@@ -76,6 +76,17 @@ export function generateRideCode(): string {
 	return chars;
 }
 
+export function isPrimitive(obj: any): any {
+	switch (typeof obj) {
+		case 'string':
+		case 'number':
+		case 'boolean':
+			return true;
+	}
+
+	return obj === String || obj === Number || obj === Boolean;
+}
+
 /*
 export function hashPassword(password: string, salt: string): string {
 	const iterations: number = 500;
@@ -118,17 +129,6 @@ export function generateRandomChars(n: number): any {
 		chars += possible.charAt(Math.floor(Math.random() * possible.length));
 
 	return chars;
-}
-
-export function isPrimitive(obj: any): any {
-	switch (typeof obj) {
-		case 'string':
-		case 'number':
-		case 'boolean':
-			return true;
-	}
-
-	return obj === String || obj === Number || obj === Boolean;
 }
 
 
