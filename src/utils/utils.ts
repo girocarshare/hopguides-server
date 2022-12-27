@@ -65,6 +65,17 @@ export function capitalize(value: string): string {
 	return value[0].toUpperCase() + value.slice(1);
 }
 
+
+export function generateRideCode(): string {
+	let chars = '';
+	const possible = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
+	for (let i = 0; i < 8; i++) {
+		chars += possible.charAt(Math.floor(Math.random() * possible.length));
+		if (chars.length === 4) chars += '-';
+	}
+	return chars;
+}
+
 /*
 export function hashPassword(password: string, salt: string): string {
 	const iterations: number = 500;
@@ -367,16 +378,6 @@ export function getExtKeys(): { name: string; key: string }[] {
 	return extKeys;
 }
 
-
-export function generateRideCode(): string {
-	let chars = '';
-	const possible = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
-	for (let i = 0; i < 8; i++) {
-		chars += possible.charAt(Math.floor(Math.random() * possible.length));
-		if (chars.length === 4) chars += '-';
-	}
-	return chars;
-}
 
 export function generateInviteCode(userName: string): string {
 	if (!userName || !userName.trim()) {

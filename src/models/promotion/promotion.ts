@@ -16,21 +16,11 @@ export enum Redeemable {
 	MOBILITY = 'MOBILITY'
 }
 
-export enum Partner {
-	GIRO = 'GIRO',
-	EYCA = 'EYCA',
-	VALU = 'VALU'
-}
-
 export class PromoCode {
 	@id()
 	@dbField()
 	@jsonProperty({ deserialize: false, serialize: true })
 	id: string = generateUuid();
-
-	@jsonProperty()
-	@dbField()
-	owner: Partner = Partner.GIRO;
 
 	@jsonProperty()
 	@dbField()
@@ -71,10 +61,6 @@ export class PromoCode {
 	@dbField()
 	@jsonProperty()
 	validTo: number = 0;
-
-	@jsonProperty({ type: String })
-	@dbField({ type: String })
-	conditions: string[] = [];
 
 	@jsonProperty({ type: String })
 	@dbField({ type: String })
