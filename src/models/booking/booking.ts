@@ -2,7 +2,7 @@ import { dbField, id } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { generateRideCode, generateUuid } from '../../utils/utils';
 import { Vehicle } from '../vehicle/vehicle';
-import { Review } from '../reviewRideOrBooking';
+import { Review } from '../review/review';
 import { ChangeLog } from '../classes';
 import { PathPoint } from './PathPoint';
 import { validEnum } from '../../validations/decorators';
@@ -119,10 +119,10 @@ export class Booking {
 		return booking;
 	}
 
-	calculatePaymentAmount(rentTime: number): number {
+	/*calculatePaymentAmount(rentTime: number): number {
 		return (
 			Math.abs(this.vehicle.pricing.pricePerMinute * rentTime) +
 			this.vehicle.pricing.startingFee
 		);
-	}
+	}*/
 }
