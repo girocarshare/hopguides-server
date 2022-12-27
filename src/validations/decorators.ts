@@ -3,20 +3,19 @@ import {
 	//ArrayValidator,
 	EmailValidator,
 	MaxValidator,
-	/*EnumValidator,
+	EnumValidator,
 	IntegerValidator,
-	MaxValidator,
-	MinValidator,*/
+	MinValidator,
 	NopValidator,
 	//NotEmptyValidator,
-	//RequiredValidator,
+	RequiredValidator,
 	Validator
 } from './validators';
 
 const emailValidator = new EmailValidator();
-/*const requiredValidator = new RequiredValidator();
-const notEmptyValidator = new NotEmptyValidator();
-const integerValidator = new IntegerValidator();*/
+const requiredValidator = new RequiredValidator();
+//const notEmptyValidator = new NotEmptyValidator();
+const integerValidator = new IntegerValidator();
 const nopValidator = new NopValidator();
 export const validationsMDKey = Symbol('validations');
 export const validationMethodsMDKey = Symbol('validationMethods');
@@ -79,16 +78,9 @@ export function valid() {
 	};
 }
 
-/*
 export function required(): any {
 	return function (target: any, propertyKey: string): any {
 		addValidator(target, propertyKey, requiredValidator);
-	};
-}
-
-export function notEmpty(): any {
-	return function (target: any, propertyKey: string): any {
-		addValidator(target, propertyKey, notEmptyValidator);
 	};
 }
 
@@ -98,9 +90,9 @@ export function validEnum<T>(clazz: T) {
 	};
 }
 
-export function validArray(type: any) {
+export function integer() {
 	return function (target: any, propertyKey: string): any {
-		addValidator(target, propertyKey, new ArrayValidator(type));
+		addValidator(target, propertyKey, integerValidator);
 	};
 }
 
@@ -110,11 +102,22 @@ export function min(min: number) {
 	};
 }
 
-export function integer() {
+/*
+
+
+export function notEmpty(): any {
 	return function (target: any, propertyKey: string): any {
-		addValidator(target, propertyKey, integerValidator);
+		addValidator(target, propertyKey, notEmptyValidator);
 	};
 }
+
+
+export function validArray(type: any) {
+	return function (target: any, propertyKey: string): any {
+		addValidator(target, propertyKey, new ArrayValidator(type));
+	};
+}
+
 
 export function validationMethod(errorMsg: string) {
 	return function (taget: any, propertyKey: string, descriptor: PropertyDescriptor): any {

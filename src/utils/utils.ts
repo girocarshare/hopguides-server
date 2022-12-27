@@ -43,6 +43,28 @@ export function eighteenYearsOld(): number {
 export function generateUuid(): string {
 	return v4();
 }
+
+export function generateVehicleIMEI(text?: string): string {
+	const vehicleIMEI: string =
+		'#' + onlyChar(text) + Math.floor(100000 + Math.random() * 900000).toString();
+	return vehicleIMEI.toUpperCase();
+}
+
+export function onlyChar(value: string): string {
+	if (!value) return '';
+	const PATTERN = /[ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+	value = value.replace(PATTERN, '');
+	value = value.replace(/[0-9]/g, '');
+	if (!value) return '';
+	return capitalize(value.toLowerCase());
+}
+
+export function capitalize(value: string): string {
+	value = value.toLowerCase();
+	if (!value) return '';
+	return value[0].toUpperCase() + value.slice(1);
+}
+
 /*
 export function hashPassword(password: string, salt: string): string {
 	const iterations: number = 500;
@@ -259,11 +281,6 @@ export function roundToTwoDecimal(val: number): number {
 	return _.round(val, 2);
 }
 
-export function capitalize(value: string): string {
-	value = value.toLowerCase();
-	if (!value) return '';
-	return value[0].toUpperCase() + value.slice(1);
-}
 
 export function capitalizeEvery(value: string): string {
 	const splitVal = value.toLowerCase().split(' ');
@@ -292,15 +309,6 @@ export function onlyNumChar(value: string): string {
 	value = value.toLowerCase().replace(/[^\w]/g, '');
 	if (!value) return '';
 	return value.toUpperCase();
-}
-
-export function onlyChar(value: string): string {
-	if (!value) return '';
-	const PATTERN = /[ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
-	value = value.replace(PATTERN, '');
-	value = value.replace(/[0-9]/g, '');
-	if (!value) return '';
-	return capitalize(value.toLowerCase());
 }
 
 export function onlyNum(value: string): string {
@@ -377,12 +385,6 @@ export function generateInviteCode(userName: string): string {
 	if (userName.length > 5) userName = userName.trim().substring(0, 5);
 	const inviteCode: string = onlyChar(userName) + Math.floor(99 + Math.random() * 900).toString();
 	return inviteCode.toUpperCase();
-}
-
-export function generateVehicleIMEI(text?: string): string {
-	const vehicleIMEI: string =
-		'#' + onlyChar(text) + Math.floor(100000 + Math.random() * 900000).toString();
-	return vehicleIMEI.toUpperCase();
 }
 
 export function chunkArray(array: any[], size: number): Array<any> {

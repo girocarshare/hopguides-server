@@ -34,8 +34,6 @@ export class NopValidator implements Validator<any> {
 		return undefined;
 	}
 }
-/*
-
 export class RequiredValidator implements Validator<any> {
 	validate(value: any): ErrorMessage {
 		if (typeof value === 'undefined' || value === undefined || value == null)
@@ -43,13 +41,6 @@ export class RequiredValidator implements Validator<any> {
 	}
 }
 
-export class NotEmptyValidator extends RequiredValidator {
-	validate(value: any): ErrorMessage {
-		const errorMsg = super.validate(value);
-		if (errorMsg || (isArray(value) && value.length === 0) || value === '')
-			return ErrorMessages.notEmpty;
-	}
-}
 
 export class EnumValidator implements Validator<any> {
 	constructor(private enumClazz: any) {}
@@ -68,6 +59,13 @@ export class EnumValidator implements Validator<any> {
 	}
 }
 
+export class IntegerValidator implements Validator<any> {
+	validate(value: any): ErrorMessage {
+		if (value % 1 !== 0) return ErrorMessages.integerMsg;
+	}
+}
+
+
 export class MinValidator implements Validator<any> {
 	constructor(private min: number) {}
 
@@ -81,6 +79,19 @@ export class MinValidator implements Validator<any> {
 	}
 }
 
+/*
+
+
+
+export class NotEmptyValidator extends RequiredValidator {
+	validate(value: any): ErrorMessage {
+		const errorMsg = super.validate(value);
+		if (errorMsg || (isArray(value) && value.length === 0) || value === '')
+			return ErrorMessages.notEmpty;
+	}
+}
+
+
 
 export class ArrayValidator implements Validator<any[]> {
 	constructor(private type: any) {}
@@ -92,9 +103,5 @@ export class ArrayValidator implements Validator<any[]> {
 	}
 }
 
-export class IntegerValidator implements Validator<any> {
-	validate(value: any): ErrorMessage {
-		if (value % 1 !== 0) return ErrorMessages.integerMsg;
-	}
-}
+
 */
