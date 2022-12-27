@@ -21,23 +21,6 @@ class Contact {
 	@dbField()
 	webURL: string;
 
-	@jsonProperty()
-	@dbField()
-	confirmed: boolean = false;
-}
-
-class Voucher {
-	@dbField()
-	@jsonProperty()
-	id: string;
-
-	@jsonProperty()
-	@dbField()
-	value: number;
-
-	@jsonProperty()
-	@dbField()
-	description: string;
 }
 
 export class POI {
@@ -52,10 +35,6 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	title: LocalizedField;
-
-	@jsonProperty()
-	@dbField()
-	voucher: Voucher;
 
 	@jsonProperty()
 	@dbField()

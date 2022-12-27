@@ -3,7 +3,7 @@ import { dbField, id } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { generateUuid, generateVehicleIMEI } from '../../utils/utils';
 import { required, validEnum } from '../../validations/decorators';
-import { VehicleLiveInfo } from './carLiveInfo';
+import { VehicleLiveInfo } from './liveInfo';
 import { VehicleAvailable, VehicleStatus, VehicleType, VehicleVersion } from './enums';
 import { Tracker } from './tracker';
 import { ChangeLog } from '../classes';
