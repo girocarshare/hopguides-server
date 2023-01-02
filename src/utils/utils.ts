@@ -5,7 +5,7 @@ import * as crypto from 'crypto';
 //import * as moment from 'moment';
 import { v4 } from 'uuid';
 //import { CustomError } from '../classes/customError';
-//import { INextFunction, IRequest, IResponse } from '../classes/interfaces';
+import { INextFunction, IRequest, IResponse } from '../classes/interfaces';
 //import UserRepo, { UserRepository } from '../db/repository/userRepository';
 //import { Vehicle } from '../models/car/car';
 //import { VehicleAvailable, VehicleStatus } from '../models/car/enums';
@@ -85,6 +85,14 @@ export function isPrimitive(obj: any): any {
 	}
 
 	return obj === String || obj === Number || obj === Boolean;
+}
+
+export function withErrorHandler(
+	routerFunction: (req: IRequest, res: IResponse, next: INextFunction) => Promise<any>
+) {
+	return function (req: IRequest, res: IResponse, next: INextFunction): any {
+		routerFunction(req, res, next).catch();
+	};
 }
 
 /*
@@ -226,13 +234,6 @@ export function formatDateHourOnly(timestamp: number): string {
 	return moment(timestamp).format('HH:mm');
 }
 
-export function withErrorHandler(
-	routerFunction: (req: IRequest, res: IResponse, next: INextFunction) => Promise<any>
-) {
-	return function (req: IRequest, res: IResponse, next: INextFunction): any {
-		routerFunction(req, res, next).catch(next);
-	};
-}
 
 export function deleteUndefinedFields(data: object): any {
 	const undefinedFields: string[] = [];

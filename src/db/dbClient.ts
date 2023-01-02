@@ -1,5 +1,7 @@
 import { Db, MongoClient } from 'mongodb';
 import UserRepository from './repository/userRepository';
+import TourRepository from './repository/tourRepository';
+import VehicleRepository from './repository/vehicleRepository';
 /*import ReportRepository from './repository/reportRepository';
 import VehicleRepository from './repository/carRepository';
 import RideRepository from './repository/rideRepository';
@@ -14,15 +16,14 @@ import BlastRepository from './repository/blastRepository';
 import SettingsRepository from './repository/settingsRepository';
 import EventlogRepository from './repository/eventlogRepository';
 import IoTEventRepository from './repository/iotEventRepository';
-import TourRepository from './repository/tourRepository';
 import OperStatsRepository from './repository/operStatsRepository';
 import OperaRepository from './repository/operaRepository';
 import blacklistRepository from './repository/blacklistRepository';*/
 
 import { Logger } from 'tslog';
-var DB_URI_COMMON="mongodb+srv://app_giro_common_stage:2X8JxIP5nbXZ6yxt@giro-prod-cluster-0.rflif.gcp.mongodb.net/giro-common-stage?retryWrites=true&w=majority"
+var DB_URI_COMMON="mongodb://127.0.0.1:27017/"
 var DB_DATABASE_COMMON="giro-common-stage"
-var DB_URI="mongodb+srv://app_giro_mobility_stage:2X8JxIP5nbXZ6yxt@giro-prod-cluster-0.rflif.gcp.mongodb.net/giro-staging?retryWrites=true&w=majority"
+var DB_URI="mongodb://127.0.0.1:27017/"
 var DB_DATABASE="giro-staging"
 const logger: Logger = new Logger();
 
@@ -71,6 +72,8 @@ class DbClient {
 
 		/** Initialize collections */
 		UserRepository.setCollection(database.collection('users'));
+		TourRepository.setCollection(database.collection('tours'));
+		VehicleRepository.setCollection(database.collection('vehicle'));
 		/*VehicleRepository.setCollection(database.collection('mb-vehicles'));
 		BookingRepository.setCollection(database.collection('mb-rents'));
 		RideRepository.setCollection(database.collection('mb-rideshares'));
@@ -80,7 +83,6 @@ class DbClient {
 		OperaRepository.setCollection(database.collection('opera'));
 		EventlogRepository.setCollection(database.collection('eventlog'));
 		IoTEventRepository.setCollection(database.collection('iot-events'));
-		TourRepository.setCollection(database.collection('tours'));
 		OperStatsRepository.setCollection(database.collection('oper-stats'));
 
 		CountryRepository.setCollection(databaseCommon.collection('citiesCountry'));

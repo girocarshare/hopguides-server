@@ -1,8 +1,8 @@
 import * as express from 'express';
-/*import { createRespondAndThrowErr } from './middlewares/renders';
+//import { createRespondAndThrowErr } from './middlewares/renders';
 import { UserRouter } from './routes/userRouter';
-import { CarRouter } from './routes/carRouter';
-import { catchErrors } from './utils/errorhandles';
+import { VehicleRouter } from './routes/vehicleRouter';
+/*import { catchErrors } from './utils/errorhandles';
 import {
 	AdminRole,
 	allowFor,
@@ -26,9 +26,9 @@ import { GeofenceRouter } from './routes/geofenceRouter';
 import { EventlogRouter } from './routes/eventlogRouter';
 import { IoTExchangeRouter } from './routes/iot/router';
 import { TestRouter } from './routes/testRouter';
-import { HotelRouter } from './routes/hotelRouter';
+import { HotelRouter } from './routes/hotelRouter';*/
 import { DashboardAppRouter } from './routes/dash/router';
-import { checkAppOrigin, parseUserLocale } from './routes/me/util';*/
+//import { checkAppOrigin, parseUserLocale } from './routes/me/util';*/
 
 const xmlparser = require('express-xml-bodyparser');
 const bearerToken = require('express-bearer-token');
@@ -36,9 +36,9 @@ const bearerToken = require('express-bearer-token');
 class App {
 	public app: express.Application;
 
-	/*private userRouter: UserRouter;
-	private userCarRouter: UserCarRouter;
-	private carRouter: CarRouter;
+	private userRouter: UserRouter;
+	private vehicleRouter: VehicleRouter;
+	/*private carRouter: CarRouter;
 	private bookingRouter: BookingRouter;
 	private reportRouter: ReportRouter;
 	private rideRouter: RideRouter;
@@ -53,10 +53,10 @@ class App {
 
 	constructor() {
 		this.app = express();
-		/*this.testRouter = new TestRouter();
+		//this.testRouter = new TestRouter();
 		this.userRouter = new UserRouter();
-		this.carRouter = new CarRouter();
-		this.reportRouter = new ReportRouter();
+		this.vehicleRouter = new VehicleRouter();
+		/*this.reportRouter = new ReportRouter();
 		this.userCarRouter = new UserCarRouter();
 		this.bookingRouter = new BookingRouter();
 		this.rideRouter = new RideRouter();
@@ -101,20 +101,20 @@ class App {
 		this.app.use(express.urlencoded({ extended: true }));
 
 		// App dashboard routes
-		/*this.app.use('/api/pnl', new DashboardAppRouter().router);
+		this.app.use('/api/pnl', new DashboardAppRouter().router);
 
 		// App mobile-exchange routes
-		this.app.use(
+		/*this.app.use(
 			'/api/me',
 			// bearerToken({ reqKey: 'bearerToken' }), //Comment for DEV
 			// checkAppOrigin(), //Comment for DEV
 			parseUserLocale(),
 			new MobileAppRouter().router
-		);
+		);*/
 
 		this.app.use('/api/users', this.userRouter.router);
 
-		this.app.use(
+/*		this.app.use(
 			'/api/users/:userId/vehicles',
 			function (req: any, res: any, next: any) {
 				req.method === 'OPTIONS' ? res.sendStatus(200) : next();
@@ -128,9 +128,9 @@ class App {
 			]),
 			this.userCarRouter.router
 		);
-
-		this.app.use('/api/vehicles', this.carRouter.router);
-
+*/
+		this.app.use('/api/vehicles', this.vehicleRouter.router);
+/*
 		this.app.use('/api/rent', this.bookingRouter.router);
 
 		this.app.use('/api/reports', this.reportRouter.router);
