@@ -29,6 +29,7 @@ import { TestRouter } from './routes/testRouter';
 import { HotelRouter } from './routes/hotelRouter';*/
 import { DashboardAppRouter } from './routes/dash/router';
 //import { checkAppOrigin, parseUserLocale } from './routes/me/util';*/
+import { BPartnerRouter } from './routes/bpartnerRouter';
 
 const xmlparser = require('express-xml-bodyparser');
 const bearerToken = require('express-bearer-token');
@@ -39,6 +40,7 @@ class App {
 	private userRouter: UserRouter;
 	private vehicleRouter: VehicleRouter;
 	private bookingRouter: BookingRouter;
+	private bpartnerRouter: BPartnerRouter;
 	/*
 	private reportRouter: ReportRouter;
 	private rideRouter: RideRouter;
@@ -57,6 +59,7 @@ class App {
 		this.userRouter = new UserRouter();
 		this.vehicleRouter = new VehicleRouter();
 		this.bookingRouter = new BookingRouter();
+		this.bpartnerRouter = new BPartnerRouter();
 		/*this.reportRouter = new ReportRouter();
 		this.userCarRouter = new UserCarRouter();
 		this.rideRouter = new RideRouter();
@@ -132,6 +135,8 @@ class App {
 		this.app.use('/api/vehicles', this.vehicleRouter.router);
 
 		this.app.use('/api/booking', this.bookingRouter.router);
+		
+		this.app.use('/api/bp', this.bpartnerRouter.router);
 /*
 		this.app.use('/api/reports', this.reportRouter.router);
 

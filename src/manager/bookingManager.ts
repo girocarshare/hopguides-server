@@ -1,7 +1,7 @@
 import { PaymentType, RentEndReason, RentType } from './../models/booking/booking';
 import BookingRepo, { BookingRepository } from '../db/repository/bookingRepository';
 //import { CarManager } from './carManager';
-import { Booking, RentStatus } from '../models/booking/booking';
+import { Booking, BookingStatus } from '../models/booking/booking';
 import { User } from '../models/user/user';
 /*import { CreateBookingReviewPayload } from '../classes/review/createBookingReviewPayload';
 import { CustomError } from '../classes/customError';
@@ -51,7 +51,7 @@ export class BookingManager {
 			/** Create rent of vehicle */
 			const booking: Booking = new Booking();
 			booking.userId = user.id;
-			booking.status = RentStatus.SCHEDULED;
+			booking.status = BookingStatus.PENDING;
 			booking.from = scheduledFrom;
 			booking.to = scheduledTo;
 

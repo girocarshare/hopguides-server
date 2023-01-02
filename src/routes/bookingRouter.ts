@@ -5,7 +5,7 @@ import { SearchPagination } from '../classes/searchPagination';
 import { deserialize, serialize } from '../json';*/
 import { BookingManager } from '../manager/bookingManager';
 import { UserManager } from '../manager/userManager';
-import { Booking, RentStatus } from '../models/booking/booking';
+import { Booking, BookingStatus } from '../models/booking/booking';
 import {
 	/*AdminRole,
 	allowFor,
@@ -47,7 +47,6 @@ export class BookingRouter extends BaseRouter {
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse, next) => {
 				// Extract body
-				const { purpose, phone, scheduledFrom, scheduledTo } = req.body;
 				// Extract vehicle
 				//const vehicle: Vehicle = await this.carManager.getVehicle(req.params.vehicleId);
 				//if (!vehicle) {
@@ -59,7 +58,7 @@ export class BookingRouter extends BaseRouter {
 
 				// todo : maybe cache those settings, or better: create a caching layer in `settingsManager`
 
-				const renter: User = await this.userManager.getUserByPhone(phone);
+				const renter: User = await this.userManager.getUser(req.body.userId);
 
 	///////////////////////////////////////*			if (!renter.hasPaymentMethod() && renter.getAccountBalance() > 0) {
 					//throw new CustomError(413, 'Please input payment method first');
@@ -92,8 +91,8 @@ export class BookingRouter extends BaseRouter {
 				const createdScheduledRent: Booking = await this.bookingManager.scheduleRent(
 					//vehicle,
 					renter,
-					scheduledFrom,
-					scheduledTo,
+					req.body.from,
+					req.body.to
 					//purpose
 				);
 				if (!createdScheduledRent) throw new CustomError(400, 'Cannot create rent!');

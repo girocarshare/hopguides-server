@@ -53,6 +53,12 @@ export class UserManager {
 			throw new CustomError(404, `User ${phoneNumber} not found!`);
 		});
 	}
+
+	async getUser(userId: string): Promise<User> {
+		return await this.userRepository.getByIdOrThrow(userId).catch(() => {
+			throw new CustomError(404, 'User not found!');
+		});
+	}
 	/*
 
 	async getUserByEmail(email: string): Promise<User> {
@@ -70,11 +76,7 @@ export class UserManager {
 		return (await this.userRepository.findOne({ inviteCode: code.toUpperCase() })) || null;
 	}
 
-	async getUser(userId: string): Promise<User> {
-		return await this.userRepository.getByIdOrThrow(userId).catch(() => {
-			throw new CustomError(404, 'User not found!');
-		});
-	}
+
 
 	async getRenter(userId: string): Promise<User> {
 		return (await this.userRepository.findOne({ _id: userId })) || null;

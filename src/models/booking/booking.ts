@@ -12,15 +12,20 @@ import {GeneratedVoucher } from './bookingVoucher';
 import { BookingPricing } from './bookingPricing';
 import { BookingDocs } from './bookingDocs';
 
-export enum RentStatus {
-	SCHEDULED = 'SCHEDULED',
+export enum BookingStatus {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	RESERVED = 'RESERVED',
+	BOOKED = 'BOOKED',
 	DRIVING = 'DRIVING',
 	FINISHED = 'FINISHED',
 	/** END statuses */
+	CANCELED = 'CANCELED',
+	REJECTED = 'REJECTED',
+	TIMED_OUT = 'TIMED_OUT',
+	NO_PICKUP = 'NO_PICKUP',
 	ARCHIVED = 'ARCHIVED',
-	REFUNDED = 'REFUNDED',
-	DELETED = 'DELETED',
-	FAILED = 'FAILED'
+	DELETED = 'DELETED'
 }
 
 export enum RentEndReason {
@@ -60,7 +65,7 @@ export class Booking {
 
 	@dbField()
 	@jsonProperty({ deserialize: false, serialize: true })
-	status: RentStatus = RentStatus.DRIVING;
+	status: BookingStatus;
 
 	@dbField()
 	@jsonProperty()
@@ -106,6 +111,9 @@ export class Booking {
 	@jsonProperty()
 	tourId: string; // tells if this is tour booking and which booking it is
 
+	@dbField()
+	@jsonProperty()
+	bpartnerId: string; 
 
 	static start( userId: string): Booking {
 		const booking: Booking = new Booking();

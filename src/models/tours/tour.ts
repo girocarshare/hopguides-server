@@ -16,10 +16,6 @@ export class Tour {
 
 	@jsonProperty()
 	@dbField()
-	ownerId: string;
-
-	@jsonProperty()
-	@dbField()
 	title: LocalizedField;
 
 	@jsonProperty()
@@ -52,10 +48,6 @@ export class Tour {
 	@min(0)
 	price: number;
 
-	@jsonProperty()
-	@dbField()
-	vehicleType: VehicleType;
-
 	@jsonProperty({ type: POI })
 	@dbField({ type: POI })
 	points: POI[];
@@ -63,10 +55,6 @@ export class Tour {
 	@jsonProperty()
 	@dbField()
 	returnLocation: ReturnLocation;
-	
-	@jsonProperty()
-	@dbField()
-	vehicle: Vehicle;
 
 	@jsonProperty()
 	@dbField()

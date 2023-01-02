@@ -28,12 +28,6 @@ export enum UserRoles {
 	ROOT = 'ROOT'
 }
 
-export enum LoggedFrom {
-	FACEBOOK = 'FACEBOOK',
-	GOOGLE = 'GOOGLE',
-	CUSTOM = 'CUSTOM'
-}
-
 export enum VerificationLevel {
 	RENT = 'RENT',
 	RIDESHARE = 'RIDESHARE',
@@ -80,15 +74,8 @@ export class User extends UserBase {
 	@dbField()
 	role: UserRoles = UserRoles.USER;
 
-	@jsonProperty({ deserialize: false, serialize: true })
-	@dbField()
-	roleMB: UserRoles = UserRoles.USER;
-
 	@dbField()
 	confirmed: boolean = false;
-
-	@dbField()
-	confirmedMB: boolean = false;
 
 	@jsonProperty()
 	@dbField()
@@ -130,10 +117,6 @@ export class User extends UserBase {
 	valuStatus: string = null;
 
 	// OTHER
-
-	@jsonProperty({ deserialize: false, serialize: true })
-	@dbField()
-	loggedFrom: LoggedFrom = LoggedFrom.CUSTOM;
 
 	@jsonProperty()
 	@dbField()

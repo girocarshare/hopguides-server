@@ -14,11 +14,6 @@ export class Vehicle {
 	@jsonProperty({ deserialize: true, serialize: true })
 	id: string = generateUuid();
 
-	@jsonProperty({ deserialize: false, serialize: true })
-	@dbField()
-	@required()
-	userId: string; /** Vehicle owner UUID */
-
 	@jsonProperty()
 	@dbField()
 	@required()
@@ -79,5 +74,8 @@ export class Vehicle {
 	@jsonProperty()
 	changeLog: ChangeLog = new ChangeLog(); /** Log of last change by person & time of it */
 
+	@jsonProperty()
+	@dbField()
+	tourId: string; 
 
 }

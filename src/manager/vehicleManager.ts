@@ -81,7 +81,7 @@ export class VehicleManager {
 
 	async create(userId: string, vehicleData: CreateVehiclePayload): Promise<Vehicle> {
 		const payload: Vehicle = deserialize(Vehicle, vehicleData);
-		payload.userId = userId;
+		//payload.userId = userId;
 		payload.liveInfo = new VehicleLiveInfo();
 
 		const vehicle: Vehicle = await this.vehicleRepository.createOne(payload).catch(() => {
