@@ -48,12 +48,12 @@ export class UserManager {
 	//	this.transactionManager = new TransactionManager();
 	//	this.s3Service = new S3Service(process.env.AWS_BUCKET_NAME);
 	}
-
-	/*async getUserByPhone(phoneNumber: string): Promise<User> {
+	async getUserByPhone(phoneNumber: string): Promise<User> {
 		return await this.userRepository.findOne({ phone: phoneNumber }).catch(() => {
 			throw new CustomError(404, `User ${phoneNumber} not found!`);
 		});
 	}
+	/*
 
 	async getUserByEmail(email: string): Promise<User> {
 		return await this.userRepository.findOne({ email: email.toLowerCase() }).catch(() => {

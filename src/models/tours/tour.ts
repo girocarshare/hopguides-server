@@ -6,6 +6,7 @@ import { VehicleType } from '../vehicle/enums';
 import { ReturnLocation } from './returnOptions';
 import { LocalizedField } from '../localizedField';
 import { POI } from './POI';
+import { Vehicle } from '../vehicle/vehicle';
 
 export class Tour {
 	@id()
@@ -62,6 +63,10 @@ export class Tour {
 	@jsonProperty()
 	@dbField()
 	returnLocation: ReturnLocation;
+	
+	@jsonProperty()
+	@dbField()
+	vehicle: Vehicle;
 
 	@jsonProperty()
 	@dbField()

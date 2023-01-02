@@ -64,10 +64,6 @@ export class Booking {
 
 	@dbField()
 	@jsonProperty()
-	vehicle: Vehicle;
-
-	@dbField()
-	@jsonProperty()
 	from: number;
 
 	@dbField()
@@ -111,10 +107,9 @@ export class Booking {
 	tourId: string; // tells if this is tour booking and which booking it is
 
 
-	static start(car: Vehicle, userId: string): Booking {
+	static start( userId: string): Booking {
 		const booking: Booking = new Booking();
 		booking.userId = userId;
-		booking.vehicle = car;
 		booking.from = Date.now();
 		return booking;
 	}

@@ -2,6 +2,7 @@ import * as express from 'express';
 //import { createRespondAndThrowErr } from './middlewares/renders';
 import { UserRouter } from './routes/userRouter';
 import { VehicleRouter } from './routes/vehicleRouter';
+import { BookingRouter } from './routes/bookingRouter';
 /*import { catchErrors } from './utils/errorhandles';
 import {
 	AdminRole,
@@ -13,7 +14,6 @@ import {
 	UserRoleWith
 } from './utils/utils';
 import { UserCarRouter } from './routes/userCarRouter';
-import { BookingRouter } from './routes/rentRouter';
 import { ReportRouter } from './routes/reportRouter';
 import { RideRouter } from './routes/rideshareRouter';
 import { CountryRouter } from './routes/countryRouter';
@@ -38,8 +38,8 @@ class App {
 
 	private userRouter: UserRouter;
 	private vehicleRouter: VehicleRouter;
-	/*private carRouter: CarRouter;
 	private bookingRouter: BookingRouter;
+	/*
 	private reportRouter: ReportRouter;
 	private rideRouter: RideRouter;
 	private countryRouter: CountryRouter;
@@ -56,9 +56,9 @@ class App {
 		//this.testRouter = new TestRouter();
 		this.userRouter = new UserRouter();
 		this.vehicleRouter = new VehicleRouter();
+		this.bookingRouter = new BookingRouter();
 		/*this.reportRouter = new ReportRouter();
 		this.userCarRouter = new UserCarRouter();
-		this.bookingRouter = new BookingRouter();
 		this.rideRouter = new RideRouter();
 		this.countryRouter = new CountryRouter();
 		this.promotionsRouter = new PromoRouter();
@@ -130,9 +130,9 @@ class App {
 		);
 */
 		this.app.use('/api/vehicles', this.vehicleRouter.router);
-/*
-		this.app.use('/api/rent', this.bookingRouter.router);
 
+		this.app.use('/api/booking', this.bookingRouter.router);
+/*
 		this.app.use('/api/reports', this.reportRouter.router);
 
 		this.app.use('/api/ride', this.rideRouter.router);
