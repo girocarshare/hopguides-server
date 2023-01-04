@@ -108,11 +108,11 @@ export class Booking {
 	changeLog: ChangeLog = new ChangeLog();
 
 	@dbField()
-	@jsonProperty()
-	tourId: string; // tells if this is tour booking and which booking it is
+	@jsonProperty({ deserialize: true, serialize: true })
+	tourId: string;
 
 	@dbField()
-	@jsonProperty()
+	@jsonProperty({ deserialize: true, serialize: true })
 	bpartnerId: string; 
 
 	static start( userId: string): Booking {

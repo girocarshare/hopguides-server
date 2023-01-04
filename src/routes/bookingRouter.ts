@@ -5,7 +5,11 @@ import { SearchPagination } from '../classes/searchPagination';
 import { deserialize, serialize } from '../json';*/
 import { BookingManager } from '../manager/bookingManager';
 import { UserManager } from '../manager/userManager';
+import { TourManager } from '../manager/tourManager';
+import { BPartnerManager } from '../manager/bpartnerManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
+import { Tour } from '../models/tours/tour';
+import { BPartner } from '../models/bpartner/bpartner';
 import {
 	/*AdminRole,
 	allowFor,
@@ -28,6 +32,8 @@ export class BookingRouter extends BaseRouter {
 	//settingsManager: SettingsManager = new SettingsManager();
 	bookingManager = new BookingManager();
 	userManager = new UserManager();
+	tourManager = new TourManager();
+	bpartnerManager = new BPartnerManager();
 	//notificationManager = new NotificationManager();
 
 	upload: any;
@@ -60,6 +66,9 @@ export class BookingRouter extends BaseRouter {
 
 				const renter: User = await this.userManager.getUser(req.body.userId);
 
+				const tour: Tour = await this.tourManager.getTour(req.body.tourId);
+
+				const bpartner: BPartner = await this.bpartnerManager.getBP(req.body.bpartnerId);
 	///////////////////////////////////////*			if (!renter.hasPaymentMethod() && renter.getAccountBalance() > 0) {
 					//throw new CustomError(413, 'Please input payment method first');
 				//}******************************************************************************************
@@ -92,7 +101,9 @@ export class BookingRouter extends BaseRouter {
 					//vehicle,
 					renter,
 					req.body.from,
-					req.body.to
+					req.body.to,
+					tour,
+					bpartner
 					//purpose
 				);
 				if (!createdScheduledRent) throw new CustomError(400, 'Cannot create rent!');
@@ -100,7 +111,18 @@ export class BookingRouter extends BaseRouter {
 			})
 		);
 
-
+	/** GET all bookings   */
+		this.router.get(
+			'/all',
+			//allowFor([AdminRole, ManagerRole, SupportRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				
+				const filter: any = {};
+			
+				const bookings: Booking[] = await this.bookingManager.getBookings(filter);
+				return res.status(200).send(bookings);
+			})
+		);
 
 		/** GET bookings with user details   
 		this.router.get(

@@ -3,6 +3,7 @@ import * as express from 'express';
 import { UserRouter } from './routes/userRouter';
 import { VehicleRouter } from './routes/vehicleRouter';
 import { BookingRouter } from './routes/bookingRouter';
+import { ReportRouter } from './routes/reportRouter';
 /*import { catchErrors } from './utils/errorhandles';
 import {
 	AdminRole,
@@ -14,7 +15,6 @@ import {
 	UserRoleWith
 } from './utils/utils';
 import { UserCarRouter } from './routes/userCarRouter';
-import { ReportRouter } from './routes/reportRouter';
 import { RideRouter } from './routes/rideshareRouter';
 import { CountryRouter } from './routes/countryRouter';
 import { CronRouter } from './routes/cronRouter';
@@ -41,8 +41,8 @@ class App {
 	private vehicleRouter: VehicleRouter;
 	private bookingRouter: BookingRouter;
 	private bpartnerRouter: BPartnerRouter;
-	/*
 	private reportRouter: ReportRouter;
+	/*
 	private rideRouter: RideRouter;
 	private countryRouter: CountryRouter;
 	private promotionsRouter: PromoRouter;
@@ -60,7 +60,8 @@ class App {
 		this.vehicleRouter = new VehicleRouter();
 		this.bookingRouter = new BookingRouter();
 		this.bpartnerRouter = new BPartnerRouter();
-		/*this.reportRouter = new ReportRouter();
+		this.reportRouter = new ReportRouter();
+		/*
 		this.userCarRouter = new UserCarRouter();
 		this.rideRouter = new RideRouter();
 		this.countryRouter = new CountryRouter();
@@ -137,9 +138,9 @@ class App {
 		this.app.use('/api/booking', this.bookingRouter.router);
 		
 		this.app.use('/api/bp', this.bpartnerRouter.router);
-/*
-		this.app.use('/api/reports', this.reportRouter.router);
 
+		this.app.use('/api/reports', this.reportRouter.router);
+/*
 		this.app.use('/api/ride', this.rideRouter.router);
 
 		this.app.use('/api/promo', this.promotionsRouter.router);

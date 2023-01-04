@@ -27,13 +27,15 @@ export class BPartnerManager {
 	async getBPByUser(userId: string): Promise<BPartner> {
 		return (await this.bpartnerRepository.findOne({ userId: userId })) || null;
 	}
-/*
+
+
+
 	async getBP(bpartnerId: string): Promise<BPartner> {
 		return await this.bpartnerRepository.getByIdOrThrow(bpartnerId).catch(() => {
-			throw new Error('Error getting Vehicle');
+			throw new Error('Error getting business partner');
 		});
 	}
-
+/*
 	async getBPs(filter?: any, pagination?: SearchPagination): Promise<BPartner[]> {
 		return await this.bpartnerRepository.getAll(filter, pagination).catch(() => {
 			throw new Error('Error getting all BPartners');

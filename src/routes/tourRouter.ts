@@ -26,18 +26,17 @@ export class TourRouter extends BaseRouter {
 
 	init(): void {
 		/** GET fetches tour list for admin panel */
-		/*this.router.get(
-			'/',
-			allowFor([AdminRole, SupportRole, ManagerRole]),
-			parseJwt,
+		this.router.get(
+			'/all',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
+		
 				const tours: Tour[] = await this.tourManager.getTours();
-				return res.respond(
-					200,
-					tours.map(u => serialize(u))
-				);
+				return res.status(200).send(tours);
+				
 			})
-		);*/
+		);
 
 		/** GET fetches tour data */
 		this.router.get(

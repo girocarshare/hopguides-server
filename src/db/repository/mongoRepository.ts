@@ -1,6 +1,6 @@
 import { Collection, FindAndModifyWriteOpResultObject, InsertOneWriteOpResult } from 'mongodb';
 import { CustomError } from '../../classes/customError';
-//import { SearchPagination } from '../../classes/searchPagination';
+import { SearchPagination } from '../../classes/searchPagination';
 import { serializeForDb } from '../dbUtils';
 
 export abstract class MongoRepository<T> {
@@ -14,12 +14,12 @@ export abstract class MongoRepository<T> {
 		this.collection = collection;
 	}
 
-	/*async getAll(filter?: any, pagination?: SearchPagination): Promise<T[]> {
+	async getAll(filter?: any, pagination?: SearchPagination): Promise<T[]> {
 		let searchOptions = {};
 		if (pagination) searchOptions = pagination.buildMongoSearchOptions();
 		const all: T[] = await this.collection.find(filter, searchOptions).toArray();
 		return all.map(a => this.mapObject(a));
-	}*/
+	}
 
 	async getAllProject(filter?: any, projectOptions?: any): Promise<T[]> {
 		const all: T[] = await this.collection

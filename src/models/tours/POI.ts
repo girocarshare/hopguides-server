@@ -59,4 +59,8 @@ export class POI {
 	@jsonProperty({ type: String })
 	@dbField({ type: String })
 	files: string[];
+	
+	@jsonProperty()
+	@dbField()
+	used: boolean;
 }

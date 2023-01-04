@@ -1,6 +1,6 @@
 import tourRepository, { TourRepository } from '../db/repository/tourRepository';
 import { CustomError } from '../classes/customError';
-//import { SearchPagination } from '../classes/searchPagination';
+import { SearchPagination } from '../classes/searchPagination';
 import { Tour } from '../models/tours/tour';
 //import { deserializeFromDb } from '../db/dbUtils';
 //import { GetTourPayload } from '../classes/tour/getTourPayload';
@@ -18,7 +18,7 @@ export class TourManager {
 		});
 	}
 
-	/*async getTours(filter?: any, pagination?: SearchPagination): Promise<Tour[]> {
+	async getTours(filter?: any, pagination?: SearchPagination): Promise<Tour[]> {
 		return await this.tourRepository.getAll(filter, pagination).catch(() => {
 			throw new Error('Error getting Tours');
 		});

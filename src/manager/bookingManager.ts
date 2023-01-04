@@ -3,6 +3,8 @@ import BookingRepo, { BookingRepository } from '../db/repository/bookingReposito
 //import { CarManager } from './carManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import { User } from '../models/user/user';
+import { Tour } from '../models/tours/tour';
+import { BPartner } from '../models/bpartner/bpartner';
 /*import { CreateBookingReviewPayload } from '../classes/review/createBookingReviewPayload';
 import { CustomError } from '../classes/customError';
 import { S3Service } from '../utils/s3Service';
@@ -45,6 +47,8 @@ export class BookingManager {
 		user: User,
 		scheduledFrom: number,
 		scheduledTo: number,
+		tour: Tour,
+		bpartner: BPartner
 		//purposeText: string
 	): Promise<Booking> {
 		try {
@@ -54,6 +58,8 @@ export class BookingManager {
 			booking.status = BookingStatus.PENDING;
 			booking.from = scheduledFrom;
 			booking.to = scheduledTo;
+			booking.tourId = tour.id;
+			booking.bpartnerId = bpartner.id;
 
 			return await this.createRent(booking);
 		} catch (error) {
@@ -61,6 +67,11 @@ export class BookingManager {
 		}
 	}
 
+	async getBookings(filter: any, pagination?: any): Promise<Booking[]> {
+		return await this.bookingRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting Rents');
+		});
+	}
 
 	/*async getBooking(bookingId: string): Promise<Booking> {
 		return await this.bookingRepository.getByIdOrThrow(bookingId).catch(() => {
@@ -80,11 +91,6 @@ export class BookingManager {
 		});
 	}
 
-	async getBookings(filter: any, pagination?: any): Promise<Booking[]> {
-		return await this.bookingRepository.getAll(filter, pagination).catch(() => {
-			throw new Error('Error getting Rents');
-		});
-	}
 
 	async getBookingsStat(
 		userId: string,
