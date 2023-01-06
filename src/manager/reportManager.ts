@@ -28,18 +28,16 @@ export class ReportManager {
 		
 		var count = 0
 		for(var booking of bookings){
-		
-			const tour: Tour = await this.tourRepository.getByIdOrThrow(booking.tourId ).catch(() => {
-				throw new Error('Error getting tour');
-			});
+	
+			for(var point of booking.points){
 
-			/*for(var point of tour.points){
-				var poi : POI =  await this.poiManager.getPoi(point.id);
-				if(poi.id.toString() == companyId && point.used){
+				if(point.id.toString() == companyId && point.used){
 
 					count = count + 1
 				}
-			}*/
+
+			}
+		
 		}
 
 		const report: Report = new Report();

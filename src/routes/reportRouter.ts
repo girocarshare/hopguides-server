@@ -79,7 +79,7 @@ export class ReportRouter extends BaseRouter {
 	}
 
 	init(): void {
-		/** GET the list of reports   */
+		/** GET report for one company/point  */
 		this.router.get(
 			'/:id',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
