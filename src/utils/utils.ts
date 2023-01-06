@@ -94,7 +94,9 @@ export function withErrorHandler(
 		routerFunction(req, res, next).catch();
 	};
 }
-
+export function generateRandomHex(size: number): string {
+	return crypto.randomBytes(size).toString('hex');
+}
 /*
 export function hashPassword(password: string, salt: string): string {
 	const iterations: number = 500;
@@ -126,9 +128,7 @@ export function generatePasswordSalt(): any {
 	return crypto.randomBytes(64).toString('hex');
 }
 
-export function generateRandomHex(size: number): string {
-	return crypto.randomBytes(size).toString('hex');
-}
+
 
 export function generateRandomChars(n: number): any {
 	let chars = '';

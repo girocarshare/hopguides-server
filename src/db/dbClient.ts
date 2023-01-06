@@ -4,6 +4,7 @@ import TourRepository from './repository/tourRepository';
 import VehicleRepository from './repository/vehicleRepository';
 import BookingRepository from './repository/bookingRepository';
 import BPartnerRepository from './repository/bpartnerRepository';
+import POIRepository from './repository/poiRepository';
 /*import ReportRepository from './repository/reportRepository';
 import VehicleRepository from './repository/carRepository';
 import RideRepository from './repository/rideRepository';
@@ -77,6 +78,7 @@ class DbClient {
 		VehicleRepository.setCollection(database.collection('vehicle'));
 		BookingRepository.setCollection(database.collection('booking'));
 		BPartnerRepository.setCollection(database.collection('bpartner'));
+		POIRepository.setCollection(database.collection('poi'));
 		/*VehicleRepository.setCollection(database.collection('mb-vehicles'));
 		RideRepository.setCollection(database.collection('mb-rideshares'));
 		ReportRepository.setCollection(database.collection('mb-reports'));

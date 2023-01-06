@@ -5,7 +5,6 @@ import { min } from '../../validations/decorators';
 import { VehicleType } from '../vehicle/enums';
 import { ReturnLocation } from './returnOptions';
 import { LocalizedField } from '../localizedField';
-import { POI } from './POI';
 import { Vehicle } from '../vehicle/vehicle';
 
 export class Tour {
@@ -48,9 +47,11 @@ export class Tour {
 	@min(0)
 	price: number;
 
-	@jsonProperty({ type: POI })
-	@dbField({ type: POI })
-	points: POI[];
+	
+	@jsonProperty({ type: String })
+	@dbField({ type: String })
+	points: string[] = [];
+
 
 	@jsonProperty()
 	@dbField()

@@ -4,6 +4,7 @@ import { UserRouter } from './routes/userRouter';
 import { VehicleRouter } from './routes/vehicleRouter';
 import { BookingRouter } from './routes/bookingRouter';
 import { ReportRouter } from './routes/reportRouter';
+import { POIRouter } from './routes/poiRouter';
 /*import { catchErrors } from './utils/errorhandles';
 import {
 	AdminRole,
@@ -42,6 +43,7 @@ class App {
 	private bookingRouter: BookingRouter;
 	private bpartnerRouter: BPartnerRouter;
 	private reportRouter: ReportRouter;
+	private poiRouter: POIRouter;
 	/*
 	private rideRouter: RideRouter;
 	private countryRouter: CountryRouter;
@@ -61,6 +63,7 @@ class App {
 		this.bookingRouter = new BookingRouter();
 		this.bpartnerRouter = new BPartnerRouter();
 		this.reportRouter = new ReportRouter();
+		this.poiRouter = new POIRouter();
 		/*
 		this.userCarRouter = new UserCarRouter();
 		this.rideRouter = new RideRouter();
@@ -117,6 +120,8 @@ class App {
 		);*/
 
 		this.app.use('/api/users', this.userRouter.router);
+
+		this.app.use('/api/poi', this.poiRouter.router);
 
 /*		this.app.use(
 			'/api/users/:userId/vehicles',

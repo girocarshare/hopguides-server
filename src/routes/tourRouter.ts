@@ -11,15 +11,19 @@ import {
 } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
 import { deserialize, serialize } from '../json';
+import { POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
+import { POI } from '../models/tours/poi';
 
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
+	poiManager: POIManager;
 
 	constructor() {
 		super(true);
 		this.tourManager = new TourManager();
+		this.poiManager = new POIManager();
 
 		this.init();
 	}
@@ -70,13 +74,25 @@ export class TourRouter extends BaseRouter {
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
+
+					for(var point of req.body.points){
+						const poi: POI = await this.poiManager.getPoi(point);
+					
+						if(poi!=null){
+						
+						}else{
+							
+							return res.status(500).send("Error point with that id doesn't exist");
+						}
+					}
+
 					const createdTour: Tour = await this.tourManager.createTour(
 						deserialize(Tour, req.body)
 					);
 					
 					return res.status(200).send(createdTour);
 				} catch (err) {
-					console.log(err)
+					console.log(err.error)
 				}
 			})
 		);

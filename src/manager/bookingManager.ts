@@ -5,6 +5,7 @@ import { Booking, BookingStatus } from '../models/booking/booking';
 import { User } from '../models/user/user';
 import { Tour } from '../models/tours/tour';
 import { BPartner } from '../models/bpartner/bpartner';
+import { PoiHelp } from '../models/booking/PoiHelp';
 /*import { CreateBookingReviewPayload } from '../classes/review/createBookingReviewPayload';
 import { CustomError } from '../classes/customError';
 import { S3Service } from '../utils/s3Service';
@@ -48,7 +49,8 @@ export class BookingManager {
 		scheduledFrom: number,
 		scheduledTo: number,
 		tour: Tour,
-		bpartner: BPartner
+		bpartner: BPartner,
+		points: PoiHelp[]
 		//purposeText: string
 	): Promise<Booking> {
 		try {
@@ -60,6 +62,7 @@ export class BookingManager {
 			booking.to = scheduledTo;
 			booking.tourId = tour.id;
 			booking.bpartnerId = bpartner.id;
+			booking.points = points;
 
 			return await this.createRent(booking);
 		} catch (error) {

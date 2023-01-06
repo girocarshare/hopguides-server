@@ -6,9 +6,11 @@ import { deserialize, serialize } from '../json';*/
 import { BookingManager } from '../manager/bookingManager';
 import { UserManager } from '../manager/userManager';
 import { TourManager } from '../manager/tourManager';
+import { POIManager } from '../manager/poiManager';
 import { BPartnerManager } from '../manager/bpartnerManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import { Tour } from '../models/tours/tour';
+import { PoiHelp } from '../models/booking/PoiHelp';
 import { BPartner } from '../models/bpartner/bpartner';
 import {
 	/*AdminRole,
@@ -34,6 +36,7 @@ export class BookingRouter extends BaseRouter {
 	userManager = new UserManager();
 	tourManager = new TourManager();
 	bpartnerManager = new BPartnerManager();
+	poiManager = new POIManager();
 	//notificationManager = new NotificationManager();
 
 	upload: any;
@@ -69,6 +72,22 @@ export class BookingRouter extends BaseRouter {
 				const tour: Tour = await this.tourManager.getTour(req.body.tourId);
 
 				const bpartner: BPartner = await this.bpartnerManager.getBP(req.body.bpartnerId);
+
+				var points : PoiHelp[] = []
+				if(tour!=null){
+					for(var point of tour.points){
+						var p : PoiHelp = new PoiHelp();
+						p.id = point
+						p.used = false
+
+						points.push(p)
+					}
+					
+
+
+				}
+				
+
 	///////////////////////////////////////*			if (!renter.hasPaymentMethod() && renter.getAccountBalance() > 0) {
 					//throw new CustomError(413, 'Please input payment method first');
 				//}******************************************************************************************
@@ -103,7 +122,8 @@ export class BookingRouter extends BaseRouter {
 					req.body.from,
 					req.body.to,
 					tour,
-					bpartner
+					bpartner,
+					points
 					//purpose
 				);
 				if (!createdScheduledRent) throw new CustomError(400, 'Cannot create rent!');

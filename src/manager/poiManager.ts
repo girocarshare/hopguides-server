@@ -1,39 +1,29 @@
-import tourRepository, { TourRepository } from '../db/repository/tourRepository';
+import poiRepository, { POIRepository } from '../db/repository/poiRepository';
 import { CustomError } from '../classes/customError';
 import { SearchPagination } from '../classes/searchPagination';
-import { Tour } from '../models/tours/tour';
+import { POI } from '../models/tours/poi';
 //import { deserializeFromDb } from '../db/dbUtils';
 //import { GetTourPayload } from '../classes/tour/getTourPayload';
-import { S3Service } from '../utils/s3Service';
-import { MulterFile } from '../classes/interfaces';
-import * as multer from 'multer';
 
-
-	
-declare  var randomString: string
-export class TourManager {
-	tourRepository: TourRepository;
-	s3Service: S3Service;
+export class POIManager {
+	poiRepository: POIRepository;
 	constructor() {
-		this.tourRepository = tourRepository;
-		this.s3Service = new S3Service("giromobility-dev");
+		this.poiRepository = poiRepository;
+
 	}
 
-	
-
-
-	async getTour(tourId: string): Promise<Tour> {
-		return await this.tourRepository.getByIdOrThrow(tourId).catch(() => {
-			throw new CustomError(404, 'Tour not found!');
+	async getPoi(poiId: string): Promise<POI> {
+		return await this.poiRepository.getByIdOrThrow(poiId).catch(() => {
+			throw new CustomError(404, 'POI not found!');
 		});
 	}
 
-	async getTours(filter?: any, pagination?: SearchPagination): Promise<Tour[]> {
-		return await this.tourRepository.getAll(filter, pagination).catch(() => {
-			throw new Error('Error getting Tours');
+	async getPois(filter?: any, pagination?: SearchPagination): Promise<POI[]> {
+		return await this.poiRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting pois');
 		});
 	}
-
+/*
 	async uploadMenu(tourId: string, file: MulterFile): Promise<Tour> {
 		var tours: Tour[] =  await this.tourRepository.getAll().catch(() => {
 			throw new Error('Error getting Tours');
@@ -104,15 +94,16 @@ export class TourManager {
 		else throw new CustomError(404, 'tour not found');
 	}
 */
-	async updateTour(tourId: string, data: Partial<Tour>): Promise<Tour> {
+/*	async updateTour(tourId: string, data: Partial<Tour>): Promise<Tour> {
 		return await this.tourRepository.updateOne(tourId, data).catch(() => {
 			throw new Error('Error updating Tour');
 		});
 	}
-
-	async createTour(tour: Tour): Promise<Tour> {
-		return await this.tourRepository.createOne(tour).catch(() => {
-			throw new CustomError(500, 'Tour not created!');
+*/
+	async createPOI(poi: POI): Promise<POI> {
+		return await this.poiRepository.createOne(poi).catch(() => {
+			
+			throw new CustomError(500, 'POI not created!');
 		});
 	}
 }

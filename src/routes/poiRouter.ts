@@ -1,15 +1,12 @@
 /*import { ServiceRole } from './../utils/utils';*/
 import { IRequest, IResponse } from '../classes/interfaces';
-/*import { CarManager } from '../manager/carManager';
-import { User } from '../models/user/user';
+import { POIManager } from '../manager/poiManager';
+/*import { User } from '../models/user/user';
 import { UserManager } from '../manager/userManager';*/
 import { /*AdminRole, allowFor, parseJwt, SupportRole,*/ withErrorHandler } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
-import { Report } from '../models/report/report';
-import { Tour } from '../models/tours/tour';
-//import { deserialize, serialize } from '../json';*/
-import { ReportManager } from '../manager/reportManager';
-import { TourManager } from '../manager/tourManager';
+import { POI } from '../models/tours/poi';
+import { deserialize, serialize } from '../json';
 /*import { CustomError } from '../classes/customError';
 import { SearchPagination } from '../classes/searchPagination';
 import { SearchReportFilter } from '../classes/searchReportFilter';*/
@@ -19,10 +16,10 @@ import { ReportType } from '../models/report/enums';
 import { Vehicle } from '../models/car/car';*/
 
 import { simpleAsync } from './util';
-interface IBkRequest extends IRequest {
+/*interface IBkRequest extends IRequest {
 	tour: Tour;
 	tourId: string;
-}	
+}	*/
 
 function randomstring(length) {
 	var result = '';
@@ -34,16 +31,16 @@ function randomstring(length) {
 	}
 	return result;
 }
-export class ReportRouter extends BaseRouter {
+export class POIRouter extends BaseRouter {
 	//carManager: CarManager;
-	reportManager: ReportManager;
-	tourManager: TourManager;
+	poiManager: POIManager;
+	//tourManager: TourManager;
 	//userManager: UserManager;
 	//notificationManager: NotificationManager;
 	//upload: any;
 
 	
-	storage = multer.diskStorage({
+	/*storage = multer.diskStorage({
 		destination: function (req, file, cb) {
 			
 		console.log("evo me ovde")
@@ -65,43 +62,55 @@ export class ReportRouter extends BaseRouter {
 		}
 	})
 	
-	upload = multer({ storage: this.storage })
+	upload = multer({ storage: this.storage })*/
 	constructor() {
 		super(true);
-		this.upload = multer({ storage: this.storage });
+		//this.upload = multer({ storage: this.storage });
 		//this.carManager = new CarManager();
 		//this.userManager = new UserManager();
-		this.reportManager = new ReportManager();
-		this.tourManager = new TourManager();
+		this.poiManager = new POIManager();
+		//this.tourManager = new TourManager();
 		//this.notificationManager = new NotificationManager();
 
 		this.init();
 	}
 
 	init(): void {
+
+		/** POST reate POI */
+		this.router.post(
+			'/create',
+			//allowFor([AdminRole, MarketingRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				try{
+		
+				const poi: POI = await this.poiManager.createPOI(
+					deserialize(POI, req.body)
+				);
+			
+
+				return res.status(200).send(poi);
+				}catch(err){
+					console.log(err.error)
+				}
+			})
+		);
+
+
+
 		/** GET the list of reports   */
-		this.router.get(
+		/*this.router.get(
 			'/:id',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				const filter: any = {};
 				const report: Report = await this.reportManager.getReport(req.params.id, filter);
 				return res.status(200).send(report)
-			})
-		);
-
-		/** GET generate qr code for company   */
-		this.router.get(
-			'/qr/:id',
-			//allowFor([AdminRole, SupportRole, ServiceRole]),
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-	
-				 await this.reportManager.generateQr(req.params.id);
-				return res.status(200)
 				
 			})
-		);
-
+		);*/
+	
 		/*this.router.post(
 			'/:tourId/uploadFile',
 			//userSecurity(),
@@ -115,7 +124,7 @@ export class ReportRouter extends BaseRouter {
 			})
 		);*/
 
-		this.router.post(
+	/*	this.router.post(
 			'/:pointId/uploadMenu',
 			//userSecurity(),
 			//ownedBookingInStatusMdw(RentStatus.DRIVING),
@@ -127,7 +136,7 @@ export class ReportRouter extends BaseRouter {
 				return await this.tourManager.uploadMenu(req.params.pointId, req.file);
 			})
 		);
-
+*/
 
 		
 		/** POST report   

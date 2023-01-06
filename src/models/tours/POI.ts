@@ -3,6 +3,7 @@ import { jsonProperty } from '../../json/decorations';
 import { GeoLocation } from '../address/geoLocation';
 import { LocalizedField } from '../localizedField';
 
+import { generateUuid } from '../../utils/utils';
 class Contact {
 	@jsonProperty()
 	@dbField()
@@ -24,9 +25,16 @@ class Contact {
 }
 
 export class POI {
+
+	@id()
+	@dbField()
+	@jsonProperty({ deserialize: false, serialize: true })
+	id: string = generateUuid();
+
+
 	@jsonProperty()
 	@dbField()
-	id: number;
+	idField: number;
 
 	@jsonProperty()
 	@dbField()
@@ -62,5 +70,6 @@ export class POI {
 	
 	@jsonProperty()
 	@dbField()
-	used: boolean;
+	image: string;
+
 }

@@ -11,6 +11,7 @@ import { BookingVehicle } from './bookingVehicle';
 import {GeneratedVoucher } from './bookingVoucher';
 import { BookingPricing } from './bookingPricing';
 import { BookingDocs } from './bookingDocs';
+import { PoiHelp } from './PoiHelp';
 
 export enum BookingStatus {
 	PENDING = 'PENDING',
@@ -114,6 +115,12 @@ export class Booking {
 	@dbField()
 	@jsonProperty({ deserialize: true, serialize: true })
 	bpartnerId: string; 
+
+	
+	@jsonProperty({ type: PoiHelp })
+	@dbField({ type: PoiHelp })
+	points: PoiHelp[] = [];
+
 
 	static start( userId: string): Booking {
 		const booking: Booking = new Booking();
