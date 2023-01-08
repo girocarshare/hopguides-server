@@ -34,21 +34,7 @@ export class TourManager {
 		});
 	}
 
-	async uploadMenu(tourId: string, file: MulterFile): Promise<Tour> {
-		var tours: Tour[] =  await this.tourRepository.getAll().catch(() => {
-			throw new Error('Error getting Tours');
-		});
-
-		for(var tour of tours){
-			//if()
-			for(var point of tour.points){
-
-			}
-		}
-
-		var tour : Tour
-		return tour;
-	}
+	
 
 
 	/*async __uploadFile(tourId: string, file: MulterFile): Promise<Tour> {

@@ -70,6 +70,6 @@ export class POI {
 	
 	@jsonProperty()
 	@dbField()
-	image: string;
+	menu: string;
 
 }

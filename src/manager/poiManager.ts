@@ -5,6 +5,7 @@ import { POI } from '../models/tours/poi';
 //import { deserializeFromDb } from '../db/dbUtils';
 //import { GetTourPayload } from '../classes/tour/getTourPayload';
 
+import { MulterFile } from '../classes/interfaces';
 export class POIManager {
 	poiRepository: POIRepository;
 	constructor() {
@@ -21,6 +22,15 @@ export class POIManager {
 	async getPois(filter?: any, pagination?: SearchPagination): Promise<POI[]> {
 		return await this.poiRepository.getAll(filter, pagination).catch(() => {
 			throw new Error('Error getting pois');
+		});
+	}
+
+	async uploadMenu(pointId: string, file: MulterFile): Promise<POI> {
+		var point: POI = await this.getPoi(pointId)
+
+		point.menu = file.path
+		return await this.poiRepository.updateOne(pointId, point).catch(() => {
+			throw new Error('Error updating Tour');
 		});
 	}
 /*
@@ -94,12 +104,12 @@ export class POIManager {
 		else throw new CustomError(404, 'tour not found');
 	}
 */
-/*	async updateTour(tourId: string, data: Partial<Tour>): Promise<Tour> {
+	/*async updatePOI(poiId: string, data: Partial<Tour>): Promise<Tour> {
 		return await this.tourRepository.updateOne(tourId, data).catch(() => {
 			throw new Error('Error updating Tour');
 		});
-	}
-*/
+	}*/
+
 	async createPOI(poi: POI): Promise<POI> {
 		return await this.poiRepository.createOne(poi).catch(() => {
 			

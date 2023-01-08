@@ -14,7 +14,7 @@ import * as multer from 'multer';
 /*import { NotificationManager } from '../manager/notificationManager';
 import { ReportType } from '../models/report/enums';
 import { Vehicle } from '../models/car/car';*/
-
+import * as fs from 'fs';
 import { simpleAsync } from './util';
 /*interface IBkRequest extends IRequest {
 	tour: Tour;
@@ -31,6 +31,12 @@ function randomstring(length) {
 	}
 	return result;
 }
+
+interface IBkRequest extends IRequest {
+	point: POI;
+	pointId: string;
+}
+
 export class POIRouter extends BaseRouter {
 	//carManager: CarManager;
 	poiManager: POIManager;
@@ -39,21 +45,18 @@ export class POIRouter extends BaseRouter {
 	//notificationManager: NotificationManager;
 	//upload: any;
 
-	
-	/*storage = multer.diskStorage({
+	storage = multer.diskStorage({
 		destination: function (req, file, cb) {
-			
-		console.log("evo me ovde")
+
 			cb(null, 'images/menu')
 		},
 		filename: function (req, file, cb) {
-			
-		console.log("evo me ovde 2222")
-		globalThis.randomString = randomstring(10)
+
+			globalThis.randomString = randomstring(10)
 			var list = file.originalname.split('.')
 			cb(null, globalThis.randomString + "." + list[list.length - 1]);
 		},
-	
+
 		fileFilter(req, file, cb) {
 			if (!file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt)$/)) {
 				return cb(new Error('Please upload pdf file.'))
@@ -61,8 +64,9 @@ export class POIRouter extends BaseRouter {
 			cb(undefined, true)
 		}
 	})
-	
-	upload = multer({ storage: this.storage })*/
+
+	upload = multer({ storage: this.storage })
+
 	constructor() {
 		super(true);
 		//this.upload = multer({ storage: this.storage });
@@ -72,6 +76,7 @@ export class POIRouter extends BaseRouter {
 		//this.tourManager = new TourManager();
 		//this.notificationManager = new NotificationManager();
 
+		this.upload = multer({ storage: this.storage });
 		this.init();
 	}
 
@@ -83,21 +88,66 @@ export class POIRouter extends BaseRouter {
 			//allowFor([AdminRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try{
-		
-				const poi: POI = await this.poiManager.createPOI(
-					deserialize(POI, req.body)
-				);
-			
+				try {
 
-				return res.status(200).send(poi);
-				}catch(err){
+					const poi: POI = await this.poiManager.createPOI(
+						deserialize(POI, req.body)
+					);
+
+
+					return res.status(200).send(poi);
+				} catch (err) {
 					console.log(err.error)
 				}
 			})
 		);
 
+		this.router.post(
+			'/:pointId/uploadMenu',
+			//userSecurity(),
+			//ownedBookingInStatusMdw(RentStatus.DRIVING),
+			this.upload.single('file'),
+			simpleAsync(async (req: IBkRequest) => {
+				// Upload
+				console.log(req.file)
+				if (!req.file) console.log("Error while uploading file")
+				return await this.poiManager.uploadMenu(req.params.pointId, req.file);
+			})
+		);
 
+
+		/** GET poi picture   */
+
+		this.router.get(
+			'/getFile/:id',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			try{
+				
+				var point: POI = await this.poiManager.getPoi((req.params.id).trim());
+
+				if(point.menu!=null){
+				fs.readFile("./" + point.menu, (error, data) => {
+					if (error) {
+						throw error;
+					}
+					var file = data
+
+					res.status(200);
+					res.setHeader('Content-Type', 'application/octet-stream');
+					res.setHeader('Content-Disposition', 'attachment; filename=' + req.params.fileName);
+					res.write(file, 'binary');
+					res.end();
+				
+				});
+			}else{
+				res.status(200)
+			}
+			}catch(err){
+				console.log(err.error)
+			}
+			})
+		);
 
 		/** GET the list of reports   */
 		/*this.router.get(
@@ -110,7 +160,7 @@ export class POIRouter extends BaseRouter {
 				
 			})
 		);*/
-	
+
 		/*this.router.post(
 			'/:tourId/uploadFile',
 			//userSecurity(),
@@ -124,21 +174,21 @@ export class POIRouter extends BaseRouter {
 			})
 		);*/
 
-	/*	this.router.post(
-			'/:pointId/uploadMenu',
-			//userSecurity(),
-			//ownedBookingInStatusMdw(RentStatus.DRIVING),
-			this.upload.single('file'),
-			simpleAsync(async (req: IBkRequest) => {
-				// Upload
-				console.log(req.file)
-				if (!req.file) console.log("Error while uploading file")
-				return await this.tourManager.uploadMenu(req.params.pointId, req.file);
-			})
-		);
-*/
+		/*	this.router.post(
+				'/:pointId/uploadMenu',
+				//userSecurity(),
+				//ownedBookingInStatusMdw(RentStatus.DRIVING),
+				this.upload.single('file'),
+				simpleAsync(async (req: IBkRequest) => {
+					// Upload
+					console.log(req.file)
+					if (!req.file) console.log("Error while uploading file")
+					return await this.tourManager.uploadMenu(req.params.pointId, req.file);
+				})
+			);
+	*/
 
-		
+
 		/** POST report   
 		this.router.post(
 			'/',

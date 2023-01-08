@@ -13,27 +13,16 @@ import { TourManager } from '../manager/tourManager';
 /*import { CustomError } from '../classes/customError';
 import { SearchPagination } from '../classes/searchPagination';
 import { SearchReportFilter } from '../classes/searchReportFilter';*/
-import * as multer from 'multer';
 /*import { NotificationManager } from '../manager/notificationManager';
 import { ReportType } from '../models/report/enums';
 import { Vehicle } from '../models/car/car';*/
 
 import { simpleAsync } from './util';
-interface IBkRequest extends IRequest {
-	tour: Tour;
-	tourId: string;
-}	
 
-function randomstring(length) {
-	var result = '';
-	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	var charactersLength = characters.length;
-	for (var i = 0; i < length; i++) {
-		result += characters.charAt(Math.floor(Math.random() *
-			charactersLength));
-	}
-	return result;
-}
+interface helpObjectSort {
+	from: string;
+	count: number;
+  };
 export class ReportRouter extends BaseRouter {
 	//carManager: CarManager;
 	reportManager: ReportManager;
@@ -43,32 +32,9 @@ export class ReportRouter extends BaseRouter {
 	//upload: any;
 
 	
-	storage = multer.diskStorage({
-		destination: function (req, file, cb) {
-			
-		console.log("evo me ovde")
-			cb(null, 'images/menu')
-		},
-		filename: function (req, file, cb) {
-			
-		console.log("evo me ovde 2222")
-		globalThis.randomString = randomstring(10)
-			var list = file.originalname.split('.')
-			cb(null, globalThis.randomString + "." + list[list.length - 1]);
-		},
 	
-		fileFilter(req, file, cb) {
-			if (!file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt)$/)) {
-				return cb(new Error('Please upload pdf file.'))
-			}
-			cb(undefined, true)
-		}
-	})
-	
-	upload = multer({ storage: this.storage })
 	constructor() {
 		super(true);
-		this.upload = multer({ storage: this.storage });
 		//this.carManager = new CarManager();
 		//this.userManager = new UserManager();
 		this.reportManager = new ReportManager();
@@ -87,6 +53,16 @@ export class ReportRouter extends BaseRouter {
 				const filter: any = {};
 				const report: Report = await this.reportManager.getReport(req.params.id, filter);
 				return res.status(200).send(report)
+			})
+		);
+
+		this.router.get(
+			'/previous/:id',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				const filter: any = {};
+				const helpObjectS: helpObjectSort[] = await this.reportManager.getReports(req.params.id, filter);
+				return res.status(200).send(helpObjectS)
 			})
 		);
 
@@ -115,20 +91,7 @@ export class ReportRouter extends BaseRouter {
 			})
 		);*/
 
-		this.router.post(
-			'/:pointId/uploadMenu',
-			//userSecurity(),
-			//ownedBookingInStatusMdw(RentStatus.DRIVING),
-			this.upload.single('file'),
-			simpleAsync(async (req: IBkRequest) => {
-				// Upload
-				console.log(req.file)
-				if (!req.file) console.log("Error while uploading file")
-				return await this.tourManager.uploadMenu(req.params.pointId, req.file);
-			})
-		);
-
-
+		
 		
 		/** POST report   
 		this.router.post(
