@@ -138,6 +138,7 @@ export class User extends UserBase {
 	@dbField()
 	allowPromoMB: boolean = true;
 
+	@jsonProperty()
 	@dbField()
 	password: string;
 

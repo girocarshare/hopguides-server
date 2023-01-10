@@ -4,7 +4,7 @@ import { User, UserRoles, UserStatus } from '../models/user/user';
 //import * as multer from 'multer';
 import { CustomError } from '../classes/customError';
 import { IRequest, IResponse, MulterFile } from '../classes/interfaces';
-//import { LoginPayloadOLD } from '../classes/user/loginPayload';
+import { LoginPayload } from '../classes/user/loginPayload';
 //import { UserPatchPayload } from '../classes/user/userPatchPayload';
 import { deserialize, serialize } from '../json';
 //import { BookingManager } from '../manager/bookingManager';
@@ -23,7 +23,7 @@ import {
 	UserRoleWith,*/
 	withErrorHandler
 } from '../utils/utils';
-//import { validateOrThrow } from '../validations';
+import { validateOrThrow } from '../validations';
 import { BaseRouter } from './baseRouter';
 /*import { UserCarRouter } from './userCarRouter';
 import { sendSMSMB } from '../utils/sms';
@@ -41,61 +41,87 @@ function performBasicChecks(user: User): void {
 	if (user.statusMB === UserStatus.BANNED) throw new CustomError(443, 'User is banned');*/
 }
 
-	export class UserRouter extends BaseRouter {
-		userManager: UserManager;
-		/*bookingManager: BookingManager;
-		rideManager: RideManager;
-		carManager: CarManager;
-		notificationManager: NotificationManager;
-		userCarRouter: UserCarRouter;
-		transactionManager: TransactionManager;
+export class UserRouter extends BaseRouter {
+	userManager: UserManager;
+	/*bookingManager: BookingManager;
+	rideManager: RideManager;
+	carManager: CarManager;
+	notificationManager: NotificationManager;
+	userCarRouter: UserCarRouter;
+	transactionManager: TransactionManager;
 
-		upload: any;*/
+	upload: any;*/
 
-		constructor() {
-			super();
-			//this.upload = multer();
-			this.userManager = new UserManager();
-			/*this.bookingManager = new BookingManager();
-			this.rideManager = new RideManager();
-			this.carManager = new CarManager();
-			this.notificationManager = new NotificationManager();
-			this.userCarRouter = new UserCarRouter();
-			this.transactionManager = new TransactionManager();*/
-			this.init();
-		}
+	constructor() {
+		super();
+		//this.upload = multer();
+		this.userManager = new UserManager();
+		/*this.bookingManager = new BookingManager();
+		this.rideManager = new RideManager();
+		this.carManager = new CarManager();
+		this.notificationManager = new NotificationManager();
+		this.userCarRouter = new UserCarRouter();
+		this.transactionManager = new TransactionManager();*/
+		this.init();
+	}
 
-		init(): void {
-			/*this.router.post(
-				'/:userId/uploadICON',
-				allowFor([AdminRole]),
-				this.upload.single('file'),
-				withErrorHandler(async (req: IRequest, res: IResponse) => {
-					await this.userManager.getUser(req.params.userId);
-					const file: MulterFile = req.file;
-					if (!file) return res.throwErr(new CustomError(400, 'No file found'));
-					const uploadedUrl: string = await this.userManager.uploadICON(file);
-					return res.respond(200, uploadedUrl);
-				})
-			); 
-			
-	*/
+	init(): void {
+		/*this.router.post(
+			'/:userId/uploadICON',
+			allowFor([AdminRole]),
+			this.upload.single('file'),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				await this.userManager.getUser(req.params.userId);
+				const file: MulterFile = req.file;
+				if (!file) return res.throwErr(new CustomError(400, 'No file found'));
+				const uploadedUrl: string = await this.userManager.uploadICON(file);
+				return res.respond(200, uploadedUrl);
+			})
+		); 
+		
+*/
 
-			this.router.post(
-				'/addUser',
-				withErrorHandler(async (req: IRequest, res: IResponse) => {
-					const createdUser: User = await this.userManager.createUser(
-						deserialize(User, req.body));
+		this.router.post(
+			'/addUser',
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				console.log(req.body)
+				const createdUser: User = await this.userManager.createUser(
+					deserialize(User, req.body));
 
-				
-					//const createdUser: User = await this.userManager.createUser(userData);
 
-					//console.log(createdUser)
-					return res.status(200).send(createdUser);
-				})
-			);
+				//const createdUser: User = await this.userManager.createUser(userData);
 
-			// GET fetches users list for admin panel 
+				//console.log(createdUser)
+				return res.status(200).send(createdUser);
+			})
+		);
+
+		this.router.post(
+			'/login',
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				const login: LoginPayload = deserialize(LoginPayload, req.body);
+				validateOrThrow(login);
+				let user: User = await this.userManager.getUserByEmail(login.email);
+				/** START OF SECURITY CHECKS  */
+				//performBasicChecks(user);
+				/** END OF SECURITY CHECKS  */
+				if (!user || user.role === UserRoles.USER)
+					return res.throwErr(new CustomError(404, 'User not ADMIN'));
+
+				else {
+					const loggedUserData: {
+						userData: User;
+						userJwt: string;
+					} = await this.userManager.login(login);
+					res.append('accessToken', loggedUserData.userJwt);
+					return res.status(200).send(serialize(loggedUserData.userData));
+					
+				}
+			})
+		);
+
+
+		// GET fetches users list for admin panel 
 		/*	this.router.get(
 				'/',
 				allowFor([AdminRole, SupportRole]),
@@ -434,5 +460,5 @@ function performBasicChecks(user: User): void {
 		}
 	*/
 	}
-		
-	}
+
+}

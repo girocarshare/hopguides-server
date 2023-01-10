@@ -7,6 +7,7 @@ import { serializeForDb } from '../db/dbUtils';
 import UserRepo, { UserRepository } from '../db/repository/userRepository';
 //import { ICreditCardPayload } from '../models/paywiser/creditCard';
 import { User, UserStatus, UserRoles } from '../models/user/user';
+import { LoginPayload } from '../classes/user/loginPayload';
 /*import {
 	payTopUp,
 	payWith3DSec,
@@ -17,9 +18,9 @@ import { User, UserStatus, UserRoles } from '../models/user/user';
 	tokenizeCard3D,
 	voidReservation
 } from '../utils/paywiser';
-import { S3Service } from '../utils/s3Service';
-import { generateJwt, roundToTwoDecimal } from '../utils/utils';
-import { SearchUsersFilter } from '../classes/searchUsersFilter';
+import { S3Service } from '../utils/s3Service';*/
+import { generateJwt } from '../utils/utils';
+/*import { SearchUsersFilter } from '../classes/searchUsersFilter';
 import { SearchPagination } from '../classes/searchPagination';
 import { TransactionManager } from './transactionManager';
 import { encrypt } from '../utils/crypto';
@@ -32,7 +33,8 @@ import { PromoCode, PromoType } from '../models/promotion/promotion';
 import { PaymentType } from '../models/booking/booking';
 import { Tour } from '../models/tours/tour';*/
 import { Logger } from 'tslog';
-
+import { create } from 'domain';
+var bcrypt = require('bcryptjs');
 export class UserManager {
 	userRepository: UserRepository;
 	//valuManager: ValuManager;
@@ -56,6 +58,13 @@ export class UserManager {
 
 	async getUser(userId: string): Promise<User> {
 		return await this.userRepository.getByIdOrThrow(userId).catch(() => {
+			throw new CustomError(404, 'User not found!');
+		});
+	}
+
+	
+	async getUserByEmail(email: string): Promise<User> {
+		return await this.userRepository.findOne({ email: email }).catch(() => {
 			throw new CustomError(404, 'User not found!');
 		});
 	}
@@ -146,7 +155,13 @@ export class UserManager {
 	async createUser(user: User): Promise<User> {
 		// search for user, check if it exists, if it does, check for the fields of confirmed and createdAt
 		let createdUser: User = await this.userRepository.findOne({ phone: user.phone });
-		if (!createdUser) createdUser = await this.userRepository.createOne(user);
+
+
+		if (!createdUser) {
+			user.password = await bcrypt.hash(user.password, 8)
+
+			createdUser = await this.userRepository.createOne(user);
+		}
 		// await sendRegistrationMail(createdUser, notification.emailTemplate);
 		else if (createdUser.statusMB === UserStatus.BANNED)
 			throw new CustomError(403, 'User blacklisted');
@@ -155,6 +170,24 @@ export class UserManager {
 		else createdUser = await this.userRepository.replaceOne(createdUser.id, user);
 
 		return createdUser;
+	}
+
+	async login(login: LoginPayload): Promise<{ userData: User; userJwt: string }> {
+		
+		var user: User = await this.userRepository.findOne({ email: login.email }).catch(() => {
+			throw new CustomError(404, 'User not found!');
+		});
+		const isMatch = await bcrypt.compare(login.password, user.password)
+		
+
+		if(isMatch){
+
+			return { userData: user, userJwt: generateJwt(user) };
+		}
+		else{
+			throw new CustomError(401, "Passwords do not match");
+		}
+
 	}
 /*
 	async confirmUser(confirmationToken: string): Promise<User> {

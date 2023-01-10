@@ -79,7 +79,6 @@ export class MinValidator implements Validator<any> {
 	}
 }
 
-/*
 
 
 
@@ -91,7 +90,7 @@ export class NotEmptyValidator extends RequiredValidator {
 	}
 }
 
-
+/*
 
 export class ArrayValidator implements Validator<any[]> {
 	constructor(private type: any) {}

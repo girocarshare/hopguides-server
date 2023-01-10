@@ -1,17 +1,17 @@
 //import { ReturnLocation } from './../models/car/returnOptions';
 import * as crypto from 'crypto';
-//import * as jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 //import * as _ from 'lodash';
 //import * as moment from 'moment';
 import { v4 } from 'uuid';
-//import { CustomError } from '../classes/customError';
+import { CustomError } from '../classes/customError';
 import { INextFunction, IRequest, IResponse } from '../classes/interfaces';
-//import UserRepo, { UserRepository } from '../db/repository/userRepository';
+import UserRepo, { UserRepository } from '../db/repository/userRepository';
 //import { Vehicle } from '../models/car/car';
 //import { VehicleAvailable, VehicleStatus } from '../models/car/enums';
 import { User, UserRoles, UserStatus } from '../models/user/user';
-/*import { CONSTANTS } from './constants';
-import { Tour } from '../models/tours/tour';
+import { CONSTANTS } from './constants';
+/*import { Tour } from '../models/tours/tour';
 import { Booking } from '../models/booking/booking';*/
 import { Logger } from 'tslog';
 
@@ -103,23 +103,27 @@ export function hashPassword(password: string, salt: string): string {
 	const key = crypto.pbkdf2Sync(password, salt, iterations, 64, 'sha512');
 	return key.toString('hex');
 }
+*/
+
+var JWT_KEY="73c0f68d35b4fc866d54"
+var JWT_SECRET="jj8axcJBhpQqZm08O5HxGxpSH9XLmQFhXYbPmt6wnG8B4Q92N98zSPmJrgtceOi"
 
 export function generateJwt(user: User): string {
-	const secret = process.env.JWT_SECRET;
-	const key = process.env.JWT_KEY;
+	const secret = JWT_SECRET;
+	const key = JWT_KEY;
 	const tokenData = {
 		id: user.id,
 		email: user.email,
 		firstName: user.firstName,
 		lastName: user.lastName,
 		key: key,
-		role: user.roleMB,
+		role: user.role,
 		status: user.statusMB,
 		exp: Date.now() + CONSTANTS.day * 90
 	};
 	return jwt.sign(tokenData, secret);
 }
-
+/*
 export function mergeCopyArrays(objValue: any, srcValue: any): any {
 	if (_.isArray(objValue)) return srcValue;
 }
@@ -139,7 +143,7 @@ export function generateRandomChars(n: number): any {
 	return chars;
 }
 
-
+*/
 export interface IAuthChecker {
 	check(id: any, role: string, req: IRequest): boolean;
 }
@@ -149,7 +153,7 @@ export function paramCheck(param: string) {
 		return req.params[param] === id;
 	};
 }
-
+/*
 export function queryCheck(param: string) {
 	return function (id: any, req: any): any {
 		return req.query[param] === id;
@@ -161,7 +165,7 @@ export function bodyCheck(param: string) {
 		return req.body[param] === id;
 	};
 }
-
+*/
 class RoleChecker implements IAuthChecker {
 	constructor(private readonly role: string) {}
 
@@ -221,7 +225,7 @@ export function allowFor(
 			.catch(() => res.throwErr(new CustomError(403, 'Unauthorized')));
 	};
 }
-
+/*
 export function formatDate(timestamp: number): string {
 	return moment(timestamp).format('DD.MM.YYYY HH:mm');
 }

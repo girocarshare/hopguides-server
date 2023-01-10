@@ -5,7 +5,7 @@ import { VehicleRouter } from './routes/vehicleRouter';
 import { BookingRouter } from './routes/bookingRouter';
 import { ReportRouter } from './routes/reportRouter';
 import { POIRouter } from './routes/poiRouter';
-/*import { catchErrors } from './utils/errorhandles';
+//import { catchErrors } from './utils/errorhandles';
 import {
 	AdminRole,
 	allowFor,
@@ -15,7 +15,7 @@ import {
 	SupportRole,
 	UserRoleWith
 } from './utils/utils';
-import { UserCarRouter } from './routes/userCarRouter';
+/*import { UserCarRouter } from './routes/userCarRouter';
 import { RideRouter } from './routes/rideshareRouter';
 import { CountryRouter } from './routes/countryRouter';
 import { CronRouter } from './routes/cronRouter';

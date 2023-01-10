@@ -7,14 +7,14 @@ import {
 	IntegerValidator,
 	MinValidator,
 	NopValidator,
-	//NotEmptyValidator,
+	NotEmptyValidator,
 	RequiredValidator,
 	Validator
 } from './validators';
 
 const emailValidator = new EmailValidator();
 const requiredValidator = new RequiredValidator();
-//const notEmptyValidator = new NotEmptyValidator();
+const notEmptyValidator = new NotEmptyValidator();
 const integerValidator = new IntegerValidator();
 const nopValidator = new NopValidator();
 export const validationsMDKey = Symbol('validations');
@@ -102,7 +102,7 @@ export function min(min: number) {
 	};
 }
 
-/*
+
 
 
 export function notEmpty(): any {
@@ -111,7 +111,7 @@ export function notEmpty(): any {
 	};
 }
 
-
+/*
 export function validArray(type: any) {
 	return function (target: any, propertyKey: string): any {
 		addValidator(target, propertyKey, new ArrayValidator(type));
