@@ -113,12 +113,6 @@ export function generateJwt(user: User): string {
 	const key = JWT_KEY;
 	const tokenData = {
 		id: user.id,
-		email: user.email,
-		firstName: user.firstName,
-		lastName: user.lastName,
-		key: key,
-		role: user.role,
-		status: user.statusMB,
 		exp: Date.now() + CONSTANTS.day * 90
 	};
 	return jwt.sign(tokenData, secret);
@@ -334,18 +328,23 @@ export function onlyNum(value: string): string {
 	value = value.replace(/\D/g, '');
 	if (!value) return '';
 	return capitalize(value.toLowerCase());
-}
+}*/
+
+
+var JWT_SECRET="jj8axcJBhpQqZm08O5HxGxpSH9XLmQFhXYbPmt6wnG8B4Q92N98zSPmJrgtceOi"
 
 export function parseJwt(req: IRequest, res: IResponse, next: any): void {
-	const token: string = req.header('accessToken');
+
+	var token = req.header('authorization').replace('Bearer ', '').trim()
+
 	if (!token) return res.throwErr(new CustomError(401, 'No token'));
 	let tokenData;
 	try {
-		tokenData = jwt.verify(token, process.env.JWT_SECRET);
+		tokenData = jwt.verify(token, JWT_SECRET);
 	} catch (err) {
 		return res.throwErr(new CustomError(401, 'Invalid token'));
 	}
-	if (tokenData.exp < Date.now()) return res.throwErr(new CustomError(401, 'Token has expired'));
+	//if (tokenData.exp < Date.now()) return res.throwErr(new CustomError(401, 'Token has expired'));
 
 	const userRepository: UserRepository = UserRepo;
 	userRepository
@@ -359,7 +358,7 @@ export function parseJwt(req: IRequest, res: IResponse, next: any): void {
 		})
 		.catch(() => res.throwErr(new CustomError(403, 'Unauthorized')));
 }
-
+/*
 export function decodeJwtOrThrow(req: IRequest, res: IResponse): any {
 	const token: string = req.header('accessToken');
 	if (!token) return res.throwErr(new CustomError(401, 'No token'));

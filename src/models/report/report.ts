@@ -6,5 +6,7 @@ export class Report {
 	monthlyUsedCoupons: number;
 
 	menu: string;
+	
+	name: string;
 
 }

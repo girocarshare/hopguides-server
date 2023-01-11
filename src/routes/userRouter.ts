@@ -21,6 +21,8 @@ import {
 	ServiceRole,
 	SupportRole,
 	UserRoleWith,*/
+	
+	parseJwt,
 	withErrorHandler
 } from '../utils/utils';
 import { validateOrThrow } from '../validations';
@@ -114,9 +116,19 @@ export class UserRouter extends BaseRouter {
 						userJwt: string;
 					} = await this.userManager.login(login);
 					res.append('accessToken', loggedUserData.userJwt);
-					return res.status(200).send(serialize(loggedUserData.userData));
+					return res.status(200).send({userJwt : loggedUserData.userJwt});
 					
 				}
+			})
+		);
+
+		this.router.get(
+			'/getRole',
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				var user: User = await this.userManager.getUser(req.userId);
+				var role : string = user.role
+				return res.status(200).send(role);
 			})
 		);
 

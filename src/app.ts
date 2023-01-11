@@ -84,9 +84,9 @@ class App {
 			res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE,OPTIONS');
 			res.header(
 				'Access-Control-Allow-Headers',
-				'Origin, X-Requested-With, Content-Type, Accept, accessToken, Accept-Language'
+				'Origin, X-Requested-With, Content-Type, Accept, accessToken, Accept-Language, Authorization'
 			);
-			res.header('Access-Control-Expose-Headers', 'accessToken');
+			res.header('Access-Control-Expose-Headers', 'Authorization');
 			// intercepts OPTIONS method
 			if (req.method === 'OPTIONS') {
 				// respond with 200

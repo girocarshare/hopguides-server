@@ -32,6 +32,10 @@ export class ReportManager {
 			throw new Error('Error getting bookings');
 		});
 
+		const p: POI = await this.poiManager.getPoi(companyId).catch(() => {
+			throw new Error('Error getting poi');
+		});
+
 		var count = 0
 		let monthIndex: number = new Date().getMonth();
 		let yearIndex: number = new Date().getFullYear();
@@ -56,6 +60,7 @@ export class ReportManager {
 		const report: Report = new Report();
 		report.pointId = companyId;
 		report.monthlyUsedCoupons = count;
+		report.name = p.name;
 		return report
 	}
 

@@ -36,6 +36,11 @@ export class POI {
 	@dbField()
 	idField: number;
 
+	
+	@jsonProperty()
+	@dbField()
+	name: string;
+
 	@jsonProperty()
 	@dbField()
 	location: GeoLocation;
@@ -71,5 +76,8 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	menu: string;
-
+	
+	@jsonProperty()
+	@dbField()
+	bpartnerId: string;
 }

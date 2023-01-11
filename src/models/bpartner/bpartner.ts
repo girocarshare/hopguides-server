@@ -62,6 +62,10 @@ export class BPartner {
 	@jsonProperty()
 	@dbField()
 	userId: string;
+	
+	@jsonProperty()
+	@dbField()
+	name: string;
 
 	@jsonProperty({ deserialize: false, serialize: true })
 	@dbField()
