@@ -14,6 +14,7 @@ import { deserialize, serialize } from '../json';
 import { POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
+import { ToursReport } from '../classes/tour/toursReport';
 import { POI } from '../models/tours/poi';
 
 export class TourRouter extends BaseRouter {
@@ -37,6 +38,18 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 		
 				const tours: Tour[] = await this.tourManager.getTours();
+				return res.status(200).send(tours);
+				
+			})
+		);
+
+		this.router.get(
+			'/allReport',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+		
+				const tours: ToursReport[] = await this.tourManager.getToursForReport();
 				return res.status(200).send(tours);
 				
 			})

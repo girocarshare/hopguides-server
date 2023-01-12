@@ -39,10 +39,11 @@ export class BPartnerRouter extends BaseRouter {
 				if (bpartner) throw new CustomError(400, 'BPartner already exists');
 				/** END OF SECURITY CHECKS   */
 
-				const bpartnerData: CreateBPartnerPayload = deserialize(
-					CreateBPartnerPayload,
+				const bpartnerData: BPartner = deserialize(
+					BPartner,
 					req.body
 				);
+				
 				validateOrThrow(bpartnerData);
 				const createdBPartner: BPartner = await this.bpartnerManager.createBP(
 					user,

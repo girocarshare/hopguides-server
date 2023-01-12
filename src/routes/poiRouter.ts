@@ -1,14 +1,16 @@
 /*import { ServiceRole } from './../utils/utils';*/
 import { IRequest, IResponse } from '../classes/interfaces';
 import { POIManager } from '../manager/poiManager';
+import { BPartnerManager } from '../manager/bpartnerManager';
 /*import { User } from '../models/user/user';
 import { UserManager } from '../manager/userManager';*/
 import { /*AdminRole, allowFor, parseJwt, SupportRole,*/ withErrorHandler } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
 import { POI } from '../models/tours/poi';
+import { BPartner } from '../models/bpartner/bpartner';
 import { deserialize, serialize } from '../json';
-/*import { CustomError } from '../classes/customError';
-import { SearchPagination } from '../classes/searchPagination';
+import { CustomError } from '../classes/customError';
+/*import { SearchPagination } from '../classes/searchPagination';
 import { SearchReportFilter } from '../classes/searchReportFilter';*/
 import * as multer from 'multer';
 /*import { NotificationManager } from '../manager/notificationManager';
@@ -40,6 +42,7 @@ interface IBkRequest extends IRequest {
 export class POIRouter extends BaseRouter {
 	//carManager: CarManager;
 	poiManager: POIManager;
+	bpartnerManager: BPartnerManager;
 	//tourManager: TourManager;
 	//userManager: UserManager;
 	//notificationManager: NotificationManager;
@@ -73,6 +76,7 @@ export class POIRouter extends BaseRouter {
 		//this.carManager = new CarManager();
 		//this.userManager = new UserManager();
 		this.poiManager = new POIManager();
+		this.bpartnerManager = new BPartnerManager();
 		//this.tourManager = new TourManager();
 		//this.notificationManager = new NotificationManager();
 
@@ -89,7 +93,12 @@ export class POIRouter extends BaseRouter {
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
+					const bpartner: BPartner = await this.bpartnerManager.getBP(req.body.bpartnerId);
 
+
+					if(bpartner==null){
+						throw new CustomError(404, 'BPartner not found');
+					}
 					const poi: POI = await this.poiManager.createPOI(
 						deserialize(POI, req.body)
 					);
@@ -109,7 +118,6 @@ export class POIRouter extends BaseRouter {
 			this.upload.single('file'),
 			simpleAsync(async (req: IBkRequest) => {
 				// Upload
-				console.log(req.file)
 				if (!req.file) console.log("Error while uploading file")
 				return await this.poiManager.uploadMenu(req.params.pointId, req.file);
 			})

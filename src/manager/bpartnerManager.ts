@@ -15,10 +15,11 @@ export class BPartnerManager {
 		this.bpartnerRepository = BPartnerRepository;
 	}
 
-	async createBP(user: User, bpartnerData: CreateBPartnerPayload): Promise<BPartner> {
-		const bpartner: BPartner = deserialize(BPartner, bpartnerData);
+	async createBP(user: User, bpartner: BPartner): Promise<BPartner> {
+	
 		bpartner.userId = user.id;
 
+		console.log(bpartner)
 		return await this.bpartnerRepository.createOne(bpartner).catch(() => {
 			throw new Error('Error creating BPartner');
 		});

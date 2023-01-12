@@ -6,16 +6,21 @@ import { Tour } from '../models/tours/tour';
 //import { GetTourPayload } from '../classes/tour/getTourPayload';
 import { S3Service } from '../utils/s3Service';
 import { MulterFile } from '../classes/interfaces';
+import { ToursReport } from '../classes/tour/toursReport';
 import * as multer from 'multer';
+import { Booking, BookingStatus } from '../models/booking/booking';
+import bookingRepository, { BookingRepository } from '../db/repository/bookingRepository';
 
 
 	
 declare  var randomString: string
 export class TourManager {
 	tourRepository: TourRepository;
+	bookingRepository: BookingRepository;
 	s3Service: S3Service;
 	constructor() {
 		this.tourRepository = tourRepository;
+		this.bookingRepository = bookingRepository;
 		this.s3Service = new S3Service("giromobility-dev");
 	}
 
@@ -34,7 +39,52 @@ export class TourManager {
 		});
 	}
 
+	async getToursForReport(filter?: any, pagination?: SearchPagination): Promise<ToursReport[]> {
+
+		var toursReport: ToursReport[] = []
+
+		const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting bookings');
+		});
+		var tours: Tour[] = await this.tourRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting Tours');
+		});
+
 	
+
+		for(var tour of tours){
+			var count = 0
+			let monthIndex: number = new Date().getMonth();
+			let yearIndex: number = new Date().getFullYear();
+
+			for (var booking of bookings) {
+				var date = new Date(booking.from);
+	
+				let monthBooking: number = date.getMonth();
+				let yearBooking: number = date.getFullYear();
+				
+	
+					if (booking.tourId == tour.id && monthIndex == monthBooking && yearBooking == yearIndex) {
+	
+						count = count + 1
+					}
+	
+				
+	
+			}
+
+			
+			var tourReport : ToursReport = new ToursReport();
+			tourReport.tourId = tour.id;
+			tourReport.tourName = tour.title.en;
+			tourReport.tourPrice = tour.price;
+			tourReport.noOfRidesAMonth = count;
+
+			toursReport.push(tourReport)
+
+		}
+		return toursReport
+	}
 
 
 	/*async __uploadFile(tourId: string, file: MulterFile): Promise<Tour> {

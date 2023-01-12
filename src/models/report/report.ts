@@ -9,4 +9,11 @@ export class Report {
 	
 	name: string;
 
+	bpartnerName : string;
+
+	bpartnerEmail: string;
+
+	bpratnerPhone: string;
+	
+
 }

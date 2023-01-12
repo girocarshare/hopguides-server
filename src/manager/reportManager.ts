@@ -4,6 +4,8 @@ import { Tour } from '../models/tours/tour';
 import { POI } from '../models/tours/poi';
 import { PoiHelp } from '../models/booking/PoiHelp';
 import { CustomError } from '../classes/customError';
+import { BPartner } from '../models/bpartner/bpartner';
+import { BPartnerManager } from '../manager/bpartnerManager';
 import tourRepository, { TourRepository } from '../db/repository/tourRepository';
 import { POIManager } from '../manager/poiManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
@@ -18,12 +20,14 @@ export class ReportManager {
 	bookingRepository: BookingRepository;
 	tourRepository: TourRepository;
 	poiManager: POIManager;
+	bpartnerManager: BPartnerManager;
 
 
 	constructor() {
 		this.bookingRepository = bookingRepository;
 		this.tourRepository = tourRepository;
 		this.poiManager = new POIManager();
+		this.bpartnerManager = new BPartnerManager();
 
 	}
 
@@ -35,6 +39,11 @@ export class ReportManager {
 		const p: POI = await this.poiManager.getPoi(companyId).catch(() => {
 			throw new Error('Error getting poi');
 		});
+
+		const bPartner: BPartner = await this.bpartnerManager.getBP(p.bpartnerId).catch(() => {
+			throw new Error('Error getting business partner');
+		});
+
 
 		var count = 0
 		let monthIndex: number = new Date().getMonth();
@@ -61,6 +70,11 @@ export class ReportManager {
 		report.pointId = companyId;
 		report.monthlyUsedCoupons = count;
 		report.name = p.name;
+		report.bpartnerName = bPartner.name;
+		report.bpartnerEmail = bPartner.contact.email;
+		report.bpratnerPhone = bPartner.contact.phone;
+
+		console.log(report)
 		return report
 	}
 
