@@ -16,6 +16,8 @@ import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
 import { ToursReport } from '../classes/tour/toursReport';
 import { POI } from '../models/tours/poi';
+import { PreviousTourReport } from '../classes/tour/previousReportTour';
+
 
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
@@ -52,6 +54,23 @@ export class TourRouter extends BaseRouter {
 				const tours: ToursReport[] = await this.tourManager.getToursForReport();
 				return res.status(200).send(tours);
 				
+			})
+		);
+
+
+		this.router.get(
+			'/previousReport/:tourId',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				console.log(req.params.tourId)
+				if(req.params.tourId == null){
+					res.status(200)
+				}else{
+				const filter: any = {};
+				const data: PreviousTourReport[] = await this.tourManager.getPreviousReportForTour(req.params.tourId,filter);
+				return res.status(200).send(data);
+				}
 			})
 		);
 

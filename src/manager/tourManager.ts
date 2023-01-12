@@ -11,9 +11,10 @@ import * as multer from 'multer';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import bookingRepository, { BookingRepository } from '../db/repository/bookingRepository';
 
+import { PreviousTourReport } from '../classes/tour/previousReportTour';
 
-	
-declare  var randomString: string
+
+declare var randomString: string
 export class TourManager {
 	tourRepository: TourRepository;
 	bookingRepository: BookingRepository;
@@ -24,7 +25,7 @@ export class TourManager {
 		this.s3Service = new S3Service("giromobility-dev");
 	}
 
-	
+
 
 
 	async getTour(tourId: string): Promise<Tour> {
@@ -50,31 +51,31 @@ export class TourManager {
 			throw new Error('Error getting Tours');
 		});
 
-	
 
-		for(var tour of tours){
+
+		for (var tour of tours) {
 			var count = 0
 			let monthIndex: number = new Date().getMonth();
 			let yearIndex: number = new Date().getFullYear();
 
 			for (var booking of bookings) {
 				var date = new Date(booking.from);
-	
+
 				let monthBooking: number = date.getMonth();
 				let yearBooking: number = date.getFullYear();
-				
-	
-					if (booking.tourId == tour.id && monthIndex == monthBooking && yearBooking == yearIndex) {
-	
-						count = count + 1
-					}
-	
-				
-	
+
+
+				if (booking.tourId == tour.id && monthIndex == monthBooking && yearBooking == yearIndex) {
+
+					count = count + 1
+				}
+
+
+
 			}
 
-			
-			var tourReport : ToursReport = new ToursReport();
+
+			var tourReport: ToursReport = new ToursReport();
 			tourReport.tourId = tour.id;
 			tourReport.tourName = tour.title.en;
 			tourReport.tourPrice = tour.price;
@@ -86,6 +87,90 @@ export class TourManager {
 		return toursReport
 	}
 
+
+	async getPreviousReportForTour(tourId: string, filter: any, pagination?: any): Promise<PreviousTourReport[]> {
+
+		var groupByArray = function (xs, key) {
+			return xs.reduce(function (rv, x) {
+				let v = key instanceof Function ? key(x) : x[key]; let el = rv.find((r) => r && r.key === v);
+				if (el) { el.values.push(x); }
+				else { rv.push({ key: v, values: [x] }); }
+				return rv;
+			}, []);
+		}
+
+
+		const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting bookings');
+		});
+
+
+
+		interface helpObject {
+			from: string;
+			id: string;
+		};
+
+
+		var helpArray: helpObject[] = [];
+
+		for (var booking of bookings) {
+
+
+				if (booking.tourId == tourId) {
+					var date = new Date(booking.from);
+
+					let monthBooking: number = date.getMonth();
+					let yearBooking: number = date.getFullYear();
+
+					let helpObject: helpObject = { from: monthBooking.toString() + yearBooking.toString(), id: tourId }
+
+					helpArray.push(helpObject);
+
+				}
+
+			
+
+
+		}
+
+
+		console.log(helpArray)
+
+		helpArray = groupByArray(helpArray, 'from');
+
+		console.log(helpArray)
+		interface helpObjectSort {
+			from: string;
+			count: number;
+		};
+
+		class objectStr {
+			key: string;
+			values: helpObject[];
+		};
+
+		interface helpObjectSort {
+			from: string;
+			count: number;
+		};
+
+		var helpArraySort: helpObjectSort[] = []
+
+		helpArray.forEach((element) => {
+
+			var obj = Object.assign(new objectStr, element)
+
+			var helpArrayObj = { from: obj.key, count: obj.values.length }
+			helpArraySort.push(helpArrayObj)
+		});
+
+
+
+
+		console.log(helpArraySort)
+		return helpArraySort;
+	}
 
 	/*async __uploadFile(tourId: string, file: MulterFile): Promise<Tour> {
 		const url = await this.s3Service.uploadMenuFile(tourId, file).catch(() => {
