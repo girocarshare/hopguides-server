@@ -128,10 +128,6 @@ export class TourManager {
 					helpArray.push(helpObject);
 
 				}
-
-			
-
-
 		}
 
 
@@ -225,10 +221,13 @@ export class TourManager {
 		else throw new CustomError(404, 'tour not found');
 	}
 */
-	async updateTour(tourId: string, data: Partial<Tour>): Promise<Tour> {
-		return await this.tourRepository.updateOne(tourId, data).catch(() => {
+	async updateTour(tourId: string, data: Partial<Tour>): Promise<ToursReport[]> {
+
+		 await this.tourRepository.updateOne(tourId, data).catch((err) => {
 			throw new Error('Error updating Tour');
 		});
+
+		return this.getToursForReport({})
 	}
 
 	async createTour(tour: Tour): Promise<Tour> {

@@ -86,16 +86,20 @@ export class TourRouter extends BaseRouter {
 		);
 
 		/** PATCH patch tour from ADMIN user */
-		this.router.patch(
-			'/:tourId',
+		this.router.post(
+			'/update/:tourId',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const updatedTour: Tour = await this.tourManager.updateTour(
-					req.params.tourId,
-					deserialize(Tour, req.body)
+				
+				var tour: Tour = await this.tourManager.getTour(req.body.tourId)
+				tour.price = req.body.tourPrice
+
+				const updatedTour: ToursReport[] = await this.tourManager.updateTour(
+					tour.id,
+					deserialize(Tour, tour)
 				);
-				return res.respond(200, serialize(updatedTour));
+				return res.status(200).send(serialize(updatedTour));
 			})
 		);
 

@@ -79,12 +79,24 @@ export abstract class MongoRepository<T> {
 
 	async updateOne(id: string, data: any): Promise<T> {
 		delete data._id;
-		const updated: FindAndModifyWriteOpResultObject<any> = await this.collection.findOneAndUpdate(
-			{ _id: id },
-			{ $set: data },
-			{ returnOriginal: false }
-		);
-		return this.mapObject(updated.value);
+		try {
+			const result = await this.collection.updateOne(
+				{ _id: id },
+			  {
+				$set:  data
+			  },
+			  { upsert: true }
+			);
+		
+			return this.mapObject(result);
+		  } finally{(err) =>{
+		  }}
+
+		  
+
+
+	
+
 	}
 
 	async incrementOne(id: string, data: any): Promise<T> {
