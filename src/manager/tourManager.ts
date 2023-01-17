@@ -8,10 +8,15 @@ import { S3Service } from '../utils/s3Service';
 import { MulterFile } from '../classes/interfaces';
 import { ToursReport } from '../classes/tour/toursReport';
 import * as multer from 'multer';
+import { Report } from '../models/report/report';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import bookingRepository, { BookingRepository } from '../db/repository/bookingRepository';
 
+import { POI } from '../models/tours/poi';
+import { POIManager } from './poiManager';
+import { ReportManager } from './reportManager';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
+import { ToursWithPoints, PointsForTours } from '../classes/tour/toursWithPoints';
 
 
 declare var randomString: string
@@ -19,10 +24,14 @@ export class TourManager {
 	tourRepository: TourRepository;
 	bookingRepository: BookingRepository;
 	s3Service: S3Service;
+	poiManager: POIManager;
+	reportManager: ReportManager;
 	constructor() {
 		this.tourRepository = tourRepository;
 		this.bookingRepository = bookingRepository;
 		this.s3Service = new S3Service("giromobility-dev");
+		this.poiManager = new POIManager();
+		this.reportManager = new ReportManager();
 	}
 
 
@@ -88,6 +97,51 @@ export class TourManager {
 	}
 
 
+	async getToursWithPoints(filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints[]> {
+
+		try{
+		var toursReport: ToursWithPoints[] = []
+
+		var tours: Tour[] = await this.tourRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting Tours');
+		});
+
+
+
+		for (var tour of tours) {
+			
+			var points: PointsForTours[]  = []
+			for(var point of tour.points){
+			
+					var poi: POI = await this.poiManager.getPoi(point)
+
+					var p : PointsForTours = new PointsForTours();
+					p.point = poi;
+
+					var report : Report = await this.reportManager.getReport(poi.id, {})
+
+					p.monthlyUsed = report.monthlyUsedCoupons;
+
+					points.push(p)
+
+			}
+
+			var tourReport : ToursWithPoints = new ToursWithPoints();
+			tourReport.tourId = tour.id;
+			tourReport.points = points;
+
+			toursReport.push(tourReport)
+			}
+
+			
+		
+		return toursReport
+		}catch(err){
+			console.log(err.error)
+		}
+	}
+
+
 	async getPreviousReportForTour(tourId: string, filter: any, pagination?: any): Promise<PreviousTourReport[]> {
 
 		var groupByArray = function (xs, key) {
@@ -131,11 +185,9 @@ export class TourManager {
 		}
 
 
-		console.log(helpArray)
 
 		helpArray = groupByArray(helpArray, 'from');
 
-		console.log(helpArray)
 		interface helpObjectSort {
 			from: string;
 			count: number;
@@ -163,8 +215,6 @@ export class TourManager {
 
 
 
-
-		console.log(helpArraySort)
 		return helpArraySort;
 	}
 

@@ -74,7 +74,6 @@ export class ReportManager {
 		report.bpartnerEmail = bPartner.contact.email;
 		report.bpratnerPhone = bPartner.contact.phone;
 
-		console.log(report)
 		return report
 	}
 
@@ -163,7 +162,7 @@ export class ReportManager {
 	}
 
 
-	async generateQr(companyId: string): Promise<string> {
+	async generateQr(companyId: string): Promise<boolean> {
 
 		//let datajson = JSON.stringify(data);
 		/*QRCode.toString(datajson, {type: "terminal"}, function (err, code){
@@ -173,10 +172,11 @@ export class ReportManager {
 		/*QRCode.toDataURL(datajson, function (err, code){
 			console.log(code)
 		})*/
-		QRCode.toFile("qr.png", "http://localhost:3001/#/report/" + companyId, function (err) {
+		await QRCode.toFile(companyId.trim() + ".png", "http://localhost:3001/#/report/" + companyId.trim(), function (err) {
 
+		return false
 		})
-		return "ok"
+		return true
 	}
 
 

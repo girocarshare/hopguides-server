@@ -15,6 +15,7 @@ import { POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
 import { ToursReport } from '../classes/tour/toursReport';
+import { ToursWithPoints } from '../classes/tour/toursWithPoints';
 import { POI } from '../models/tours/poi';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
 
@@ -38,10 +39,10 @@ export class TourRouter extends BaseRouter {
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-		
+
 				const tours: Tour[] = await this.tourManager.getTours();
 				return res.status(200).send(tours);
-				
+
 			})
 		);
 
@@ -50,10 +51,23 @@ export class TourRouter extends BaseRouter {
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-		
+
 				const tours: ToursReport[] = await this.tourManager.getToursForReport();
 				return res.status(200).send(tours);
+
+			})
+		);
+
+		this.router.get(
+			'/allToursWithPoints',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
 				
+				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+				return res.status(200).send(tours);
+
 			})
 		);
 
@@ -64,12 +78,12 @@ export class TourRouter extends BaseRouter {
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				console.log(req.params.tourId)
-				if(req.params.tourId == null){
+				if (req.params.tourId == null) {
 					res.status(200)
-				}else{
-				const filter: any = {};
-				const data: PreviousTourReport[] = await this.tourManager.getPreviousReportForTour(req.params.tourId,filter);
-				return res.status(200).send(data);
+				} else {
+					const filter: any = {};
+					const data: PreviousTourReport[] = await this.tourManager.getPreviousReportForTour(req.params.tourId, filter);
+					return res.status(200).send(data);
 				}
 			})
 		);
@@ -91,7 +105,7 @@ export class TourRouter extends BaseRouter {
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				
+
 				var tour: Tour = await this.tourManager.getTour(req.body.tourId)
 				tour.price = req.body.tourPrice
 
@@ -111,13 +125,13 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 
-					for(var point of req.body.points){
+					for (var point of req.body.points) {
 						const poi: POI = await this.poiManager.getPoi(point);
-					
-						if(poi!=null){
-						
-						}else{
-							
+
+						if (poi != null) {
+
+						} else {
+
 							return res.status(500).send("Error point with that id doesn't exist");
 						}
 					}
@@ -125,12 +139,45 @@ export class TourRouter extends BaseRouter {
 					const createdTour: Tour = await this.tourManager.createTour(
 						deserialize(Tour, req.body)
 					);
-					
+
 					return res.status(200).send(createdTour);
 				} catch (err) {
 					console.log(err.error)
 				}
 			})
 		);
+
+		this.router.post(
+			'/add',
+			//allowFor([AdminRole, ManagerRole, MarketingRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				try {
+
+					var arr: string[] = []
+					for (var point of req.body.points) {
+						
+						const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
+						arr.push(poi.id)
+					}
+
+					var t = {
+						title: req.body.title,
+						shortInfo: req.body.shortInfo,
+						longInfo: req.body.longInfo,
+						price: req.body.price,
+						points: arr
+					}
+					const createdTour: Tour = await this.tourManager.createTour(
+						deserialize(Tour, t)
+					);
+
+					return res.status(200).send(createdTour);
+				} catch (err) {
+					console.log(err.error)
+				}
+			})
+		);
+
 	}
 }
