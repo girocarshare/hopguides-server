@@ -23,7 +23,7 @@ import { POIManager } from '../manager/poiManager';
 import { Notification } from '../models/notification/notification';
 
 import * as sgMail from '@sendgrid/mail';
-
+import * as schedule from 'node-schedule';
 import { simpleAsync } from './util';
 
 interface helpObjectSort {
@@ -45,7 +45,7 @@ export class ReportRouter extends BaseRouter {
 	//notificationManager: NotificationManager;
 	//upload: any;
 
-	
+
 
 	constructor() {
 		super(true);
@@ -122,29 +122,31 @@ export class ReportRouter extends BaseRouter {
 			})
 		);
 
-		
+
 		/** GET send invoice email  */
 		this.router.get(
 			'/emails/sendEmails',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				
 
-				var pois : POI[] = await this.poiManager.getPois()
-				for(var poi of pois){
+				const job = schedule.scheduleJob('0 0 1 * *', async function () {
 
-					var report: Report = await this.reportManager.getReport(poi.id, {})
-					var price = report.monthlyUsedCoupons * poi.price;
-					sgMail.send({
-						to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
-						from: `${emailSender}`,
-						subject: "Monthly invoice to Tourism Ljubljana",
-						text: `Please invoice Tourism Ljubljana for ${price} eur with tax`,
-					})
 
-				}
-				
+					var pois: POI[] = await this.poiManager.getPois()
+					for (var poi of pois) {
 
+						var report: Report = await this.reportManager.getReport(poi.id, {})
+						var price = report.monthlyUsedCoupons * poi.price;
+						sgMail.send({
+							to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
+							from: `${emailSender}`,
+							subject: "Monthly invoice to Tourism Ljubljana",
+							text: `Please invoice Tourism Ljubljana for ${price} eur with tax`,
+						})
+
+					}
+
+				});
 				return res.status(200)
 			})
 		);
