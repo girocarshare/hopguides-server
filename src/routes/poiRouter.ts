@@ -18,6 +18,8 @@ import { ReportType } from '../models/report/enums';
 import { Vehicle } from '../models/car/car';*/
 import * as fs from 'fs';
 import { simpleAsync } from './util';
+import { ToursReport } from '../classes/tour/toursReport';
+import { TourManager } from '../manager/tourManager';
 /*interface IBkRequest extends IRequest {
 	tour: Tour;
 	tourId: string;
@@ -43,7 +45,7 @@ export class POIRouter extends BaseRouter {
 	//carManager: CarManager;
 	poiManager: POIManager;
 	bpartnerManager: BPartnerManager;
-	//tourManager: TourManager;
+	tourManager: TourManager;
 	//userManager: UserManager;
 	//notificationManager: NotificationManager;
 	//upload: any;
@@ -77,7 +79,7 @@ export class POIRouter extends BaseRouter {
 		//this.userManager = new UserManager();
 		this.poiManager = new POIManager();
 		this.bpartnerManager = new BPartnerManager();
-		//this.tourManager = new TourManager();
+		this.tourManager = new TourManager();
 		//this.notificationManager = new NotificationManager();
 
 		this.upload = multer({ storage: this.storage });
@@ -96,7 +98,7 @@ export class POIRouter extends BaseRouter {
 					const bpartner: BPartner = await this.bpartnerManager.getBP(req.body.bpartnerId);
 
 
-					if(bpartner==null){
+					if (bpartner == null) {
 						throw new CustomError(404, 'BPartner not found');
 					}
 					const poi: POI = await this.poiManager.createPOI(
@@ -130,33 +132,60 @@ export class POIRouter extends BaseRouter {
 			'/getFile/:id',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-			try{
-				
-				var point: POI = await this.poiManager.getPoi((req.params.id).trim());
+				try {
 
-				if(point.menu!=null){
-				fs.readFile("./" + point.menu, (error, data) => {
-					if (error) {
-						throw error;
+					var point: POI = await this.poiManager.getPoi((req.params.id).trim());
+
+					if (point.menu != null) {
+						fs.readFile("./" + point.menu, (error, data) => {
+							if (error) {
+								throw error;
+							}
+							var file = data
+
+							res.status(200);
+							res.setHeader('Content-Type', 'application/octet-stream');
+							res.setHeader('Content-Disposition', 'attachment; filename=' + req.params.fileName);
+							res.write(file, 'binary');
+							res.end();
+
+						});
+					} else {
+						res.status(200)
 					}
-					var file = data
-
-					res.status(200);
-					res.setHeader('Content-Type', 'application/octet-stream');
-					res.setHeader('Content-Disposition', 'attachment; filename=' + req.params.fileName);
-					res.write(file, 'binary');
-					res.end();
-				
-				});
-			}else{
-				res.status(200)
-			}
-			}catch(err){
-				console.log(err.error)
-			}
+				} catch (err) {
+					console.log(err.error)
+				}
 			})
 		);
 
+		/** POST update poi */
+		this.router.post(
+			'/update/:pointId',
+			//allowFor([AdminRole, ManagerRole, MarketingRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try{
+
+				var point: POI = await this.poiManager.getPoi(req.body.point.id)
+				point.price = req.body.point.price
+
+				const updatedPoi: POI = await this.poiManager.updatePoi(
+					point.id,
+					deserialize(POI, point)
+				);
+
+
+				const tours: ToursReport[] = await this.tourManager.getToursForReport(
+					{}
+				);
+				return res.status(200).send(tours);
+				}catch(err){
+					console.log(err)
+				}
+			})
+		);
 		/** GET the list of reports   */
 		/*this.router.get(
 			'/:id',

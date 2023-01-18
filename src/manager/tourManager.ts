@@ -102,7 +102,8 @@ export class TourManager {
 		try{
 		var toursReport: ToursWithPoints[] = []
 
-		var tours: Tour[] = await this.tourRepository.getAll(filter, pagination).catch(() => {
+		var tours: Tour[] = await this.tourRepository.getAll(filter, pagination).catch((err) => {
+			console.log(err)
 			throw new Error('Error getting Tours');
 		});
 
@@ -129,6 +130,7 @@ export class TourManager {
 			var tourReport : ToursWithPoints = new ToursWithPoints();
 			tourReport.tourId = tour.id;
 			tourReport.points = points;
+			tourReport.tourName = tour.title.en;
 
 			toursReport.push(tourReport)
 			}
@@ -137,7 +139,7 @@ export class TourManager {
 		
 		return toursReport
 		}catch(err){
-			console.log(err.error)
+			console.log(err)
 		}
 	}
 

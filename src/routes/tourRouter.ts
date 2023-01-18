@@ -66,6 +66,7 @@ export class TourRouter extends BaseRouter {
 
 				
 				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+				console.log(tours)
 				return res.status(200).send(tours);
 
 			})
@@ -77,7 +78,7 @@ export class TourRouter extends BaseRouter {
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				console.log(req.params.tourId)
+		
 				if (req.params.tourId == null) {
 					res.status(200)
 				} else {

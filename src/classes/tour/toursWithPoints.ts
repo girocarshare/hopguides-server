@@ -12,6 +12,8 @@ export class ToursWithPoints {
 
 	tourId: string;
 
+	tourName: string;
+
 	points: PointsForTours[];
 	
 }
