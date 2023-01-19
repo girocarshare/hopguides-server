@@ -88,12 +88,17 @@ export class ReportRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
 
+				function sleep(ms) {
+					return new Promise((resolve) => {
+						setTimeout(resolve, ms);
+					});
+				}
 				try {
 
 					var tf = false;
 					tf = await this.reportManager.generateQr(req.params.id);
 
-
+					await sleep(1000);
 
 					if (tf) {
 						fs.readFile("./" + req.params.id.trim() + ".png", (error, data) => {
@@ -129,14 +134,15 @@ export class ReportRouter extends BaseRouter {
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				const job = schedule.scheduleJob('0 0 1 * *', async function () {
-
+				//const job = schedule.scheduleJob('0 0 1 * *', async function () {
+				//const job = schedule.scheduleJob('45 * * * *',  async function () {
 
 					var pois: POI[] = await this.poiManager.getPois()
 					for (var poi of pois) {
 
 						var report: Report = await this.reportManager.getReport(poi.id, {})
 						var price = report.monthlyUsedCoupons * poi.price;
+						price = Math.round(price * 100) / 100
 						sgMail.send({
 							to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
 							from: `${emailSender}`,
@@ -146,7 +152,7 @@ export class ReportRouter extends BaseRouter {
 
 					}
 
-				});
+				//});
 				return res.status(200)
 			})
 		);
