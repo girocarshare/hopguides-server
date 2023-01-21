@@ -20,6 +20,7 @@ import * as fs from 'fs';
 import { POI } from '../models/tours/poi';
 import { POIManager } from '../manager/poiManager';
 
+const PDFDocument = require('pdfkit');
 import { Notification } from '../models/notification/notification';
 
 import * as sgMail from '@sendgrid/mail';
@@ -137,20 +138,80 @@ export class ReportRouter extends BaseRouter {
 				//const job = schedule.scheduleJob('0 0 1 * *', async function () {
 				//const job = schedule.scheduleJob('45 * * * *',  async function () {
 
-					var pois: POI[] = await this.poiManager.getPois()
-					for (var poi of pois) {
 
-						var report: Report = await this.reportManager.getReport(poi.id, {})
-						var price = report.monthlyUsedCoupons * poi.price;
-						price = Math.round(price * 100) / 100
+				const doc = new PDFDocument();
+
+				// Pipe its output somewhere, like to a file or HTTP response
+				// See below for browser usage
+				doc.pipe(fs.createWriteStream('output.pdf'));
+
+				// Embed a font, set the font size, and render some text
+				doc
+
+					.fontSize(25)
+					.text('Some text with an embedded font!', 100, 100);
+
+				// Add an image, constrain it to a given size, and center it vertically and horizontally
+
+
+				// Add another page
+				doc
+					.addPage()
+					.fontSize(25)
+					.text('Here is some vector graphics...', 100, 100);
+
+				// Draw a triangle
+				doc
+					.save()
+					.moveTo(100, 150)
+					.lineTo(100, 250)
+					.lineTo(200, 250)
+					.fill('#FF3300');
+
+				// Apply some transforms and render an SVG path with the 'even-odd' fill rule
+				doc
+					.scale(0.6)
+					.translate(470, -380)
+					.path('M 250,75 L 323,301 131,161 369,161 177,301 z')
+					.fill('red', 'even-odd')
+					.restore();
+
+				// Add some text with annotations
+				doc
+					.addPage()
+					.fillColor('blue')
+					.text('Here is a link!', 100, 100)
+					.underline(100, 100, 160, 27, { color: '#0000FF' })
+					.link(100, 100, 160, 27, 'http://google.com/');
+
+				// Finalize PDF file
+				doc.end();
+				var pois: POI[] = await this.poiManager.getPois()
+				for (var poi of pois) {
+
+					var report: Report = await this.reportManager.getReport(poi.id, {})
+					var price = report.monthlyUsedCoupons * poi.price;
+					price = Math.round(price * 100) / 100;
+					var pathToAttachment = "output.pdf";
+					var attachment = fs.readFileSync(pathToAttachment).toString("base64");
+
 						sgMail.send({
 							to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
 							from: `${emailSender}`,
 							subject: "Monthly invoice to Tourism Ljubljana",
 							text: `Please invoice Tourism Ljubljana for ${price} eur with tax`,
+							attachments: [
+								{
+								  content: attachment,
+								  filename: "attachment.pdf",
+								  type: "application/pdf",
+								  disposition: "attachment"
+								}
+							  ]
 						})
+					
 
-					}
+				}
 
 				//});
 				return res.status(200)
