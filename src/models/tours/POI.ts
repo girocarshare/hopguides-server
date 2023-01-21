@@ -13,14 +13,52 @@ class Contact {
 	@dbField()
 	email: string;
 
-	// we don't yet have Address class
-	@jsonProperty()
-	@dbField()
-	address: string;
-
 	@jsonProperty()
 	@dbField()
 	webURL: string;
+
+}
+
+
+class FromTo {
+	@jsonProperty()
+	@dbField()
+	from: string;
+
+	@jsonProperty()
+	@dbField()
+	to: string;
+
+}
+
+class WorkingHours {
+	@jsonProperty()
+	@dbField()
+	monday: FromTo;
+
+	@jsonProperty()
+	@dbField()
+	tuesday: FromTo;
+
+	@jsonProperty()
+	@dbField()
+	wednesday: FromTo;
+	
+	@jsonProperty()
+	@dbField()
+	thursday: FromTo;
+	
+	@jsonProperty()
+	@dbField()
+	friday: FromTo;
+	
+	@jsonProperty()
+	@dbField()
+	saturday: FromTo;
+	
+	@jsonProperty()
+	@dbField()
+	sunday: FromTo;
 
 }
 
@@ -61,6 +99,11 @@ export class POI {
 	@dbField()
 	contact: Contact;
 
+	
+	@jsonProperty()
+	@dbField()
+	workingHours: WorkingHours;
+
 	@jsonProperty({ type: String })
 	@dbField({ type: String })
 	images: string[];
@@ -76,6 +119,10 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	menu: string;
+
+	@jsonProperty()
+	@dbField()
+	offerName: string;
 	
 	@jsonProperty()
 	@dbField()

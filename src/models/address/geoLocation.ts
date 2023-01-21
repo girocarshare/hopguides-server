@@ -7,6 +7,32 @@ export enum GeoObjectType {
 }
 
 export class GeoLocation {
+
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	street: string;
+
+
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	country: string;
+
+	
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	city: string;
+
+	
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	latitude: string;
+
+		
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	longitude: string;
+
+
 	@dbField()
 	type: GeoObjectType = GeoObjectType.POINT;
 
