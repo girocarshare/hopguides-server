@@ -37,6 +37,11 @@ class Contact {
 	@dbField()
 	phone: string;
 
+	
+	@jsonProperty()
+	@dbField()
+	phone2: string;
+
 	@jsonProperty()
 	@dbField()
 	email: string;

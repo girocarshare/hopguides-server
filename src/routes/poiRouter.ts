@@ -171,6 +171,9 @@ export class POIRouter extends BaseRouter {
 				var point: POI = await this.poiManager.getPoi(req.body.point.id)
 				point.price = req.body.point.price
 				point.offerName = req.body.point.offerName
+				point.contact.name = req.body.point.contact.name
+				point.contact.phone = req.body.point.contact.phone
+				point.contact.email = req.body.point.contact.email
 
 				const updatedPoi: POI = await this.poiManager.updatePoi(
 					point.id,

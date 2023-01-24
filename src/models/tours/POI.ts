@@ -8,6 +8,10 @@ class Contact {
 	@jsonProperty()
 	@dbField()
 	phone: string;
+	
+	@jsonProperty()
+	@dbField()
+	name: string;
 
 	@jsonProperty()
 	@dbField()

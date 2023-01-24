@@ -15,5 +15,9 @@ export class Report {
 
 	bpratnerPhone: string;
 	
+	bpratnerPhone2: string;
+
+	offerName: string;
+	
 
 }

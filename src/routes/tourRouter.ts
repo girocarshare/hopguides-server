@@ -3,13 +3,15 @@ import {
 	/*AdminRole,
 	allowFor,
 	ManagerRole,
-	MarketingRole,
+	MarketingRole,*/
 	parseJwt,
-	ServiceRole,
+	/*ServiceRole,
 	SupportRole,*/
 	withErrorHandler
 } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
+import { User, UserRoles, UserStatus } from '../models/user/user';
+import { UserManager } from '../manager/userManager';
 import { deserialize, serialize } from '../json';
 import { POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
@@ -23,11 +25,13 @@ import { PreviousTourReport } from '../classes/tour/previousReportTour';
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
 	poiManager: POIManager;
+	userManager: UserManager;
 
 	constructor() {
 		super(true);
 		this.tourManager = new TourManager();
 		this.poiManager = new POIManager();
+		this.userManager = new UserManager();
 
 		this.init();
 	}
@@ -66,7 +70,7 @@ export class TourRouter extends BaseRouter {
 
 				
 				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
-				console.log(tours)
+				
 				return res.status(200).send(tours);
 
 			})
@@ -151,14 +155,17 @@ export class TourRouter extends BaseRouter {
 		this.router.post(
 			'/add',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			//parseJwt,
+			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 
 					var arr: string[] = []
+					var user: User = await this.userManager.getUser(req.userId);
 					for (var point of req.body.points) {
 						
+						point.bpartnerId = user.id
 						const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
+			
 						arr.push(poi.id)
 					}
 

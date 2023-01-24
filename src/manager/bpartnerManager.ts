@@ -29,7 +29,7 @@ export class BPartnerManager {
 		return (await this.bpartnerRepository.findOne({ userId: userId })) || null;
 	}
 
-
+	
 
 	async getBP(bpartnerId: string): Promise<BPartner> {
 		return await this.bpartnerRepository.getByIdOrThrow(bpartnerId).catch(() => {

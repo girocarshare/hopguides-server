@@ -39,8 +39,7 @@ export class ReportManager {
 		const p: POI = await this.poiManager.getPoi(companyId).catch(() => {
 			throw new Error('Error getting poi');
 		});
-
-		const bPartner: BPartner = await this.bpartnerManager.getBP(p.bpartnerId).catch(() => {
+		const bPartner: BPartner = await this.bpartnerManager.getBPByUser(p.bpartnerId).catch(() => {
 			throw new Error('Error getting business partner');
 		});
 
@@ -73,6 +72,8 @@ export class ReportManager {
 		report.bpartnerName = bPartner.name;
 		report.bpartnerEmail = bPartner.contact.email;
 		report.bpratnerPhone = bPartner.contact.phone;
+		report.bpratnerPhone2 = bPartner.contact.phone2;
+		report.offerName = p.offerName;
 
 		return report
 	}
@@ -172,7 +173,7 @@ export class ReportManager {
 		/*QRCode.toDataURL(datajson, function (err, code){
 			console.log(code)
 		})*/
-		await QRCode.toFile(companyId.trim() + ".png", "http://localhost:3001/#/report/" + companyId.trim(), function (err) {
+		await QRCode.toFile(companyId.trim() + ".png", "http://localhost:3001/#/report/" + companyId.trim(),function (err) {
 
 		return false
 		})
