@@ -140,38 +140,34 @@ export class ReportRouter extends BaseRouter {
 				//const job = schedule.scheduleJob('0 0 1 * *', async function () {
 				//const job = schedule.scheduleJob('45 * * * *',  async function () {
 
+
 				var pois: POI[] = await this.poiManager.getPois()
 				for (var poi of pois) {
 
 					var report: Report = await this.reportManager.getReport(poi.id, {})
-					var price = report.monthlyUsedCoupons * poi.price;
+					var help: string[] = poi.price.toString().split("€")
+					var price = report.monthlyUsedCoupons * Number(help[0]);
 					price = Math.round(price * 100) / 100;
 
 
 					const invoice = {
 						shipping: {
-							name: "John Doe",
+							name: "Tourism Ljubljana",
 							address: "1234 Main Street",
-							city: "San Francisco",
-							state: "CA",
-							country: "US",
-							postal_code: 94111
+							city: "Ljubljana",
+							country: "Slovenia",
+							postal_code: 1000
 						},
 						items: [
 							{
-								item: "TC 100",
-								description: "Toner Cartridge",
-								quantity: 2,
-								amount: 6000
+								name: report.name,
+								offerName: report.offerName,
+								monthlyUsedCoupons: report.monthlyUsedCoupons,
+								price:  poi.price
 							},
-							{
-								item: "USB_EXT",
-								description: "USB Cable Extender",
-								quantity: 1,
-								amount: 2000
-							}
+		
 						],
-						subtotal: 8000,
+						subtotal: price,
 						paid: 0,
 						invoice_nr: 1234
 					};
@@ -185,7 +181,12 @@ export class ReportRouter extends BaseRouter {
 						to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
 						from: `${emailSender}`,
 						subject: "Monthly invoice to Tourism Ljubljana",
-						text: `Please invoice Tourism Ljubljana for ${price} eur with tax`,
+						html: `Dear partner,<br/><br/>
+						
+						Please invoice Tourism Ljubljana ${price} eur with tax until the 15th of this month.<br/>
+						Attached, you will find invoice report pdf document.<br/><br/>
+						
+						For more information, please visit` +" <a href=http://localhost:3001/#/report/"+poi.id+">this website</a><br/><br/>Kind regards, <br/> GoGiro.",
 						attachments: [
 							{
 								content: attachment,

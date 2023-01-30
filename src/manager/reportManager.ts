@@ -173,10 +173,15 @@ export class ReportManager {
 		/*QRCode.toDataURL(datajson, function (err, code){
 			console.log(code)
 		})*/
-		await QRCode.toFile(companyId.trim() + ".png", "http://localhost:3001/#/report/" + companyId.trim(),function (err) {
 
-		return false
-		})
+		await QRCode.toFile(companyId.trim() + ".png","http://localhost:3001/#/report/", {
+			scale: 15,
+			width: "1000px"
+		  }, function (err) {
+			if (err) throw err
+			console.log('done')
+		  })
+
 		return true
 	}
 

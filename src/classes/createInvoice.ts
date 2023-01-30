@@ -30,7 +30,7 @@ function generateCustomerInformation(doc, invoice) {
   doc
     .fillColor("#444444")
     .fontSize(20)
-    .text("Invoice", 50, 160);
+    .text("Invoice report", 50, 160);
 
   generateHr(doc, 185);
 
@@ -58,8 +58,6 @@ function generateCustomerInformation(doc, invoice) {
     .text(
       invoice.shipping.city +
         ", " +
-        invoice.shipping.state +
-        ", " +
         invoice.shipping.country,
       300,
       customerInformationTop + 30
@@ -77,11 +75,10 @@ function generateInvoiceTable(doc, invoice) {
   generateTableRow(
     doc,
     invoiceTableTop,
-    "Item",
-    "Description",
-    "Unit Cost",
-    "Quantity",
-    "Line Total"
+    "Partner",
+    "Offer name",
+    "Monthly used coupons",
+    "Price"
   );
   generateHr(doc, invoiceTableTop + 20);
   doc.font("Helvetica");
@@ -92,11 +89,10 @@ function generateInvoiceTable(doc, invoice) {
     generateTableRow(
       doc,
       position,
-      item.item,
-      item.description,
-      formatCurrency(item.amount / item.quantity),
-      item.quantity,
-      formatCurrency(item.amount)
+      item.name,
+      item.offerName,
+      item.monthlyUsedCoupons,
+      item.price,
     );
 
     generateHr(doc, position + 20);
@@ -107,7 +103,6 @@ function generateInvoiceTable(doc, invoice) {
     doc,
     subtotalPosition,
     "",
-    "",
     "Subtotal",
     "",
     formatCurrency(invoice.subtotal)
@@ -117,7 +112,6 @@ function generateInvoiceTable(doc, invoice) {
   generateTableRow(
     doc,
     paidToDatePosition,
-    "",
     "",
     "Paid To Date",
     "",
@@ -130,7 +124,6 @@ function generateInvoiceTable(doc, invoice) {
     doc,
     duePosition,
     "",
-    "",
     "Balance Due",
     "",
     formatCurrency(invoice.subtotal - invoice.paid)
@@ -142,7 +135,7 @@ function generateFooter(doc) {
   doc
     .fontSize(10)
     .text(
-      "Payment is due within 15 days. Thank you for your business.",
+      "Please invoice to Tour Ljubljana until the 15th of the month. Thank you for your business.",
       50,
       780,
       { align: "center", width: 500 }
@@ -152,19 +145,17 @@ function generateFooter(doc) {
 function generateTableRow(
   doc,
   y,
-  item,
-  description,
-  unitCost,
-  quantity,
-  lineTotal
+  name,
+  offerName,
+  monthlyUsedCoupons,
+  price
 ) {
   doc
     .fontSize(10)
-    .text(item, 50, y)
-    .text(description, 150, y)
-    .text(unitCost, 280, y, { width: 90, align: "right" })
-    .text(quantity, 370, y, { width: 90, align: "right" })
-    .text(lineTotal, 0, y, { align: "right" });
+    .text(name, 50, y)
+    .text(offerName, 150, y)
+    .text(monthlyUsedCoupons, 280, y, { width: 90, align: "right" })
+    .text(price, 370, y, { width: 90, align: "right" })
 }
 
 function generateHr(doc, y) {
