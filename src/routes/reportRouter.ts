@@ -21,6 +21,7 @@ import { POI } from '../models/tours/poi';
 import { POIManager } from '../manager/poiManager';
 const { createInvoice } = require("../classes/createInvoice");
 
+const getStream = require('get-stream')
 
 const PDFDocument = require('pdfkit');
 import { Notification } from '../models/notification/notification';
@@ -104,7 +105,7 @@ export class ReportRouter extends BaseRouter {
 					await sleep(1000);
 
 					if (tf) {
-						fs.readFile("./" + req.params.id.trim() + ".png", (error, data) => {
+						fs.readFile("./images/menu/" + req.params.id.trim() + ".png", (error, data) => {
 							if (error) {
 								throw error;
 							}
@@ -163,19 +164,18 @@ export class ReportRouter extends BaseRouter {
 								name: report.name,
 								offerName: report.offerName,
 								monthlyUsedCoupons: report.monthlyUsedCoupons,
-								price:  poi.price
+								price: poi.price
 							},
-		
+
 						],
 						subtotal: price,
 						paid: 0,
 						invoice_nr: 1234
 					};
-	
-					createInvoice(invoice, "invoice.pdf");
 
-					var pathToAttachment = "invoice.pdf";
-					var attachment = fs.readFileSync(pathToAttachment).toString("base64");
+					const pdfBuffer = await createInvoice(invoice, "invoice.pdf");
+					const pdfBase64string = pdfBuffer.toString('base64')
+
 
 					sgMail.send({
 						to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
@@ -186,10 +186,10 @@ export class ReportRouter extends BaseRouter {
 						Please invoice Tourism Ljubljana ${price} eur with tax until the 15th of this month.<br/>
 						Attached, you will find invoice report pdf document.<br/><br/>
 						
-						For more information, please visit` +" <a href=http://localhost:3001/#/report/"+poi.id+">this website</a><br/><br/>Kind regards, <br/> GoGiro.",
+						For more information, please visit` + " <a href=http://localhost:3001/#/report/" + poi.id + ">this website</a><br/><br/>Kind regards, <br/> GoGiro.",
 						attachments: [
 							{
-								content: attachment,
+								content: pdfBase64string,
 								filename: "attachment.pdf",
 								type: "application/pdf",
 								disposition: "attachment"

@@ -174,7 +174,7 @@ export class ReportManager {
 			console.log(code)
 		})*/
 
-		await QRCode.toFile(companyId.trim() + ".png","http://localhost:3001/#/report/", {
+		await QRCode.toFile('images/menu/'+companyId.trim() + ".png","http://localhost:3001/#/report/", {
 			scale: 15,
 			width: "1000px"
 		  }, function (err) {
