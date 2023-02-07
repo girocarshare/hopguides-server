@@ -1,12 +1,6 @@
 import { IRequest, IResponse } from '../classes/interfaces';
 import {
-	/*AdminRole,
-	allowFor,
-	ManagerRole,
-	MarketingRole,*/
 	parseJwt,
-	/*ServiceRole,
-	SupportRole,*/
 	withErrorHandler
 } from '../utils/utils';
 import { BaseRouter } from './baseRouter';

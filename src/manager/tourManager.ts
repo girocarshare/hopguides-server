@@ -2,8 +2,6 @@ import tourRepository, { TourRepository } from '../db/repository/tourRepository'
 import { CustomError } from '../classes/customError';
 import { SearchPagination } from '../classes/searchPagination';
 import { Tour } from '../models/tours/tour';
-//import { deserializeFromDb } from '../db/dbUtils';
-//import { GetTourPayload } from '../classes/tour/getTourPayload';
 import { S3Service } from '../utils/s3Service';
 import { MulterFile } from '../classes/interfaces';
 import { ToursReport } from '../classes/tour/toursReport';
@@ -220,59 +218,6 @@ export class TourManager {
 		return helpArraySort;
 	}
 
-	/*async __uploadFile(tourId: string, file: MulterFile): Promise<Tour> {
-		const url = await this.s3Service.uploadMenuFile(tourId, file).catch(() => {
-			throw new Error('Error uploading file for Rent');
-		});
-
-		return await this.updateMenuPhoto(tourId, {
-			$set: { returnImage: url },
-			$push: { returnImages: url }
-		});
-	}
-	async updateMenuPhoto(tourId: string, data: any): Promise<Tour> {
-		return await this.tourRepository.update(tourId, data).catch(() => {
-			throw new Error('Error updating Rent');
-		});
-	}*/
-	/*async getTranslatedTour(tourId: string, locale: string = 'en'): Promise<any> {
-		const aggregateFilter: any[] = [];
-		aggregateFilter.push({
-			$match: {
-				_id: tourId
-			}
-		});
-		aggregateFilter.push({
-			$set: {
-				id: '$_id',
-				title: `$title.${locale}`,
-				longInfo: `$longInfo.${locale}`,
-				timeInfo: `$timeInfo.${locale}`,
-				paymentInfo: `$paymentInfo.${locale}`,
-				shortInfo: `$shortInfo.${locale}`,
-				points: {
-					$map: {
-						input: '$points',
-						as: 'point',
-						in: {
-							$mergeObjects: [
-								'$$point',
-								{
-									title: `$$point.title.${locale}`,
-									shortInfo: `$$point.shortInfo.${locale}`,
-									longInfo: `$$point.longInfo.${locale}`
-								}
-							]
-						}
-					}
-				}
-			}
-		});
-		const tour = await this.tourRepository.aggregate(aggregateFilter);
-		if (tour) return deserializeFromDb(GetTourPayload, tour[0]);
-		else throw new CustomError(404, 'tour not found');
-	}
-*/
 	async updateTour(tourId: string, data: Partial<Tour>) {
 
 		 await this.tourRepository.updateOne(tourId, data).catch((err) => {

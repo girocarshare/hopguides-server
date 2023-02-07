@@ -30,13 +30,6 @@ export abstract class MongoRepository<T> {
 		return all.map(a => this.mapObject(a));
 	}
 
-	/*async getAllWithSort(filter?: any, pagination?: SearchPagination, sort?: any): Promise<T[]> {
-		let searchOptions = {};
-		if (pagination) searchOptions = pagination.buildMongoSearchOptions();
-		const all: T[] = await this.collection.find(filter, searchOptions).sort(sort).toArray();
-		return all.map(a => this.mapObject(a));
-	}
-*/
 	async getByIdOrThrow(id: string): Promise<T> {
 		const found: any = await this.collection.findOne({ _id: id });
 		if (!found) throw new CustomError(404, 'Not found');
@@ -91,11 +84,6 @@ export abstract class MongoRepository<T> {
 			return this.mapObject(result);
 		  } finally{(err) =>{
 		  }}
-
-		  
-
-
-	
 
 	}
 

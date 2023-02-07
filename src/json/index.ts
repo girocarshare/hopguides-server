@@ -7,7 +7,6 @@ import {
 	undefinedOrNullValue,
 	undefinedValue
 } from '../utils/utils';
-//import { validateOrThrow } from '../validations';
 import { getJsonPropertiesMetaData, JsonPropertyMetaData } from './decorations';
 
 export function deserialize<T>(Clazz: { new (): T }, jsonObject: any): T {
@@ -98,9 +97,4 @@ function isFilterMatch(filter: string, jsonField: JsonPropertyMetaData): boolean
 	return !filter || !jsonField.filter || filter === jsonField.filter;
 }
 
-/*export function deserializeAndValidate<T>(clazz: { new (): T }, jsonObject: any): T {
-	const obj = deserialize(clazz, jsonObject);
-	validateOrThrow(obj);
 
-	return obj;
-}*/

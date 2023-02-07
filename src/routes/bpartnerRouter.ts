@@ -1,6 +1,6 @@
 import { IRequest, IResponse } from '../classes/interfaces';
 import { UserManager } from '../manager/userManager';
-import {/* AdminRole, allowFor, MarketingRole, parseJwt,*/ withErrorHandler } from '../utils/utils';
+import { withErrorHandler } from '../utils/utils';
 import { User, UserRoles, UserStatus } from '../models/user/user';
 import { BaseRouter } from './baseRouter';
 import { deserialize, serialize } from '../json';
@@ -58,62 +58,5 @@ export class BPartnerRouter extends BaseRouter {
 				}
 			})
 		);
-
-
-
-		/** GET fetches BPartner list for admin panel   
-		this.router.get(
-			'/',
-			allowFor([AdminRole, MarketingRole]),
-			parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const bpartners: BPartner[] = await this.bpartnerManager.getBPs();
-				return res.respond(
-					200,
-					bpartners.map(u => serialize(u))
-				);
-			})
-		);
-
-		/** GET fetches the number of all BPartner   
-		this.router.get(
-			'/count',
-			allowFor([AdminRole, MarketingRole]),
-			parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const count: number = await this.bpartnerManager.countBPs();
-				return res.respond(200, count);
-			})
-		);
-
-		/** GET fetches promotion data   
-		this.router.get(
-			'/:bpartnerId',
-			allowFor([AdminRole, MarketingRole]),
-			parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const bpartner: BPartner = await this.bpartnerManager.getBP(req.params.bpartnerId);
-
-				return res.respond(200, serialize(bpartner));
-			})
-		);
-
-		/** PATCH patch code from ADMIN user   
-		this.router.patch(
-			'/:bpartnerId',
-			allowFor([AdminRole, MarketingRole]),
-			parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const bpartner: BPartner = await this.bpartnerManager.getBP(req.params.bpartnerId);
-				const updatedBPartner: BPartner = await this.bpartnerManager.patchBP(
-					bpartner,
-					req.body
-				);
-				const serializeFilter: string =
-					req.role === UserRoles.ADMIN ? 'protected' : 'public';
-
-				return res.respond(200, serialize(updatedBPartner, serializeFilter));
-			})
-		);*/
 	}
 }

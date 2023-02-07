@@ -165,15 +165,6 @@ export class ReportManager {
 
 	async generateQr(companyId: string): Promise<boolean> {
 
-		//let datajson = JSON.stringify(data);
-		/*QRCode.toString(datajson, {type: "terminal"}, function (err, code){
-			console.log(code)
-		})*/
-
-		/*QRCode.toDataURL(datajson, function (err, code){
-			console.log(code)
-		})*/
-
 		await QRCode.toFile('images/menu/'+companyId.trim() + ".png","http://localhost:3001/#/report/", {
 			scale: 15,
 			width: "1000px"
