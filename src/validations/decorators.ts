@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import {
-	//ArrayValidator,
 	EmailValidator,
 	MaxValidator,
 	EnumValidator,
@@ -110,21 +109,3 @@ export function notEmpty(): any {
 		addValidator(target, propertyKey, notEmptyValidator);
 	};
 }
-
-/*
-export function validArray(type: any) {
-	return function (target: any, propertyKey: string): any {
-		addValidator(target, propertyKey, new ArrayValidator(type));
-	};
-}
-
-
-export function validationMethod(errorMsg: string) {
-	return function (taget: any, propertyKey: string, descriptor: PropertyDescriptor): any {
-		const validations = getValidationMethodMetaData(taget);
-		validations.push({
-			errorMsg: errorMsg,
-			validationFunction: descriptor.value
-		});
-	};
-}*/

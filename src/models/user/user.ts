@@ -20,12 +20,9 @@ export enum UserStatus {
 
 export enum UserRoles {
 	USER = 'USER',
-	SERVICE = 'SERVICE',
-	MANAGER = 'MANAGER',
-	MARKETING = 'MARKETING',
-	SUPPORT = 'SUPPORT',
+	PROVIDER = 'PROVIDER',
 	ADMIN = 'ADMIN',
-	ROOT = 'ROOT'
+	BPARTNER = 'BPARTNER',
 }
 
 export enum VerificationLevel {
@@ -76,6 +73,9 @@ export class User extends UserBase {
 
 	@dbField()
 	confirmed: boolean = false;
+	
+	@dbField()
+	invited: boolean = false;
 
 	@jsonProperty()
 	@dbField()

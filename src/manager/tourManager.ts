@@ -273,13 +273,12 @@ export class TourManager {
 		else throw new CustomError(404, 'tour not found');
 	}
 */
-	async updateTour(tourId: string, data: Partial<Tour>): Promise<ToursReport[]> {
+	async updateTour(tourId: string, data: Partial<Tour>) {
 
 		 await this.tourRepository.updateOne(tourId, data).catch((err) => {
 			throw new Error('Error updating Tour');
 		});
 
-		return this.getToursForReport({})
 	}
 
 	async createTour(tour: Tour): Promise<Tour> {

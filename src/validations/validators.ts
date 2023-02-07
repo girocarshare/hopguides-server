@@ -2,7 +2,6 @@ import * as validator from 'validator';
 import { isArray } from '../utils/utils';
 import * as ErrorMessages from './errorMessages';
 import { ErrorMessage } from './errorMessages';
-//import { getNativeType } from './index';
 
 
 export class EmailValidator implements Validator<string> {
@@ -89,18 +88,3 @@ export class NotEmptyValidator extends RequiredValidator {
 			return ErrorMessages.notEmpty;
 	}
 }
-
-/*
-
-export class ArrayValidator implements Validator<any[]> {
-	constructor(private type: any) {}
-
-	validate(value: any[]): ErrorMessage {
-		// eslint-disable-next-line valid-typeof
-		if (value && !value.every(v => typeof v === getNativeType(this.type)))
-			return ErrorMessages.arrayTypeMsg(getNativeType(this.type));
-	}
-}
-
-
-*/

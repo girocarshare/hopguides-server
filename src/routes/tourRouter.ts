@@ -114,11 +114,13 @@ export class TourRouter extends BaseRouter {
 				var tour: Tour = await this.tourManager.getTour(req.body.tourId)
 				tour.price = req.body.tourPrice
 
-				const updatedTour: ToursReport[] = await this.tourManager.updateTour(
+				 await this.tourManager.updateTour(
 					tour.id,
 					deserialize(Tour, tour)
 				);
-				return res.status(200).send(serialize(updatedTour));
+
+				const tours: ToursReport[] = await this.tourManager.getToursForReport();
+				return res.status(200).send(tours);
 			})
 		);
 

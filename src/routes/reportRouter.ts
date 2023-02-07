@@ -69,9 +69,13 @@ export class ReportRouter extends BaseRouter {
 			'/:id',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				try{
 				const filter: any = {};
 				const report: Report = await this.reportManager.getReport(req.params.id, filter);
 				return res.status(200).send(report)
+				}catch(err){
+					return res.status(412).send(err)
+				}
 			})
 		);
 

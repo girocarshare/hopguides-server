@@ -74,11 +74,9 @@ export class S3Service {
 			.promise();
 			
 		await uploadPromise.catch((err) => {
-			console.log("allala" + err)
 			throw new CustomError(407, 'Upload to S3 error');
 		});
 		
-		console.log("evo mee 5")
 		return `https://${this.bucketName}.imgix.net/${imgKey}`;
 	}
 
