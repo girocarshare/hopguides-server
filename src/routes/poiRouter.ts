@@ -14,6 +14,7 @@ import { simpleAsync } from './util';
 import { ToursReport } from '../classes/tour/toursReport';
 import { TourManager } from '../manager/tourManager';
 
+import { ToursWithPoints } from '../classes/tour/toursWithPoints';
 function randomstring(length) {
 	var result = '';
 	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -161,9 +162,8 @@ export class POIRouter extends BaseRouter {
 				);
 
 
-				const tours: ToursReport[] = await this.tourManager.getToursForReport(
-					{}
-				);
+				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+				
 				return res.status(200).send(tours);
 				}catch(err){
 					console.log(err)
