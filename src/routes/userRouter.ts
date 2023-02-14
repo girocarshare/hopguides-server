@@ -83,6 +83,25 @@ export class UserRouter extends BaseRouter {
 			})
 		);
 
+
+		this.router.post(
+			'/forgotPassword',
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			
+			
+						sgMail.send({
+							to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
+							from: `${emailSender}`,
+							subject: "Reset password",
+							html: `Dear partner,<br/><br/>
+							
+							Kindly click on the link below to reset your password.<br/><br/> <a href=http://localhost:3001/#/setPassword/${req.body.email} id=get> Reset password </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
+							`
+						})
+						return res.status(200).send();
+			})
+		);
+
 		this.router.post(
 			'/register',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
