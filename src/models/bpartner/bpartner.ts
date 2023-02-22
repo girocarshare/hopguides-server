@@ -1,6 +1,7 @@
 import { dbField, id } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { generateUuid } from '../../utils/utils';
+import { GeoLocation } from '../address/geoLocation';
 
 export enum BPartnerStatus {
 	DELETED = 'DELETED',
@@ -46,10 +47,9 @@ class Contact {
 	@dbField()
 	email: string;
 
-	// we don't yet have Address class
 	@jsonProperty()
 	@dbField()
-	address: string;
+	location: GeoLocation;
 
 	@jsonProperty()
 	@dbField()
@@ -95,7 +95,6 @@ export class BPartner {
 	@jsonProperty({ deserialize: false, serialize: true })
 	@dbField()
 	modifiedAt: number;
-
 	
 	@jsonProperty()
 	@dbField()

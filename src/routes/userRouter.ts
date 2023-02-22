@@ -55,7 +55,15 @@ export class UserRouter extends BaseRouter {
 							phone: req.body.phone,
 							phone2: req.body.phone2,
 							email: req.body.contactEmail,
-							webURL: req.body.webURL},
+							webURL: req.body.webURL,
+						location: {
+							street: req.body.location.street,
+							 country: req.body.location.country, 
+							 city: req.body.location.city, 
+							 latitude: req.body.location.latitude,
+							  longitude: req.body.location.longitude 
+
+						}},
 						userId: createdUser.id,
 	
 	

@@ -31,6 +31,35 @@ export class TourRouter extends BaseRouter {
 	}
 
 	init(): void {
+
+
+		/** GET generate qr code for tour */
+		this.router.get(
+			'/qr/:tourId/:providerId',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try {
+
+				const tour: Tour = await this.tourManager.getTour(req.params.tourId );
+				if(tour!=null){
+					await this.tourManager.generateQr(req.params.tourId, req.params.providerId );
+					return res.status(200).send("Success");
+				}else{
+					return res.status(412).send("Tour doesn't exist");
+				}
+				} catch (err) {
+					console.log(err.error)
+				}
+
+
+				return res.status(200).send("Success");
+
+			})
+		);
+
+
+
 		/** GET fetches tour list for admin panel */
 		this.router.get(
 			'/all',

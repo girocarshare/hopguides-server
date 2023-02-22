@@ -15,7 +15,7 @@ import { POIManager } from './poiManager';
 import { ReportManager } from './reportManager';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
 import { ToursWithPoints, PointsForTours } from '../classes/tour/toursWithPoints';
-
+var QRCode = require('qrcode')
 
 declare var randomString: string
 export class TourManager {
@@ -34,6 +34,21 @@ export class TourManager {
 
 
 
+
+	async generateQr(tourId: string, providerId: string): Promise<boolean> {
+
+		//change url
+		await QRCode.toFile('images/tourQrCodes/'+tourId.trim() +"*"+providerId.trim() + ".png","http://localhost:3001/#/report/", {
+			scale: 15,
+			width: "1000px"
+		  }, function (err) {
+			if (err) throw err
+			console.log('done')
+			return true
+		  })
+
+		return true
+	}
 
 	async getTour(tourId: string): Promise<Tour> {
 		return await this.tourRepository.getByIdOrThrow(tourId).catch(() => {

@@ -11,4 +11,8 @@ export class PoiHelp {
 	@dbField()
 	used: boolean;
 
+	@jsonProperty()
+	@dbField()
+	qrCode: string;
+
 }

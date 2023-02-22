@@ -22,7 +22,6 @@ export class BookingManager {
 	}
 
 	async scheduleRent(
-		user: User,
 		scheduledFrom: number,
 		scheduledTo: number,
 		tour: Tour,
@@ -33,7 +32,6 @@ export class BookingManager {
 		try {
 			/** Create rent of vehicle */
 			const booking: Booking = new Booking();
-			booking.userId = user.id;
 			booking.status = BookingStatus.PENDING;
 			booking.from = scheduledFrom;
 			booking.to = scheduledTo;

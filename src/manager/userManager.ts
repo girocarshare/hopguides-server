@@ -8,6 +8,7 @@ import { LoginPayload } from '../classes/user/loginPayload';
 import { generateJwt } from '../utils/utils';
 import { Logger } from 'tslog';
 import { create } from 'domain';
+import { GeoLocation } from '../models/address/geoLocation';
 var bcrypt = require('bcryptjs');
 export class UserManager {
 	userRepository: UserRepository;
@@ -61,7 +62,6 @@ export class UserManager {
 		if (!createdUser) {
 			user.invited = true;
 			user.role = UserRoles.PROVIDER;
-
 			createdUser = await this.userRepository.createOne(user);
 		}
 		// await sendRegistrationMail(createdUser, notification.emailTemplate);
@@ -77,6 +77,7 @@ export class UserManager {
 		
 		createdUser.invited = false;
 		createdUser.password = await bcrypt.hash(user.password, 8)
+		
 
 		// await sendRegistrationMail(createdUser, notification.emailTemplate);
 	 createdUser = await this.userRepository.replaceOne(createdUser.id, createdUser);
