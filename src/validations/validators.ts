@@ -2,7 +2,6 @@ import * as validator from 'validator';
 import { isArray } from '../utils/utils';
 import * as ErrorMessages from './errorMessages';
 import { ErrorMessage } from './errorMessages';
-//import { getNativeType } from './index';
 
 
 export class EmailValidator implements Validator<string> {
@@ -34,8 +33,6 @@ export class NopValidator implements Validator<any> {
 		return undefined;
 	}
 }
-/*
-
 export class RequiredValidator implements Validator<any> {
 	validate(value: any): ErrorMessage {
 		if (typeof value === 'undefined' || value === undefined || value == null)
@@ -43,13 +40,6 @@ export class RequiredValidator implements Validator<any> {
 	}
 }
 
-export class NotEmptyValidator extends RequiredValidator {
-	validate(value: any): ErrorMessage {
-		const errorMsg = super.validate(value);
-		if (errorMsg || (isArray(value) && value.length === 0) || value === '')
-			return ErrorMessages.notEmpty;
-	}
-}
 
 export class EnumValidator implements Validator<any> {
 	constructor(private enumClazz: any) {}
@@ -68,6 +58,13 @@ export class EnumValidator implements Validator<any> {
 	}
 }
 
+export class IntegerValidator implements Validator<any> {
+	validate(value: any): ErrorMessage {
+		if (value % 1 !== 0) return ErrorMessages.integerMsg;
+	}
+}
+
+
 export class MinValidator implements Validator<any> {
 	constructor(private min: number) {}
 
@@ -82,19 +79,12 @@ export class MinValidator implements Validator<any> {
 }
 
 
-export class ArrayValidator implements Validator<any[]> {
-	constructor(private type: any) {}
 
-	validate(value: any[]): ErrorMessage {
-		// eslint-disable-next-line valid-typeof
-		if (value && !value.every(v => typeof v === getNativeType(this.type)))
-			return ErrorMessages.arrayTypeMsg(getNativeType(this.type));
-	}
-}
 
-export class IntegerValidator implements Validator<any> {
+export class NotEmptyValidator extends RequiredValidator {
 	validate(value: any): ErrorMessage {
-		if (value % 1 !== 0) return ErrorMessages.integerMsg;
+		const errorMsg = super.validate(value);
+		if (errorMsg || (isArray(value) && value.length === 0) || value === '')
+			return ErrorMessages.notEmpty;
 	}
 }
-*/
