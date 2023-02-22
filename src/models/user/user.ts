@@ -20,18 +20,9 @@ export enum UserStatus {
 
 export enum UserRoles {
 	USER = 'USER',
-	SERVICE = 'SERVICE',
-	MANAGER = 'MANAGER',
-	MARKETING = 'MARKETING',
-	SUPPORT = 'SUPPORT',
+	PROVIDER = 'PROVIDER',
 	ADMIN = 'ADMIN',
-	ROOT = 'ROOT'
-}
-
-export enum LoggedFrom {
-	FACEBOOK = 'FACEBOOK',
-	GOOGLE = 'GOOGLE',
-	CUSTOM = 'CUSTOM'
+	BPARTNER = 'BPARTNER',
 }
 
 export enum VerificationLevel {
@@ -80,15 +71,11 @@ export class User extends UserBase {
 	@dbField()
 	role: UserRoles = UserRoles.USER;
 
-	@jsonProperty({ deserialize: false, serialize: true })
-	@dbField()
-	roleMB: UserRoles = UserRoles.USER;
-
 	@dbField()
 	confirmed: boolean = false;
-
+	
 	@dbField()
-	confirmedMB: boolean = false;
+	invited: boolean = false;
 
 	@jsonProperty()
 	@dbField()
@@ -131,10 +118,6 @@ export class User extends UserBase {
 
 	// OTHER
 
-	@jsonProperty({ deserialize: false, serialize: true })
-	@dbField()
-	loggedFrom: LoggedFrom = LoggedFrom.CUSTOM;
-
 	@jsonProperty()
 	@dbField()
 	verification: OTPCode = new OTPCode();
@@ -155,6 +138,7 @@ export class User extends UserBase {
 	@dbField()
 	allowPromoMB: boolean = true;
 
+	@jsonProperty()
 	@dbField()
 	password: string;
 
