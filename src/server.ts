@@ -7,6 +7,7 @@ import DbClient from './db/dbClient';
 import App from './app';
 import { Logger } from 'tslog';
 
+
 const logger: Logger = new Logger();
 
 const port = process.env.PORT || 3000;

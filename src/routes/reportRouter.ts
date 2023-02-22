@@ -150,8 +150,8 @@ export class ReportRouter extends BaseRouter {
 							{
 								name: report.name,
 								offerName: report.offerName,
-								monthlyUsedCoupons: report.monthlyUsedCoupons,
-								price: poi.price
+								monthlyUsedCoupons: 1,
+								price: 15
 							},
 
 						],
@@ -170,7 +170,7 @@ export class ReportRouter extends BaseRouter {
 						subject: "Monthly invoice to Tourism Ljubljana",
 						html: `Dear partner,<br/><br/>
 						
-						Please invoice Tourism Ljubljana ${price} eur with tax until the 15th of this month.<br/>
+						Please invoice Tourism Ljubljana 15eur with tax until the 15th of this month.<br/>
 						Attached, you will find invoice report pdf document.<br/><br/>
 						
 						For more information, please visit` + " <a href=http://localhost:3001/#/report/" + poi.id + ">this website</a><br/><br/>Kind regards, <br/> GoGiro.",
