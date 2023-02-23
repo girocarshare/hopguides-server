@@ -38,7 +38,7 @@ export class TourManager {
 	async generateQr(tourId: string, providerId: string): Promise<boolean> {
 
 		//change url
-		await QRCode.toFile('images/tourQrCodes/'+tourId.trim() +"*"+providerId.trim() + ".png","http://localhost:3001/#/report/", {
+		await QRCode.toFile('images/tourQrCodes/'+tourId.trim() +"---"+providerId.trim() + ".png","http://localhost:3000/deeplink?url=https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1", {
 			scale: 15,
 			width: "1000px"
 		  }, function (err) {
