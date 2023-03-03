@@ -177,6 +177,7 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
+		
 		this.router.post(
 			'/add',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
@@ -211,6 +212,48 @@ export class TourRouter extends BaseRouter {
 				}
 			})
 		);
+		/** POST add partners to existing tour */
+		this.router.post(
+			'/addPartners',
+			//allowFor([AdminRole, ManagerRole, MarketingRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				try {
 
+					var arr: string[] = []
+					var user: User = await this.userManager.getUser(req.userId);
+					for (var point of req.body.points) {
+						
+						point.bpartnerId = user.id
+						const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
+			
+						arr.push(poi.id)
+					}
+
+					const tour: Tour = await this.tourManager.getTour(
+						req.body.id
+					);
+
+					for (var point2 of tour.points) {
+						arr.push(point2)
+					}
+					
+					tour.points = arr
+
+					console.log(tour)
+				
+					await this.tourManager.updateTour(
+						tour.id,
+						deserialize(Tour, tour)
+					);
+	
+					const tours: ToursReport[] = await this.tourManager.getToursForReport();
+					return res.status(200).send(tours);
+
+				} catch (err) {
+					console.log(err.error)
+				}
+			})
+		);
 	}
 }
