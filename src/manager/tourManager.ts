@@ -246,4 +246,24 @@ export class TourManager {
 			throw new CustomError(500, 'Tour not created!');
 		});
 	}
+
+
+	async uploadMenu(tourId: string, file: MulterFile): Promise<Tour> {
+		var tour: Tour = await this.getTour(tourId)
+
+		tour.image = file.path
+		return await this.tourRepository.updateOne(tourId, tour).catch(() => {
+			throw new Error('Error updating Tour');
+		});
+	}
+
+	
+	async uploadAudio(tourId: string, file: MulterFile): Promise<Tour> {
+		var tour: Tour = await this.getTour(tourId)
+
+		tour.audio = file.path
+		return await this.tourRepository.updateOne(tourId, tour).catch(() => {
+			throw new Error('Error updating Tour');
+		});
+	}
 }

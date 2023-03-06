@@ -122,7 +122,8 @@ export class POI {
 	
 	@jsonProperty()
 	@dbField()
-	menu: string;
+	menu: string
+	
 
 	@jsonProperty()
 	@dbField()

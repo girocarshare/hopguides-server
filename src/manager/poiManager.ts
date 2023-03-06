@@ -32,7 +32,14 @@ export class POIManager {
 		});
 	}
 
+	async uploadImages(pointId: string, file: string[]): Promise<POI> {
+		var point: POI = await this.getPoi(pointId)
 
+		point.images = file
+		return await this.poiRepository.updateOne(pointId, point).catch(() => {
+			throw new Error('Error updating Tour');
+		});
+	}
 	
 	async updatePoi(pointId: string, data: Partial<POI>): Promise<POI> {
 
