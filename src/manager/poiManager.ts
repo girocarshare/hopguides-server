@@ -56,4 +56,14 @@ export class POIManager {
 			throw new CustomError(500, 'POI not created!');
 		});
 	}
+
+	
+	async uploadAudio(poiId: string, file: string): Promise<POI> {
+		var point: POI = await this.getPoi(poiId)
+
+		point.audio = file
+		return await this.poiRepository.updateOne(poiId, point).catch(() => {
+			throw new Error('Error updating Tour');
+		});
+	}
 }
