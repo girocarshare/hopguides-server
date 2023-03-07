@@ -282,6 +282,7 @@ export class TourRouter extends BaseRouter {
 						duration: tour.duration,
 						length: tour.length,
 						highestPoint: tour.highestPoint,
+						termsAndConditions: tour.termsAndConditions,
 						points: arr
 					}
 					const createdTour: Tour = await this.tourManager.createTour(

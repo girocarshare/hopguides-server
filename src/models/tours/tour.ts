@@ -83,4 +83,9 @@ export class Tour {
 	@jsonProperty()
 	@dbField()
 	highestPoint: string;
+
+
+	@jsonProperty()
+	@dbField()
+	termsAndConditions: string;
 }
