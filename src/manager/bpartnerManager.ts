@@ -33,4 +33,10 @@ export class BPartnerManager {
 		});
 	}
 
+	async getBPartners(filter: any, pagination?: any): Promise<BPartner[]> {
+		return await this.bpartnerRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting Rents');
+		});
+	}
+
 }

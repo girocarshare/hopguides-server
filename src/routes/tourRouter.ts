@@ -115,7 +115,17 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
+		this.router.get(
+			'/allReport',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
+				const tours: ToursReport[] = await this.tourManager.getToursForReport();
+				return res.status(200).send(tours);
+
+			})
+		);
 
 		this.router.get(
 			'/allToursWithPoints',
@@ -264,6 +274,7 @@ export class TourRouter extends BaseRouter {
 					var arr: string[] = []
 					var arr2 = []
 					//var user: User = await this.userManager.getUser(req.userId);
+					if(tour.points.length != 0){
 					for (var point of tour.points) {
 
 						const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
@@ -273,21 +284,6 @@ export class TourRouter extends BaseRouter {
 						arr.push(poi.id)
 						arr2.push(poi)
 					}
-
-					var t = {
-						title: tour.title,
-						shortInfo: tour.shortInfo,
-						longInfo: tour.longInfo,
-						price: tour.price,
-						duration: tour.duration,
-						length: tour.length,
-						highestPoint: tour.highestPoint,
-						termsAndConditions: tour.termsAndConditions,
-						points: arr
-					}
-					const createdTour: Tour = await this.tourManager.createTour(
-						deserialize(Tour, t)
-					);
 
 					var partnerImages = []
 					for (var f of req.files) {
@@ -337,6 +333,24 @@ export class TourRouter extends BaseRouter {
 							}
 						}
 					}
+				}
+
+					var t = {
+						title: tour.title,
+						shortInfo: tour.shortInfo,
+						longInfo: tour.longInfo,
+						price: tour.price,
+						duration: tour.duration,
+						length: tour.length,
+						highestPoint: tour.highestPoint,
+						termsAndConditions: tour.termsAndConditions,
+						points: arr
+					}
+					const createdTour: Tour = await this.tourManager.createTour(
+						deserialize(Tour, t)
+					);
+
+					
 
 					for (var file of req.files) {
 						if (file.originalname.substring(0, 5).trim() === 'image') {
