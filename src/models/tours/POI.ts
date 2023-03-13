@@ -4,6 +4,19 @@ import { GeoLocation } from '../address/geoLocation';
 import { LocalizedField } from '../localizedField';
 
 import { generateUuid } from '../../utils/utils';
+
+
+export enum Category {
+	HISTORY = 'HISTORY',
+	DRINKS = 'DRINKS',
+	NATURE = 'NATURE',
+	EATS = 'EATS',
+	BRIDGE = 'BRIDGE',
+	MUSEUMS = 'MUSEUMS',
+	EXPERIENCE = 'EXPERIENCE',
+	
+}
+
 class Contact {
 	@jsonProperty()
 	@dbField()
@@ -122,7 +135,8 @@ export class POI {
 	
 	@jsonProperty()
 	@dbField()
-	menu: string;
+	menu: string
+	
 
 	@jsonProperty()
 	@dbField()
@@ -135,4 +149,13 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	bpartnerId: string;
+
+	@dbField()
+	@jsonProperty()
+	category: string;
+
+	
+	@jsonProperty()
+	@dbField()
+	audio: string;
 }

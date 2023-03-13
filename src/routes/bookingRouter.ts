@@ -9,6 +9,8 @@ import { Booking, BookingStatus } from '../models/booking/booking';
 import { Tour } from '../models/tours/tour';
 import { PoiHelp } from '../models/booking/PoiHelp';
 import { BPartner } from '../models/bpartner/bpartner';
+
+var deeplink = require('node-deeplink');
 import {
 	withErrorHandler
 } from '../utils/utils';
@@ -48,6 +50,7 @@ export class BookingRouter extends BaseRouter {
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse, next) => {
 
+
 				const tour: Tour = await this.tourManager.getTour(req.body.tourId);
 
 				const logitude: string = req.body.longitude;
@@ -70,13 +73,15 @@ export class BookingRouter extends BaseRouter {
 							p.id = point
 							p.used = false
 
-							await QRCode.toFile('images/qrcodes/' + point.trim() + "---" + tour.id.trim() + ".png", "http://localhost:3001/#/report/", {
+							await QRCode.toFile('images/qrcodes/' + point.trim() + "---" + tour.id.trim() + ".png", "http://localhost:3000/deeplink", {
 								scale: 15,
 								width: "1000px"
 							}, function (err) {
 								if (err) throw err
 								console.log('done')
 							})
+
+
 
 							p.qrCode = 'images/qrcodes/' + point.trim() + "*" + tour.id.trim() + ".png"
 
@@ -118,5 +123,6 @@ export class BookingRouter extends BaseRouter {
 				return res.status(200).send(bookings);
 			})
 		);
-	}
+
+		}
 }

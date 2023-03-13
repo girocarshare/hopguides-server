@@ -32,7 +32,14 @@ export class POIManager {
 		});
 	}
 
+	async uploadImages(pointId: string, file: string[]): Promise<POI> {
+		var point: POI = await this.getPoi(pointId)
 
+		point.images = file
+		return await this.poiRepository.updateOne(pointId, point).catch(() => {
+			throw new Error('Error updating Tour');
+		});
+	}
 	
 	async updatePoi(pointId: string, data: Partial<POI>): Promise<POI> {
 
@@ -47,6 +54,16 @@ export class POIManager {
 		return await this.poiRepository.createOne(poi).catch(() => {
 			
 			throw new CustomError(500, 'POI not created!');
+		});
+	}
+
+	
+	async uploadAudio(poiId: string, file: string): Promise<POI> {
+		var point: POI = await this.getPoi(poiId)
+
+		point.audio = file
+		return await this.poiRepository.updateOne(poiId, point).catch(() => {
+			throw new Error('Error updating Tour');
 		});
 	}
 }

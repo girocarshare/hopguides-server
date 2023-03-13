@@ -58,5 +58,28 @@ export class BPartnerRouter extends BaseRouter {
 				}
 			})
 		);
+
+		/** GET all bpartners   */
+		this.router.get(
+			'/all',
+			//allowFor([AdminRole, ManagerRole, SupportRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				const filter: any = {};
+
+				const bpartners: BPartner[] = await this.bpartnerManager.getBPartners(filter);
+
+				var arr = []
+				for(var bpartner of bpartners){
+					var bp = {
+						id: bpartner.id,
+						name: bpartner.name					}
+					arr.push(bp)
+				}
+
+				return res.status(200).send(arr);
+			})
+		);
+
 	}
 }

@@ -38,7 +38,7 @@ export class TourManager {
 	async generateQr(tourId: string, providerId: string): Promise<boolean> {
 
 		//change url
-		await QRCode.toFile('images/tourQrCodes/'+tourId.trim() +"*"+providerId.trim() + ".png","http://localhost:3001/#/report/", {
+		await QRCode.toFile('images/tourQrCodes/'+tourId.trim() +"---"+providerId.trim() + ".png","http://localhost:3000/deeplink?url=https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1", {
 			scale: 15,
 			width: "1000px"
 		  }, function (err) {
@@ -244,6 +244,26 @@ export class TourManager {
 	async createTour(tour: Tour): Promise<Tour> {
 		return await this.tourRepository.createOne(tour).catch(() => {
 			throw new CustomError(500, 'Tour not created!');
+		});
+	}
+
+
+	async uploadMenu(tourId: string, file: MulterFile): Promise<Tour> {
+		var tour: Tour = await this.getTour(tourId)
+
+		tour.image = file.path
+		return await this.tourRepository.updateOne(tourId, tour).catch(() => {
+			throw new Error('Error updating Tour');
+		});
+	}
+
+	
+	async uploadAudio(tourId: string, file: MulterFile): Promise<Tour> {
+		var tour: Tour = await this.getTour(tourId)
+
+		tour.audio = file.path
+		return await this.tourRepository.updateOne(tourId, tour).catch(() => {
+			throw new Error('Error updating Tour');
 		});
 	}
 }

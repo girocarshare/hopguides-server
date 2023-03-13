@@ -4,6 +4,7 @@ import { VehicleRouter } from './routes/vehicleRouter';
 import { BookingRouter } from './routes/bookingRouter';
 import { ReportRouter } from './routes/reportRouter';
 import { POIRouter } from './routes/poiRouter';
+var deeplink = require('node-deeplink');
 import {
 	AdminRole,
 	allowFor,
@@ -86,6 +87,16 @@ class App {
 
 		this.app.use('/api/reports', this.reportRouter.router);
 
+		
+this.app.get(
+	'/deeplink',
+	deeplink({
+	  fallback: 'https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1',
+	  android_package_name: 'com.citylifeapps.cups',
+	  ios_store_link:
+		'https://itunes.apple.com/us/app/cups-unlimited-coffee/id556462755?mt=8&uo=4',
+	})
+  );
 	}
 }
 

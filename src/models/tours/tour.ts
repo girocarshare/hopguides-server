@@ -60,4 +60,32 @@ export class Tour {
 	@jsonProperty()
 	@dbField()
 	createdAt: number = Date.now();
+
+	
+	@jsonProperty()
+	@dbField()
+	image: string;
+	
+	@jsonProperty()
+	@dbField()
+	audio: string;
+	
+	@jsonProperty()
+	@dbField()
+	duration: string;
+
+	
+	@jsonProperty()
+	@dbField()
+	length: string;
+
+	
+	@jsonProperty()
+	@dbField()
+	highestPoint: string;
+
+
+	@jsonProperty()
+	@dbField()
+	termsAndConditions: string;
 }

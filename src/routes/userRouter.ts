@@ -6,6 +6,8 @@ import { LoginPayload } from '../classes/user/loginPayload';
 import { deserialize, serialize } from '../json';
 import { UserManager } from '../manager/userManager';
 import { BPartnerManager } from '../manager/bpartnerManager';
+import { simpleAsync } from './util';
+import * as multer from 'multer';
 import {
 	parseJwt,
 	withErrorHandler
@@ -14,19 +16,54 @@ import { validateOrThrow } from '../validations';
 import { BaseRouter } from './baseRouter';
 import { BPartner } from '../models/bpartner/bpartner';
 import * as sgMail from '@sendgrid/mail';
+import { RegisterPayload } from '../classes/user/registerPayload';
 
 sgMail.setApiKey("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")
 var emailSender = "beta-app@gogiro.app";
 
+interface IBkRequest extends IRequest {
+	request: RegisterPayload;
+}
+
+function randomstring(length) {
+	var result = '';
+	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var charactersLength = characters.length;
+	for (var i = 0; i < length; i++) {
+		result += characters.charAt(Math.floor(Math.random() *
+			charactersLength));
+	}
+	return result;
+}
 
 export class UserRouter extends BaseRouter {
 	userManager: UserManager;
-	bpartnerManager: BPartnerManager;
+	bpartnerManager: BPartnerManager; storage = multer.diskStorage({
+		destination: function (req, file, cb) {
 
+			cb(null, 'images/menu')
+		},
+		filename: function (req, file, cb) {
+
+			globalThis.randomString = randomstring(10)
+			var list = file.originalname.split('.')
+			cb(null, globalThis.randomString + "." + list[list.length - 1]);
+		},
+
+		fileFilter(req, file, cb) {
+			if (!file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+				return cb(new Error('Please upload pdf file.'))
+			}
+			cb(undefined, true)
+		}
+	})
+
+	upload = multer({ storage: this.storage })
 	constructor() {
 		super();
 		this.userManager = new UserManager();
 		this.bpartnerManager = new BPartnerManager();
+		this.upload = multer({ storage: this.storage });
 		this.init();
 	}
 
@@ -44,50 +81,42 @@ export class UserRouter extends BaseRouter {
 
 		this.router.post(
 			'/sendRegistrationEmail',
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-			
-				console.log(req.body)
+			this.upload.single('file'),
+			simpleAsync(async (req: IBkRequest, res: IResponse) => {
+
+
+
+				let jsonObj = JSON.parse(req.body.request);
+				let data = jsonObj as RegisterPayload;
+
+
 				const createdUser: User = await this.userManager.sendRegistrationEmail(
 					deserialize(User, req.body));
 
-					var data = {
-						contact: {name: req.body.name,
-							phone: req.body.phone,
-							phone2: req.body.phone2,
-							email: req.body.contactEmail,
-							webURL: req.body.webURL,
-						location: {
-							street: req.body.location.street,
-							 country: req.body.location.country, 
-							 city: req.body.location.city, 
-							 latitude: req.body.location.latitude,
-							  longitude: req.body.location.longitude 
+			
+				data.userId = createdUser.id
 
-						}},
-						userId: createdUser.id,
-	
-	
-					}
-					const bpartnerData: BPartner = deserialize(
-						BPartner,
-						data
-					);
-					const createdBP: BPartner = await this.bpartnerManager.createBP(
-						createdUser,
-						bpartnerData
-						);
-	
-						sgMail.send({
-							to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
-							from: `${emailSender}`,
-							subject: "Set password",
-							html: `Dear partner,<br/><br/>
+				const bpartnerData: BPartner = deserialize(
+					BPartner,
+					data
+				);
+				const createdBP: BPartner = await this.bpartnerManager.createBP(
+					createdUser,
+					bpartnerData
+				);
+
+				await this.bpartnerManager.uploadLogo(createdBP.id, req.file);
+				sgMail.send({
+					to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
+					from: `${emailSender}`,
+					subject: "Set password",
+					html: `Dear partner,<br/><br/>
 							
 							You have been invited to join our platform. Kindly click on the link below to register.<br/><br/> <a href=http://localhost:3001/#/setPassword/${req.body.email} id=get> Register now </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
 							`
-						})
-					return res.status(200).send(createdBP);
-				
+				})
+				return res.status(200).send(createdBP);
+
 			})
 		);
 
@@ -95,61 +124,61 @@ export class UserRouter extends BaseRouter {
 		this.router.post(
 			'/forgotPassword',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-			
-			
-						sgMail.send({
-							to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
-							from: `${emailSender}`,
-							subject: "Reset password",
-							html: `Dear partner,<br/><br/>
+
+
+				sgMail.send({
+					to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
+					from: `${emailSender}`,
+					subject: "Reset password",
+					html: `Dear partner,<br/><br/>
 							
 							Kindly click on the link below to reset your password.<br/><br/> <a href=http://localhost:3001/#/setPassword/${req.body.email} id=get> Reset password </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
 							`
-						})
-						return res.status(200).send();
+				})
+				return res.status(200).send();
 			})
 		);
 
 		this.router.post(
 			'/register',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-		
+
 				const createdUser: User = await this.userManager.register(
 					deserialize(User, req.body));
 
 
-					return res.status(200).send(createdUser);
-			
+				return res.status(200).send(createdUser);
+
 			})
 		);
 
 		this.router.post(
 			'/login',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try{
-				const login: LoginPayload = deserialize(LoginPayload, req.body);
-				validateOrThrow(login);
-				let user: User = await this.userManager.getUserByEmail(login.email);
-				/** START OF SECURITY CHECKS  */
-				//performBasicChecks(user);
-				/** END OF SECURITY CHECKS  */
-				if (!user)
-					return res.throwErr(new CustomError(404, 'User not ADMIN'));
+				try {
+					const login: LoginPayload = deserialize(LoginPayload, req.body);
+					validateOrThrow(login);
+					let user: User = await this.userManager.getUserByEmail(login.email);
+					/** START OF SECURITY CHECKS  */
+					//performBasicChecks(user);
+					/** END OF SECURITY CHECKS  */
+					if (!user)
+						return res.throwErr(new CustomError(404, 'User not ADMIN'));
 
-				else {
-					const loggedUserData: {
-						userData: User;
-						userJwt: string;
-					} = await this.userManager.login(login);
-					res.append('accessToken', loggedUserData.userJwt);
-					return res.status(200).send({userJwt : loggedUserData.userJwt});
-					
+					else {
+						const loggedUserData: {
+							userData: User;
+							userJwt: string;
+						} = await this.userManager.login(login);
+						res.append('accessToken', loggedUserData.userJwt);
+						return res.status(200).send({ userJwt: loggedUserData.userJwt });
+
+					}
+				} catch (err) {
+					return res.status(412).send(err);
 				}
-			}catch(err){
-				return res.status(412).send(err);
-			}
 			})
-		
+
 		);
 
 		this.router.get(
@@ -157,7 +186,7 @@ export class UserRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				var user: User = await this.userManager.getUser(req.userId);
-				var role : string = user.role
+				var role: string = user.role
 				return res.status(200).send(role);
 			})
 		);
