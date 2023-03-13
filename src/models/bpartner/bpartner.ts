@@ -99,4 +99,9 @@ export class BPartner {
 	@jsonProperty()
 	@dbField()
 	contact: Contact = new Contact();
+
+	
+	@jsonProperty()
+	@dbField()
+	logo: string;
 }

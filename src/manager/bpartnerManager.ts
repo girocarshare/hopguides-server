@@ -3,6 +3,7 @@ import { MongoRepository } from '../db/repository/mongoRepository';
 import BPartnerRepository from '../db/repository/bpartnerRepository';
 import { deserialize } from '../json';
 import { User } from '../models/user/user';
+import { MulterFile } from '../classes/interfaces';
 
 export class BPartnerManager {
 	bpartnerRepository: MongoRepository<BPartner>;
@@ -26,6 +27,15 @@ export class BPartnerManager {
 	}
 
 	
+	async uploadLogo(id: string, file: MulterFile): Promise<BPartner> {
+		var bpartner: BPartner = await this.getBP(id)
+
+		bpartner.logo = file.path
+		return await this.bpartnerRepository.updateOne(id, bpartner).catch(() => {
+			throw new Error('Error updating BPartner');
+		});
+	}
+
 
 	async getBP(bpartnerId: string): Promise<BPartner> {
 		return await this.bpartnerRepository.getByIdOrThrow(bpartnerId).catch(() => {

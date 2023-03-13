@@ -264,7 +264,6 @@ export class TourRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				// Upload
 				try {
-					console.log(req.files)
 
 
 					let jsonObj = JSON.parse(req.body.tour); // string to "any" object first
@@ -364,7 +363,7 @@ export class TourRouter extends BaseRouter {
 						}
 					}
 
-					//return res.status(200).send(createdTour);
+					return res.status(200);
 
 				} catch (err) {
 					console.log(err)
