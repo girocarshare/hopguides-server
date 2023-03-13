@@ -7,129 +7,127 @@ import { ChangeLog } from '../classes';
 import { PathPoint } from './PathPoint';
 import { validEnum } from '../../validations/decorators';
 import { Payment } from './payment';
-import { BookingVehicle } from './bookingVehicle';
-import {GeneratedVoucher } from './bookingVoucher';
+// import { BookingVehicle } from './bookingVehicle';
+import { GeneratedVoucher } from './bookingVoucher';
 import { BookingPricing } from './bookingPricing';
 import { BookingDocs } from './bookingDocs';
 import { PoiHelp } from './PoiHelp';
 
 export enum BookingStatus {
-	PENDING = 'PENDING',
-	APPROVED = 'APPROVED',
-	RESERVED = 'RESERVED',
-	BOOKED = 'BOOKED',
-	DRIVING = 'DRIVING',
-	FINISHED = 'FINISHED',
-	/** END statuses */
-	CANCELED = 'CANCELED',
-	REJECTED = 'REJECTED',
-	TIMED_OUT = 'TIMED_OUT',
-	NO_PICKUP = 'NO_PICKUP',
-	ARCHIVED = 'ARCHIVED',
-	DELETED = 'DELETED'
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  RESERVED = 'RESERVED',
+  BOOKED = 'BOOKED',
+  DRIVING = 'DRIVING',
+  FINISHED = 'FINISHED',
+  /** END statuses */
+  CANCELED = 'CANCELED',
+  REJECTED = 'REJECTED',
+  TIMED_OUT = 'TIMED_OUT',
+  NO_PICKUP = 'NO_PICKUP',
+  ARCHIVED = 'ARCHIVED',
+  DELETED = 'DELETED',
 }
 
 export enum RentEndReason {
-	BALANCE_LOW = 'BALANCE_LOW',
-	BATTERY_LOW = 'BATTERY_LOW'
+  BALANCE_LOW = 'BALANCE_LOW',
+  BATTERY_LOW = 'BATTERY_LOW',
 }
 
 export enum PaymentMethod {
-	PAYWISER = 'PYW'
+  PAYWISER = 'PYW',
 }
 
 export enum PaymentType {
-	CARD = 'CARD',
-	VALU = 'VALU',
-	WALLET = 'WALLET'
+  CARD = 'CARD',
+  VALU = 'VALU',
+  WALLET = 'WALLET',
 }
 
 export enum RentType {
-	PPU = 'PPU',
-	PUF = 'PUF',
-	TOUR = 'TOUR'
+  PPU = 'PPU',
+  PUF = 'PUF',
+  TOUR = 'TOUR',
 }
 
 export class Booking {
-	@id()
-	@dbField()
-	@jsonProperty({ deserialize: false, serialize: true })
-	id: string = generateUuid();
+  @id()
+  @dbField()
+  @jsonProperty({ deserialize: false, serialize: true })
+  id: string = generateUuid();
 
-	@dbField()
-	@jsonProperty({ deserialize: false, serialize: true })
-	userId: string;
+  @dbField()
+  @jsonProperty({ deserialize: false, serialize: true })
+  userId: string;
 
-	@jsonProperty()
-	@dbField()
-	code: string = generateRideCode();
+  @jsonProperty()
+  @dbField()
+  code: string = generateRideCode();
 
-	@dbField()
-	@jsonProperty({ deserialize: false, serialize: true })
-	status: BookingStatus;
+  @dbField()
+  @jsonProperty({ deserialize: false, serialize: true })
+  status: BookingStatus;
 
-	@dbField()
-	@jsonProperty()
-	from: number;
+  @dbField()
+  @jsonProperty()
+  from: number;
 
-	@dbField()
-	@jsonProperty()
-	to: number;
+  @dbField()
+  @jsonProperty()
+  to: number;
 
-	@dbField()
-	@jsonProperty()
-	bookingNumber: number;
-	
-	@dbField()
-	@jsonProperty()
-	paymentMethod: PaymentMethod;
+  @dbField()
+  @jsonProperty()
+  bookingNumber: number;
 
-	@dbField()
-	@jsonProperty()
-	pricing: BookingPricing;
-	
-	@dbField()
-	@jsonProperty()
-	documents: BookingDocs;
+  @dbField()
+  @jsonProperty()
+  paymentMethod: PaymentMethod;
 
-	@dbField()
-	@jsonProperty()
-	review: Review;
+  @dbField()
+  @jsonProperty()
+  pricing: BookingPricing;
 
-	@dbField()
-	@jsonProperty({ deserialize: false, serialize: true })
-	createdAt: number = Date.now();
+  @dbField()
+  @jsonProperty()
+  documents: BookingDocs;
 
-	@dbField()
-	@jsonProperty({ deserialize: false, serialize: true })
-	modifiedAt: number;
+  @dbField()
+  @jsonProperty()
+  review: Review;
 
-	@dbField()
-	@jsonProperty()
-	changeLog: ChangeLog = new ChangeLog();
+  @dbField()
+  @jsonProperty({ deserialize: false, serialize: true })
+  createdAt: number = Date.now();
 
-	@dbField()
-	@jsonProperty({ deserialize: true, serialize: true })
-	tourId: string;
+  @dbField()
+  @jsonProperty({ deserialize: false, serialize: true })
+  modifiedAt: number;
 
-	@dbField()
-	@jsonProperty({ deserialize: true, serialize: true })
-	bpartnerId: string; 
+  @dbField()
+  @jsonProperty()
+  changeLog: ChangeLog = new ChangeLog();
 
-	
-	@jsonProperty({ type: PoiHelp })
-	@dbField({ type: PoiHelp })
-	points: PoiHelp[] = [];
+  @dbField()
+  @jsonProperty({ deserialize: true, serialize: true })
+  tourId: string;
 
+  @dbField()
+  @jsonProperty({ deserialize: true, serialize: true })
+  bpartnerId: string;
 
-	static start( userId: string): Booking {
-		const booking: Booking = new Booking();
-		booking.userId = userId;
-		booking.from = Date.now();
-		return booking;
-	}
+  @jsonProperty({ type: PoiHelp })
+  @dbField({ type: PoiHelp })
+  points: PoiHelp[] = [];
 
-	/*calculatePaymentAmount(rentTime: number): number {
+  static start(userId: string): Booking {
+    const booking: Booking = new Booking();
+    booking.userId = userId;
+    booking.from = Date.now();
+    return booking;
+  }
+
+  /*calculatePaymentAmount(rentTime: number): number {
 		return (
 			Math.abs(this.vehicle.pricing.pricePerMinute * rentTime) +
 			this.vehicle.pricing.startingFee
