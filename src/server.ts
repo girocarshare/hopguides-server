@@ -5,7 +5,7 @@ import { Logger } from 'tslog';
 
 const logger: Logger = new Logger();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 function appStart(app: any, port: any): Promise<any> {
   return new Promise((resolve, reject) => {

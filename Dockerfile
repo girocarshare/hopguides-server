@@ -15,5 +15,5 @@ WORKDIR /usr/app
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 
-EXPOSE 8000
+EXPOSE 8080
 CMD ["dist/server.js"]
