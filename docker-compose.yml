@@ -1,0 +1,13 @@
+services:
+  mongo:
+    image: mongo:6.0.4
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - hopguides-mongo-data:/data/db
+
+volumes:
+  hopguides-mongo-data: {}
