@@ -20,16 +20,16 @@ class DbClient {
     logger.info('::INFO:: Connecting Mongo DB...');
 
     /** DATABASE COMMON GIRO */
-    const mongoUriCommon: string = DB_URI_COMMON || '';
-    const dbNameCommon: string = DB_DATABASE_COMMON || '';
-    if (!mongoUriCommon || !dbNameCommon)
-      throw new Error('No Mongo URI or no DB name');
-    const dbCommon: MongoClient = await MongoClient.connect(mongoUriCommon, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    logger.info(`::INFO:: dbNameCommon: ${dbNameCommon}`);
-    const databaseCommon: Db = dbCommon.db(dbNameCommon);
+    // const mongoUriCommon: string = DB_URI_COMMON || '';
+    // const dbNameCommon: string = DB_DATABASE_COMMON || '';
+    // if (!mongoUriCommon || !dbNameCommon)
+    //   throw new Error('No Mongo URI or no DB name');
+    // const dbCommon: MongoClient = await MongoClient.connect(mongoUriCommon, {
+    //   useNewUrlParser: true,
+    //   useUnifiedTopology: true,
+    // });
+    // logger.info(`::INFO:: dbNameCommon: ${dbNameCommon}`);
+    // const databaseCommon: Db = dbCommon.db(dbNameCommon);
     /** DATABASE GIROCARSHARE */
     const mongoUri: string = DB_URI || '';
     const dbName: string = DB_DATABASE || '';
