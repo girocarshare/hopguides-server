@@ -7,7 +7,7 @@ on:
 
 env:
   PROJECT_ID: hopguides
-  GAR_LOCATION: europe-west8-docker.pkg.dev
+  GAR_LOCATION: europe-west8
   REPOSITORY: hopguides-repository
   SERVICE: hopguides-server-main
   REGION: europe-west8
