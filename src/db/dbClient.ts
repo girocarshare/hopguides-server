@@ -13,6 +13,8 @@ var DB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 var DB_DATABASE = 'giro-staging';
 const logger: Logger = new Logger();
 
+console.log('DB_URI', DB_URI);
+
 class DbClient {
   constructor() {}
 

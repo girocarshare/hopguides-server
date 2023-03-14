@@ -51,4 +51,4 @@ jobs:
           region: ${{ env.REGION }}
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
           env_vars: |
-            MONGODB_URI='${{ secrets.MONGODB_URI }}'
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
