@@ -1,19 +1,15 @@
 import { jsonProperty } from '../../json/decorations';
 import { email, notEmpty, required } from '../../validations/decorators';
-import { POI } from '../../models/tours/poi';
+import { POI } from '../../models/tours/poiModel';
 export class PointsForTours {
+  point: POI;
 
-	point: POI;
-
-	monthlyUsed : number;
-
+  monthlyUsed: number;
 }
 export class ToursWithPoints {
+  tourId: string;
 
-	tourId: string;
+  tourName: string;
 
-	tourName: string;
-
-	points: PointsForTours[];
-	
+  points: PointsForTours[];
 }
