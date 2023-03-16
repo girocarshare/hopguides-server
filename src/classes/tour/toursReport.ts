@@ -8,6 +8,8 @@ export class ToursReport {
 	tourName: string;
 	
 	tourPrice: number;
+
+	currency: string;
 	
 	noOfRidesAMonth: number;
 }

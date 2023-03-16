@@ -163,7 +163,7 @@ export class UserRouter extends BaseRouter {
 					//performBasicChecks(user);
 					/** END OF SECURITY CHECKS  */
 					if (!user)
-						return res.throwErr(new CustomError(404, 'User not ADMIN'));
+						return res.throwErr(new CustomError(404, 'User does not exist'));
 
 					else {
 						const loggedUserData: {

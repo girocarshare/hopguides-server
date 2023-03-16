@@ -56,6 +56,61 @@ export class TourManager {
 		});
 	}
 
+	
+	async getSingleTour(tourId: string): Promise<ToursWithPoints> {
+
+		try{
+
+			console.log(tourId)
+		var tour: Tour = await this.getTour(tourId).catch((err) => {
+			console.log(err)
+			throw new Error('Error getting Tours');
+		});
+			
+			var points: PointsForTours[]  = []
+			for(var point of tour.points){
+			
+					var poi: POI = await this.poiManager.getPoi(point)
+
+					var p : PointsForTours = new PointsForTours();
+					p.point = poi;
+
+					var report : Report = await this.reportManager.getReport(poi.id, {})
+
+					p.monthlyUsed = report.monthlyUsedCoupons;
+
+					points.push(p)
+
+			}
+
+			var tourReport : ToursWithPoints = new ToursWithPoints();
+			tourReport.tourId = tour.id;
+			tourReport.points = points;
+			tourReport.title = tour.title;
+			tourReport.shortInfo = tour.shortInfo;
+			tourReport.longInfo = tour.longInfo;
+			tourReport.currency = tour.currency;
+			tourReport.images = tour.images;
+			tourReport.price = tour.price;
+			tourReport.image = tour.image;
+			tourReport.audio = tour.audio;
+			tourReport.duration = tour.duration;
+			tourReport.length = tour.length;
+			tourReport.highestPoint = tour.highestPoint;
+			tourReport.termsAndConditions = tour.termsAndConditions;
+
+
+			
+
+			
+		
+		return tourReport
+		}catch(err){
+			console.log(err)
+		}
+	}
+
+
 	async getTours(filter?: any, pagination?: SearchPagination): Promise<Tour[]> {
 		return await this.tourRepository.getAll(filter, pagination).catch(() => {
 			throw new Error('Error getting Tours');
@@ -99,8 +154,9 @@ export class TourManager {
 
 			var tourReport: ToursReport = new ToursReport();
 			tourReport.tourId = tour.id;
-			tourReport.tourName = tour.title.en;
+			tourReport.tourName = tour.title.english;
 			tourReport.tourPrice = tour.price;
+			tourReport.currency = tour.currency;
 			tourReport.noOfRidesAMonth = count;
 
 			toursReport.push(tourReport)
@@ -143,7 +199,19 @@ export class TourManager {
 			var tourReport : ToursWithPoints = new ToursWithPoints();
 			tourReport.tourId = tour.id;
 			tourReport.points = points;
-			tourReport.tourName = tour.title.en;
+			tourReport.title = tour.title;
+			tourReport.shortInfo = tour.shortInfo;
+			tourReport.longInfo = tour.longInfo;
+			tourReport.currency = tour.currency;
+			tourReport.images = tour.images;
+			tourReport.price = tour.price;
+			tourReport.image = tour.image;
+			tourReport.audio = tour.audio;
+			tourReport.duration = tour.duration;
+			tourReport.length = tour.length;
+			tourReport.highestPoint = tour.highestPoint;
+			tourReport.termsAndConditions = tour.termsAndConditions;
+
 
 			toursReport.push(tourReport)
 			}

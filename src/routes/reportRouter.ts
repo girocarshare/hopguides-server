@@ -133,8 +133,8 @@ export class ReportRouter extends BaseRouter {
 				for (var poi of pois) {
 
 					var report: Report = await this.reportManager.getReport(poi.id, {})
-					var help: string[] = poi.price.toString().split("€")
-					var price = report.monthlyUsedCoupons * Number(help[0]);
+					//var help: string[] = poi.price.toString().split("€")
+					var price = 1 * Number(poi.price);
 					price = Math.round(price * 100) / 100;
 
 
@@ -151,7 +151,7 @@ export class ReportRouter extends BaseRouter {
 								name: report.name,
 								offerName: report.offerName,
 								monthlyUsedCoupons: 1,
-								price: 15
+								price: poi.price
 							},
 
 						],

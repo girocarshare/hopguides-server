@@ -68,7 +68,7 @@ export class ReportManager {
 		const report: Report = new Report();
 		report.pointId = companyId;
 		report.monthlyUsedCoupons = count;
-		report.name = p.title.en;
+		report.name = p.title.english;
 		report.bpartnerName = bPartner.name;
 		report.bpartnerEmail = bPartner.contact.email;
 		report.bpratnerPhone = bPartner.contact.phone;

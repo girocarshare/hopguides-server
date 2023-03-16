@@ -4,9 +4,19 @@ import { jsonProperty } from '../json/decorations';
 export class LocalizedField {
 	@jsonProperty()
 	@dbField()
-	en: string;
+	english: string;
 
 	@jsonProperty()
 	@dbField()
-	si: string;
+	slovenian: string;
+
+	
+	@jsonProperty()
+	@dbField()
+	serbian: string;
+	
+	@jsonProperty()
+	@dbField()
+	spanish: string;
+
 }

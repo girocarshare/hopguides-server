@@ -164,8 +164,8 @@ export class TourRouter extends BaseRouter {
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const tour: Tour = await this.tourManager.getTour(req.params.tourId);
-				return res.respond(200, serialize(tour));
+				const tour: ToursWithPoints = await this.tourManager.getSingleTour(req.params.tourId);
+				return res.status(200).send(tour);
 			})
 		);
 
@@ -227,6 +227,7 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 
+					console.log(req.body)
 					var arr: string[] = []
 					var user: User = await this.userManager.getUser(req.userId);
 					for (var point of req.body.points) {
@@ -241,8 +242,9 @@ export class TourRouter extends BaseRouter {
 						title: req.body.title,
 						shortInfo: req.body.shortInfo,
 						longInfo: req.body.longInfo,
+						currency: req.body.currency,
 						price: req.body.price,
-						points: arr
+						points: arr,
 					}
 					const createdTour: Tour = await this.tourManager.createTour(
 						deserialize(Tour, t)
@@ -266,7 +268,7 @@ export class TourRouter extends BaseRouter {
 				try {
 
 
-					let jsonObj = JSON.parse(req.body.tour); // string to "any" object first
+					let jsonObj = JSON.parse(req.body.tour); 
 					let tour = jsonObj as Tour;
 
 
@@ -339,6 +341,7 @@ export class TourRouter extends BaseRouter {
 						shortInfo: tour.shortInfo,
 						longInfo: tour.longInfo,
 						price: tour.price,
+						currency: tour.currency,
 						duration: tour.duration,
 						length: tour.length,
 						highestPoint: tour.highestPoint,

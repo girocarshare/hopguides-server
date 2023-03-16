@@ -46,7 +46,10 @@ export class Tour {
 	@dbField()
 	@min(0)
 	price: number;
-
+	
+	@jsonProperty()
+	@dbField()
+	currency: string;
 	
 	@jsonProperty({ type: String })
 	@dbField({ type: String })

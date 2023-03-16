@@ -146,6 +146,8 @@ export class POI {
 	@dbField()
 	price: number;
 
+	
+
 	@jsonProperty()
 	@dbField()
 	bpartnerId: string;
