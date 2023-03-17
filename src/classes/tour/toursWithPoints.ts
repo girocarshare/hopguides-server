@@ -1,13 +1,11 @@
 import { jsonProperty } from '../../json/decorations';
 import { email, notEmpty, required } from '../../validations/decorators';
-import { POI } from '../../models/tours/poi';
 import { LocalizedField } from '../../models/localizedField';
+import { POI } from '../../models/tours/poiModel';
 export class PointsForTours {
+  point: POI;
 
-	point: POI;
-
-	monthlyUsed : number;
-
+  monthlyUsed: number;
 }
 export class ToursWithPoints {
 

@@ -4,7 +4,7 @@ import { POIManager } from '../manager/poiManager';
 import { BPartnerManager } from '../manager/bpartnerManager';
 import { withErrorHandler } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
-import { POI } from '../models/tours/poi';
+import { POI } from '../models/tours/poiModel';
 import { BPartner } from '../models/bpartner/bpartner';
 import { deserialize, serialize } from '../json';
 import { CustomError } from '../classes/customError';

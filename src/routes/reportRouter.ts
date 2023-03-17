@@ -1,4 +1,3 @@
-
 import { IRequest, IResponse } from '../classes/interfaces';
 import {  withErrorHandler } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
@@ -9,7 +8,7 @@ import { TourManager } from '../manager/tourManager';
 import { CustomError } from '../classes/customError';
 import { NotificationType } from '../models/notification/notificationType';
 import * as fs from 'fs';
-import { POI } from '../models/tours/poi';
+import { POI } from '../models/tours/poiModel';
 import { POIManager } from '../manager/poiManager';
 const { createInvoice } = require("../classes/createInvoice");
 
@@ -97,14 +96,12 @@ export class ReportRouter extends BaseRouter {
 								throw error;
 							}
 							var file = data
-
 							var filename = req.params.id.trim() + ".png"
 							res.status(200);
 							res.setHeader('Content-Type', 'application/octet-stream');
 							res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
 							res.write(file, 'binary');
 							res.end();
-
 						});*/
 					}
 

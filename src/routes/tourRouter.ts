@@ -12,7 +12,7 @@ import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
 import { ToursReport } from '../classes/tour/toursReport';
 import { ToursWithPoints } from '../classes/tour/toursWithPoints';
-import { Category, POI } from '../models/tours/poi';
+import { Category, POI } from '../models/tours/poiModel';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
 import 'reflect-metadata';
 import { plainToClass } from 'class-transformer';

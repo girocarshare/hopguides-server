@@ -10,7 +10,7 @@ import { Report } from '../models/report/report';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import bookingRepository, { BookingRepository } from '../db/repository/bookingRepository';
 
-import { POI } from '../models/tours/poi';
+import { POI } from '../models/tours/poiModel';
 import { POIManager } from './poiManager';
 import { ReportManager } from './reportManager';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';

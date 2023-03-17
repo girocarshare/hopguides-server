@@ -1,7 +1,7 @@
 import bookingRepository, { BookingRepository } from '../db/repository/bookingRepository';
 import { Report } from '../models/report/report';
 import { Tour } from '../models/tours/tour';
-import { POI } from '../models/tours/poi';
+import { POI } from '../models/tours/poiModel';
 import { PoiHelp } from '../models/booking/PoiHelp';
 import { CustomError } from '../classes/customError';
 import { BPartner } from '../models/bpartner/bpartner';

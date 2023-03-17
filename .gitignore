@@ -5,3 +5,6 @@ build/
 tmp/
 temp/
 images
+*.env*
+!.env.example
+dist/
