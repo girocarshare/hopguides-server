@@ -90,7 +90,6 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	idField: number;
-
 	
 	@jsonProperty()
 	@dbField()
@@ -145,6 +144,8 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	price: number;
+
+	
 
 	@jsonProperty()
 	@dbField()

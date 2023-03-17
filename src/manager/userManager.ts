@@ -90,6 +90,8 @@ export class UserManager {
 		var user: User = await this.userRepository.findOne({ email: login.email }).catch(() => {
 			throw new CustomError(404, 'User not found!');
 		});
+		
+		console.log(user)
 		const isMatch = await bcrypt.compare(login.password, user.password)
 		
 

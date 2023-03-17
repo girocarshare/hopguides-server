@@ -22,14 +22,15 @@ export class POIManager {
     });
   }
 
-  async uploadMenu(pointId: string, file: MulterFile): Promise<POI> {
-    var point: POI = await this.getPoi(pointId);
+	async uploadMenu(pointId: string, file: string): Promise<POI> {
+		var point: POI = await this.getPoi(pointId)
 
-    point.menu = file.path;
-    return await this.poiRepository.updateOne(pointId, point).catch(() => {
-      throw new Error('Error updating Tour');
-    });
-  }
+		point.menu = file
+		return await this.poiRepository.updateOne(pointId, point).catch(() => {
+			throw new Error('Error updating Tour');
+		});
+	}
+
 
   async uploadImages(pointId: string, file: string[]): Promise<POI> {
     var point: POI = await this.getPoi(pointId);

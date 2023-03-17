@@ -8,6 +8,8 @@ import { UserManager } from '../manager/userManager';
 import { BPartnerManager } from '../manager/bpartnerManager';
 import { simpleAsync } from './util';
 import * as multer from 'multer';
+import * as AWS from 'aws-sdk';
+import * as fs from 'fs';
 import {
 	parseJwt,
 	withErrorHandler
@@ -17,13 +19,17 @@ import { BaseRouter } from './baseRouter';
 import { BPartner } from '../models/bpartner/bpartner';
 import * as sgMail from '@sendgrid/mail';
 import { RegisterPayload } from '../classes/user/registerPayload';
-
+var multerS3 = require('multer-s3');
 sgMail.setApiKey("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")
 var emailSender = "beta-app@gogiro.app";
-
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
 interface IBkRequest extends IRequest {
 	request: RegisterPayload;
 }
+var rString: string;
 
 function randomstring(length) {
 	var result = '';
@@ -38,32 +44,53 @@ function randomstring(length) {
 
 export class UserRouter extends BaseRouter {
 	userManager: UserManager;
-	bpartnerManager: BPartnerManager; storage = multer.diskStorage({
-		destination: function (req, file, cb) {
+	bpartnerManager: BPartnerManager;
+	
 
-			cb(null, 'images/menu')
-		},
-		filename: function (req, file, cb) {
 
-			globalThis.randomString = randomstring(10)
-			var list = file.originalname.split('.')
-			cb(null, globalThis.randomString + "." + list[list.length - 1]);
-		},
-
-		fileFilter(req, file, cb) {
-			if (!file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
-				return cb(new Error('Please upload pdf file.'))
-			}
-			cb(undefined, true)
+	fileFilter = (req, file, cb) => {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+			cb(null, true)
+		} else {
+			cb(null, false)
 		}
+	}
+
+
+	multerS3Config = multerS3({
+		s3: s3,
+		bucket: 'hopguides/logos',
+		metadata: function (req, file, cb) {
+
+			cb(null, { fieldName: globalThis.rString });
+		},
+		key: function (req, file, cb) {
+			var list = file.originalname.split('.')
+			globalThis.rString = randomstring(10)+ "." + list[list.length - 1]
+			cb(null, globalThis.rString)
+		}
+	});
+
+	upload = multer({
+		storage: this.multerS3Config,
+		fileFilter: this.fileFilter,
+
+
+
 	})
 
-	upload = multer({ storage: this.storage })
+
+	getFields = multer();
 	constructor() {
 		super();
 		this.userManager = new UserManager();
 		this.bpartnerManager = new BPartnerManager();
-		this.upload = multer({ storage: this.storage });
+		this.upload = multer({
+			storage: this.multerS3Config,
+			fileFilter: this.fileFilter,
+
+		});
+
 		this.init();
 	}
 
@@ -78,14 +105,13 @@ export class UserRouter extends BaseRouter {
 				return res.status(200).send(createdUser);
 			})
 		);
-
 		this.router.post(
 			'/sendRegistrationEmail',
+			//this.getFields.any(),
 			this.upload.single('file'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 
-
-
+				{
 				let jsonObj = JSON.parse(req.body.request);
 				let data = jsonObj as RegisterPayload;
 
@@ -105,7 +131,8 @@ export class UserRouter extends BaseRouter {
 					bpartnerData
 				);
 
-				await this.bpartnerManager.uploadLogo(createdBP.id, req.file);
+				var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/logos/" + globalThis.rString;
+				await this.bpartnerManager.uploadLogo(createdBP.id, fileName);
 				sgMail.send({
 					to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
 					from: `${emailSender}`,
@@ -115,8 +142,8 @@ export class UserRouter extends BaseRouter {
 							You have been invited to join our platform. Kindly click on the link below to register.<br/><br/> <a href=http://localhost:3001/#/setPassword/${req.body.email} id=get> Register now </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
 							`
 				})
-				return res.status(200).send(createdBP);
-
+					return res.status(200).send(createdBP);
+				}
 			})
 		);
 
@@ -163,7 +190,7 @@ export class UserRouter extends BaseRouter {
 					//performBasicChecks(user);
 					/** END OF SECURITY CHECKS  */
 					if (!user)
-						return res.throwErr(new CustomError(404, 'User not ADMIN'));
+						return res.throwErr(new CustomError(404, 'User does not exist'));
 
 					else {
 						const loggedUserData: {

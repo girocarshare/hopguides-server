@@ -1,5 +1,6 @@
 import { jsonProperty } from '../../json/decorations';
 import { email, notEmpty, required } from '../../validations/decorators';
+import { LocalizedField } from '../../models/localizedField';
 import { POI } from '../../models/tours/poiModel';
 export class PointsForTours {
   point: POI;
@@ -7,9 +8,33 @@ export class PointsForTours {
   monthlyUsed: number;
 }
 export class ToursWithPoints {
-  tourId: string;
 
-  tourName: string;
+	tourId: string;
+	
+	currency: string;
 
-  points: PointsForTours[];
+	points: PointsForTours[];
+
+	title: LocalizedField;
+	
+	longInfo: LocalizedField;
+	
+	shortInfo: LocalizedField;
+
+	images: string[];
+
+	price: number;
+	
+	image: string;
+	
+	audio: string;
+	
+	duration: string;
+
+	length: string;
+
+	highestPoint: string;
+
+	termsAndConditions: string;
+	
 }

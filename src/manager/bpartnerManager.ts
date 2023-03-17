@@ -27,10 +27,10 @@ export class BPartnerManager {
 	}
 
 	
-	async uploadLogo(id: string, file: MulterFile): Promise<BPartner> {
+	async uploadLogo(id: string, name: string): Promise<BPartner> {
 		var bpartner: BPartner = await this.getBP(id)
 
-		bpartner.logo = file.path
+		bpartner.logo = name
 		return await this.bpartnerRepository.updateOne(id, bpartner).catch(() => {
 			throw new Error('Error updating BPartner');
 		});

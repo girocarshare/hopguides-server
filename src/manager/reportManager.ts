@@ -1,6 +1,4 @@
-import bookingRepository, {
-  BookingRepository,
-} from '../db/repository/bookingRepository';
+import bookingRepository, { BookingRepository } from '../db/repository/bookingRepository';
 import { Report } from '../models/report/report';
 import { Tour } from '../models/tours/tour';
 import { POI } from '../models/tours/poiModel';
@@ -8,179 +6,211 @@ import { PoiHelp } from '../models/booking/PoiHelp';
 import { CustomError } from '../classes/customError';
 import { BPartner } from '../models/bpartner/bpartner';
 import { BPartnerManager } from '../manager/bpartnerManager';
-import tourRepository, {
-  TourRepository,
-} from '../db/repository/tourRepository';
+import tourRepository, { TourRepository } from '../db/repository/tourRepository';
 import { POIManager } from '../manager/poiManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import { deserialize, serialize } from '../json';
-var QRCode = require('qrcode');
+import * as AWS from 'aws-sdk';
+var multerS3 = require('multer-s3');
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
+
+const s3bucket = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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",
+	params: {Bucket: 'hopguides/qrcodes'}});
+var QRCode = require('qrcode')
 interface helpObjectSort {
-  from: string;
-  count: number;
-}
+	from: string;
+	count: number;
+  };
 
 export class ReportManager {
-  bookingRepository: BookingRepository;
-  tourRepository: TourRepository;
-  poiManager: POIManager;
-  bpartnerManager: BPartnerManager;
+	bookingRepository: BookingRepository;
+	tourRepository: TourRepository;
+	poiManager: POIManager;
+	bpartnerManager: BPartnerManager;
 
-  constructor() {
-    this.bookingRepository = bookingRepository;
-    this.tourRepository = tourRepository;
-    this.poiManager = new POIManager();
-    this.bpartnerManager = new BPartnerManager();
-  }
 
-  async getReport(
-    companyId: string,
-    filter: any,
-    pagination?: any
-  ): Promise<Report> {
-    const bookings: Booking[] = await this.bookingRepository
-      .getAll(filter, pagination)
-      .catch(() => {
-        throw new Error('Error getting bookings');
-      });
+	constructor() {
+		this.bookingRepository = bookingRepository;
+		this.tourRepository = tourRepository;
+		this.poiManager = new POIManager();
+		this.bpartnerManager = new BPartnerManager();
 
-    const p: POI = await this.poiManager.getPoi(companyId).catch(() => {
-      throw new Error('Error getting poi');
-    });
-    const bPartner: BPartner = await this.bpartnerManager
-      .getBPByUser(p.bpartnerId)
-      .catch(() => {
-        throw new Error('Error getting business partner');
-      });
+	}
 
-    var count = 0;
-    let monthIndex: number = new Date().getMonth();
-    let yearIndex: number = new Date().getFullYear();
+	async getReport(companyId: string, filter: any, pagination?: any): Promise<Report> {
+		const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting bookings');
+		});
 
-    for (var booking of bookings) {
-      var date = new Date(booking.from);
+		const p: POI = await this.poiManager.getPoi(companyId).catch(() => {
+			throw new Error('Error getting poi');
+		});
+		const bPartner: BPartner = await this.bpartnerManager.getBP(p.bpartnerId).catch(() => {
+			throw new Error('Error getting business partner');
+		});
 
-      let monthBooking: number = date.getMonth();
-      let yearBooking: number = date.getFullYear();
-      for (var point of booking.points) {
-        if (
-          point.id.toString() == companyId &&
-          point.used &&
-          monthIndex == monthBooking &&
-          yearBooking == yearIndex
-        ) {
-          count = count + 1;
-        }
-      }
-    }
 
-    const report: Report = new Report();
-    report.pointId = companyId;
-    report.monthlyUsedCoupons = count;
-    report.name = p.title.en;
-    report.bpartnerName = bPartner.name;
-    report.bpartnerEmail = bPartner.contact.email;
-    report.bpratnerPhone = bPartner.contact.phone;
-    report.bpratnerPhone2 = bPartner.contact.phone2;
-    report.offerName = p.offerName;
+		var count = 0
+		let monthIndex: number = new Date().getMonth();
+		let yearIndex: number = new Date().getFullYear();
 
-    return report;
-  }
 
-  async getReports(
-    companyId: string,
-    filter: any,
-    pagination?: any
-  ): Promise<helpObjectSort[]> {
-    var groupByArray = function (xs, key) {
-      return xs.reduce(function (rv, x) {
-        let v = key instanceof Function ? key(x) : x[key];
-        let el = rv.find(r => r && r.key === v);
-        if (el) {
-          el.values.push(x);
-        } else {
-          rv.push({ key: v, values: [x] });
-        }
-        return rv;
-      }, []);
-    };
+		for (var booking of bookings) {
+			var date = new Date(booking.from);
 
-    const bookings: Booking[] = await this.bookingRepository
-      .getAll(filter, pagination)
-      .catch(() => {
-        throw new Error('Error getting bookings');
-      });
+			let monthBooking: number = date.getMonth();
+			let yearBooking: number = date.getFullYear();
+			for (var point of booking.points) {
 
-    interface helpObject {
-      from: string;
-      points: PoiHelp[];
-    }
+				if (point.id.toString() == companyId && point.used && monthIndex == monthBooking && yearBooking == yearIndex) {
 
-    var helpArray: helpObject[] = [];
+					count = count + 1
+				}
 
-    for (var booking of bookings) {
-      for (var point of booking.points) {
-        if (point.id.toString() == companyId && point.used) {
-          var date = new Date(booking.from);
+			}
 
-          let monthBooking: number = date.getMonth();
-          let yearBooking: number = date.getFullYear();
+		}
 
-          let helpObject: helpObject = {
-            from: monthBooking.toString() + yearBooking.toString(),
-            points: booking.points,
-          };
+		const report: Report = new Report();
+		report.pointId = companyId;
+		report.monthlyUsedCoupons = count;
+		report.name = p.name;
+		report.bpartnerName = bPartner.name;
+		report.bpartnerEmail = bPartner.contact.email;
+		report.bpratnerPhone = bPartner.contact.phone;
+		report.bpratnerPhone2 = bPartner.contact.phone2;
+		report.offerName = p.offerName;
 
-          helpArray.push(helpObject);
-        }
-      }
-    }
+		return report
+	}
 
-    helpArray = groupByArray(helpArray, 'from');
+	
+	async getReports(companyId: string, filter: any, pagination?: any): Promise<helpObjectSort[]> {
 
-    interface helpObjectSort {
-      from: string;
-      count: number;
-    }
+		var groupByArray = function(xs, key) { 
+			return xs.reduce(function (rv, x) { 
+				let v = key instanceof Function ? key(x) : x[key]; let el = rv.find((r) => r && r.key === v);
+				 if (el) { el.values.push(x); }
+				  else { rv.push({ key: v, values: [x] }); }
+				   return rv; }, []); } 
+		  
 
-    var helpArraySort: helpObjectSort[] = [];
+		  const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
+			throw new Error('Error getting bookings');
+		});
 
-    class objectStr {
-      key: string;
-      values: helpObject[];
-    }
 
-    interface helpObjectSort {
-      from: string;
-      count: number;
-    }
 
-    var helpArraySort: helpObjectSort[] = [];
+		interface helpObject {
+			from: string;
+			points: PoiHelp[];
+		  };
+		   
 
-    helpArray.forEach(element => {
-      var obj = Object.assign(new objectStr(), element);
+		var helpArray : helpObject[] = [];
 
-      var helpArrayObj = { from: obj.key, count: obj.values.length };
-      helpArraySort.push(helpArrayObj);
-    });
+		for (var booking of bookings) {
 
-    return helpArraySort;
-  }
+			for (var point of booking.points) {
 
-  async generateQr(companyId: string): Promise<boolean> {
-    await QRCode.toFile(
-      'images/menu/' + companyId.trim() + '.png',
-      'http://localhost:3001/#/report/',
-      {
-        scale: 15,
-        width: '1000px',
-      },
-      function (err) {
-        if (err) throw err;
-        console.log('done');
-      }
-    );
+				if (point.id.toString() == companyId && point.used) {
+					var date = new Date(booking.from);
 
-    return true;
-  }
+					let monthBooking: number = date.getMonth();
+					let yearBooking: number = date.getFullYear();
+
+					let helpObject : helpObject = {from : monthBooking.toString() + yearBooking.toString(), points: booking.points}
+
+					helpArray.push(helpObject);
+
+				}
+
+			}
+
+
+		}
+
+
+		
+		helpArray = groupByArray(helpArray, 'from');
+
+		interface helpObjectSort {
+			from: string;
+			count: number;
+		  };
+
+		  var helpArraySort: helpObjectSort[] = []
+
+	
+		  class objectStr {
+			key: string;
+			values: helpObject[];
+		  };
+
+		  interface helpObjectSort {
+			from: string;
+			count: number;
+		  };
+
+		  var helpArraySort: helpObjectSort[] = []
+		  
+		  helpArray.forEach( (element) => {
+
+			var obj = Object.assign(new objectStr, element)
+
+			var helpArrayObj = {from : obj.key, count: obj.values.length}
+			helpArraySort.push(helpArrayObj)
+		});
+
+		
+		  
+
+		return helpArraySort;
+	}
+
+
+	async generateQr(companyId: string): Promise<boolean> {
+
+		QRCode.toDataURL("http://localhost:3001/#/report/"+ companyId,{scale: 15,
+		width: "1000px"}, function (err, base64) {
+			
+			const base64Data : Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+			const type = base64.split(';')[0].split('/')[1];
+			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+			const params = {
+				Bucket: 'hopguides/qrcodes',
+				Key: `${image_name}.${type}`, // type is not required
+				Body: base64Data,
+				ACL: 'public-read',
+				ContentEncoding: 'base64', // required
+				ContentType: `image/${type}` // required. Notice the back ticks
+			}
+			s3bucket.upload(params, function (err, data) {
+	
+				if (err) {
+					console.log('ERROR MSG: ', err);
+				} else {
+					console.log('Successfully uploaded data');
+				}
+			});
+		});
+
+
+		/*await QRCode.toFile('images/menu/'+companyId.trim() + ".png","http://localhost:3001/#/report/", {
+			scale: 15,
+			width: "1000px"
+		  }, function (err) {
+			if (err) throw err
+			console.log('done')
+		  })*/
+
+		return true
+	}
+
+
 }

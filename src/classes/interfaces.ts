@@ -21,6 +21,8 @@ export interface MulterFile {
 	path: string;
 	/** A Buffer of the entire file (MemoryStorage) */
 	buffer: Buffer;
+	
+	location: string;
 }
 
 export interface IRequest extends Request {
