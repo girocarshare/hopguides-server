@@ -72,7 +72,7 @@ export class ReportRouter extends BaseRouter {
 			})
 		);
 
-		/** GET generate qr code for company   */
+		/** GET generate qr code for company  */
 		this.router.get(
 			'/qr/:id',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
@@ -92,7 +92,7 @@ export class ReportRouter extends BaseRouter {
 					await sleep(1000);
 
 					if (tf) {
-						fs.readFile("./images/menu/" + req.params.id.trim() + ".png", (error, data) => {
+						/*fs.readFile("./images/menu/" + req.params.id.trim() + ".png", (error, data) => {
 							if (error) {
 								throw error;
 							}
@@ -105,7 +105,7 @@ export class ReportRouter extends BaseRouter {
 							res.write(file, 'binary');
 							res.end();
 
-						});
+						});*/
 					}
 
 				} catch (err) {

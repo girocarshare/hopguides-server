@@ -15,6 +15,17 @@ import { POIManager } from './poiManager';
 import { ReportManager } from './reportManager';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
 import { ToursWithPoints, PointsForTours } from '../classes/tour/toursWithPoints';
+import * as AWS from 'aws-sdk';
+var multerS3 = require('multer-s3');
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
+
+const s3bucket = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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",
+	params: {Bucket: 'hopguides/qrcodes'}});
 var QRCode = require('qrcode')
 
 declare var randomString: string
@@ -38,15 +49,34 @@ export class TourManager {
 	async generateQr(tourId: string, providerId: string): Promise<boolean> {
 
 		//change url
-		await QRCode.toFile('images/tourQrCodes/'+tourId.trim() +"---"+providerId.trim() + ".png","http://localhost:3000/deeplink?url=https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1", {
-			scale: 15,
-			width: "1000px"
-		  }, function (err) {
-			if (err) throw err
-			console.log('done')
-			return true
-		  })
 
+
+		QRCode.toDataURL("http://localhost:3000/deeplink?url=https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1", {scale: 15,
+		width: "1000px"},function (err, base64) {
+			const base64Data : Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+			const type = base64.split(';')[0].split('/')[1];
+			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+			const params = {
+				Bucket: 'hopguides/qrcodes',
+				Key: `${image_name}.${type}`, // type is not required
+				Body: base64Data,
+				ACL: 'public-read',
+				ContentEncoding: 'base64', // required
+				ContentType: `image/${type}` // required. Notice the back ticks
+			}
+			s3bucket.upload(params, function (err, data) {
+	
+				if (err) {
+					console.log('ERROR MSG: ', err);
+				} else {
+					console.log('Successfully uploaded data');
+				}
+			});
+		});
+
+
+
+		
 		return true
 	}
 
@@ -319,7 +349,7 @@ export class TourManager {
 	async uploadMenu(tourId: string, file: MulterFile): Promise<Tour> {
 		var tour: Tour = await this.getTour(tourId)
 
-		tour.image = file.path
+		tour.image = file.location
 		return await this.tourRepository.updateOne(tourId, tour).catch(() => {
 			throw new Error('Error updating Tour');
 		});
@@ -329,7 +359,7 @@ export class TourManager {
 	async uploadAudio(tourId: string, file: MulterFile): Promise<Tour> {
 		var tour: Tour = await this.getTour(tourId)
 
-		tour.audio = file.path
+		tour.audio = file.location
 		return await this.tourRepository.updateOne(tourId, tour).catch(() => {
 			throw new Error('Error updating Tour');
 		});

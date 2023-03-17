@@ -90,7 +90,6 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	idField: number;
-
 	
 	@jsonProperty()
 	@dbField()

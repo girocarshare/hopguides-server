@@ -23,10 +23,10 @@ export class POIManager {
 		});
 	}
 
-	async uploadMenu(pointId: string, file: MulterFile): Promise<POI> {
+	async uploadMenu(pointId: string, file: string): Promise<POI> {
 		var point: POI = await this.getPoi(pointId)
 
-		point.menu = file.path
+		point.menu = file
 		return await this.poiRepository.updateOne(pointId, point).catch(() => {
 			throw new Error('Error updating Tour');
 		});

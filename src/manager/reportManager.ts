@@ -10,6 +10,17 @@ import tourRepository, { TourRepository } from '../db/repository/tourRepository'
 import { POIManager } from '../manager/poiManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import { deserialize, serialize } from '../json';
+import * as AWS from 'aws-sdk';
+var multerS3 = require('multer-s3');
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
+
+const s3bucket = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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",
+	params: {Bucket: 'hopguides/qrcodes'}});
 var QRCode = require('qrcode')
 interface helpObjectSort {
 	from: string;
@@ -39,7 +50,7 @@ export class ReportManager {
 		const p: POI = await this.poiManager.getPoi(companyId).catch(() => {
 			throw new Error('Error getting poi');
 		});
-		const bPartner: BPartner = await this.bpartnerManager.getBPByUser(p.bpartnerId).catch(() => {
+		const bPartner: BPartner = await this.bpartnerManager.getBP(p.bpartnerId).catch(() => {
 			throw new Error('Error getting business partner');
 		});
 
@@ -68,7 +79,7 @@ export class ReportManager {
 		const report: Report = new Report();
 		report.pointId = companyId;
 		report.monthlyUsedCoupons = count;
-		report.name = p.title.english;
+		report.name = p.name;
 		report.bpartnerName = bPartner.name;
 		report.bpartnerEmail = bPartner.contact.email;
 		report.bpratnerPhone = bPartner.contact.phone;
@@ -165,13 +176,38 @@ export class ReportManager {
 
 	async generateQr(companyId: string): Promise<boolean> {
 
-		await QRCode.toFile('images/menu/'+companyId.trim() + ".png","http://localhost:3001/#/report/", {
+		QRCode.toDataURL("http://localhost:3001/#/report/"+ companyId,{scale: 15,
+		width: "1000px"}, function (err, base64) {
+			
+			const base64Data : Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+			const type = base64.split(';')[0].split('/')[1];
+			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+			const params = {
+				Bucket: 'hopguides/qrcodes',
+				Key: `${image_name}.${type}`, // type is not required
+				Body: base64Data,
+				ACL: 'public-read',
+				ContentEncoding: 'base64', // required
+				ContentType: `image/${type}` // required. Notice the back ticks
+			}
+			s3bucket.upload(params, function (err, data) {
+	
+				if (err) {
+					console.log('ERROR MSG: ', err);
+				} else {
+					console.log('Successfully uploaded data');
+				}
+			});
+		});
+
+
+		/*await QRCode.toFile('images/menu/'+companyId.trim() + ".png","http://localhost:3001/#/report/", {
 			scale: 15,
 			width: "1000px"
 		  }, function (err) {
 			if (err) throw err
 			console.log('done')
-		  })
+		  })*/
 
 		return true
 	}

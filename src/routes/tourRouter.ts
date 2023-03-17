@@ -20,8 +20,14 @@ import { simpleAsync } from './util';
 import * as multer from 'multer';
 import * as fs from 'fs';
 import 'es6-shim';
-import { SimpleConsoleLogger } from 'typeorm';
-import { array } from 'get-stream';
+import * as AWS from 'aws-sdk';
+import { ConnectionIsNotSetError } from 'typeorm';
+var multerS3 = require('multer-s3');
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
+var rString: string;
 interface IBkRequest extends IRequest {
 	tour: Tour;
 }
@@ -42,33 +48,51 @@ export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
 	poiManager: POIManager;
 	userManager: UserManager;
-	storage = multer.diskStorage({
-		destination: function (req, file, cb) {
-
-			cb(null, 'images/menu')
-		},
-		filename: function (req, file, cb) {
-
-			globalThis.randomString = randomstring(10)
-			var list = file.originalname.split('.')
-			cb(null, globalThis.randomString + "." + list[list.length - 1]);
-		},
-
-		fileFilter(req, file, cb) {
-			if (!file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
-				return cb(new Error('Please upload pdf file.'))
-			}
-			cb(undefined, true)
+	fileFilter = (req, file, cb) => {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+			cb(null, true)
+		} else {
+			cb(null, false)
 		}
-	})
+	}
 
-	upload = multer({ storage: this.storage })
+
+	multerS3Config = multerS3({
+		s3: s3,
+		bucket: 'hopguides/tours',
+        acl: 'public-read',
+		metadata: function (req, file, cb) {
+
+			cb(null, { fieldName: globalThis.rString });
+		},
+		key: function (req, file, cb) {
+			var list = file.originalname.split('.')
+			globalThis.rString = randomstring(10)+ "." + list[list.length - 1]
+			cb(null, globalThis.rString)
+		}
+	});
+
+	upload = multer({
+		storage: this.multerS3Config,
+		fileFilter: this.fileFilter,
+
+
+
+	})
 	constructor() {
 		super(true);
 		this.tourManager = new TourManager();
 		this.poiManager = new POIManager();
 		this.userManager = new UserManager();
-		this.upload = multer({ storage: this.storage });
+		this.upload =multer({
+			storage: this.multerS3Config,
+			fileFilter: this.fileFilter,
+			filename: function (req, file, cb) {
+				cb(null, "lalalalfsds.jpg");
+			},
+	
+
+		});
 		this.init();
 	}
 
@@ -266,7 +290,8 @@ export class TourRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				// Upload
 				try {
-
+				
+					
 
 					let jsonObj = JSON.parse(req.body.tour); 
 					let tour = jsonObj as Tour;
@@ -274,10 +299,11 @@ export class TourRouter extends BaseRouter {
 
 					var arr: string[] = []
 					var arr2 = []
-					//var user: User = await this.userManager.getUser(req.userId);
 					if(tour.points.length != 0){
 					for (var point of tour.points) {
 
+					
+						
 						const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
 
 						//poi.category = Category.NATURE
@@ -297,22 +323,24 @@ export class TourRouter extends BaseRouter {
 
 							var h = {
 								name: help2,
-								path: f.path
+								path: f.location
 							}
 							partnerImages.push(h)
 						}
 					}
-
 					//if the names are the same
 					var arrayy = []
 					for (var i of arr2) {
 						for (var im of partnerImages) {
 
-							if (im.name === i.title.en) {
+							if (im.name === i.name) {
+								
+							//var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/" + globalThis.rString;
 								arrayy.push(im.path);
 
 							}
 						}
+
 						await this.poiManager.uploadImages(i.id, arrayy);
 						arrayy = []
 					}
@@ -323,13 +351,12 @@ export class TourRouter extends BaseRouter {
 
 							if (f.originalname.substring(0, 6).trim() === 'audio2') {
 					
-
 								var help = f.originalname.split('---')
 
 								var help2 = help[0].substring(6)
 
-								if (help2 === i.title.en) {
-									await this.poiManager.uploadAudio(i.id, f.path);
+								if (help2 === i.name) {
+									await this.poiManager.uploadAudio(i.id, f.location);
 								}
 							}
 						}

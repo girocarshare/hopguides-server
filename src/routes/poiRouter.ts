@@ -15,6 +15,14 @@ import { ToursReport } from '../classes/tour/toursReport';
 import { TourManager } from '../manager/tourManager';
 
 import { ToursWithPoints } from '../classes/tour/toursWithPoints';
+
+import * as AWS from 'aws-sdk';
+var multerS3 = require('multer-s3');
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
+var rString: string;
 function randomstring(length) {
 	var result = '';
 	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -36,34 +44,47 @@ export class POIRouter extends BaseRouter {
 	bpartnerManager: BPartnerManager;
 	tourManager: TourManager;
 
-	storage = multer.diskStorage({
-		destination: function (req, file, cb) {
-
-			cb(null, 'images/menu')
-		},
-		filename: function (req, file, cb) {
-
-			globalThis.randomString = randomstring(10)
-			var list = file.originalname.split('.')
-			cb(null, globalThis.randomString + "." + list[list.length - 1]);
-		},
-
-		fileFilter(req, file, cb) {
-			if (!file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt)$/)) {
-				return cb(new Error('Please upload pdf file.'))
-			}
-			cb(undefined, true)
+	fileFilter = (req, file, cb) => {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+			cb(null, true)
+		} else {
+			cb(null, false)
 		}
-	})
+	}
 
-	upload = multer({ storage: this.storage })
+
+	multerS3Config = multerS3({
+		s3: s3,
+		bucket: 'hopguides/tours',
+		metadata: function (req, file, cb) {
+
+			cb(null, { fieldName: globalThis.rString });
+		},
+		key: function (req, file, cb) {
+			var list = file.originalname.split('.')
+			globalThis.rString = randomstring(10)+ "." + list[list.length - 1]
+			cb(null, globalThis.rString)
+		}
+	});
+
+	upload = multer({
+		storage: this.multerS3Config,
+		fileFilter: this.fileFilter,
+
+
+
+	})
 
 	constructor() {
 		super(true);
 		this.poiManager = new POIManager();
 		this.bpartnerManager = new BPartnerManager();
 		this.tourManager = new TourManager();
-		this.upload = multer({ storage: this.storage });
+		this.upload =multer({
+			storage: this.multerS3Config,
+			fileFilter: this.fileFilter,
+
+		});
 		this.init();
 	}
 
@@ -102,7 +123,9 @@ export class POIRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest) => {
 				// Upload
 				if (!req.file) console.log("Error while uploading file")
-				return await this.poiManager.uploadMenu(req.params.pointId, req.file);
+				
+				var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/" + globalThis.rString;
+				return await this.poiManager.uploadMenu(req.params.pointId, fileName);
 			})
 		);
 

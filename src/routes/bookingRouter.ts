@@ -16,6 +16,17 @@ import {
 } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
 import { User, UserRoles } from '../models/user/user';
+import * as AWS from 'aws-sdk';
+var multerS3 = require('multer-s3');
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
+
+const s3bucket = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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",
+	params: {Bucket: 'hopguides/qrcodes'}});
 var QRCode = require('qrcode')
 export class BookingRouter extends BaseRouter {
 	bookingManager = new BookingManager();
@@ -73,24 +84,47 @@ export class BookingRouter extends BaseRouter {
 							p.id = point
 							p.used = false
 
-							await QRCode.toFile('images/qrcodes/' + point.trim() + "---" + tour.id.trim() + ".png", "http://localhost:3000/deeplink", {
+							const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+							QRCode.toDataURL("http://localhost:3000/deeplink",{scale: 15,
+							width: "1000px"}, function (err, base64) {
+								
+								const base64Data : Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+								const type = base64.split(';')[0].split('/')[1];
+								const params = {
+									Bucket: 'hopguides/qrcodes',
+									Key: `${image_name}.${type}`, // type is not required
+									Body: base64Data,
+									ACL: 'public-read',
+									ContentEncoding: 'base64', // required
+									ContentType: `image/${type}` // required. Notice the back ticks
+								}
+								s3bucket.upload(params, function (err, data) {
+						
+									if (err) {
+										console.log('ERROR MSG: ', err);
+									} else {
+										console.log('Successfully uploaded data');
+									}
+								});
+							});
+
+							/*await QRCode.toFile('images/qrcodes/' + point.trim() + "---" + tour.id.trim() + ".png", "http://localhost:3000/deeplink", {
 								scale: 15,
 								width: "1000px"
 							}, function (err) {
 								if (err) throw err
 								console.log('done')
-							})
+							})*/
 
 
 
-							p.qrCode = 'images/qrcodes/' + point.trim() + "*" + tour.id.trim() + ".png"
+							p.qrCode = 'https://hopguides.s3.eu-central-1.amazonaws.com/gqcodes/'+image_name+".png"
 
 							points.push(p)
 						}
 
 
 					}
-					console.log(Date.now())
 					// Create reservation
 					const createdScheduledRent: Booking = await this.bookingManager.scheduleRent(
 						req.body.from,
