@@ -23,16 +23,31 @@ class Contact {
 
 }
 
-export class RegisterPayload {
+class Dimensions {
 
 	
+	@jsonProperty()
+	width: string;
+	
+	@jsonProperty()
+	height: string;
+
+
+}
+
+export class RegisterPayload {
+
 	@jsonProperty()
 	contact: Contact;
 
 	@jsonProperty()
 	userId: string;
 
-
 	@jsonProperty()
 	name: string;
+
+	
+	@jsonProperty()
+	dimensions: Dimensions;
 }
+

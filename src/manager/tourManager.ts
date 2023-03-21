@@ -7,15 +7,19 @@ import { MulterFile } from '../classes/interfaces';
 import { ToursReport } from '../classes/tour/toursReport';
 import * as multer from 'multer';
 import { Report } from '../models/report/report';
+import { BPartnerManager } from '../manager/bpartnerManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
+import { BookingManager } from '../manager/bookingManager';
 import bookingRepository, { BookingRepository } from '../db/repository/bookingRepository';
 
+import { PoiHelp } from '../models/booking/PoiHelp';
 import { POI } from '../models/tours/poiModel';
 import { POIManager } from './poiManager';
 import { ReportManager } from './reportManager';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
-import { ToursWithPoints, PointsForTours } from '../classes/tour/toursWithPoints';
+import { ToursWithPoints, PointsForTours, Logo } from '../classes/tour/toursWithPoints';
 import * as AWS from 'aws-sdk';
+import { BPartner } from '../models/bpartner/bpartner';
 var multerS3 = require('multer-s3');
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -25,22 +29,39 @@ var s3 = new AWS.S3({
 const s3bucket = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "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",
-	params: {Bucket: 'hopguides/qrcodes'}});
+	params: { Bucket: 'hopguides/qrcodes' }
+});
 var QRCode = require('qrcode')
 
 declare var randomString: string
+
+
+function getDistanceBetweenPoints(latitude1, longitude1, latitude2, longitude2) {
+	let theta = longitude1 - longitude2;
+	let distance = 60 * 1.1515 * (180 / Math.PI) * Math.acos(
+		Math.sin(latitude1 * (Math.PI / 180)) * Math.sin(latitude2 * (Math.PI / 180)) +
+		Math.cos(latitude1 * (Math.PI / 180)) * Math.cos(latitude2 * (Math.PI / 180)) * Math.cos(theta * (Math.PI / 180))
+	);
+
+	return distance * 1.609344;
+
+}
 export class TourManager {
 	tourRepository: TourRepository;
 	bookingRepository: BookingRepository;
+	bpartner: BookingRepository;
+	bookingManager = new BookingManager();
 	s3Service: S3Service;
 	poiManager: POIManager;
 	reportManager: ReportManager;
+	bpartnerManager: BPartnerManager;
 	constructor() {
 		this.tourRepository = tourRepository;
 		this.bookingRepository = bookingRepository;
 		this.s3Service = new S3Service("giromobility-dev");
 		this.poiManager = new POIManager();
 		this.reportManager = new ReportManager();
+		this.bpartnerManager = new BPartnerManager();
 	}
 
 
@@ -51,9 +72,11 @@ export class TourManager {
 		//change url
 
 
-		QRCode.toDataURL("http://localhost:3000/deeplink?url=https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1", {scale: 15,
-		width: "1000px"},function (err, base64) {
-			const base64Data : Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+		QRCode.toDataURL("http://localhost:3000/deeplink?url=https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1", {
+			scale: 15,
+			width: "1000px"
+		}, function (err, base64) {
+			const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
 			const type = base64.split(';')[0].split('/')[1];
 			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
 			const params = {
@@ -65,7 +88,7 @@ export class TourManager {
 				ContentType: `image/${type}` // required. Notice the back ticks
 			}
 			s3bucket.upload(params, function (err, data) {
-	
+
 				if (err) {
 					console.log('ERROR MSG: ', err);
 				} else {
@@ -76,7 +99,7 @@ export class TourManager {
 
 
 
-		
+
 		return true
 	}
 
@@ -86,59 +109,148 @@ export class TourManager {
 		});
 	}
 
-	
-	async getSingleTour(tourId: string): Promise<ToursWithPoints> {
 
-		try{
+	async getSingleTour(tourId: string, longitude: string, latitude: string): Promise<ToursWithPoints> {
 
-			console.log(tourId)
-		var tour: Tour = await this.getTour(tourId).catch((err) => {
-			console.log(err)
-			throw new Error('Error getting Tours');
-		});
-			
-			var points: PointsForTours[]  = []
-			for(var point of tour.points){
-			
-					var poi: POI = await this.poiManager.getPoi(point)
+		try {
 
-					var p : PointsForTours = new PointsForTours();
-					p.point = poi;
+			var tour: Tour = await this.getTour(tourId).catch((err) => {
+				throw new Error('Error getting Tours');
+			});
 
-					var report : Report = await this.reportManager.getReport(poi.id, {})
+			var bpartner: BPartner = await this.bpartnerManager.getBP(tour.bpartnerId).catch((err) => {
+				throw new Error('Error getting Tours');
+			});
 
-					p.monthlyUsed = report.monthlyUsedCoupons;
+			const logitudePartner: string = bpartner.contact.location.longitude;
+			const latitudePartner: string = bpartner.contact.location.latitude;
 
-					points.push(p)
+			var distance = getDistanceBetweenPoints(latitude, longitude, latitudePartner, logitudePartner)
 
+
+			if (distance > 0.5) {
+
+				var points: PoiHelp[] = []
+				var pointsArr: PointsForTours[] = []
+				if (tour != null) {
+					for (var point of tour.points) {
+
+						var poi: POI = await this.poiManager.getPoi(point)
+						if (poi.offerName != "") {
+							var p: PoiHelp = new PoiHelp();
+							p.id = point
+							p.used = false
+
+							const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+							QRCode.toDataURL("http://localhost:3000/deeplink", {
+								scale: 15,
+								width: "1000px"
+							}, function (err, base64) {
+
+								const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+								const type = base64.split(';')[0].split('/')[1];
+								const params = {
+									Bucket: 'hopguides/qrcodes',
+									Key: `${image_name}.${type}`, // type is not required
+									Body: base64Data,
+									ACL: 'public-read',
+									ContentEncoding: 'base64', // required
+									ContentType: `image/${type}` // required. Notice the back ticks
+								}
+								s3bucket.upload(params, function (err, data) {
+
+									if (err) {
+										console.log('ERROR MSG: ', err);
+									} else {
+										console.log('Successfully uploaded data');
+									}
+								});
+							});
+
+
+							p.qrCode = 'https://hopguides.s3.eu-central-1.amazonaws.com/gqcodes/' + image_name + ".png"
+
+							points.push(p)
+
+
+							var po: PointsForTours = new PointsForTours();
+							po.point = poi;
+
+							var report: Report = await this.reportManager.getReport(poi.id, {})
+
+							po.monthlyUsed = report.monthlyUsedCoupons;
+
+							po.voucher = 'https://hopguides.s3.eu-central-1.amazonaws.com/gqcodes/' + image_name + ".png"
+							
+							po.voucherDesc = poi.voucherDesc
+
+							po.hasVoucher = true;
+
+							pointsArr.push(po)
+						}else{
+							var po: PointsForTours = new PointsForTours();
+							po.point = poi;
+
+							var report: Report = await this.reportManager.getReport(poi.id, {})
+
+							po.monthlyUsed = 0;
+
+							po.hasVoucher = false;
+						
+
+							pointsArr.push(po)
+						}
+					}
+				
+				// Create reservation
+
+				var i = (Number)(new Date());
+				const createdScheduledRent: Booking = await this.bookingManager.scheduleRent(
+					i,
+					i,
+					tour,
+					bpartner,
+					points
+				);
+				if (!createdScheduledRent) throw new CustomError(400, 'Cannot create rent!');
+
+				var logo: Logo = new Logo();
+				logo.image = bpartner.logo;
+				logo.height = bpartner.dimensions.height;
+				logo.width = bpartner.dimensions.width;
+
+				var tourReport: ToursWithPoints = new ToursWithPoints();
+				tourReport.tourId = tour.id;
+				tourReport.points = pointsArr;
+				tourReport.title = tour.title;
+				tourReport.shortInfo = tour.shortInfo;
+				tourReport.longInfo = tour.longInfo;
+				tourReport.currency = tour.currency;
+				tourReport.images = tour.images;
+				tourReport.price = tour.price;
+				tourReport.image = tour.image;
+				tourReport.audio = tour.audio;
+				tourReport.duration = tour.duration;
+				tourReport.length = tour.length;
+				tourReport.logo = logo;
+				tourReport.highestPoint = tour.highestPoint;
+				tourReport.agreementTitle = tour.agreementTitle;
+				tourReport.agreementDesc = tour.agreementDesc;
+				tourReport.partnerName = bpartner.name;
+				tourReport.support = bpartner.support;
+				tourReport.termsAndConditions = tour.termsAndConditions;
+
+				return tourReport
+				}
+			}else{
+				
+			console.log("Not in radius")
 			}
-
-			var tourReport : ToursWithPoints = new ToursWithPoints();
-			tourReport.tourId = tour.id;
-			tourReport.points = points;
-			tourReport.title = tour.title;
-			tourReport.shortInfo = tour.shortInfo;
-			tourReport.longInfo = tour.longInfo;
-			tourReport.currency = tour.currency;
-			tourReport.images = tour.images;
-			tourReport.price = tour.price;
-			tourReport.image = tour.image;
-			tourReport.audio = tour.audio;
-			tourReport.duration = tour.duration;
-			tourReport.length = tour.length;
-			tourReport.highestPoint = tour.highestPoint;
-			tourReport.termsAndConditions = tour.termsAndConditions;
-
-
-			
-
-			
-		
-		return tourReport
-		}catch(err){
+		} catch (err) {
 			console.log(err)
 		}
 	}
+
 
 
 	async getTours(filter?: any, pagination?: SearchPagination): Promise<Tour[]> {
@@ -198,58 +310,58 @@ export class TourManager {
 
 	async getToursWithPoints(filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints[]> {
 
-		try{
-		var toursReport: ToursWithPoints[] = []
+		try {
+			var toursReport: ToursWithPoints[] = []
 
-		var tours: Tour[] = await this.tourRepository.getAll(filter, pagination).catch((err) => {
-			console.log(err)
-			throw new Error('Error getting Tours');
-		});
+			var tours: Tour[] = await this.tourRepository.getAll(filter, pagination).catch((err) => {
+				console.log(err)
+				throw new Error('Error getting Tours');
+			});
 
 
 
-		for (var tour of tours) {
-			
-			var points: PointsForTours[]  = []
-			for(var point of tour.points){
-			
+			for (var tour of tours) {
+
+				var points: PointsForTours[] = []
+				for (var point of tour.points) {
+
 					var poi: POI = await this.poiManager.getPoi(point)
 
-					var p : PointsForTours = new PointsForTours();
+					var p: PointsForTours = new PointsForTours();
 					p.point = poi;
 
-					var report : Report = await this.reportManager.getReport(poi.id, {})
+					var report: Report = await this.reportManager.getReport(poi.id, {})
 
 					p.monthlyUsed = report.monthlyUsedCoupons;
 
 					points.push(p)
 
+				}
+
+				var tourReport: ToursWithPoints = new ToursWithPoints();
+				tourReport.tourId = tour.id;
+				tourReport.points = points;
+				tourReport.title = tour.title;
+				tourReport.shortInfo = tour.shortInfo;
+				tourReport.longInfo = tour.longInfo;
+				tourReport.currency = tour.currency;
+				tourReport.images = tour.images;
+				tourReport.price = tour.price;
+				tourReport.image = tour.image;
+				tourReport.audio = tour.audio;
+				tourReport.duration = tour.duration;
+				tourReport.length = tour.length;
+				tourReport.highestPoint = tour.highestPoint;
+				tourReport.termsAndConditions = tour.termsAndConditions;
+
+
+				toursReport.push(tourReport)
 			}
 
-			var tourReport : ToursWithPoints = new ToursWithPoints();
-			tourReport.tourId = tour.id;
-			tourReport.points = points;
-			tourReport.title = tour.title;
-			tourReport.shortInfo = tour.shortInfo;
-			tourReport.longInfo = tour.longInfo;
-			tourReport.currency = tour.currency;
-			tourReport.images = tour.images;
-			tourReport.price = tour.price;
-			tourReport.image = tour.image;
-			tourReport.audio = tour.audio;
-			tourReport.duration = tour.duration;
-			tourReport.length = tour.length;
-			tourReport.highestPoint = tour.highestPoint;
-			tourReport.termsAndConditions = tour.termsAndConditions;
 
 
-			toursReport.push(tourReport)
-			}
-
-			
-		
-		return toursReport
-		}catch(err){
+			return toursReport
+		} catch (err) {
 			console.log(err)
 		}
 	}
@@ -284,17 +396,17 @@ export class TourManager {
 		for (var booking of bookings) {
 
 
-				if (booking.tourId == tourId) {
-					var date = new Date(booking.from);
+			if (booking.tourId == tourId) {
+				var date = new Date(booking.from);
 
-					let monthBooking: number = date.getMonth();
-					let yearBooking: number = date.getFullYear();
+				let monthBooking: number = date.getMonth();
+				let yearBooking: number = date.getFullYear();
 
-					let helpObject: helpObject = { from: monthBooking.toString() + yearBooking.toString(), id: tourId }
+				let helpObject: helpObject = { from: monthBooking.toString() + yearBooking.toString(), id: tourId }
 
-					helpArray.push(helpObject);
+				helpArray.push(helpObject);
 
-				}
+			}
 		}
 
 
@@ -333,7 +445,7 @@ export class TourManager {
 
 	async updateTour(tourId: string, data: Partial<Tour>) {
 
-		 await this.tourRepository.updateOne(tourId, data).catch((err) => {
+		await this.tourRepository.updateOne(tourId, data).catch((err) => {
 			throw new Error('Error updating Tour');
 		});
 
@@ -355,7 +467,7 @@ export class TourManager {
 		});
 	}
 
-	
+
 	async uploadAudio(tourId: string, file: MulterFile): Promise<Tour> {
 		var tour: Tour = await this.getTour(tourId)
 

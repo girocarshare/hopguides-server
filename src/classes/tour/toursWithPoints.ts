@@ -6,7 +6,21 @@ export class PointsForTours {
   point: POI;
 
   monthlyUsed: number;
+
+  voucher: string;
+
+  hasVoucher: Boolean;
+  
+  voucherDesc: LocalizedField;
 }
+
+export class Logo {
+	image: string;
+  
+	height: string;
+
+	width: string;
+  }
 export class ToursWithPoints {
 
 	tourId: string;
@@ -35,6 +49,17 @@ export class ToursWithPoints {
 
 	highestPoint: string;
 
+	logo: Logo;
+
 	termsAndConditions: string;
+
+	agreementTitle: LocalizedField;
+
+	
+	agreementDesc: LocalizedField;
+	
+	partnerName: string;
+
+	support: LocalizedField;
 	
 }
