@@ -311,7 +311,7 @@ export class TourManager {
 			var distance = getDistanceBetweenPoints(latitude, longitude, latitudePartner, logitudePartner)
 
 
-			if (distance > 0.5) {
+			//if (distance < 0.5) {
 
 				var points: PoiHelp[] = []
 				var pointsArr: Point[] = []
@@ -432,10 +432,10 @@ export class TourManager {
 
 				return tourReport
 				}
-			}else{
+			//}else{
 				
-			console.log("Not in radius")
-			}
+			//console.log("Not in radius")
+			//}
 		} catch (err) {
 			console.log(err)
 		}
