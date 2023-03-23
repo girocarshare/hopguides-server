@@ -22,6 +22,7 @@ import * as fs from 'fs';
 import 'es6-shim';
 import * as AWS from 'aws-sdk';
 import { ConnectionIsNotSetError } from 'typeorm';
+import { TourData } from '../classes/tour/tourData';
 var multerS3 = require('multer-s3');
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -179,6 +180,16 @@ export class TourRouter extends BaseRouter {
 				}
 			})
 		);
+	/** GET languages */
+	this.router.get(
+		'/languages',
+		//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+		//parseJwt,
+		withErrorHandler(async (req: IRequest, res: IResponse) => {
+			const languages: string[] = ["English", "Slovenian", "Serbian", "Spanish"];
+			return res.status(200).send(languages);
+		})
+	);
 
 		/** GET fetches tour data */
 		this.router.get(
@@ -186,7 +197,7 @@ export class TourRouter extends BaseRouter {
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const tour: ToursWithPoints = await this.tourManager.getSingleTour(req.params.tourId, req.body.longitude, req.body.latitude);
+				const tour: TourData = await this.tourManager.getSingleTour(req.params.tourId, req.body.longitude, req.body.latitude, req.body.language);
 				return res.status(200).send(tour);
 			})
 		);

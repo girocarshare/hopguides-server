@@ -2,16 +2,98 @@ import { jsonProperty } from '../../json/decorations';
 import { email, notEmpty, required } from '../../validations/decorators';
 import { LocalizedField } from '../../models/localizedField';
 import { POI } from '../../models/tours/poiModel';
-export class PointsForTours {
-  point: POI;
+import { GeoLocation } from '../../models/address/geoLocation';
 
+class Contact {
+	phone: string;
+	
+	name: string;
+
+	email: string;
+
+	webURL: string;
+
+}
+
+class FromTo {
+	from: string;
+
+	to: string;
+
+}
+
+class WorkingHours {
+	monday: FromTo;
+
+	tuesday: FromTo;
+
+	wednesday: FromTo;
+	
+	thursday: FromTo;
+	
+	friday: FromTo;
+	
+	saturday: FromTo;
+	
+	sunday: FromTo;
+
+}
+
+export class POICl {
+
+	id: string ;
+
+	idField: number;
+	
+	name: string;
+
+	location: GeoLocation;
+
+	title: string;
+
+	shortInfo: string;
+
+	longInfo: string;
+
+	contact: Contact;
+
+
+	workingHours: WorkingHours;
+
+	images: string[];
+
+	icon: string;
+
+	files: string[];
+	
+	menu: string
+	
+
+	offerName: string;
+	
+	price: number;
+
+	
+	bpartnerId: string;
+
+	category: string;
+
+	
+	audio: string;
+  
+
+  }
+
+export class PointsForTours {
+  point: POICl;
+  pointCl: POI;
   monthlyUsed: number;
 
   voucher: string;
 
   hasVoucher: Boolean;
   
-  voucherDesc: LocalizedField;
+  voucherDesc: string;
 }
 
 export class Logo {
@@ -22,6 +104,8 @@ export class Logo {
 	width: string;
   }
 export class ToursWithPoints {
+	
+	noOfRidesAMonth: number;
 
 	tourId: string;
 	
@@ -29,11 +113,11 @@ export class ToursWithPoints {
 
 	points: PointsForTours[];
 
-	title: LocalizedField;
+	title: string;
 	
-	longInfo: LocalizedField;
+	longInfo: string;
 	
-	shortInfo: LocalizedField;
+	shortInfo: string;
 
 	images: string[];
 
@@ -53,13 +137,13 @@ export class ToursWithPoints {
 
 	termsAndConditions: string;
 
-	agreementTitle: LocalizedField;
+	agreementTitle: string;
 
 	
-	agreementDesc: LocalizedField;
+	agreementDesc: string;
 	
 	partnerName: string;
 
-	support: LocalizedField;
+	support: string;
 	
 }
