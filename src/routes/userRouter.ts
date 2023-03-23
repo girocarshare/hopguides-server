@@ -112,10 +112,11 @@ export class UserRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 
 				{
+
+
 				let jsonObj = JSON.parse(req.body.request);
 				let data = jsonObj as RegisterPayload;
-
-
+				
 				const createdUser: User = await this.userManager.sendRegistrationEmail(
 					deserialize(User, req.body));
 

@@ -2,6 +2,7 @@ import { dbField, id } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { generateUuid } from '../../utils/utils';
 import { GeoLocation } from '../address/geoLocation';
+import { LocalizedField } from '../localizedField';
 
 export enum BPartnerStatus {
 	DELETED = 'DELETED',
@@ -56,7 +57,19 @@ class Contact {
 	webURL: string;
 
 }
+class Dimensions {
 
+	
+	@jsonProperty()
+	@dbField()
+	width: string;
+	
+	@jsonProperty()
+	@dbField()
+	height: string;
+
+
+}
 
 export class BPartner {
 	@id()
@@ -104,4 +117,13 @@ export class BPartner {
 	@jsonProperty()
 	@dbField()
 	logo: string;
+
+	@jsonProperty()
+	@dbField()
+	dimensions: Dimensions;
+
+	
+	@jsonProperty()
+	@dbField()
+	support: LocalizedField;
 }

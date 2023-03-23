@@ -99,6 +99,11 @@ export class POI {
 	@dbField()
 	location: GeoLocation;
 
+
+	@jsonProperty()
+	@dbField()
+	voucherDesc: LocalizedField;
+
 	@jsonProperty()
 	@dbField()
 	title: LocalizedField;

@@ -19,6 +19,18 @@ export class Tour {
 
 	@jsonProperty()
 	@dbField()
+	bpartnerId: string;
+	
+	@jsonProperty()
+	@dbField()
+	agreementTitle: LocalizedField;
+
+	@jsonProperty()
+	@dbField()
+	agreementDesc: LocalizedField;
+
+	@jsonProperty()
+	@dbField()
 	shortInfo: LocalizedField;
 
 	@jsonProperty()

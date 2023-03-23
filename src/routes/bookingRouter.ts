@@ -61,7 +61,6 @@ export class BookingRouter extends BaseRouter {
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse, next) => {
 
-
 				const tour: Tour = await this.tourManager.getTour(req.body.tourId);
 
 				const logitude: string = req.body.longitude;
