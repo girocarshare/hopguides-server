@@ -20,7 +20,8 @@ import { PreviousTourReport } from '../classes/tour/previousReportTour';
 import { ToursWithPoints, PointsForTours, Logo, POICl } from '../classes/tour/toursWithPoints';
 import * as AWS from 'aws-sdk';
 import { BPartner } from '../models/bpartner/bpartner';
-import { Characteristics, Point, TourData } from '../classes/tour/tourData';
+import { Characteristics, Location, Point, TourData } from '../classes/tour/tourData';
+import { PointData } from '../classes/tour/pointData';
 var multerS3 = require('multer-s3');
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -427,6 +428,7 @@ export class TourManager {
 				tourReport.agreementTitle = tour.agreementTitle[language];
 				tourReport.agreementDesc = tour.agreementDesc[language];
 				tourReport.termsAndConditionsLink = tour.termsAndConditions;
+				tourReport.bookingId = createdScheduledRent.id;
 
 				return tourReport
 				}
@@ -439,7 +441,87 @@ export class TourManager {
 		}
 	}
 
+	async getTourPoints(tourId: string, language: string, bookingId: string): Promise<PointData[]> {
 
+		try {
+
+			var tour: Tour = await this.getTour(tourId).catch((err) => {
+				throw new Error('Error getting Tours');
+			});
+
+			var bpartner: BPartner = await this.bpartnerManager.getBP(tour.bpartnerId).catch((err) => {
+				throw new Error('Error getting Tours');
+			});
+
+			
+
+				var pointsArr: PointData[] = []
+				if (tour != null) {
+					for (var point of tour.points) {
+
+						var poi: POI = await this.poiManager.getPoi(point)
+						if (poi.offerName != "") {
+
+							var location: Location = new Location()
+							location.lat = poi.location.latitude;
+							location.lng = poi.location.longitude;
+
+
+							var poiHelp: PointData = new PointData();
+							poiHelp.id = poi.id;
+							poiHelp.audio = poi.audio
+							poiHelp.category = poi.category;
+							poiHelp.images = poi.images
+							poiHelp.location = location;
+							poiHelp.name = poi.name
+							poiHelp.shortInfo = poi.shortInfo[language]
+							poiHelp.longInfo = poi.longInfo[language]
+							poiHelp.offerName = poi.offerName
+
+							var booking: Booking = await this.bookingManager.getBooking(bookingId)
+
+
+							poiHelp.hasVoucher = true;
+							poiHelp.voucherDesc = poi.voucherDesc[language];
+							for(var p of booking.points){
+								if(p.id === poi.id){
+									poiHelp.voucher= p.qrCode
+								}
+							}
+							
+							pointsArr.push(poiHelp)
+						}else{
+							var location: Location = new Location()
+							location.lat = poi.location.latitude;
+							location.lng = poi.location.longitude;
+
+
+							var poiHelp: PointData = new PointData();
+							poiHelp.id = poi.id;
+							poiHelp.audio = poi.audio
+							poiHelp.category = poi.category;
+							poiHelp.images = poi.images
+							poiHelp.location = location;
+							poiHelp.name = poi.name
+							poiHelp.shortInfo = poi.shortInfo[language]
+							poiHelp.longInfo = poi.longInfo[language]
+							poiHelp.hasVoucher = false;
+						
+							
+							pointsArr.push(poiHelp)
+						}
+					}
+				
+
+				
+
+				return pointsArr
+				}
+			
+		} catch (err) {
+			console.log(err)
+		}
+	}
 
 	async getTours(filter?: any, pagination?: SearchPagination): Promise<Tour[]> {
 		return await this.tourRepository.getAll(filter, pagination).catch(() => {

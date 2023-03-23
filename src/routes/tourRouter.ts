@@ -23,6 +23,7 @@ import 'es6-shim';
 import * as AWS from 'aws-sdk';
 import { ConnectionIsNotSetError } from 'typeorm';
 import { TourData } from '../classes/tour/tourData';
+import { PointData } from '../classes/tour/pointData';
 var multerS3 = require('multer-s3');
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -201,6 +202,17 @@ export class TourRouter extends BaseRouter {
 				return res.status(200).send(tour);
 			})
 		);
+
+			/** GET fetches points data for a tour */
+			this.router.get(
+				'/points/:tourId',
+				//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+				//parseJwt,
+				withErrorHandler(async (req: IRequest, res: IResponse) => {
+					const tour: PointData[] = await this.tourManager.getTourPoints(req.params.tourId, req.body.language, req.body.bookingId);
+					return res.status(200).send(tour);
+				})
+			);
 
 		/** PATCH patch tour from ADMIN user */
 		this.router.post(

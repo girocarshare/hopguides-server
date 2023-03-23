@@ -63,5 +63,6 @@ export class TourData {
 
 	logo: Logo;
 
+	bookingId: string;
 
 }

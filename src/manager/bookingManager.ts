@@ -50,4 +50,10 @@ export class BookingManager {
 			throw new Error('Error getting Rents');
 		});
 	}
+
+	async getBooking(bookingId: string): Promise<Booking> {
+		return await this.bookingRepository.getByIdOrThrow(bookingId).catch(() => {
+			throw new Error('Booking not found!');
+		});
+	}
 }
