@@ -313,132 +313,133 @@ export class TourManager {
 
 			//if (distance < 0.5) {
 
-				var points: PoiHelp[] = []
-				var pointsArr: Point[] = []
-				if (tour != null) {
-					for (var point of tour.points) {
+			var points: PoiHelp[] = []
+			var pointsArr: Point[] = []
+			//if (tour != null) {
+			//for (var point of tour.points) {
 
-						var poi: POI = await this.poiManager.getPoi(point)
-						if (poi.offerName != "") {
-							var p: PoiHelp = new PoiHelp();
-							p.id = point
-							p.used = false
+			//var poi: POI = await this.poiManager.getPoi(point)
+			/*if (poi.offerName != "") {
+				var p: PoiHelp = new PoiHelp();
+				p.id = point
+				p.used = false
 
-							const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
-							QRCode.toDataURL("http://localhost:3000/deeplink", {
-								scale: 15,
-								width: "1000px"
-							}, function (err, base64) {
+				const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+				QRCode.toDataURL("http://localhost:3000/deeplink", {
+					scale: 15,
+					width: "1000px"
+				}, function (err, base64) {
 
-								const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-								const type = base64.split(';')[0].split('/')[1];
-								const params = {
-									Bucket: 'hopguides/qrcodes',
-									Key: `${image_name}.${type}`, // type is not required
-									Body: base64Data,
-									ACL: 'public-read',
-									ContentEncoding: 'base64', // required
-									ContentType: `image/${type}` // required. Notice the back ticks
-								}
-								s3bucket.upload(params, function (err, data) {
-
-									if (err) {
-										console.log('ERROR MSG: ', err);
-									} else {
-										console.log('Successfully uploaded data');
-									}
-								});
-							});
-
-
-							p.qrCode = 'https://hopguides.s3.eu-central-1.amazonaws.com/gqcodes/' + image_name + ".png"
-
-							points.push(p)
-
-
-							var po: Point = new Point();
-							po.category = poi.category;
-							po.id = poi.id;
-							po.name = poi.name;
-
-							pointsArr.push(po)
-						}else{
-							
-							var po: Point = new Point();
-							po.category = poi.category;
-							po.id = poi.id;
-							po.name = poi.name;
-
-							pointsArr.push(po)
-						}
+					const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+					const type = base64.split(';')[0].split('/')[1];
+					const params = {
+						Bucket: 'hopguides/qrcodes',
+						Key: `${image_name}.${type}`, // type is not required
+						Body: base64Data,
+						ACL: 'public-read',
+						ContentEncoding: 'base64', // required
+						ContentType: `image/${type}` // required. Notice the back ticks
 					}
+					s3bucket.upload(params, function (err, data) {
+
+						if (err) {
+							console.log('ERROR MSG: ', err);
+						} else {
+							console.log('Successfully uploaded data');
+						}
+					});
+				});
+
+
+				p.qrCode = 'https://hopguides.s3.eu-central-1.amazonaws.com/gqcodes/' + image_name + ".png"
+
+				points.push(p)
+
+
+				var po: Point = new Point();
+				po.category = poi.category;
+				po.id = poi.id;
+				po.name = poi.name;
+
+				pointsArr.push(po)
+			}else{
 				
-				// Create reservation
+				var po: Point = new Point();
+				po.category = poi.category;
+				po.id = poi.id;
+				po.name = poi.name;
 
-				var i = (Number)(new Date());
-				const createdScheduledRent: Booking = await this.bookingManager.scheduleRent(
-					i,
-					i,
-					tour,
-					bpartner,
-					points
-				);
-				if (!createdScheduledRent) throw new CustomError(400, 'Cannot create rent!');
+				pointsArr.push(po)
+			}
+		}
+	
+	// Create reservation
 
-				var logo: Logo = new Logo();
-				logo.image = bpartner.logo;
-				logo.height = bpartner.dimensions.height;
-				logo.width = bpartner.dimensions.width;
+	var i = (Number)(new Date());
+	const createdScheduledRent: Booking = await this.bookingManager.scheduleRent(
+		i,
+		i,
+		tour,
+		bpartner,
+		points
+	);
+	if (!createdScheduledRent) throw new CustomError(400, 'Cannot create rent!');
+*/
+			var logo: Logo = new Logo();
+			logo.image = bpartner.logo;
+			logo.height = bpartner.dimensions.height;
+			logo.width = bpartner.dimensions.width;
 
-				var characteristicsArr : Characteristics[] = [];
-				var characteristics: Characteristics = new Characteristics();
-				characteristics.name = "duration";
-				characteristics.icon = "duration";
-				characteristics.value = tour.duration;
-
-
-				characteristicsArr.push(characteristics);
-
-				characteristics = new Characteristics();
-				characteristics.name = "length";
-				characteristics.icon = "distance";
-				characteristics.value = tour.length;
-
-
-				characteristicsArr.push(characteristics);
-
-				characteristics = new Characteristics();
-				characteristics.name = "highest point";
-				characteristics.icon = "flag";
-				characteristics.value = tour.highestPoint;
+			var characteristicsArr: Characteristics[] = [];
+			var characteristics: Characteristics = new Characteristics();
+			characteristics.name = "duration";
+			characteristics.icon = "duration";
+			characteristics.value = tour.duration;
 
 
-				characteristicsArr.push(characteristics);
+			characteristicsArr.push(characteristics);
 
-				var tourReport: TourData = new TourData();
-				tourReport.tourId = tour.id;
-				tourReport.points = pointsArr;
-				tourReport.title = tour.title[language];
-				tourReport.shortInfo = tour.shortInfo[language];
-				tourReport.longInfo = tour.longInfo[language];
-				tourReport.image = tour.image;
-				tourReport.audio = tour.audio;
-				tourReport.logo = logo;
-				tourReport.characteristics = characteristicsArr;
-				tourReport.agreementTitle = tour.agreementTitle[language];
-				tourReport.agreementDesc = tour.agreementDesc[language];
-				tourReport.termsAndConditionsLink = tour.termsAndConditions;
-				tourReport.bookingId = createdScheduledRent.id;
+			characteristics = new Characteristics();
+			characteristics.name = "length";
+			characteristics.icon = "distance";
+			characteristics.value = tour.length;
 
-				return tourReport
-				}
+
+			characteristicsArr.push(characteristics);
+
+			characteristics = new Characteristics();
+			characteristics.name = "highest point";
+			characteristics.icon = "flag";
+			characteristics.value = tour.highestPoint;
+
+
+			characteristicsArr.push(characteristics);
+
+			var tourReport: TourData = new TourData();
+			tourReport.tourId = tour.id;
+			tourReport.points = pointsArr;
+			tourReport.title = tour.title[language];
+			tourReport.shortInfo = tour.shortInfo[language];
+			tourReport.longInfo = tour.longInfo[language];
+			tourReport.image = tour.image;
+			tourReport.audio = tour.audio;
+			tourReport.logo = logo;
+			tourReport.characteristics = characteristicsArr;
+			tourReport.agreementTitle = tour.agreementTitle[language];
+			tourReport.agreementDesc = tour.agreementDesc[language];
+			tourReport.termsAndConditionsLink = tour.termsAndConditions;
+			//tourReport.bookingId = createdScheduledRent.id;
+
+			return tourReport
+		//}
 			//}else{
-				
+
 			//console.log("Not in radius")
 			//}
 		} catch (err) {
 			console.log(err)
 		}
+	
 	}
 
 	async getTourPoints(tourId: string, language: string, bookingId: string): Promise<PointData[]> {
@@ -453,71 +454,71 @@ export class TourManager {
 				throw new Error('Error getting Tours');
 			});
 
-			
-
-				var pointsArr: PointData[] = []
-				if (tour != null) {
-					for (var point of tour.points) {
-
-						var poi: POI = await this.poiManager.getPoi(point)
-						if (poi.offerName != "") {
-
-							var location: Location = new Location()
-							location.lat = poi.location.latitude;
-							location.lng = poi.location.longitude;
 
 
-							var poiHelp: PointData = new PointData();
-							poiHelp.id = poi.id;
-							poiHelp.audio = poi.audio
-							poiHelp.category = poi.category;
-							poiHelp.images = poi.images
-							poiHelp.location = location;
-							poiHelp.name = poi.name
-							poiHelp.shortInfo = poi.shortInfo[language]
-							poiHelp.longInfo = poi.longInfo[language]
-							poiHelp.offerName = poi.offerName
+			var pointsArr: PointData[] = []
+			if (tour != null) {
+				for (var point of tour.points) {
 
-							var booking: Booking = await this.bookingManager.getBooking(bookingId)
+					var poi: POI = await this.poiManager.getPoi(point)
+					if (poi.offerName != "") {
+
+						var location: Location = new Location()
+						location.lat = poi.location.latitude;
+						location.lng = poi.location.longitude;
 
 
-							poiHelp.hasVoucher = true;
-							poiHelp.voucherDesc = poi.voucherDesc[language];
-							for(var p of booking.points){
-								if(p.id === poi.id){
-									poiHelp.voucher= p.qrCode
-								}
+						var poiHelp: PointData = new PointData();
+						poiHelp.id = poi.id;
+						poiHelp.audio = poi.audio
+						poiHelp.category = poi.category;
+						poiHelp.images = poi.images
+						poiHelp.location = location;
+						poiHelp.name = poi.name
+						poiHelp.shortInfo = poi.shortInfo[language]
+						poiHelp.longInfo = poi.longInfo[language]
+						poiHelp.offerName = poi.offerName
+
+						var booking: Booking = await this.bookingManager.getBooking(bookingId)
+
+
+						poiHelp.hasVoucher = true;
+						poiHelp.voucherDesc = poi.voucherDesc[language];
+						for (var p of booking.points) {
+							if (p.id === poi.id) {
+								poiHelp.voucher = p.qrCode
 							}
-							
-							pointsArr.push(poiHelp)
-						}else{
-							var location: Location = new Location()
-							location.lat = poi.location.latitude;
-							location.lng = poi.location.longitude;
-
-
-							var poiHelp: PointData = new PointData();
-							poiHelp.id = poi.id;
-							poiHelp.audio = poi.audio
-							poiHelp.category = poi.category;
-							poiHelp.images = poi.images
-							poiHelp.location = location;
-							poiHelp.name = poi.name
-							poiHelp.shortInfo = poi.shortInfo[language]
-							poiHelp.longInfo = poi.longInfo[language]
-							poiHelp.hasVoucher = false;
-						
-							
-							pointsArr.push(poiHelp)
 						}
-					}
-				
 
-				
+						pointsArr.push(poiHelp)
+					} else {
+						var location: Location = new Location()
+						location.lat = poi.location.latitude;
+						location.lng = poi.location.longitude;
+
+
+						var poiHelp: PointData = new PointData();
+						poiHelp.id = poi.id;
+						poiHelp.audio = poi.audio
+						poiHelp.category = poi.category;
+						poiHelp.images = poi.images
+						poiHelp.location = location;
+						poiHelp.name = poi.name
+						poiHelp.shortInfo = poi.shortInfo[language]
+						poiHelp.longInfo = poi.longInfo[language]
+						poiHelp.hasVoucher = false;
+
+
+						pointsArr.push(poiHelp)
+					}
+				}
+
+
+
 
 				return pointsArr
-				}
-			
+			}
+
 		} catch (err) {
 			console.log(err)
 		}
@@ -596,24 +597,24 @@ export class TourManager {
 			for (var tour of tours) {
 
 				var count = 0
-			let monthIndex: number = new Date().getMonth();
-			let yearIndex: number = new Date().getFullYear();
+				let monthIndex: number = new Date().getMonth();
+				let yearIndex: number = new Date().getFullYear();
 
-			for (var booking of bookings) {
-				var date = new Date(booking.from);
+				for (var booking of bookings) {
+					var date = new Date(booking.from);
 
-				let monthBooking: number = date.getMonth();
-				let yearBooking: number = date.getFullYear();
+					let monthBooking: number = date.getMonth();
+					let yearBooking: number = date.getFullYear();
 
 
-				if (booking.tourId == tour.id && monthIndex == monthBooking && yearBooking == yearIndex) {
+					if (booking.tourId == tour.id && monthIndex == monthBooking && yearBooking == yearIndex) {
 
-					count = count + 1
+						count = count + 1
+					}
+
+
+
 				}
-
-
-
-			}
 
 
 
