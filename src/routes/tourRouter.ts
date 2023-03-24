@@ -204,7 +204,7 @@ export class TourRouter extends BaseRouter {
 		);
 
 			/** GET fetches points data for a tour */
-			this.router.get(
+			this.router.post(
 				'/points/:tourId',
 				//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 				//parseJwt,
