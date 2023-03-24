@@ -198,7 +198,7 @@ export class TourRouter extends BaseRouter {
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const tour: TourData = await this.tourManager.getSingleTour(req.params.tourId, req.body.longitude, req.body.latitude, req.body.language);
+				const tour: TourData = await this.tourManager.getSingleTour(req.params.tourId, "", "","");//req.body.longitude, req.body.latitude, req.body.language);
 				return res.status(200).send(tour);
 			})
 		);
