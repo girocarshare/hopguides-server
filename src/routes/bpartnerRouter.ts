@@ -9,6 +9,7 @@ import { BPartnerManager } from '../manager/bpartnerManager';
 import { CreateBPartnerPayload } from '../classes/bpartner/createBPartner';
 import { BPartner } from '../models/bpartner/bpartner';
 import { CustomError } from '../classes/customError';
+import { Contact } from '../classes/bpartner/contact';
 
 export class BPartnerRouter extends BaseRouter {
 	userManager: UserManager;
@@ -23,37 +24,37 @@ export class BPartnerRouter extends BaseRouter {
 
 	init(): void {
 
-		
+
 		/** POST create BPartner from ADMIN user   */
 		this.router.post(
 			'/:userId/createBP',
 			//allowFor([AdminRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try{
-				const user: User = await this.userManager.getUser(req.params.userId);
-				const bpartner: BPartner = await this.bpartnerManager.getBPByUser(user.id);
-				/** START OF SECURITY CHECKS   */
-				/** Check if owner & customer not BANNED   */
-				if (user.status === UserStatus.BANNED) throw new CustomError(443, 'User is banned');
-				if (bpartner) throw new CustomError(400, 'BPartner already exists');
-				/** END OF SECURITY CHECKS   */
+				try {
+					const user: User = await this.userManager.getUser(req.params.userId);
+					const bpartner: BPartner = await this.bpartnerManager.getBPByUser(user.id);
+					/** START OF SECURITY CHECKS   */
+					/** Check if owner & customer not BANNED   */
+					if (user.status === UserStatus.BANNED) throw new CustomError(443, 'User is banned');
+					if (bpartner) throw new CustomError(400, 'BPartner already exists');
+					/** END OF SECURITY CHECKS   */
 
-				const bpartnerData: BPartner = deserialize(
-					BPartner,
-					req.body
-				);
-				
-				validateOrThrow(bpartnerData);
-				const createdBPartner: BPartner = await this.bpartnerManager.createBP(
-					user,
-					bpartnerData
-				);
-				const serializeFilter: string =
-					req.role === UserRoles.ADMIN ? 'protected' : 'public';
+					const bpartnerData: BPartner = deserialize(
+						BPartner,
+						req.body
+					);
 
-				return res.status(200).send(createdBPartner);
-				}catch(err){
+					validateOrThrow(bpartnerData);
+					const createdBPartner: BPartner = await this.bpartnerManager.createBP(
+						user,
+						bpartnerData
+					);
+					const serializeFilter: string =
+						req.role === UserRoles.ADMIN ? 'protected' : 'public';
+
+					return res.status(200).send(createdBPartner);
+				} catch (err) {
 					console.log(err.error)
 				}
 			})
@@ -70,14 +71,26 @@ export class BPartnerRouter extends BaseRouter {
 				const bpartners: BPartner[] = await this.bpartnerManager.getBPartners(filter);
 
 				var arr = []
-				for(var bpartner of bpartners){
+				for (var bpartner of bpartners) {
 					var bp = {
 						id: bpartner.id,
-						name: bpartner.name					}
+						name: bpartner.name
+					}
 					arr.push(bp)
 				}
 
 				return res.status(200).send(arr);
+			})
+		);
+
+		/** GET support data */
+		this.router.post(
+			'/support/:tourId',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				const contact: Contact = await this.bpartnerManager.getContact(req.params.tourId, req.body.language);
+				return res.status(200).send(contact);
 			})
 		);
 

@@ -192,18 +192,19 @@ export class TourRouter extends BaseRouter {
 		})
 	);
 
-		/** GET fetches tour data */
+		/** POST fetches tour data */
 		this.router.post(
 			'/:tourId',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				const tour: TourData = await this.tourManager.getSingleTour(req.params.tourId, req.body.longitude, req.body.latitude, req.body.language);
+				//TODO
+				const tour: TourData = await this.tourManager.getSingleTour(req.params.tourId, "", "", req.body.language);
 				return res.status(200).send(tour);
 			})
 		);
 
-			/** GET fetches points data for a tour */
+			/** POST fetches points data for a tour */
 			this.router.post(
 				'/points/:tourId',
 				//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
