@@ -305,10 +305,10 @@ export class TourManager {
 				throw new Error('Error getting Tours');
 			});
 
-			const logitudePartner: string = bpartner.contact.location.longitude;
-			const latitudePartner: string = bpartner.contact.location.latitude;
+			//const logitudePartner: string = bpartner.contact.location.longitude;
+			//const latitudePartner: string = bpartner.contact.location.latitude;
 
-			var distance = getDistanceBetweenPoints(latitude, longitude, latitudePartner, logitudePartner)
+			//var distance = getDistanceBetweenPoints(latitude, longitude, latitudePartner, logitudePartner)
 
 
 			//if (distance < 0.5) {
@@ -385,10 +385,10 @@ export class TourManager {
 	);
 	if (!createdScheduledRent) throw new CustomError(400, 'Cannot create rent!');
 */
-			var logo: Logo = new Logo();
+			/*var logo: Logo = new Logo();
 			logo.image = bpartner.logo;
 			logo.height = bpartner.dimensions.height;
-			logo.width = bpartner.dimensions.width;
+			logo.width = bpartner.dimensions.width;*/
 
 			var characteristicsArr: Characteristics[] = [];
 			var characteristics: Characteristics = new Characteristics();
@@ -418,16 +418,16 @@ export class TourManager {
 			var tourReport: TourData = new TourData();
 			tourReport.tourId = tour.id;
 			tourReport.points = pointsArr;
-			tourReport.title = tour.title[language];
-			tourReport.shortInfo = tour.shortInfo[language];
-			tourReport.longInfo = tour.longInfo[language];
+			//tourReport.title = tour.title[language];
+			//tourReport.shortInfo = tour.shortInfo[language];
+			//tourReport.longInfo = tour.longInfo[language];
 			tourReport.image = tour.image;
 			tourReport.audio = tour.audio;
-			tourReport.logo = logo;
+			//tourReport.logo = logo;
 			tourReport.characteristics = characteristicsArr;
-			tourReport.agreementTitle = tour.agreementTitle[language];
-			tourReport.agreementDesc = tour.agreementDesc[language];
-			tourReport.termsAndConditionsLink = tour.termsAndConditions;
+			//tourReport.agreementTitle = tour.agreementTitle[language];
+			//tourReport.agreementDesc = tour.agreementDesc[language];
+			//tourReport.termsAndConditionsLink = tour.termsAndConditions;
 			//tourReport.bookingId = createdScheduledRent.id;
 
 			return tourReport
