@@ -193,7 +193,7 @@ export class TourRouter extends BaseRouter {
 	);
 
 		/** GET fetches tour data */
-		this.router.get(
+		this.router.post(
 			'/:tourId',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			//parseJwt,
