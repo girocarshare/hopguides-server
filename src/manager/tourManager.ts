@@ -305,10 +305,10 @@ export class TourManager {
 				throw new Error('Error getting Tours');
 			});
 
-			const logitudePartner: string = bpartner.contact.location.longitude;
-			const latitudePartner: string = bpartner.contact.location.latitude;
+			//const logitudePartner: string = bpartner.contact.location.longitude;
+			//const latitudePartner: string = bpartner.contact.location.latitude;
 
-			var distance = getDistanceBetweenPoints(latitude, longitude, latitudePartner, logitudePartner)
+			//var distance = getDistanceBetweenPoints(latitude, longitude, latitudePartner, logitudePartner)
 
 
 			//if (distance < 0.5) {
