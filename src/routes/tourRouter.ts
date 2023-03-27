@@ -217,21 +217,30 @@ export class TourRouter extends BaseRouter {
 
 		/** PATCH patch tour from ADMIN user */
 		this.router.post(
-			'/update/:tourId',
+			'/update/tour',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			//parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			
+			this.upload.array('file'),
+			simpleAsync(async (req: IBkRequest, res: IResponse) => {
+				// Upload
+				try {
+				
 
-				var tour: Tour = await this.tourManager.getTour(req.body.tourId)
-				tour.price = req.body.tourPrice
+					let jsonObj = JSON.parse(req.body.tour); 
+					let tour = jsonObj as Tour;
 
 				await this.tourManager.updateTour(
 					tour.id,
-					deserialize(Tour, tour)
+					tour
 				);
 
 				const tours: ToursReport[] = await this.tourManager.getToursForReport();
 				return res.status(200).send(tours);
+				
+			} catch (err) {
+				console.log(err.error)
+			}
 			})
 		);
 
@@ -304,7 +313,7 @@ export class TourRouter extends BaseRouter {
 		);
 
 		this.router.post(
-			'/addFull',
+			'/addFull/add',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			//parseJwt,
 			this.upload.array('file'),

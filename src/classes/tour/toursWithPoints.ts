@@ -51,9 +51,9 @@ export class POICl {
 
 	title: string;
 
-	shortInfo: string;
+	shortInfo: LocalizedField;
 
-	longInfo: string;
+	longInfo: LocalizedField;
 
 	contact: Contact;
 
@@ -113,11 +113,11 @@ export class ToursWithPoints {
 
 	points: PointsForTours[];
 
-	title: string;
+	title: LocalizedField;
 	
-	longInfo: string;
+	longInfo: LocalizedField;
 	
-	shortInfo: string;
+	shortInfo: LocalizedField;
 
 	images: string[];
 
@@ -137,10 +137,10 @@ export class ToursWithPoints {
 
 	termsAndConditions: string;
 
-	agreementTitle: string;
+	agreementTitle: LocalizedField;
 
 	
-	agreementDesc: string;
+	agreementDesc: LocalizedField;
 	
 	partnerName: string;
 

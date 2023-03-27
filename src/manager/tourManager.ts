@@ -621,7 +621,6 @@ export class TourManager {
 				var points: PointsForTours[] = []
 				for (var point of tour.points) {
 
-					var language = "english"
 					var poi: POI = await this.poiManager.getPoi(point)
 
 					var p: PointsForTours = new PointsForTours();
@@ -637,9 +636,8 @@ export class TourManager {
 					poiHelp.images = poi.images
 					poiHelp.location = poi.location;
 					poiHelp.name = poi.name
-					poiHelp.images = poi.images
-					poiHelp.shortInfo = poi.shortInfo[language]
-					poiHelp.longInfo = poi.longInfo[language]
+					poiHelp.shortInfo = poi.shortInfo
+					poiHelp.longInfo = poi.longInfo
 					poiHelp.menu = poi.menu
 					poiHelp.offerName = poi.offerName
 					poiHelp.price = poi.price
@@ -657,9 +655,9 @@ export class TourManager {
 				var tourReport: ToursWithPoints = new ToursWithPoints();
 				tourReport.tourId = tour.id;
 				tourReport.points = points;
-				tourReport.title = tour.title[language];
-				tourReport.shortInfo = tour.shortInfo[language];
-				tourReport.longInfo = tour.longInfo[language];
+				tourReport.title = tour.title;
+				tourReport.shortInfo = tour.shortInfo;
+				tourReport.longInfo = tour.longInfo;
 				tourReport.currency = tour.currency;
 				tourReport.images = tour.images;
 				tourReport.price = tour.price;
@@ -668,8 +666,8 @@ export class TourManager {
 				tourReport.duration = tour.duration;
 				tourReport.length = tour.length;
 				tourReport.highestPoint = tour.highestPoint;
-				tourReport.agreementTitle = tour.agreementTitle[language];
-				tourReport.agreementDesc = tour.agreementDesc[language];
+				tourReport.agreementTitle = tour.agreementTitle;
+				tourReport.agreementDesc = tour.agreementDesc;
 				tourReport.termsAndConditions = tour.termsAndConditions;
 				tourReport.noOfRidesAMonth = count;
 
@@ -764,6 +762,7 @@ export class TourManager {
 
 	async updateTour(tourId: string, data: Partial<Tour>) {
 
+		console.log("sdjbjskfj")
 		await this.tourRepository.updateOne(tourId, data).catch((err) => {
 			throw new Error('Error updating Tour');
 		});

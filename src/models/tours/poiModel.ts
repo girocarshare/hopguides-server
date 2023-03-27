@@ -120,6 +120,9 @@ export class POI {
 	@dbField()
 	contact: Contact;
 
+	@jsonProperty()
+	@dbField()
+	partner: boolean;
 	
 	@jsonProperty()
 	@dbField()

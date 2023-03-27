@@ -165,23 +165,29 @@ export class POIRouter extends BaseRouter {
 
 		/** POST update poi */
 		this.router.post(
-			'/update/:pointId',
+			'/update',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			//parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-
+				
+			this.upload.array('file'),
+			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				try{
+					console.log("TUUU SAMMM")
 
-				var point: POI = await this.poiManager.getPoi(req.body.point.id)
+					let jsonObj = JSON.parse(req.body.point); 
+					let point = jsonObj as POI;
+					console.log(point)
+
+				/*var point: POI = await this.poiManager.getPoi(req.body.point.id)
 				point.price = req.body.point.price
 				point.offerName = req.body.point.offerName
 				point.contact.name = req.body.point.contact.name
 				point.contact.phone = req.body.point.contact.phone
 				point.contact.email = req.body.point.contact.email
-
+*/
 				const updatedPoi: POI = await this.poiManager.updatePoi(
 					point.id,
-					deserialize(POI, point)
+					point
 				);
 
 
