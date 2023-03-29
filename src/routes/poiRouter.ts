@@ -55,7 +55,7 @@ export class POIRouter extends BaseRouter {
 
 	multerS3Config = multerS3({
 		s3: s3,
-		bucket: 'hopguides/tours',
+		bucket: 'hopguides/menu',
 		metadata: function (req, file, cb) {
 
 			cb(null, { fieldName: globalThis.rString });
@@ -90,31 +90,7 @@ export class POIRouter extends BaseRouter {
 
 	init(): void {
 
-		/** POST reate POI */
-		this.router.post(
-			'/create',
-			//allowFor([AdminRole, MarketingRole]),
-			//parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try {
-					const bpartner: BPartner = await this.bpartnerManager.getBP(req.body.bpartnerId);
-
-
-					if (bpartner == null) {
-						throw new CustomError(404, 'BPartner not found');
-					}
-					const poi: POI = await this.poiManager.createPOI(
-						deserialize(POI, req.body)
-					);
-
-
-					return res.status(200).send(poi);
-				} catch (err) {
-					console.log(err.error)
-				}
-			})
-		);
-
+	
 		this.router.post(
 			'/:pointId/uploadMenu',
 			//userSecurity(),
@@ -124,44 +100,11 @@ export class POIRouter extends BaseRouter {
 				// Upload
 				if (!req.file) console.log("Error while uploading file")
 				
-				var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/" + globalThis.rString;
-				return await this.poiManager.uploadMenu(req.params.pointId, fileName);
+
+				return await this.poiManager.uploadMenu(req.params.pointId, req.file.location);
 			})
 		);
 
-
-		/** GET poi picture   */
-
-		this.router.get(
-			'/getFile/:id',
-			//allowFor([AdminRole, SupportRole, ServiceRole]),
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try {
-
-					var point: POI = await this.poiManager.getPoi((req.params.id).trim());
-
-					if (point.menu != null) {
-						fs.readFile("./" + point.menu, (error, data) => {
-							if (error) {
-								throw error;
-							}
-							var file = data
-
-							res.status(200);
-							res.setHeader('Content-Type', 'application/octet-stream');
-							res.setHeader('Content-Disposition', 'attachment; filename=' + req.params.fileName);
-							res.write(file, 'binary');
-							res.end();
-
-						});
-					} else {
-						res.status(200)
-					}
-				} catch (err) {
-					console.log(err.error)
-				}
-			})
-		);
 
 		/** POST update poi */
 		this.router.post(
@@ -172,24 +115,14 @@ export class POIRouter extends BaseRouter {
 			this.upload.array('file'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				try{
-					console.log("TUUU SAMMM")
 
 					let jsonObj = JSON.parse(req.body.point); 
 					let point = jsonObj as POI;
-					console.log(point)
 
-				/*var point: POI = await this.poiManager.getPoi(req.body.point.id)
-				point.price = req.body.point.price
-				point.offerName = req.body.point.offerName
-				point.contact.name = req.body.point.contact.name
-				point.contact.phone = req.body.point.contact.phone
-				point.contact.email = req.body.point.contact.email
-*/
 				const updatedPoi: POI = await this.poiManager.updatePoi(
 					point.id,
 					point
 				);
-
 
 				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
 				
@@ -199,5 +132,8 @@ export class POIRouter extends BaseRouter {
 				}
 			})
 		);
+
+		
+	
 	}
 }

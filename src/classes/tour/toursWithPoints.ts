@@ -145,5 +145,6 @@ export class ToursWithPoints {
 	partnerName: string;
 
 	support: string;
+	bpartnerId: string;
 	
 }

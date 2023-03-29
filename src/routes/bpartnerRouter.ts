@@ -24,42 +24,6 @@ export class BPartnerRouter extends BaseRouter {
 
 	init(): void {
 
-
-		/** POST create BPartner from ADMIN user   */
-		this.router.post(
-			'/:userId/createBP',
-			//allowFor([AdminRole, MarketingRole]),
-			//parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try {
-					const user: User = await this.userManager.getUser(req.params.userId);
-					const bpartner: BPartner = await this.bpartnerManager.getBPByUser(user.id);
-					/** START OF SECURITY CHECKS   */
-					/** Check if owner & customer not BANNED   */
-					if (user.status === UserStatus.BANNED) throw new CustomError(443, 'User is banned');
-					if (bpartner) throw new CustomError(400, 'BPartner already exists');
-					/** END OF SECURITY CHECKS   */
-
-					const bpartnerData: BPartner = deserialize(
-						BPartner,
-						req.body
-					);
-
-					validateOrThrow(bpartnerData);
-					const createdBPartner: BPartner = await this.bpartnerManager.createBP(
-						user,
-						bpartnerData
-					);
-					const serializeFilter: string =
-						req.role === UserRoles.ADMIN ? 'protected' : 'public';
-
-					return res.status(200).send(createdBPartner);
-				} catch (err) {
-					console.log(err.error)
-				}
-			})
-		);
-
 		/** GET all bpartners   */
 		this.router.get(
 			'/all',

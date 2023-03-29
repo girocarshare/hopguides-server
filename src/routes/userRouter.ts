@@ -19,6 +19,7 @@ import { BaseRouter } from './baseRouter';
 import { BPartner } from '../models/bpartner/bpartner';
 import * as sgMail from '@sendgrid/mail';
 import { RegisterPayload } from '../classes/user/registerPayload';
+import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 var multerS3 = require('multer-s3');
 sgMail.setApiKey("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")
 var emailSender = "beta-app@gogiro.app";
@@ -143,7 +144,7 @@ export class UserRouter extends BaseRouter {
 							You have been invited to join our platform. Kindly click on the link below to register.<br/><br/> <a href=http://localhost:3001/#/setPassword/${req.body.email} id=get> Register now </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
 							`
 				})
-					return res.status(200).send(createdBP);
+					return res.status(200).send("Success");
 				}
 			})
 		);

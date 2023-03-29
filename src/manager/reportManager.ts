@@ -85,6 +85,7 @@ export class ReportManager {
 		report.bpratnerPhone = bPartner.contact.phone;
 		report.bpratnerPhone2 = bPartner.contact.phone2;
 		report.offerName = p.offerName;
+		report.menu = p.menu
 
 		return report
 	}
@@ -176,7 +177,8 @@ export class ReportManager {
 
 	async generateQr(companyId: string): Promise<boolean> {
 
-		QRCode.toDataURL("http://localhost:3001/#/report/"+ companyId,{scale: 15,
+		try{
+		QRCode.toDataURL("http://localhost:3000/#/report/"+ companyId,{scale: 15,
 		width: "1000px"}, function (err, base64) {
 			
 			const base64Data : Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
@@ -199,17 +201,10 @@ export class ReportManager {
 				}
 			});
 		});
-
-
-		/*await QRCode.toFile('images/menu/'+companyId.trim() + ".png","http://localhost:3001/#/report/", {
-			scale: 15,
-			width: "1000px"
-		  }, function (err) {
-			if (err) throw err
-			console.log('done')
-		  })*/
-
 		return true
+	}catch{
+		return false
+	}
 	}
 
 
