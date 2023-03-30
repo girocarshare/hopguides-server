@@ -14,6 +14,7 @@ import { BookingDocs } from './bookingDocs';
 import { PoiHelp } from './PoiHelp';
 
 export enum BookingStatus {
+  STARTED = 'STARTED',
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   RESERVED = 'RESERVED',

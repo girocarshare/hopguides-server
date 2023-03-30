@@ -73,16 +73,16 @@ export class UserManager {
 	
 	async register(user: User): Promise<User> {
 		// search for user, check if it exists, if it does, check for the fields of confirmed and createdAt
-		let createdUser: User = await this.userRepository.findOne({ email: user.email });
+
 		
-		createdUser.invited = false;
-		createdUser.password = await bcrypt.hash(user.password, 8)
+		user.invited = false;
+		user.password = await bcrypt.hash(user.password, 8)
 		
 
 		// await sendRegistrationMail(createdUser, notification.emailTemplate);
-	 createdUser = await this.userRepository.replaceOne(createdUser.id, createdUser);
+		user = await this.userRepository.replaceOne(user.id, user);
 
-		return createdUser;
+		return user;
 	}
 
 	async login(login: LoginPayload): Promise<{ userData: User; userJwt: string }> {

@@ -3,9 +3,9 @@ export class Point {
 
 	id: string;
 
-	category: string;
+	icon: string;
 
-	name: string;
+	text: string;
 
 }
 

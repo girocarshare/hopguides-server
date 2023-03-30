@@ -1,6 +1,6 @@
 import { IRequest, IResponse } from '../classes/interfaces';
 import { UserManager } from '../manager/userManager';
-import { withErrorHandler } from '../utils/utils';
+import { parseJwt, withErrorHandler } from '../utils/utils';
 import { User, UserRoles, UserStatus } from '../models/user/user';
 import { BaseRouter } from './baseRouter';
 import { deserialize, serialize } from '../json';
@@ -10,55 +10,69 @@ import { CreateBPartnerPayload } from '../classes/bpartner/createBPartner';
 import { BPartner } from '../models/bpartner/bpartner';
 import { CustomError } from '../classes/customError';
 import { Contact } from '../classes/bpartner/contact';
+import * as multer from 'multer';
 
+import * as AWS from 'aws-sdk';
+import { simpleAsync } from './util';
+var multerS3 = require('multer-s3');
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
+var rString: string;
+function randomstring(length) {
+	var result = '';
+	var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var charactersLength = characters.length;
+	for (var i = 0; i < length; i++) {
+		result += characters.charAt(Math.floor(Math.random() *
+			charactersLength));
+	}
+	return result;
+}
 export class BPartnerRouter extends BaseRouter {
 	userManager: UserManager;
 	bpartnerManager: BPartnerManager;
+	fileFilter = (req, file, cb) => {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+			cb(null, true)
+		} else {
+			cb(null, false)
+		}
+	}
 
+
+	multerS3Config = multerS3({
+		s3: s3,
+		bucket: 'hopguides/menu',
+		metadata: function (req, file, cb) {
+
+			cb(null, { fieldName: globalThis.rString });
+		},
+		key: function (req, file, cb) {
+			var list = file.originalname.split('.')
+			globalThis.rString = randomstring(10)+ "." + list[list.length - 1]
+			cb(null, globalThis.rString)
+		}
+	});
+
+	upload = multer({
+		storage: this.multerS3Config,
+		fileFilter: this.fileFilter,
+
+
+
+	})
 	constructor() {
 		super(true);
 		this.userManager = new UserManager();
 		this.bpartnerManager = new BPartnerManager();
 		this.init();
+
+		
 	}
 
 	init(): void {
-
-
-		/** POST create BPartner from ADMIN user   */
-		this.router.post(
-			'/:userId/createBP',
-			//allowFor([AdminRole, MarketingRole]),
-			//parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try {
-					const user: User = await this.userManager.getUser(req.params.userId);
-					const bpartner: BPartner = await this.bpartnerManager.getBPByUser(user.id);
-					/** START OF SECURITY CHECKS   */
-					/** Check if owner & customer not BANNED   */
-					if (user.status === UserStatus.BANNED) throw new CustomError(443, 'User is banned');
-					if (bpartner) throw new CustomError(400, 'BPartner already exists');
-					/** END OF SECURITY CHECKS   */
-
-					const bpartnerData: BPartner = deserialize(
-						BPartner,
-						req.body
-					);
-
-					validateOrThrow(bpartnerData);
-					const createdBPartner: BPartner = await this.bpartnerManager.createBP(
-						user,
-						bpartnerData
-					);
-					const serializeFilter: string =
-						req.role === UserRoles.ADMIN ? 'protected' : 'public';
-
-					return res.status(200).send(createdBPartner);
-				} catch (err) {
-					console.log(err.error)
-				}
-			})
-		);
 
 		/** GET all bpartners   */
 		this.router.get(
@@ -91,6 +105,35 @@ export class BPartnerRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				const contact: Contact = await this.bpartnerManager.getContact(req.params.tourId, req.body.language);
 				return res.status(200).send(contact);
+			})
+		);
+
+		this.router.post(
+			'/updateLogo',
+			//userSecurity(),
+			//ownedBookingInStatusMdw(RentStatus.DRIVING),
+			parseJwt,
+			this.upload.single('file'),
+			simpleAsync(async (req: IRequest, res: IResponse) => {
+				// Upload
+				var user: User = await this.userManager.getUser(req.userId);
+				console.log(user)
+				if (!req.file) console.log("Error while uploading file")
+				
+
+				return await this.bpartnerManager.uploadLogo(req.userId, req.file.location);
+			})
+		);
+
+		this.router.post(
+			'/changeLockCode/:code',
+			//userSecurity(),
+			//ownedBookingInStatusMdw(RentStatus.DRIVING),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				// Upload
+				var user: User = await this.userManager.getUser(req.userId);
+				return await this.bpartnerManager.updateLockCode(req.userId,req.params.code );
 			})
 		);
 

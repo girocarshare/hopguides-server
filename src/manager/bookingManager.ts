@@ -32,7 +32,7 @@ export class BookingManager {
 		try {
 			/** Create rent of vehicle */
 			const booking: Booking = new Booking();
-			booking.status = BookingStatus.PENDING;
+			booking.status = BookingStatus.STARTED;
 			booking.from = scheduledFrom;
 			booking.to = scheduledTo;
 			booking.tourId = tour.id;
@@ -54,6 +54,19 @@ export class BookingManager {
 	async getBooking(bookingId: string): Promise<Booking> {
 		return await this.bookingRepository.getByIdOrThrow(bookingId).catch(() => {
 			throw new Error('Booking not found!');
+		});
+	}
+
+	async endBooking(bookingId: string) {
+
+		var booking : Booking = await this.bookingRepository.getByIdOrThrow(bookingId).catch(() => {
+			throw new Error('Booking not found!');
+		});
+
+		booking.status = BookingStatus.FINISHED;
+
+		await this.bookingRepository.updateOne(bookingId, booking).catch((err) => {
+			throw new Error('Error updating booking');
 		});
 	}
 }

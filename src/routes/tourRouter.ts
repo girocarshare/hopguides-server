@@ -140,18 +140,6 @@ export class TourRouter extends BaseRouter {
 		);
 
 		this.router.get(
-			'/allReport',
-			//allowFor([AdminRole, SupportRole, ManagerRole]),
-			//parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-
-				const tours: ToursReport[] = await this.tourManager.getToursForReport();
-				return res.status(200).send(tours);
-
-			})
-		);
-
-		this.router.get(
 			'/allToursWithPoints',
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			//parseJwt,
@@ -192,6 +180,39 @@ export class TourRouter extends BaseRouter {
 		})
 	);
 
+	/** DELETE tour */
+	this.router.get(
+		'/deleteTour/:tourId',
+		//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+		//parseJwt,
+		withErrorHandler(async (req: IRequest, res: IResponse) => {
+			try{
+			 await this.tourManager.deleteTour(req.params.tourId);
+					
+			return res.status(200).send("Success");
+			}catch(e){
+
+				return res.status(500).send("Error");
+			}
+		})
+	);
+
+	/** DELETE poi from tour*/
+	this.router.get(
+		'/deletePoi/:tourId/:poiId',
+		//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+		//parseJwt,
+		withErrorHandler(async (req: IRequest, res: IResponse) => {
+			try{
+			 await this.tourManager.deletePoi(req.params.tourId, req.params.poiId);
+					
+			return res.status(200).send("Success");
+			}catch(e){
+
+				return res.status(500).send("Error");
+			}
+		})
+	);
 		/** POST fetches tour data */
 		this.router.post(
 			'/:tourId',
@@ -217,94 +238,49 @@ export class TourRouter extends BaseRouter {
 
 		/** PATCH patch tour from ADMIN user */
 		this.router.post(
-			'/update/:tourId',
+			'/update/tour',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			//parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-
-				var tour: Tour = await this.tourManager.getTour(req.body.tourId)
-				tour.price = req.body.tourPrice
-
-				await this.tourManager.updateTour(
-					tour.id,
-					deserialize(Tour, tour)
-				);
-
-				const tours: ToursReport[] = await this.tourManager.getToursForReport();
-				return res.status(200).send(tours);
-			})
-		);
-
-		/** POST create tour from dash */
-		this.router.post(
-			'/',
-			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			//parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			
+			this.upload.array('file'),
+			simpleAsync(async (req: IBkRequest, res: IResponse) => {
+				// Upload
 				try {
+				
 
-					for (var point of req.body.points) {
-						const poi: POI = await this.poiManager.getPoi(point);
+					let jsonObj = JSON.parse(req.body.tour); 
+					let tour = jsonObj as Tour;
 
-						if (poi != null) {
+				
+					console.log(tour)
+					for (var file of req.files) {
+						if (file.originalname.substring(0, 5).trim() === 'image') {
 
-						} else {
+							await this.tourManager.uploadMenu(tour.id, file);
 
-							return res.status(500).send("Error point with that id doesn't exist");
+						} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
+
+							await this.tourManager.uploadAudio(tour.id, file);
+
 						}
 					}
 
-					const createdTour: Tour = await this.tourManager.createTour(
-						deserialize(Tour, req.body)
-					);
+				await this.tourManager.updateTour(
+					tour.id,
+					tour
+				);
 
-					return res.status(200).send(createdTour);
-				} catch (err) {
-					console.log(err.error)
-				}
-			})
-		);
-
-
-		this.router.post(
-			'/add',
-			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try {
-
-					console.log(req.body)
-					var arr: string[] = []
-					var user: User = await this.userManager.getUser(req.userId);
-					for (var point of req.body.points) {
-
-						point.bpartnerId = user.id
-						const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
-
-						arr.push(poi.id)
-					}
-
-					var t = {
-						title: req.body.title,
-						shortInfo: req.body.shortInfo,
-						longInfo: req.body.longInfo,
-						currency: req.body.currency,
-						price: req.body.price,
-						points: arr,
-					}
-					const createdTour: Tour = await this.tourManager.createTour(
-						deserialize(Tour, t)
-					);
-
-					return res.status(200).send(createdTour);
-				} catch (err) {
-					console.log(err.error)
-				}
+				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+				return res.status(200).send(tours);
+				
+			} catch (err) {
+				console.log(err.error)
+			}
 			})
 		);
 
 		this.router.post(
-			'/addFull',
+			'/addFull/add',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			//parseJwt,
 			this.upload.array('file'),
@@ -312,8 +288,6 @@ export class TourRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				// Upload
 				try {
-				
-					
 
 					let jsonObj = JSON.parse(req.body.tour); 
 					let tour = jsonObj as Tour;
@@ -418,7 +392,7 @@ export class TourRouter extends BaseRouter {
 						}
 					}
 
-					return res.status(200);
+					return res.status(200).send("Success");
 
 				} catch (err) {
 					console.log(err.error)
@@ -428,47 +402,101 @@ export class TourRouter extends BaseRouter {
 		);
 
 
-		/** POST add partners to existing tour */
 		this.router.post(
-			'/addPartners',
+			'/addFull/partner',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			parseJwt,
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			//parseJwt,
+			this.upload.array('file'),
+			//this.upload.single('audio'),
+			simpleAsync(async (req: IBkRequest, res: IResponse) => {
+				// Upload
 				try {
 
-					var arr: string[] = []
-					var user: User = await this.userManager.getUser(req.userId);
-					for (var point of req.body.points) {
-
-						point.bpartnerId = user.id
-						const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
-
-						arr.push(poi.id)
-					}
-
-					const tour: Tour = await this.tourManager.getTour(
-						req.body.id
-					);
-
-					for (var point2 of tour.points) {
-						arr.push(point2)
-					}
-
-					tour.points = arr
+					let jsonObj = JSON.parse(req.body.tour); 
+					let tour = jsonObj as Tour;
 
 					console.log(tour)
 
-					await this.tourManager.updateTour(
-						tour.id,
-						deserialize(Tour, tour)
-					);
+					var arr: string[] = []
+					var arr2 = []
+					if(tour.points.length != 0){
+					for (var point of tour.points) {
 
-					const tours: ToursReport[] = await this.tourManager.getToursForReport();
-					return res.status(200).send(tours);
+					
+						
+						const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
+
+						//poi.category = Category.NATURE
+
+						arr.push(poi.id)
+						arr2.push(poi)
+					}
+
+					var partnerImages = []
+					for (var f of req.files) {
+
+						if (f.originalname.substring(0, 7).trim() === 'partner') {
+
+							var help = f.originalname.split('---')
+
+							var help2 = help[0].substring(7)
+
+							var h = {
+								name: help2,
+								path: f.location
+							}
+							partnerImages.push(h)
+						}
+					}
+					//if the names are the same
+					var arrayy = []
+					for (var i of arr2) {
+						for (var im of partnerImages) {
+
+							if (im.name === i.name) {
+								
+							//var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/" + globalThis.rString;
+								arrayy.push(im.path);
+
+							}
+						}
+
+						await this.poiManager.uploadImages(i.id, arrayy);
+						arrayy = []
+					}
+
+
+					for (var i of arr2) {
+						for (var f of req.files) {
+
+							if (f.originalname.substring(0, 6).trim() === 'audio2') {
+					
+								var help = f.originalname.split('---')
+
+								var help2 = help[0].substring(6)
+
+								if (help2 === i.name) {
+									await this.poiManager.uploadAudio(i.id, f.location);
+								}
+							}
+						}
+					}
+				}
+				tour.points = arr
+
+				console.log(tour)
+
+				await this.tourManager.updateTour(
+					tour.id,
+					deserialize(Tour, tour)
+				);
+
+					return res.status(200).send("Success");
 
 				} catch (err) {
 					console.log(err.error)
 				}
+
 			})
 		);
 	}

@@ -23,11 +23,13 @@ export class POIManager {
   }
 
 	async uploadMenu(pointId: string, file: string): Promise<POI> {
+     
 		var point: POI = await this.getPoi(pointId)
 
-		point.menu = file
+		point.menu = file      
 		return await this.poiRepository.updateOne(pointId, point).catch(() => {
-			throw new Error('Error updating Tour');
+    
+			throw new Error('Error updating poi');
 		});
 	}
 
