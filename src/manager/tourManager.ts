@@ -211,17 +211,60 @@ export class TourManager {
 
 
 							var po: Point = new Point();
-							po.category = poi.category;
+
+							if(poi.category == "HISTORY"){
+
+								po.icon = "castle";
+							}else if( poi.category == "DRINKS"){
+								
+								po.icon = "drinks";
+							}else if( poi.category == "NATURE"){
+								
+								po.icon = "tree";
+							}else if( poi.category == "EATS"){
+								
+								po.icon = "restaurant";
+							}else if( poi.category == "BRIDGE"){
+								
+								po.icon = "archway";
+							}else if( poi.category == "MUSEUMS"){
+								
+								po.icon = "persona";
+							}else if( poi.category == "EXPERIENCE"){
+								
+								po.icon = "boat";
+							}
 							po.id = poi.id;
-							po.name = poi.name;
+							po.text = poi.name;
 
 							pointsArr.push(po)
 						}else{
 							
 							var po: Point = new Point();
-							po.category = poi.category;
+							if(poi.category == "HISTORY"){
+
+								po.icon = "castle";
+							}else if( poi.category == "DRINKS"){
+								
+								po.icon = "drinks";
+							}else if( poi.category == "NATURE"){
+								
+								po.icon = "tree";
+							}else if( poi.category == "EATS"){
+								
+								po.icon = "restaurant";
+							}else if( poi.category == "BRIDGE"){
+								
+								po.icon = "archway";
+							}else if( poi.category == "MUSEUMS"){
+								
+								po.icon = "persona";
+							}else if( poi.category == "EXPERIENCE"){
+								
+								po.icon = "boat";
+							}
 							po.id = poi.id;
-							po.name = poi.name;
+							po.text = poi.name;
 
 							pointsArr.push(po)
 						}
@@ -570,6 +613,7 @@ export class TourManager {
 
 	async updateTour(tourId: string, data: Partial<Tour>) {
 
+		console.log(data)
 		await this.tourRepository.updateOne(tourId, data).catch((err) => {
 			throw new Error('Error updating Tour');
 		});

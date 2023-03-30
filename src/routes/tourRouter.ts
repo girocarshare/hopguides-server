@@ -251,6 +251,20 @@ export class TourRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.tour); 
 					let tour = jsonObj as Tour;
 
+				
+					console.log(tour)
+					for (var file of req.files) {
+						if (file.originalname.substring(0, 5).trim() === 'image') {
+
+							await this.tourManager.uploadMenu(tour.id, file);
+
+						} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
+
+							await this.tourManager.uploadAudio(tour.id, file);
+
+						}
+					}
+
 				await this.tourManager.updateTour(
 					tour.id,
 					tour

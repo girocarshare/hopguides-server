@@ -56,5 +56,16 @@ export class BookingRouter extends BaseRouter {
 			})
 		);
 
+		/** Finish tour/booking   */
+		this.router.get(
+			'/endBooking/:bookingId',
+			//allowFor([AdminRole, ManagerRole, SupportRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+
+				await this.bookingManager.endBooking(req.params.bookingId);
+				return res.status(200).send("Success");
+			})
+		);
 		}
 }

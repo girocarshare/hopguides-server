@@ -179,8 +179,15 @@ var JWT_SECRET="jj8axcJBhpQqZm08O5HxGxpSH9XLmQFhXYbPmt6wnG8B4Q92N98zSPmJrgtceOi"
 
 export function parseJwt(req: IRequest, res: IResponse, next: any): void {
 
-	var token = req.header('authorization').replace('Bearer ', '').trim()
 
+	var token = ""
+	if(req.route.methods.get == true){
+		 token = req.header('authorization').replace('Bearer ', '').trim()
+	}else{
+		 token = req.body.headers.authorization.trim()
+	}
+	
+	//var token = req.body.headers.authorization.trim()
 	if (!token) return res.throwErr(new CustomError(401, 'No token'));
 	let tokenData;
 	try {

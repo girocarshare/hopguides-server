@@ -22,8 +22,8 @@ export class BPartnerManager {
 	async createBP(user: User, bpartner: BPartner): Promise<BPartner> {
 	
 		bpartner.userId = user.id;
+		bpartner.lockCode = "12312"
 
-		console.log(bpartner)
 		return await this.bpartnerRepository.createOne(bpartner).catch(() => {
 			throw new Error('Error creating BPartner');
 		});
@@ -40,6 +40,15 @@ export class BPartnerManager {
 		bpartner.logo = name
 		return await this.bpartnerRepository.updateOne(id, bpartner).catch(() => {
 			throw new Error('Error updating BPartner');
+		});
+	}
+
+	async updateLockCode(id: string, code: string): Promise<BPartner> {
+		var bpartner: BPartner = await this.getBP(id)
+
+		bpartner.lockCode = code
+		return await this.bpartnerRepository.updateOne(id, bpartner).catch(() => {
+			throw new Error('Error updating lock code');
 		});
 	}
 

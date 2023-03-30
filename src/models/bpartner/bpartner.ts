@@ -126,4 +126,9 @@ export class BPartner {
 	@jsonProperty()
 	@dbField()
 	support: LocalizedField;
+
+	
+	@jsonProperty()
+	@dbField()
+	lockCode: string;
 }

@@ -119,16 +119,44 @@ export class POIRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.point); 
 					let point = jsonObj as POI;
 
+					var arrayy = []
 				const updatedPoi: POI = await this.poiManager.updatePoi(
 					point.id,
 					point
 				);
 
+				for (var f of req.files) {
+
+					console.log(f)
+					if (f.originalname.substring(0, 6).trim() === 'audio2') {
+			
+						await this.poiManager.uploadAudio(point.id, f.location);
+						
+					}
+					if (f.originalname.substring(0, 4).trim() === 'menu') {
+			
+						console.log(point.id + f.location)
+						await this.poiManager.uploadMenu(point.id, f.location);
+						
+					}
+					if (f.originalname.substring(0, 7).trim() === 'partner') {
+
+						console.log("partnerrrr")
+						arrayy.push(f.location);
+
+					}
+				}
+
+				console.log(arrayy)
+		await this.poiManager.uploadImages(point.id, arrayy);
+				
+				
+
 				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
 				
 				return res.status(200).send(tours);
 				}catch(err){
-					console.log(err)
+					console.log(err.errors)
 				}
 			})
 		);
