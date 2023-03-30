@@ -24,6 +24,7 @@ import * as AWS from 'aws-sdk';
 import { ConnectionIsNotSetError } from 'typeorm';
 import { TourData } from '../classes/tour/tourData';
 import { PointData } from '../classes/tour/pointData';
+import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 var multerS3 = require('multer-s3');
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -316,6 +317,7 @@ export class TourRouter extends BaseRouter {
 							var help = f.originalname.split('---')
 
 							var help2 = help[0].substring(7)
+							console.log(help2)
 
 							var h = {
 								name: help2,
@@ -329,14 +331,13 @@ export class TourRouter extends BaseRouter {
 					for (var i of arr2) {
 						for (var im of partnerImages) {
 
-							if (im.name === i.name) {
+							if (im.name == i.num) {
 								
 							//var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/" + globalThis.rString;
 								arrayy.push(im.path);
 
 							}
 						}
-
 						await this.poiManager.uploadImages(i.id, arrayy);
 						arrayy = []
 					}
@@ -351,7 +352,7 @@ export class TourRouter extends BaseRouter {
 
 								var help2 = help[0].substring(6)
 
-								if (help2 === i.name) {
+								if (help2 == i.num) {
 									await this.poiManager.uploadAudio(i.id, f.location);
 								}
 							}
@@ -453,7 +454,7 @@ export class TourRouter extends BaseRouter {
 					for (var i of arr2) {
 						for (var im of partnerImages) {
 
-							if (im.name === i.name) {
+							if (im.name == i.num) {
 								
 							//var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/" + globalThis.rString;
 								arrayy.push(im.path);
@@ -475,20 +476,28 @@ export class TourRouter extends BaseRouter {
 
 								var help2 = help[0].substring(6)
 
-								if (help2 === i.name) {
+								if (help2 == i.num) {
 									await this.poiManager.uploadAudio(i.id, f.location);
 								}
 							}
 						}
 					}
 				}
-				tour.points = arr
+				var t: Tour = await this.tourManager.getTour(
+					tour.id,
+				);
 
-				console.log(tour)
+				var pois = t.points
+				for(var p of arr){
+					pois.push(p)
+				}
+				t.points = pois
+
+				console.log(t)
 
 				await this.tourManager.updateTour(
-					tour.id,
-					deserialize(Tour, tour)
+					t.id,
+					deserialize(Tour, t)
 				);
 
 					return res.status(200).send("Success");

@@ -154,6 +154,9 @@ export class POI {
 	price: number;
 
 	
+	@jsonProperty()
+	@dbField()
+	num: string;
 
 	@jsonProperty()
 	@dbField()
