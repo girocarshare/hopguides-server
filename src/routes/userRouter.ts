@@ -176,7 +176,7 @@ export class UserRouter extends BaseRouter {
 					deserialize(User, req.body));
 
 
-				return res.status(200).send(createdUser);
+				return res.status(200).send("Success");
 
 			})
 		);
