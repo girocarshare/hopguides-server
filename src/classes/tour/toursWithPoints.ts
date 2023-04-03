@@ -73,6 +73,8 @@ export class POICl {
 	
 	price: number;
 
+	partner: boolean;
+
 	
 	bpartnerId: string;
 
