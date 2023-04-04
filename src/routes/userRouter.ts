@@ -118,6 +118,7 @@ export class UserRouter extends BaseRouter {
 				let jsonObj = JSON.parse(req.body.request);
 				let data = jsonObj as RegisterPayload;
 				
+				console.log(data)
 				const createdUser: User = await this.userManager.sendRegistrationEmail(
 					deserialize(User, req.body));
 
@@ -133,6 +134,7 @@ export class UserRouter extends BaseRouter {
 					bpartnerData
 				);
 
+				console.log(createdBP)
 				var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/logos/" + globalThis.rString;
 				await this.bpartnerManager.uploadLogo(createdBP.id, fileName);
 				sgMail.send({

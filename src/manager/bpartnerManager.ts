@@ -87,4 +87,18 @@ export class BPartnerManager {
 
 	}
 
+	async updateBPartner(bpartnerId: string, data: Partial<BPartner>): Promise<BPartner> {
+		return await this.bpartnerRepository.updateOne(bpartnerId, data).catch(err => {
+		  throw new Error('Error updating bpartner');
+		});
+	  }
+
+	  async deleteBPartner(bpartnerId: string) {
+
+		
+		await this.bpartnerRepository.deleteOne({ _id: bpartnerId }).catch((e) => {
+			throw new Error('Error deleting bpartner');
+		});
+	}
+
 }

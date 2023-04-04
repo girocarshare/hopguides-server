@@ -67,5 +67,23 @@ export class BookingRouter extends BaseRouter {
 				return res.status(200).send("Success");
 			})
 		);
+
+
+		
+		this.router.get(
+			'/scanQR/:bookingId/:pointId',
+			//userSecurity(),
+			//ownedBookingInStatusMdw(RentStatus.DRIVING),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try{
+				await this.bookingManager.scanQR(req.params.bookingId, req.params.pointId);
+				return res.status(200).send("Success");
+				}catch{
+
+					return res.status(500).send("Coupon already used");
+				}
+			})
+		);
 		}
 }

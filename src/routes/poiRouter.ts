@@ -62,7 +62,7 @@ export class POIRouter extends BaseRouter {
 		},
 		key: function (req, file, cb) {
 			var list = file.originalname.split('.')
-			globalThis.rString = randomstring(10)+ "." + list[list.length - 1]
+			globalThis.rString = randomstring(10) + "." + list[list.length - 1]
 			cb(null, globalThis.rString)
 		}
 	});
@@ -80,7 +80,7 @@ export class POIRouter extends BaseRouter {
 		this.poiManager = new POIManager();
 		this.bpartnerManager = new BPartnerManager();
 		this.tourManager = new TourManager();
-		this.upload =multer({
+		this.upload = multer({
 			storage: this.multerS3Config,
 			fileFilter: this.fileFilter,
 
@@ -90,7 +90,7 @@ export class POIRouter extends BaseRouter {
 
 	init(): void {
 
-	
+
 		this.router.post(
 			'/:pointId/uploadMenu',
 			//userSecurity(),
@@ -99,7 +99,7 @@ export class POIRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest) => {
 				// Upload
 				if (!req.file) console.log("Error while uploading file")
-				
+
 
 				return await this.poiManager.uploadMenu(req.params.pointId, req.file.location);
 			})
@@ -111,57 +111,52 @@ export class POIRouter extends BaseRouter {
 			'/update',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			//parseJwt,
-				
+
 			this.upload.array('file'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
-				try{
+				try {
 
-					let jsonObj = JSON.parse(req.body.point); 
+					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;
 
 					var arrayy = []
-				const updatedPoi: POI = await this.poiManager.updatePoi(
-					point.id,
-					point
-				);
+					const updatedPoi: POI = await this.poiManager.updatePoi(
+						point.id,
+						point
+					);
 
-				for (var f of req.files) {
+					for (var f of req.files) {
 
-					console.log(f)
-					if (f.originalname.substring(0, 6).trim() === 'audio2') {
-			
-						await this.poiManager.uploadAudio(point.id, f.location);
-						
+						console.log(f)
+						if (f.originalname.substring(0, 6).trim() === 'audio2') {
+
+							await this.poiManager.uploadAudio(point.id, f.location);
+
+						}
+						if (f.originalname.substring(0, 4).trim() === 'menu') {
+
+							console.log(point.id + f.location)
+							await this.poiManager.uploadMenu(point.id, f.location);
+
+						}
+						if (f.originalname.substring(0, 7).trim() === 'partner') {
+
+							console.log("partnerrrr")
+							arrayy.push(f.location);
+
+						}
 					}
-					if (f.originalname.substring(0, 4).trim() === 'menu') {
-			
-						console.log(point.id + f.location)
-						await this.poiManager.uploadMenu(point.id, f.location);
-						
-					}
-					if (f.originalname.substring(0, 7).trim() === 'partner') {
 
-						console.log("partnerrrr")
-						arrayy.push(f.location);
+					await this.poiManager.uploadImages(point.id, arrayy);
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
 
-					}
-				}
-
-				console.log(arrayy)
-		await this.poiManager.uploadImages(point.id, arrayy);
-				
-				
-
-				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
-				
-				return res.status(200).send(tours);
-				}catch(err){
+					return res.status(200).send(tours);
+				} catch (err) {
 					console.log(err.errors)
 				}
 			})
 		);
 
-		
-	
+
 	}
 }

@@ -74,7 +74,7 @@ class App {
 		this.app.use('/api/pnl', new DashboardAppRouter().router);
 
 		// App mobile-exchange routes
-	
+
 		this.app.use('/api/users', this.userRouter.router);
 
 		this.app.use('/api/poi', this.poiRouter.router);
@@ -82,21 +82,21 @@ class App {
 		this.app.use('/api/vehicles', this.vehicleRouter.router);
 
 		this.app.use('/api/booking', this.bookingRouter.router);
-		
+
 		this.app.use('/api/bp', this.bpartnerRouter.router);
 
 		this.app.use('/api/reports', this.reportRouter.router);
 
-		
-this.app.get(
-	'/deeplink',
-	deeplink({
-	  fallback: 'https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1',
-	  android_package_name: 'com.citylifeapps.cups',
-	  ios_store_link:
-		'https://itunes.apple.com/us/app/cups-unlimited-coffee/id556462755?mt=8&uo=4',
-	})
-  );
+
+		this.app.get(
+			'/deeplink',
+			deeplink({
+				fallback: 'https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/',
+				android_package_name: 'com.citylifeapps.cups',
+				ios_store_link:
+					'https://itunes.apple.com/us/app/cups-unlimited-coffee/id556462755?mt=8&uo=4',
+			})
+		);
 	}
 }
 

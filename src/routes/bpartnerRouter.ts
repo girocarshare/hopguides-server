@@ -30,6 +30,11 @@ function randomstring(length) {
 	}
 	return result;
 }
+interface IBkRequest extends IRequest {
+	bpartner: BPartner;
+	bpartnerId: string;
+}
+
 export class BPartnerRouter extends BaseRouter {
 	userManager: UserManager;
 	bpartnerManager: BPartnerManager;
@@ -97,6 +102,22 @@ export class BPartnerRouter extends BaseRouter {
 			})
 		);
 
+		/** GET all bpartners   */
+		this.router.get(
+			'/allwithdata',
+			//allowFor([AdminRole, ManagerRole, SupportRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				const filter: any = {};
+
+				const bpartners: BPartner[] = await this.bpartnerManager.getBPartners(filter);
+
+				
+
+				return res.status(200).send(bpartners);
+			})
+		);
+
 		/** GET support data */
 		this.router.post(
 			'/support/:tourId',
@@ -134,6 +155,57 @@ export class BPartnerRouter extends BaseRouter {
 				// Upload
 				var user: User = await this.userManager.getUser(req.userId);
 				return await this.bpartnerManager.updateLockCode(req.userId,req.params.code );
+			})
+		);
+
+
+		/** POST update poi */
+		this.router.post(
+			'/update',
+			//allowFor([AdminRole, ManagerRole, MarketingRole]),
+			//parseJwt,
+
+			this.upload.array('file'),
+			simpleAsync(async (req: IBkRequest, res: IResponse) => {
+				try {
+
+					let jsonObj = JSON.parse(req.body.bpartner);
+					let bpartner = jsonObj as BPartner;
+
+					var arrayy = []
+					const updatedBpartner: BPartner = await this.bpartnerManager.updateBPartner(
+						bpartner.id,
+						bpartner
+					);
+
+					for (var f of req.files) {
+
+					
+							await this.bpartnerManager.uploadLogo(bpartner.id, f.location);
+
+					}
+					return res.status(200).send("Success");
+				} catch (err) {
+					console.log(err.errors)
+				}
+			})
+		);
+
+
+		/** DELETE business partner */
+		this.router.get(
+			'/delete/:bpartnerId',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				try {
+					await this.bpartnerManager.deleteBPartner(req.params.bpartnerId);
+
+					return res.status(200).send("Success");
+				} catch (e) {
+
+					return res.status(500).send("Error");
+				}
 			})
 		);
 

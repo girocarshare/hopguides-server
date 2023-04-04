@@ -23,6 +23,18 @@ class Contact {
 
 }
 
+class Dimensions {
+
+	
+	@jsonProperty()
+	width: string;
+	
+	@jsonProperty()
+	height: string;
+
+
+}
+
 export class RegisterPayload {
 
 	@jsonProperty()
@@ -34,5 +46,8 @@ export class RegisterPayload {
 	@jsonProperty()
 	name: string;
 
+	
+	@jsonProperty()
+	dimensions: Dimensions;
 }
 
