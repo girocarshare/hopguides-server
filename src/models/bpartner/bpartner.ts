@@ -57,6 +57,19 @@ class Contact {
 	webURL: string;
 
 }
+class Dimensions {
+
+	
+	@jsonProperty()
+	@dbField()
+	width: string;
+	
+	@jsonProperty()
+	@dbField()
+	height: string;
+
+
+}
 
 export class BPartner {
 	@id()
@@ -105,6 +118,9 @@ export class BPartner {
 	@dbField()
 	logo: string;
 
+	@jsonProperty()
+	@dbField()
+	dimensions: Dimensions;
 
 	
 	@jsonProperty()

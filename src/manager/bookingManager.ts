@@ -69,4 +69,37 @@ export class BookingManager {
 			throw new Error('Error updating booking');
 		});
 	}
+
+	async scanQR(bookingId: string, pointId: string) {
+
+		var booking : Booking = await this.bookingRepository.getByIdOrThrow(bookingId).catch(() => {
+			throw new Error('Booking not found!');
+		});
+
+		var points = []
+		for(var poi of booking.points){
+
+			if(poi.id == pointId){
+
+				if(poi.used==true){
+					throw new Error('Coupon already used');
+				}else{
+				var point={
+					id: poi.id,
+					qrCode: poi.qrCode,
+					used:true
+				}
+				points.push(point)
+			}
+				
+			}else{
+				points.push(poi)
+			}
+		}
+		booking.points = points;
+
+		await this.bookingRepository.updateOne(bookingId, booking).catch((err) => {
+			throw new Error('Error updating booking');
+		});
+	}
 }

@@ -80,12 +80,12 @@ export class TourManager {
 
 
 
-	async generateQr(tourId: string, providerId: string): Promise<boolean> {
+	async generateQr(tourId: string): Promise<boolean> {
 
 		//change url
 
 
-		QRCode.toDataURL("http://localhost:3000/deeplink?url=https://www.youtube.com/watch?v=AYO-17BDVCw&list=RDAYO-17BDVCw&start_radio=1", {
+		QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=/", {
 			scale: 15,
 			width: "1000px"
 		}, function (err, base64) {
@@ -332,16 +332,8 @@ export class TourManager {
 
 				var logo: Logo = new Logo();
 				logo.image = bpartner.logo;
-
-
-				const size: Size = await this.getSize(
-					bpartner
-				);
-				if (!size) throw new CustomError(400, 'Cannot create rent!');
-
-				
-				logo.height = size.height
-				logo.width = size.width
+				logo.height = bpartner.dimensions.height
+				logo.width = bpartner.dimensions.width
 
 
 
