@@ -371,6 +371,14 @@ export class TourRouter extends BaseRouter {
 						}
 					}
 
+
+					arr = arr.reverse()
+
+					console.log("Tu sammmmmm")
+					console.log(arr)
+
+
+
 					var t = {
 						title: tour.title,
 						shortInfo: tour.shortInfo,
