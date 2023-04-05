@@ -14,5 +14,5 @@ export class GeneratedVoucher {
     voucherCode: string;    
     
     @dbField()
-    voucherUsed: boolean = false;
+    voucherUsed = false;
 }

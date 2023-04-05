@@ -1,9 +1,9 @@
 export enum SortOrder {
-	DESC = 'DESC',
-	ASC = 'ASC'
+  DESC = 'DESC',
+  ASC = 'ASC',
 }
 
 export enum BlastType {
-	SMS = 'SMS',
-	PUSH = 'PUSH'
+  SMS = 'SMS',
+  PUSH = 'PUSH',
 }

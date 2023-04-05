@@ -1,7 +1,7 @@
 import 'dotenv/config';
+import { Logger } from 'tslog';
 import DbClient from './db/dbClient';
 import App from './app';
-import { Logger } from 'tslog';
 
 const logger: Logger = new Logger();
 

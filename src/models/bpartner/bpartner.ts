@@ -13,25 +13,25 @@ export enum BPartnerStatus {
 export class BPartnerDiscount {
 	@jsonProperty()
 	@dbField()
-	serviceFeeDiscount: number = 0;
+	serviceFeeDiscount = 0;
 
 	@jsonProperty()
 	@dbField()
-	addCostFeeDicount: number = 0;
+	addCostFeeDicount = 0;
 }
 
 export class BPartnerStats {
 	@jsonProperty()
 	@dbField()
-	numberOfVehicles: number = 0;
+	numberOfVehicles = 0;
 
 	@jsonProperty()
 	@dbField()
-	requestApprovedPercent: number = 0;
+	requestApprovedPercent = 0;
 
 	@jsonProperty()
 	@dbField()
-	averageResponseTime: number = 0;
+	averageResponseTime = 0;
 }
 
 class Contact {
@@ -91,7 +91,7 @@ export class BPartner {
 
 	@jsonProperty()
 	@dbField()
-	earnings: number = 0;
+	earnings = 0;
 
 	@jsonProperty()
 	@dbField()

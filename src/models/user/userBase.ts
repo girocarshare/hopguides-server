@@ -64,6 +64,6 @@ export class UserBase {
 	}
 
 	get name(): string {
-		return this.firstName + ' ' + this.lastName;
+		return `${this.firstName  } ${  this.lastName}`;
 	}
 }

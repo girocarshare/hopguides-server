@@ -28,7 +28,7 @@ export class PointData {
 
 	voucher: string;
 
-	hasVoucher: Boolean;
+	hasVoucher: boolean;
 
 	voucherDesc: string;
 }

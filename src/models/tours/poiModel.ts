@@ -2,7 +2,6 @@ import { dbField, id } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { GeoLocation } from '../address/geoLocation';
 import { LocalizedField } from '../localizedField';
-
 import { generateUuid } from '../../utils/utils';
 
 

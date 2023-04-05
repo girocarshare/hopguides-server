@@ -1,6 +1,6 @@
+import { double } from 'aws-sdk/clients/lightsail';
 import { dbField } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
-import { double } from 'aws-sdk/clients/lightsail';
 
 export enum SecurityDepositStatus {
 	PENDING = 'PENDING',
@@ -28,5 +28,5 @@ export class BookingSecurityDeposit {
 
 	@dbField()
 	@jsonProperty()
-	retryCount: number = 0;
+	retryCount = 0;
 }

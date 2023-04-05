@@ -1,8 +1,8 @@
 import { jsonProperty } from '../../json/decorations';
 import { email, notEmpty, required } from '../../validations/decorators';
-import { LocalizedField } from '../../models/localizedField';
-import { POI } from '../../models/tours/poiModel';
-import { GeoLocation } from '../../models/address/geoLocation';
+import type { LocalizedField } from '../../models/localizedField';
+import type { POI } from '../../models/tours/poiModel';
+import type { GeoLocation } from '../../models/address/geoLocation';
 
 class Contact {
 	phone: string;
@@ -93,7 +93,7 @@ export class PointsForTours {
 
   voucher: string;
 
-  hasVoucher: Boolean;
+  hasVoucher: boolean;
   
   voucherDesc: string;
 }

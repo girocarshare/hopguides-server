@@ -31,5 +31,5 @@ export class UserSettingsMB {
 
 	@jsonProperty()
 	@dbField()
-	showWarnA: boolean = true;
+	showWarnA = true;
 }

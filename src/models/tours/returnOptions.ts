@@ -23,7 +23,7 @@ export class ReturnOptions {
 	@jsonProperty()
 	@dbField()
 	@required()
-	returnReq: Boolean;
+	returnReq: boolean;
 
 	@jsonProperty({ type: ReturnLocation })
 	@dbField({ type: ReturnLocation })

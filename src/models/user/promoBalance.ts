@@ -1,6 +1,6 @@
+import { double } from 'aws-sdk/clients/lightsail';
 import { dbField } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
-import { double } from 'aws-sdk/clients/lightsail';
 
 export class PromoBalance {
 	@jsonProperty()

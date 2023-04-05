@@ -1,7 +1,7 @@
 import { jsonProperty } from '../../json/decorations';
 import { email, notEmpty, required } from '../../validations/decorators';
-
 import { GeoLocation } from '../../models/address/geoLocation';
+
 class Contact {
 	@jsonProperty()
 	phone: string;
