@@ -1,4 +1,6 @@
-import { Db, MongoClient } from 'mongodb';
+import type { Db } from 'mongodb';
+import { MongoClient } from 'mongodb';
+import { Logger } from 'tslog';
 import UserRepository from './repository/userRepository';
 import TourRepository from './repository/tourRepository';
 import VehicleRepository from './repository/vehicleRepository';
@@ -6,11 +8,10 @@ import BookingRepository from './repository/bookingRepository';
 import BPartnerRepository from './repository/bpartnerRepository';
 import POIRepository from './repository/poiRepository';
 
-import { Logger } from 'tslog';
-var DB_URI_COMMON = 'mongodb://127.0.0.1:27017/';
-var DB_DATABASE_COMMON = 'giro-common-stage';
-var DB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
-var DB_DATABASE = 'giro-staging';
+const DB_URI_COMMON = 'mongodb://127.0.0.1:27017/';
+const DB_DATABASE_COMMON = 'giro-common-stage';
+const DB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
+const DB_DATABASE = 'giro-staging';
 const logger: Logger = new Logger();
 
 console.log('DB_URI', DB_URI);

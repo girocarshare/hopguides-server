@@ -1,12 +1,12 @@
-import { Maintenance } from './maintenance';
 import { dbField, id } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { generateUuid, generateVehicleIMEI } from '../../utils/utils';
 import { required, validEnum } from '../../validations/decorators';
+import { ChangeLog } from '../classes';
 import { VehicleLiveInfo } from './liveInfo';
 import { VehicleAvailable, VehicleStatus, VehicleType, VehicleVersion } from './enums';
 import { Tracker } from './tracker';
-import { ChangeLog } from '../classes';
+import { Maintenance } from './maintenance';
 
 export class Vehicle {
 	@id()
@@ -60,7 +60,7 @@ export class Vehicle {
 
 	@jsonProperty()
 	@dbField()
-	model: string = ''; /** This is a text that shows on modal */
+	model = ''; /** This is a text that shows on modal */
 
 	@dbField()
 	@jsonProperty({ deserialize: false, serialize: true })

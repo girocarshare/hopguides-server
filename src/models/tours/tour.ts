@@ -3,9 +3,9 @@ import { jsonProperty } from '../../json/decorations';
 import { generateUuid } from '../../utils/utils';
 import { min } from '../../validations/decorators';
 import { VehicleType } from '../vehicle/enums';
-import { ReturnLocation } from './returnOptions';
 import { LocalizedField } from '../localizedField';
 import { Vehicle } from '../vehicle/vehicle';
+import { ReturnLocation } from './returnOptions';
 
 export class Tour {
 	@id()

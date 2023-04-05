@@ -1,8 +1,7 @@
-import { CreateVehiclePayload } from '../classes/vehicle/createVehiclePayload';
+import type { CreateVehiclePayload } from '../classes/vehicle/createVehiclePayload';
 import { CustomError } from '../classes/customError';
-import VehicleRepo, {
-  VehicleRepository,
-} from '../db/repository/vehicleRepository';
+import type { VehicleRepository } from '../db/repository/vehicleRepository';
+import VehicleRepo from '../db/repository/vehicleRepository';
 import { deserialize } from '../json';
 import { Vehicle } from '../models/vehicle/vehicle';
 import { VehicleLiveInfo } from '../models/vehicle/liveInfo';
@@ -22,7 +21,7 @@ export class VehicleManager {
 
   async create(
     userId: string,
-    vehicleData: CreateVehiclePayload
+    vehicleData: CreateVehiclePayload,
   ): Promise<Vehicle> {
     const payload: Vehicle = deserialize(Vehicle, vehicleData);
     payload.liveInfo = new VehicleLiveInfo();

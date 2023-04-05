@@ -1,8 +1,8 @@
+import { double } from 'aws-sdk/clients/lightsail';
 import { dbField } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { BookingAdditionalCost } from './bookingAdditionalCost';
 import { BookingSecurityDeposit } from './bookingSecurityDeposit';
-import { double } from 'aws-sdk/clients/lightsail';
 
 export enum PaymentStatus {
 	FAILED_PAYMENT = 'FAILED_PAYMENT',

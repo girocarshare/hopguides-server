@@ -1,8 +1,8 @@
 import { dbField, id } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
-import { Message } from './message';
 import { generateUuid } from '../../utils/utils';
 import { validEnum } from '../../validations/decorators';
+import { Message } from './message';
 
 export class Chat {
 	@id()

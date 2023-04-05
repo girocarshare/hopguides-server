@@ -1,14 +1,14 @@
 import { dbField } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { email, max } from '../../validations/decorators';
+import { eighteenYearsOld } from '../../utils/utils';
+import { ChangeLog } from '../classes';
+import { StatusTxt } from '../../utils/valu/enums';
 import { UserBase } from './userBase';
 import { UserSettings, UserSettingsMB } from './userSettings';
 //import { double } from 'aws-sdk/clients/lightsail';
 import { OTPCode } from './OTPCode';
-import { eighteenYearsOld } from '../../utils/utils';
 import { PromoBalance } from './promoBalance';
-import { ChangeLog } from '../classes';
-import { StatusTxt } from '../../utils/valu/enums';
 
 export enum UserStatus {
 	DELETE = 'DELETE',
@@ -72,10 +72,10 @@ export class User extends UserBase {
 	role: UserRoles = UserRoles.USER;
 
 	@dbField()
-	confirmed: boolean = false;
+	confirmed = false;
 	
 	@dbField()
-	invited: boolean = false;
+	invited = false;
 
 	@jsonProperty()
 	@dbField()
@@ -106,7 +106,7 @@ export class User extends UserBase {
 
 	@jsonProperty()
 	@dbField()
-	autoTopUp: boolean = true;
+	autoTopUp = true;
 
 	@jsonProperty()
 	@dbField()
@@ -132,11 +132,11 @@ export class User extends UserBase {
 
 	@jsonProperty()
 	@dbField()
-	allowPromo: boolean = true;
+	allowPromo = true;
 
 	@jsonProperty()
 	@dbField()
-	allowPromoMB: boolean = true;
+	allowPromoMB = true;
 
 	@jsonProperty()
 	@dbField()
@@ -185,23 +185,23 @@ export class User extends UserBase {
 
 	hasRequiredFields(): boolean {
 		return (
-			!!this.firstName &&
-			!!this.lastName &&
-			!!this.confirmed &&
-			!!this.phone &&
-			!!this.notificationEmail &&
+			Boolean(this.firstName) &&
+			Boolean(this.lastName) &&
+			Boolean(this.confirmed) &&
+			Boolean(this.phone) &&
+			Boolean(this.notificationEmail) &&
 			// !!this.email &&
-			!!this.gender &&
-			!!this.birthDate &&
-			!!this.personalId 
+			Boolean(this.gender) &&
+			Boolean(this.birthDate) &&
+			Boolean(this.personalId) 
 		);
 	}
 
 
 	hasPaymentMethod(): boolean {
 		return (
-			(!!this.pGReferenceID && !!this.cardMask) ||
-			(!!this.valuTSID && this.valuStatus === StatusTxt.ContractConfirmed)
+			(Boolean(this.pGReferenceID) && Boolean(this.cardMask)) ||
+			(Boolean(this.valuTSID) && this.valuStatus === StatusTxt.ContractConfirmed)
 		);
 	}
 
@@ -211,18 +211,18 @@ export class User extends UserBase {
 	}
 
 	getVerificationLvl(): VerificationLevel {
-		const levelRent: boolean = !!this.phone && !!this.firstName && !!this.lastName;
+		const levelRent: boolean = Boolean(this.phone) && Boolean(this.firstName) && Boolean(this.lastName);
 		const levelRideSharing: boolean =
-			!!this.phone && !!this.firstName && !!this.lastName && !!this.avatarURL && !!this.email;
+			Boolean(this.phone) && Boolean(this.firstName) && Boolean(this.lastName) && Boolean(this.avatarURL) && Boolean(this.email);
 		const levelCarSharing: boolean =
-			!!this.avatarURL &&
-			!!this.firstName &&
-			!!this.lastName &&
-			!!this.phone &&
-			!!this.email &&
-			!!this.birthDate &&
-			!!this.gender &&
-			!!this.personalId 
+			Boolean(this.avatarURL) &&
+			Boolean(this.firstName) &&
+			Boolean(this.lastName) &&
+			Boolean(this.phone) &&
+			Boolean(this.email) &&
+			Boolean(this.birthDate) &&
+			Boolean(this.gender) &&
+			Boolean(this.personalId) 
 
 		if (levelCarSharing) return VerificationLevel.CARSHARE;
 		else if (levelRideSharing) return VerificationLevel.RIDESHARE;

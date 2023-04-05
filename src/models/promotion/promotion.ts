@@ -24,11 +24,11 @@ export class PromoCode {
 
 	@jsonProperty()
 	@dbField()
-	code: string = 'Insert code name here...';
+	code = 'Insert code name here...';
 
 	@jsonProperty()
 	@dbField()
-	text: string = 'Insert promo text here...';
+	text = 'Insert promo text here...';
 
 	@jsonProperty()
 	@dbField()
@@ -36,31 +36,31 @@ export class PromoCode {
 
 	@jsonProperty()
 	@dbField()
-	active: boolean = false;
+	active = false;
 
 	@jsonProperty()
 	@dbField()
-	value: number = 0;
+	value = 0;
 
 	@jsonProperty()
 	@dbField()
-	percent: boolean = false;
+	percent = false;
 
 	@jsonProperty()
 	@dbField()
-	usageNumber: number = 0;
+	usageNumber = 0;
 
 	@jsonProperty()
 	@dbField()
-	usageLimit: number = 0;
+	usageLimit = 0;
 
 	@dbField()
 	@jsonProperty()
-	validFrom: number = 0;
+	validFrom = 0;
 
 	@dbField()
 	@jsonProperty()
-	validTo: number = 0;
+	validTo = 0;
 
 	@jsonProperty({ type: String })
 	@dbField({ type: String })

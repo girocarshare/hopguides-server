@@ -1,19 +1,19 @@
-import { LockStatus } from './enums';
 import { dbField } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 import { integer, max, min, required } from '../../validations/decorators';
 import { GeoLocation } from '../address/geoLocation';
+import { LockStatus } from './enums';
 
 export class VehicleLiveInfo {
 	@jsonProperty()
 	@dbField()
 	@required()
-	lon: number = 46.050492;
+	lon = 46.050492;
 
 	@jsonProperty()
 	@dbField()
 	@required()
-	lat: number = 14.46881;
+	lat = 14.46881;
 
 	@jsonProperty()
 	@dbField()
@@ -21,11 +21,11 @@ export class VehicleLiveInfo {
 
 	@jsonProperty()
 	@dbField()
-	alt: number = 300;
+	alt = 300;
 
 	@jsonProperty()
 	@dbField()
-	country: string = 'Unknown';
+	country = 'Unknown';
 
 	@jsonProperty()
 	@dbField()
@@ -37,15 +37,15 @@ export class VehicleLiveInfo {
 	@min(0)
 	@max(100)
 	@integer()
-	batteryPercentage: number = 42;
+	batteryPercentage = 42;
 
 	@jsonProperty()
 	@dbField()
-	remainingMileage: number = 42;
+	remainingMileage = 42;
 
 	@jsonProperty()
 	@dbField()
-	fuelLevel: number = -1;
+	fuelLevel = -1;
 
 	@jsonProperty()
 	@dbField()
@@ -53,7 +53,7 @@ export class VehicleLiveInfo {
 
 	@jsonProperty()
 	@dbField()
-	totalMileage: number = -1;
+	totalMileage = -1;
 
 	@jsonProperty()
 	@dbField()
@@ -66,27 +66,27 @@ export class VehicleLiveInfo {
 
 	@jsonProperty()
 	@dbField()
-	bleLockStatus: number = 0;
+	bleLockStatus = 0;
 
 	@jsonProperty()
 	@dbField()
-	bleLockBattery: number = 0;
+	bleLockBattery = 0;
 
 	@jsonProperty()
 	@dbField()
-	bleLockExists: boolean = false;
+	bleLockExists = false;
 
 	@jsonProperty()
 	@dbField()
-	isIgnited: number = 0;
+	isIgnited = 0;
 
 	@jsonProperty()
 	@dbField()
-	isMoving: number = 0;
+	isMoving = 0;
 
 	@jsonProperty()
 	@dbField()
-	driveMode: number = 0;
+	driveMode = 0;
 
 	@jsonProperty()
 	@dbField()
@@ -94,11 +94,11 @@ export class VehicleLiveInfo {
 
 	@jsonProperty()
 	@dbField()
-	doorStatus: number = 0;
+	doorStatus = 0;
 
 	@jsonProperty()
 	@dbField()
-	speedLimit: number = 0;
+	speedLimit = 0;
 
 	@jsonProperty({ type: String })
 	@dbField({ type: String })
@@ -106,23 +106,23 @@ export class VehicleLiveInfo {
 
 	@jsonProperty()
 	@dbField()
-	geoId: number = -1;
+	geoId = -1;
 
 	@jsonProperty()
 	@dbField()
-	geoDistance: number = -1;
+	geoDistance = -1;
 
 	@jsonProperty()
 	@dbField()
-	geoName: string = 'Unknown';
+	geoName = 'Unknown';
 
 	@jsonProperty()
 	@dbField()
-	imobilized: boolean = false;
+	imobilized = false;
 
 	@jsonProperty()
 	@dbField()
-	isCharging: boolean = false;
+	isCharging = false;
 
 	@jsonProperty()
 	@dbField()

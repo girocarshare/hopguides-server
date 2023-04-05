@@ -1,6 +1,6 @@
 import { deserializeFromDb } from '../dbUtils';
-import { MongoRepository } from './mongoRepository';
 import { POI } from '../../models/tours/poiModel';
+import { MongoRepository } from './mongoRepository';
 
 export class POIRepository extends MongoRepository<POI> {
   constructor() {

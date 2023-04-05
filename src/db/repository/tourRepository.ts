@@ -1,6 +1,6 @@
 import { deserializeFromDb } from '../dbUtils';
-import { MongoRepository } from './mongoRepository';
 import { Tour } from '../../models/tours/tour';
+import { MongoRepository } from './mongoRepository';
 
 export class TourRepository extends MongoRepository<Tour> {
 	constructor() {

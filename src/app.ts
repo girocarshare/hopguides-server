@@ -4,7 +4,6 @@ import { VehicleRouter } from './routes/vehicleRouter';
 import { BookingRouter } from './routes/bookingRouter';
 import { ReportRouter } from './routes/reportRouter';
 import { POIRouter } from './routes/poiRouter';
-var deeplink = require('node-deeplink');
 import {
 	AdminRole,
 	allowFor,
@@ -17,6 +16,7 @@ import {
 import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
 
+const deeplink = require('node-deeplink');
 const xmlparser = require('express-xml-bodyparser');
 const bearerToken = require('express-bearer-token');
 

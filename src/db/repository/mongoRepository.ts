@@ -1,6 +1,6 @@
-import { Collection, FindAndModifyWriteOpResultObject, InsertOneWriteOpResult } from 'mongodb';
+import type { Collection, FindAndModifyWriteOpResultObject, InsertOneWriteOpResult } from 'mongodb';
 import { CustomError } from '../../classes/customError';
-import { SearchPagination } from '../../classes/searchPagination';
+import type { SearchPagination } from '../../classes/searchPagination';
 import { serializeForDb } from '../dbUtils';
 
 export abstract class MongoRepository<T> {
@@ -112,16 +112,16 @@ export abstract class MongoRepository<T> {
 
 	async updateMany(filter: any, data: any): Promise<boolean> {
 		const updated = await this.collection.updateMany(filter, { $set: data });
-		return !!(updated.result && updated.result.ok);
+		return Boolean(updated.result && updated.result.ok);
 	}
 
 	async deleteMany(filter: any): Promise<boolean> {
 		const updated = await this.collection.deleteMany(filter);
-		return !!(updated.result && updated.result.ok);
+		return Boolean(updated.result && updated.result.ok);
 	}
 
 	async deleteOne(filter: any): Promise<boolean> {
 		const updated = await this.collection.deleteOne(filter);
-		return !!(updated.result && updated.result.ok);
+		return Boolean(updated.result && updated.result.ok);
 	}
 }

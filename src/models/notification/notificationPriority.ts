@@ -4,15 +4,15 @@ import { jsonProperty } from '../../json/decorations';
 export class NotificationPriority {
 	@jsonProperty()
 	@dbField()
-	email: number = -1;
+	email = -1;
 
 	@jsonProperty()
 	@dbField()
-	push: number = -1;
+	push = -1;
 
 	@jsonProperty()
 	@dbField()
-	sms: number = -1;
+	sms = -1;
 
 	// Add notification channel
 }

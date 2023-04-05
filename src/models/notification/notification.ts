@@ -1,7 +1,7 @@
 import { dbField, id } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
-import { User } from '../user/user';
-import { NotificationChannel } from './notificationChannel';
+import type { User } from '../user/user';
+import type { NotificationChannel } from './notificationChannel';
 import { NotificationPriority } from './notificationPriority';
 import { NotificationType } from './notificationType';
 //import { PushDataType } from '../../classes/notification/push';
@@ -58,7 +58,7 @@ export class Notification {
 	getTopNotificationChannels(
 		userNotificationChannels: NotificationChannel[]
 	): NotificationChannel[] {
-		let maxPriority: number = -1;
+		let maxPriority = -1;
 		for (const userChannel of userNotificationChannels)
 			if (this.priority[userChannel] > maxPriority) maxPriority = this.priority[userChannel];
 

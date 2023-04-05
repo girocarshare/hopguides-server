@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+ 
 import { dbField } from '../../db/decorators';
 import { jsonProperty } from '../../json/decorations';
 

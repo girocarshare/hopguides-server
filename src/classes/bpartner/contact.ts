@@ -1,16 +1,13 @@
-import { Logo } from "../tour/toursWithPoints";
-
+import type { Logo } from '../tour/toursWithPoints';
 
 export class Contact {
-	
-	name: string;
+  name: string;
 
-	logo : Logo
+  logo: Logo;
 
-	phone: string
+  phone: string;
 
-	email: string; 
+  email: string;
 
-	supportDesc: string;
+  supportDesc: string;
 }
-
