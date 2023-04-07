@@ -96,6 +96,7 @@ export class TourManager {
 		var qrcode: QRCodes = new QRCodes();
 		const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
 
+		console.log(image_name)
 		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=/", {
 			scale: 15,
 			width: "1000px"
@@ -110,7 +111,7 @@ export class TourManager {
 				ContentEncoding: 'base64', // required
 				ContentType: `image/${type}` // required. Notice the back ticks
 			}
-			s3bucket.upload(params, function (err, data) {
+			 s3bucket.upload(params, function (err, data) {
 
 				if (err) {
 					console.log('ERROR MSG: ', err);
@@ -118,6 +119,7 @@ export class TourManager {
 					console.log('Successfully uploaded data');
 				}
 			});
+
 		});
 
 		qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
@@ -240,8 +242,6 @@ export class TourManager {
 
 						const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
 
-						console.log("IMAGE NAMEEEEE")
-						console.log(image_name)
 						QRCode.toDataURL("http://localhost:3000/deeplink", {
 							scale: 15,
 							width: "1000px"
@@ -268,7 +268,7 @@ export class TourManager {
 						});
 
 
-						p.qrCode = 'https://hopguides.s3.amazonaws.com/gqcodes/' + image_name + ".png"
+						p.qrCode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
 
 						points.push(p)
 

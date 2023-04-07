@@ -141,7 +141,6 @@ export class POIRouter extends BaseRouter {
 						}
 						if (f.originalname.substring(0, 7).trim() === 'partner') {
 
-							console.log("partnerrrr")
 							arrayy.push(f.location);
 
 						}
