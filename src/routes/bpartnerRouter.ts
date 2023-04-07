@@ -14,6 +14,7 @@ import * as multer from 'multer';
 
 import * as AWS from 'aws-sdk';
 import { simpleAsync } from './util';
+import { Dimensions } from '../classes/user/registerPayload';
 var multerS3 = require('multer-s3');
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -33,6 +34,9 @@ function randomstring(length) {
 interface IBkRequest extends IRequest {
 	bpartner: BPartner;
 	bpartnerId: string;
+}
+interface IBkRequestDim extends IRequest {
+	dimensions: Dimensions;
 }
 
 export class BPartnerRouter extends BaseRouter {
@@ -135,14 +139,17 @@ export class BPartnerRouter extends BaseRouter {
 			//ownedBookingInStatusMdw(RentStatus.DRIVING),
 			parseJwt,
 			this.upload.single('file'),
-			simpleAsync(async (req: IRequest, res: IResponse) => {
-				// Upload
+			simpleAsync(async (req: IBkRequestDim, res: IResponse) => {
+
+					let jsonObj = JSON.parse(req.body.dimensions);
+					let dimensions = jsonObj as Dimensions;
+
 				var user: User = await this.userManager.getUser(req.userId);
-				console.log(user)
+				
 				if (!req.file) console.log("Error while uploading file")
 				
 
-				return await this.bpartnerManager.uploadLogo(req.userId, req.file.location);
+				return await this.bpartnerManager.uploadLogoWithDim(req.userId, req.file.location, dimensions);
 			})
 		);
 

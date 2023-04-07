@@ -9,6 +9,7 @@ import { Tour } from '../models/tours/tour';
 import { Contact } from '../classes/bpartner/contact';
 import { String } from 'aws-sdk/clients/cloudwatchevents';
 import { Logo } from '../classes/tour/toursWithPoints';
+import { Dimensions } from '../classes/user/registerPayload';
 
 export class BPartnerManager {
 	bpartnerRepository: MongoRepository<BPartner>;
@@ -38,6 +39,16 @@ export class BPartnerManager {
 		var bpartner: BPartner = await this.getBP(id)
 
 		bpartner.logo = name
+		return await this.bpartnerRepository.updateOne(id, bpartner).catch(() => {
+			throw new Error('Error updating BPartner');
+		});
+	}
+
+	async uploadLogoWithDim(id: string, name: string, dimensions: Dimensions): Promise<BPartner> {
+		var bpartner: BPartner = await this.getBP(id)
+
+		bpartner.logo = name
+		bpartner.dimensions = dimensions
 		return await this.bpartnerRepository.updateOne(id, bpartner).catch(() => {
 			throw new Error('Error updating BPartner');
 		});
@@ -94,8 +105,6 @@ export class BPartnerManager {
 	  }
 
 	  async deleteBPartner(bpartnerId: string) {
-
-		
 		await this.bpartnerRepository.deleteOne({ _id: bpartnerId }).catch((e) => {
 			throw new Error('Error deleting bpartner');
 		});

@@ -93,7 +93,7 @@ export class POI {
 	
 	@jsonProperty()
 	@dbField()
-	name: string;
+	name: LocalizedField;
 
 	@jsonProperty()
 	@dbField()
