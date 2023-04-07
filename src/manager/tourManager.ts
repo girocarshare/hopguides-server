@@ -11,6 +11,7 @@ import { BPartnerManager } from '../manager/bpartnerManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import { BookingManager } from '../manager/bookingManager';
 import bookingRepository, { BookingRepository } from '../db/repository/bookingRepository';
+import QrcodesRepository from '../db/repository/qrcodesRepository';
 
 import { PoiHelp } from '../models/booking/PoiHelp';
 import { POI } from '../models/tours/poiModel';
@@ -24,10 +25,11 @@ import { Characteristics, Location, Point, TourData } from '../classes/tour/tour
 import { PointData } from '../classes/tour/pointData';
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 import { resolve } from 'dns/promises';
+import { QRCodes } from '../models/qrcodes/qrcodes';
+import { MongoRepository } from '../db/repository/mongoRepository';
 var sizeOf = require('image-size');
 const url = require('url')
 const https = require('https')
-var multerS3 = require('multer-s3');
 
 class Size {
 	height: string;
@@ -61,6 +63,7 @@ function getDistanceBetweenPoints(latitude1, longitude1, latitude2, longitude2) 
 }
 export class TourManager {
 	tourRepository: TourRepository;
+	qrcodesRepository: MongoRepository<QRCodes>;
 	bookingRepository: BookingRepository;
 	bpartner: BookingRepository;
 	bookingManager = new BookingManager();
@@ -70,6 +73,7 @@ export class TourManager {
 	bpartnerManager: BPartnerManager;
 	constructor() {
 		this.tourRepository = tourRepository;
+		this.qrcodesRepository = QrcodesRepository;
 		this.bookingRepository = bookingRepository;
 		this.s3Service = new S3Service("giromobility-dev");
 		this.poiManager = new POIManager();
@@ -78,20 +82,26 @@ export class TourManager {
 	}
 
 
+	async saveQr(tourId: string) {
 
 
-	async generateQr(tourId: string): Promise<boolean> {
+	}
+
+
+	async generateQr(tourId: string): Promise<QRCodes> {
 
 		//change url
 
 
-		QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=/", {
+		var qrcode: QRCodes = new QRCodes();
+		const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=/", {
 			scale: 15,
 			width: "1000px"
-		}, function (err, base64) {
+		}, async function (err, base64) {
 			const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
 			const type = base64.split(';')[0].split('/')[1];
-			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
 			const params = {
 				Bucket: 'hopguides/qrcodes',
 				Key: `${image_name}.${type}`, // type is not required
@@ -110,10 +120,12 @@ export class TourManager {
 			});
 		});
 
+		qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
+		qrcode.code = Math.floor(100000 + Math.random() * 900000);
+		return await this.qrcodesRepository.createOne(qrcode).catch(() => {
+			throw new CustomError(500, 'QRCode not created!');
+		});
 
-
-
-		return true
 	}
 
 	async getTour(tourId: string): Promise<Tour> {
@@ -175,21 +187,21 @@ export class TourManager {
 
 			return new Promise(function (resolve, reject) {
 				https.get(options, function (response) {
-				const chunks = []
-				response.on('data', function (chunk) {
-					 chunks.push(chunk)
-				}).on('end', function () {
-					const buffer = Buffer.concat(chunks)
-					var size = sizeOf(buffer)
-					var s: Size = new Size()
-					s.height = size.height
-					s.width = size.width
-					resolve(s)
+					const chunks = []
+					response.on('data', function (chunk) {
+						chunks.push(chunk)
+					}).on('end', function () {
+						const buffer = Buffer.concat(chunks)
+						var size = sizeOf(buffer)
+						var s: Size = new Size()
+						s.height = size.height
+						s.width = size.width
+						resolve(s)
 
 
+					})
 				})
 			})
-		})
 		} catch {
 			return null;
 		}
@@ -227,6 +239,9 @@ export class TourManager {
 						p.used = false
 
 						const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+						console.log("IMAGE NAMEEEEE")
+						console.log(image_name)
 						QRCode.toDataURL("http://localhost:3000/deeplink", {
 							scale: 15,
 							width: "1000px"
@@ -253,7 +268,7 @@ export class TourManager {
 						});
 
 
-						p.qrCode = 'https://hopguides.s3.eu-central-1.amazonaws.com/gqcodes/' + image_name + ".png"
+						p.qrCode = 'https://hopguides.s3.amazonaws.com/gqcodes/' + image_name + ".png"
 
 						points.push(p)
 
@@ -283,7 +298,7 @@ export class TourManager {
 							po.icon = "boat";
 						}
 						po.id = poi.id;
-						po.text = poi.name;
+						po.text = poi.name[language];
 
 						pointsArr.push(po)
 					} else {
@@ -312,7 +327,7 @@ export class TourManager {
 							po.icon = "boat";
 						}
 						po.id = poi.id;
-						po.text = poi.name;
+						po.text = poi.name[language];
 
 						pointsArr.push(po)
 					}
@@ -420,7 +435,7 @@ export class TourManager {
 						poiHelp.category = poi.category;
 						poiHelp.images = poi.images
 						poiHelp.location = location;
-						poiHelp.name = poi.name
+						poiHelp.name = poi.name[language]
 						poiHelp.shortInfo = poi.shortInfo[language]
 						poiHelp.longInfo = poi.longInfo[language]
 						poiHelp.offerName = poi.offerName
@@ -449,7 +464,7 @@ export class TourManager {
 						poiHelp.category = poi.category;
 						poiHelp.images = poi.images
 						poiHelp.location = location;
-						poiHelp.name = poi.name
+						poiHelp.name = poi.name[language]
 						poiHelp.shortInfo = poi.shortInfo[language]
 						poiHelp.longInfo = poi.longInfo[language]
 						poiHelp.hasVoucher = false;
@@ -699,8 +714,8 @@ export class TourManager {
 
 	async getTermsAndConditions(tourId: string): Promise<string> {
 		var tour: Tour = await this.getTour(tourId)
-return tour.termsAndConditions
-		
-		
+		return tour.termsAndConditions
+
+
 	}
 }

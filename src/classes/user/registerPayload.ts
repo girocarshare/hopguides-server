@@ -23,7 +23,7 @@ class Contact {
 
 }
 
-class Dimensions {
+export class Dimensions {
 
 	
 	@jsonProperty()

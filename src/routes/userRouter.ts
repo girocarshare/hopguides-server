@@ -135,7 +135,7 @@ export class UserRouter extends BaseRouter {
 				);
 
 				console.log(createdBP)
-				var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/logos/" + globalThis.rString;
+				var fileName = "https://hopguides.s3.amazonaws.com/logos/" + globalThis.rString;
 				await this.bpartnerManager.uploadLogo(createdBP.id, fileName);
 				sgMail.send({
 					to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email

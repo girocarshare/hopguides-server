@@ -45,7 +45,7 @@ export class POICl {
 
 	idField: number;
 	
-	name: string;
+	name: LocalizedField;
 
 	location: GeoLocation;
 
