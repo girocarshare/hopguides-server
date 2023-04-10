@@ -12,5 +12,7 @@ export class QRCodes {
 	@jsonProperty({ deserialize: true, serialize: true })
 	code: number;
 
-
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	used: boolean;
 }

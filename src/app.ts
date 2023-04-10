@@ -16,6 +16,7 @@ import {
 } from './utils/utils';
 import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
+import { request } from 'http';
 
 const xmlparser = require('express-xml-bodyparser');
 const bearerToken = require('express-bearer-token');
@@ -91,12 +92,17 @@ class App {
 		this.app.get(
 			'/deeplink',
 			deeplink({
-				fallback: 'https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/',
+				fallback: 'https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/' ,
 				android_package_name: 'com.citylifeapps.cups',
 				ios_store_link:
-					'https://itunes.apple.com/us/app/cups-unlimited-coffee/id556462755?mt=8&uo=4',
+				  'https://itunes.apple.com/us/app/cups-unlimited-coffee/id556462755?mt=8&uo=4',
 			})
 		);
+
+		this.app.get('/lala', (req, res) => {
+			console.log("tu sammmm")
+			res.send('hello world')
+		  })
 	}
 }
 

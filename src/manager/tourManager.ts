@@ -92,12 +92,9 @@ export class TourManager {
 
 		//change url
 
-
 		var qrcode: QRCodes = new QRCodes();
 		const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
-
-		console.log(image_name)
-		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=/", {
+		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=https%3A%2F%2Fhopguides-server-main-j7limbsbmq-oc.a.run.app%2Flala", {
 			scale: 15,
 			width: "1000px"
 		}, async function (err, base64) {
@@ -124,6 +121,7 @@ export class TourManager {
 
 		qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
 		qrcode.code = Math.floor(100000 + Math.random() * 900000);
+		qrcode.used = false;
 		return await this.qrcodesRepository.createOne(qrcode).catch(() => {
 			throw new CustomError(500, 'QRCode not created!');
 		});
