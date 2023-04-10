@@ -94,7 +94,7 @@ export class TourManager {
 
 		var qrcode: QRCodes = new QRCodes();
 		const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
-		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=https%3A%2F%2Fhopguides-server-main-j7limbsbmq-oc.a.run.app%2Flala", {
+		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=https%3A%2F%2Fhopguides-server-main-j7limbsbmq-oc.a.run.app%2Flala%2Fd87c2c83-59a3-43ff-849f-58f46375790f%2Fenglish", {
 			scale: 15,
 			width: "1000px"
 		}, async function (err, base64) {

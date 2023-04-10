@@ -4,6 +4,7 @@ import { VehicleRouter } from './routes/vehicleRouter';
 import { BookingRouter } from './routes/bookingRouter';
 import { ReportRouter } from './routes/reportRouter';
 import { POIRouter } from './routes/poiRouter';
+import { TourManager } from './manager/tourManager';
 var deeplink = require('node-deeplink');
 import {
 	AdminRole,
@@ -17,6 +18,7 @@ import {
 import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
 import { request } from 'http';
+import { TourData } from './classes/tour/tourData';
 
 const xmlparser = require('express-xml-bodyparser');
 const bearerToken = require('express-bearer-token');
@@ -30,10 +32,12 @@ class App {
 	private bpartnerRouter: BPartnerRouter;
 	private reportRouter: ReportRouter;
 	private poiRouter: POIRouter;
+	tourManager: TourManager;
 
 	constructor() {
 		this.app = express();
 		this.userRouter = new UserRouter();
+		this.tourManager = new TourManager();
 		this.vehicleRouter = new VehicleRouter();
 		this.bookingRouter = new BookingRouter();
 		this.bpartnerRouter = new BPartnerRouter();
@@ -99,9 +103,9 @@ class App {
 			})
 		);
 
-		this.app.get('/lala', (req, res) => {
-			console.log("tu sammmm")
-			res.send('hello world')
+		this.app.get('/lala/:tourId/:language', async (req, res) => {
+			const tour: TourData = await this.tourManager.getSingleTour(req.params.tourId, "", "", req.params.language);
+			res.send(tour);
 		  })
 	}
 }
