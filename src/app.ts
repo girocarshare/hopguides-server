@@ -103,10 +103,7 @@ class App {
 			})
 		);
 
-		this.app.get('/lala/:tourId/:language', async (req, res) => {
-			const tour: TourData = await this.tourManager.getSingleTour(req.params.tourId, "", "", req.params.language);
-			res.send(tour);
-		  })
+	
 	}
 }
 
