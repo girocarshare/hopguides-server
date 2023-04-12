@@ -30,7 +30,17 @@ import { MongoRepository } from '../db/repository/mongoRepository';
 var sizeOf = require('image-size');
 const url = require('url')
 const https = require('https')
-
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
 class Size {
 	height: string;
 	width: string
@@ -92,8 +102,19 @@ export class TourManager {
 
 		//change url
 
+		var qr: QRCodes = await this.qrcodesRepository.findOne({tourId: tourId}).catch((err) => {
+			throw new Error('Error getting qr code');
+		});
+		if(qr!=null){
+			console.log("ovdeee")
+			throw new Error('Qr code already generated for this tour');
+		}else{
 		var qrcode: QRCodes = new QRCodes();
 		const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+
+		//in url sending tourId
+
 		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=https%3A%2F%2Fwa.me%2F15551234567", {
 			scale: 15,
 			width: "1000px"
@@ -122,10 +143,24 @@ export class TourManager {
 		qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
 		qrcode.code = Math.floor(100000 + Math.random() * 900000);
 		qrcode.used = false;
+		qrcode.tourId = tourId
+
 		return await this.qrcodesRepository.createOne(qrcode).catch(() => {
 			throw new CustomError(500, 'QRCode not created!');
 		});
+	}
+	}
 
+
+	async getQRForTour(tourId: string): Promise<QRCodes> {
+		var qr: QRCodes = await this.qrcodesRepository.findOne({tourId: tourId}).catch((err) => {
+			throw new Error('Error getting qr code');
+		});
+		if(qr==null){
+			throw new Error("Qr code doesn't exist");
+		}else{
+			return qr
+		}
 	}
 
 	async getTour(tourId: string): Promise<Tour> {
@@ -211,9 +246,26 @@ export class TourManager {
 
 		try {
 
+			var qrcode: QRCodes = await this.qrcodesRepository.findOne({tourId: tourId}).catch((err) => {
+				throw new Error('Error getting qrcode');
+			});
+
+			/*if(qrcode.used==true){
+				throw new Error('You can use this coupon only once a day!');
+			}else{
+				qrcode.used=true
+
+				await this.qrcodesRepository.updateOne(qrcode.id, qrcode).catch((err) => {
+					throw new Error('Error updating qr code');
+				});
+			}*/
+
+
+
 			var tour: Tour = await this.getTour(tourId).catch((err) => {
 				throw new Error('Error getting Tours');
 			});
+
 
 			var bpartner: BPartner = await this.bpartnerManager.getBP(tour.bpartnerId).catch((err) => {
 				throw new Error('Error getting Tours');
@@ -677,7 +729,6 @@ export class TourManager {
 
 	async updateTour(tourId: string, data: Partial<Tour>) {
 
-		console.log(data)
 		await this.tourRepository.updateOne(tourId, data).catch((err) => {
 			throw new Error('Error updating Tour');
 		});

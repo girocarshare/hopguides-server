@@ -116,11 +116,32 @@ export class TourRouter extends BaseRouter {
 						return res.status(412).send("Tour doesn't exist");
 					}
 				} catch (err) {
-					console.log(err.error)
+					return res.status(412).send("Qr code for this tour is already generated.");
 				}
 
 
-				return res.status(200).send("Success");
+			})
+		);
+
+		/** GET already generated qr code for tour */
+		this.router.get(
+			'/getqrcode/:tourId',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try {
+
+					const tour: Tour = await this.tourManager.getTour(req.params.tourId);
+					if (tour != null) {
+						var qr = await this.tourManager.getQRForTour(req.params.tourId);
+						return res.status(200).send(qr);
+					} else {
+						return res.status(412).send("Tour doesn't exist");
+					}
+				} catch (err) {
+					return res.status(412).send("Qr code for this tour doesn't exist.");
+				}
+
 
 			})
 		);
