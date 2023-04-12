@@ -27,6 +27,9 @@ import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_pla
 import { resolve } from 'dns/promises';
 import { QRCodes } from '../models/qrcodes/qrcodes';
 import { MongoRepository } from '../db/repository/mongoRepository';
+import userRepository from '../db/repository/userRepository';
+import { UserManager } from './userManager';
+import { User } from '../models/user/user';
 var sizeOf = require('image-size');
 const url = require('url')
 const https = require('https')
@@ -77,6 +80,7 @@ export class TourManager {
 	bookingRepository: BookingRepository;
 	bpartner: BookingRepository;
 	bookingManager = new BookingManager();
+	userManager = new UserManager();
 	s3Service: S3Service;
 	poiManager: POIManager;
 	reportManager: ReportManager;
@@ -172,12 +176,19 @@ export class TourManager {
 
 	async deleteTour(tourId: string) {
 
+
 		var tour: Tour = await this.getTour(tourId).catch((err) => {
 			throw new Error('Error getting Tours');
 		});
+
+		for(var poi of tour.points){
+			await this.poiManager.deletePOI(poi).catch((e) => {
+				
+				throw new CustomError(404, 'POI not deleted.');
+			});
+		}
 		await this.tourRepository.deleteOne({ _id: tourId }).catch((e) => {
 
-			console.log(e)
 			throw new CustomError(404, 'Tour not deleted.');
 		});
 	}
@@ -543,16 +554,30 @@ export class TourManager {
 
 
 
-	async getToursWithPoints(filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints[]> {
+	async getToursWithPoints(id: string, filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints[]> {
 
 		try {
+
+			var user: User = await this.userManager.getUser(id)
+			var role = user.role
 			var toursReport: ToursWithPoints[] = []
+			var tours: Tour[] = []
+			if(role== "ADMIN"){
+				 tours = await this.tourRepository.getAll(filter, pagination).catch((err) => {
+					throw new Error('Error getting Tours');
+				});
+			}else if(role== "USER" || role== "BPARTNER"){
+				throw new Error('You are unable to get all the available tours');
+			}else if(role=="PROVIDER"){
 
-			var tours: Tour[] = await this.tourRepository.getAll(filter, pagination).catch((err) => {
-				console.log(err)
-				throw new Error('Error getting Tours');
-			});
-
+				var bpartner: BPartner = await this.bpartnerManager.getBPByUser(id).catch((err) => {
+					throw new Error('Error getting business partner');
+				});
+				tours = await this.tourRepository.getAll({bpartnerId: bpartner.id}, pagination).catch((err) => {
+					throw new Error('Error getting Tours');
+				});
+			}
+			
 			const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
 				throw new Error('Error getting bookings');
 			});

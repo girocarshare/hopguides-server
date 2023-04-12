@@ -63,4 +63,18 @@ export class POIManager {
       throw new Error('Error updating Tour');
     });
   }
+
+  async deletePOI(poiId: string) {
+
+
+		var poi: POI = await this.getPoi(poiId).catch((err) => {
+			throw new Error('Error getting poi');
+		});
+
+		await this.poiRepository.deleteOne({ _id: poiId }).catch((e) => {
+
+			throw new CustomError(404, 'POI not deleted.');
+		});
+	}
+
 }
