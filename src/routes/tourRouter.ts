@@ -164,11 +164,10 @@ export class TourRouter extends BaseRouter {
 		this.router.get(
 			'/allToursWithPoints',
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
-			//parseJwt,
+			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-
-				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
 
 				return res.status(200).send(tours);
 
@@ -303,8 +302,8 @@ export class TourRouter extends BaseRouter {
 						tour
 					);
 
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
-					return res.status(200).send(tours);
+					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+					return res.status(200).send([]);
 
 				} catch (err) {
 					console.log(err.error)

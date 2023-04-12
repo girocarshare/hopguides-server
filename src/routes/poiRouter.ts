@@ -147,9 +147,9 @@ export class POIRouter extends BaseRouter {
 					}
 
 					await this.poiManager.uploadImages(point.id, arrayy);
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
 
-					return res.status(200).send(tours);
+					return res.status(200).send([]);
 				} catch (err) {
 					console.log(err.errors)
 				}
