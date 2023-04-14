@@ -18,9 +18,12 @@ import 'reflect-metadata';
 import { plainToClass } from 'class-transformer';
 import { simpleAsync } from './util';
 import * as multer from 'multer';
+const axios = require('axios');
 import * as fs from 'fs';
 import 'es6-shim';
 import * as AWS from 'aws-sdk';
+const https = require('https');
+//import fetch from 'node-fetch';
 import { ConnectionIsNotSetError } from 'typeorm';
 import { TourData } from '../classes/tour/tourData';
 import { PointData } from '../classes/tour/pointData';
@@ -49,7 +52,27 @@ function randomstring(length) {
 	return result;
 }
 
+async function getTour1() {
 
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.988995747188019%2C46.127989267713815%3B13.94738552325419%2C46.10240264529747%3B13.932778084586202%2C46.11074537757715%3B13.917095599398841%2C46.11006788635984%3B13.916685347606682%2C46.11037818068329%3B13.923620109187125%2C46.08979153023348%3B13.942740918361155%2C46.08743708478799?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+		.then(res => res.data)
+		.catch(error => {
+			console.log(error);
+		});
+
+
+}
+
+async function getTour2() {
+
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.028174022432776%2C46.15268184141383%3B14.028103776814007%2C46.15390804560133%3B14.009808626050265%2C46.14513966813935%3B13.989218009254753%2C46.128126292766574%3B14.009186%2C46.137985?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+		.then(res => res.data)
+		.catch(error => {
+			console.log(error);
+		});
+
+
+}
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
 	poiManager: POIManager;
@@ -260,6 +283,39 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
+
+
+		/** POST fetches points data for a tour */
+		this.router.get(
+			'/geojson/:tourId',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				var response = ""
+				if (req.params.tourId == "d87c2c83-59a3-43ff-849f-58f46375790f") {
+				
+
+
+					
+					await getTour1()
+						.then(res => 
+							response = res.routes[0].geometry.coordinates)
+
+						return res.status(200).send(response);
+
+				} else if (req.params.tourId == "9a7ba670-e1ac-4350-892e-e15a55a145cc") {
+
+					await getTour2()
+						.then(res => 
+							response = res.routes[0].geometry.coordinates)
+
+						return res.status(200).send(response);
+				}
+
+			})
+		);
+
 		/** GET terms and conditions for a tour */
 		this.router.get(
 			'/termsandconditions/:id',
@@ -337,8 +393,8 @@ export class TourRouter extends BaseRouter {
 
 							var poiJson = deserialize(POI, point)
 
-							var item ={
-								images : poiJson.imageTitles,
+							var item = {
+								images: poiJson.imageTitles,
 								num: poiJson.num
 
 							}
@@ -373,15 +429,15 @@ export class TourRouter extends BaseRouter {
 
 								if (im.name == i.num) {
 
-									
+
 									arrayy.push(im.path);
 								}
 							}
 
-							var obj : Obj = new Obj();
+							var obj: Obj = new Obj();
 
-							for(var title of imageTitles){
-								if(title.num  == i.num){
+							for (var title of imageTitles) {
+								if (title.num == i.num) {
 									obj.names = title.images
 								}
 							}
@@ -475,8 +531,8 @@ export class TourRouter extends BaseRouter {
 
 							var poiJson = deserialize(POI, point)
 
-							var item ={
-								images : poiJson.imageTitles,
+							var item = {
+								images: poiJson.imageTitles,
 								num: poiJson.num
 
 							}
@@ -488,7 +544,7 @@ export class TourRouter extends BaseRouter {
 
 						var partnerImages = []
 
-						
+
 						for (var f of req.files) {
 
 							if (f.originalname.substring(1, 8).trim() === 'partner') {
@@ -505,7 +561,7 @@ export class TourRouter extends BaseRouter {
 								partnerImages.push(h)
 							}
 
-							
+
 						}
 						//if the names are the same
 						var arrayy = []
@@ -519,10 +575,10 @@ export class TourRouter extends BaseRouter {
 								}
 							}
 
-							var obj : Obj = new Obj();
+							var obj: Obj = new Obj();
 
-							for(var title of imageTitles){
-								if(title.num  == i.num){
+							for (var title of imageTitles) {
+								if (title.num == i.num) {
 									obj.names = title.images
 								}
 							}
