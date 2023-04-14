@@ -22,7 +22,7 @@ import { ToursWithPoints, PointsForTours, Logo, POICl } from '../classes/tour/to
 import * as AWS from 'aws-sdk';
 import { BPartner } from '../models/bpartner/bpartner';
 import { Characteristics, Location, Point, TourData } from '../classes/tour/tourData';
-import { PointData } from '../classes/tour/pointData';
+import {  PointData } from '../classes/tour/pointData';
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 import { resolve } from 'dns/promises';
 import { QRCodes } from '../models/qrcodes/qrcodes';
@@ -30,6 +30,28 @@ import { MongoRepository } from '../db/repository/mongoRepository';
 import userRepository from '../db/repository/userRepository';
 import { UserManager } from './userManager';
 import { User } from '../models/user/user';
+import qrcodesRepository from '../db/repository/qrcodesRepository';
+import { image } from 'pdfkit';
+
+var CronJob = require('cron').CronJob;
+
+var job = new CronJob(
+    '0 0 0 * * *',
+	//'1 * * * * *',
+    async function() {
+        var qrcodes: QRCodes[] = await qrcodesRepository.getAll();
+		for(var qrcode of qrcodes){
+			qrcode.used = false;
+			await qrcodesRepository.updateOne(qrcode.id, qrcode).catch((err) => {
+				throw new Error('Error updating qrcode');
+			});
+		}
+    },
+    null,
+    true,
+);
+
+
 var sizeOf = require('image-size');
 const url = require('url')
 const https = require('https')
@@ -493,13 +515,35 @@ export class TourManager {
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio
-						poiHelp.category = poi.category;
 						poiHelp.images = poi.images
 						poiHelp.location = location;
 						poiHelp.name = poi.name[language]
 						poiHelp.shortInfo = poi.shortInfo[language]
 						poiHelp.longInfo = poi.longInfo[language]
 						poiHelp.offerName = poi.offerName
+
+						if (poi.category == "HISTORY") {
+
+							poiHelp.icon = "castle";
+						} else if (poi.category == "DRINKS") {
+
+							poiHelp.icon = "drinks";
+						} else if (poi.category == "NATURE") {
+
+							poiHelp.icon = "tree";
+						} else if (poi.category == "EATS") {
+
+							poiHelp.icon = "restaurant";
+						} else if (poi.category == "BRIDGE") {
+
+							poiHelp.icon = "archway";
+						} else if (poi.category == "MUSEUMS") {
+
+							poiHelp.icon = "persona";
+						} else if (poi.category == "EXPERIENCE") {
+
+							poiHelp.icon = "boat";
+						}
 
 						var booking: Booking = await this.bookingManager.getBooking(bookingId)
 
@@ -522,13 +566,35 @@ export class TourManager {
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio
-						poiHelp.category = poi.category;
 						poiHelp.images = poi.images
 						poiHelp.location = location;
 						poiHelp.name = poi.name[language]
 						poiHelp.shortInfo = poi.shortInfo[language]
 						poiHelp.longInfo = poi.longInfo[language]
 						poiHelp.hasVoucher = false;
+
+						if (poi.category == "HISTORY") {
+
+							poiHelp.icon = "castle";
+						} else if (poi.category == "DRINKS") {
+
+							poiHelp.icon = "drinks";
+						} else if (poi.category == "NATURE") {
+
+							poiHelp.icon = "tree";
+						} else if (poi.category == "EATS") {
+
+							poiHelp.icon = "restaurant";
+						} else if (poi.category == "BRIDGE") {
+
+							poiHelp.icon = "archway";
+						} else if (poi.category == "MUSEUMS") {
+
+							poiHelp.icon = "persona";
+						} else if (poi.category == "EXPERIENCE") {
+
+							poiHelp.icon = "boat";
+						}
 
 
 						pointsArr.push(poiHelp)

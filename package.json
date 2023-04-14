@@ -22,6 +22,7 @@
     "body-parser": "^1.19.1",
     "body-parser-xml": "^2.0.0",
     "class-transformer": "^0.5.1",
+    "cron": "^2.3.0",
     "es6-shim": "^0.35.7",
     "express": "^4.17.1",
     "express-bearer-token": "^2.4.0",

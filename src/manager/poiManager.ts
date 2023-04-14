@@ -1,9 +1,14 @@
 import poiRepository, { POIRepository } from '../db/repository/poiRepository';
 import { CustomError } from '../classes/customError';
 import { SearchPagination } from '../classes/searchPagination';
-import { POI } from '../models/tours/poiModel';
+import { Image, POI } from '../models/tours/poiModel';
 
 import { MulterFile } from '../classes/interfaces';
+import { LocalizedField } from '../models/localizedField';
+export class Obj {
+  names: {number: string, name: LocalizedField}[]
+  paths: string[]
+}
 export class POIManager {
   poiRepository: POIRepository;
   constructor() {
@@ -17,7 +22,8 @@ export class POIManager {
   }
 
   async getPois(filter?: any, pagination?: SearchPagination): Promise<POI[]> {
-    return await this.poiRepository.getAll(filter, pagination).catch(() => {
+    return await this.poiRepository.getAll(filter, pagination).catch((err) => {
+      console.log(err.error)
       throw new Error('Error getting pois');
     });
   }
@@ -33,13 +39,27 @@ export class POIManager {
 		});
 	}
 
+ 
+  async uploadImages(pointId: string, object: Obj): Promise<POI> {
 
-  async uploadImages(pointId: string, file: string[]): Promise<POI> {
+    console.log(object)
     var point: POI = await this.getPoi(pointId);
 
-    point.images = file;
+   var images: Image[] = []
+    for(var i=0; i<object.paths.length; i++){
+
+      var image : Image = new Image()
+      image.image = object.paths[i]
+      image.title = object.names[i].name
+
+      images.push(image)
+
+    }
+
+    console.log(images)
+    point.images = images;
     return await this.poiRepository.updateOne(pointId, point).catch(() => {
-      throw new Error('Error updating Tour');
+      throw new Error('Error updating poi');
     });
   }
 
@@ -55,12 +75,16 @@ export class POIManager {
     });
   }
 
-  async uploadAudio(poiId: string, file: string): Promise<POI> {
-    var point: POI = await this.getPoi(poiId);
+  async uploadAudio(pointId: string, file: string): Promise<POI> {
 
+    console.log("TUUUU" + pointId)
+    console.log(await this.getPois())
+    var point: POI = await this.getPoi(pointId);
+
+    console.log("ehh")
     point.audio = file;
-    return await this.poiRepository.updateOne(poiId, point).catch(() => {
-      throw new Error('Error updating Tour');
+    return await this.poiRepository.updateOne(pointId, point).catch(() => {
+      throw new Error('Error updating poi');
     });
   }
 
