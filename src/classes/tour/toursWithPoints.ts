@@ -1,7 +1,7 @@
 import { jsonProperty } from '../../json/decorations';
 import { email, notEmpty, required } from '../../validations/decorators';
 import { LocalizedField } from '../../models/localizedField';
-import { POI } from '../../models/tours/poiModel';
+import { Image, POI } from '../../models/tours/poiModel';
 import { GeoLocation } from '../../models/address/geoLocation';
 
 class Contact {
@@ -60,7 +60,7 @@ export class POICl {
 
 	workingHours: WorkingHours;
 
-	images: string[];
+	images: Image[];
 
 	icon: string;
 

@@ -1,12 +1,20 @@
+import { Image } from "../../models/tours/poiModel";
 
 class Location {
 	lat: string;
 
 	lng: string;
 
+
 }
 
+class ImageTitle {
+	number: string;
 
+	name: string;
+
+
+}
 export class PointData {
 	id: string;
 
@@ -18,7 +26,7 @@ export class PointData {
 
 	longInfo: string;
 
-	images: string[];
+	images: Image[];
 
 	offerName: string;
 
@@ -31,5 +39,9 @@ export class PointData {
 	hasVoucher: Boolean;
 
 	voucherDesc: string;
+	
+	imageTitles: ImageTitle[];
+
+	icon: string;
 }
 

@@ -1,6 +1,6 @@
 
 import { IRequest, IResponse } from '../classes/interfaces';
-import { POIManager } from '../manager/poiManager';
+import { Obj, POIManager } from '../manager/poiManager';
 import { BPartnerManager } from '../manager/bpartnerManager';
 import { withErrorHandler } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
@@ -17,11 +17,17 @@ import { TourManager } from '../manager/tourManager';
 import { ToursWithPoints } from '../classes/tour/toursWithPoints';
 
 import * as AWS from 'aws-sdk';
+import { LocalizedField } from '../models/localizedField';
 var multerS3 = require('multer-s3');
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "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"
 })
+
+export class HelpObj  {
+	number: string
+	 name: LocalizedField}
+
 var rString: string;
 function randomstring(length) {
 	var result = '';
@@ -90,6 +96,22 @@ export class POIRouter extends BaseRouter {
 
 	init(): void {
 
+/** GET all poi */
+this.router.get(
+	'/all',
+	//allowFor([AdminRole, SupportRole, ServiceRole]),
+	withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+		try {
+
+			return  res.status(412).send(await this.poiManager.getPois());
+		} catch (err) {
+			return res.status(412).send("Error while getting pois");
+		}
+
+
+	})
+);
 
 		this.router.post(
 			'/:pointId/uploadMenu',
@@ -119,6 +141,11 @@ export class POIRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;
 
+					var localizedName = []
+					for(var p of point.imageTitles){
+						
+						localizedName.push(p)
+					}
 					var arrayy = []
 					const updatedPoi: POI = await this.poiManager.updatePoi(
 						point.id,
@@ -127,7 +154,6 @@ export class POIRouter extends BaseRouter {
 
 					for (var f of req.files) {
 
-						console.log(f)
 						if (f.originalname.substring(0, 6).trim() === 'audio2') {
 
 							await this.poiManager.uploadAudio(point.id, f.location);
@@ -139,14 +165,17 @@ export class POIRouter extends BaseRouter {
 							await this.poiManager.uploadMenu(point.id, f.location);
 
 						}
-						if (f.originalname.substring(0, 7).trim() === 'partner') {
+
+						if (f.originalname.substring(1, 8).trim() === 'partner') {
 
 							arrayy.push(f.location);
-
 						}
 					}
+					var obj : Obj = new Obj();
 
-					await this.poiManager.uploadImages(point.id, arrayy);
+					obj.names = point.imageTitles
+					obj.paths = arrayy
+					await this.poiManager.uploadImages(point.id, obj);
 					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
 
 					return res.status(200).send([]);

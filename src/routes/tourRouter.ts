@@ -7,7 +7,7 @@ import { BaseRouter } from './baseRouter';
 import { User, UserRoles, UserStatus } from '../models/user/user';
 import { UserManager } from '../manager/userManager';
 import { deserialize, serialize } from '../json';
-import { POIManager } from '../manager/poiManager';
+import { Obj, POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
 import { ToursReport } from '../classes/tour/toursReport';
@@ -26,6 +26,9 @@ import { TourData } from '../classes/tour/tourData';
 import { PointData } from '../classes/tour/pointData';
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 var multerS3 = require('multer-s3');
+
+
+
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "smrq0Ly8nNjP/WXnd2NSnvHCxUmW5zgeIYuMbTab"
@@ -324,17 +327,22 @@ export class TourRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.tour);
 					let tour = jsonObj as Tour;
 
-
 					var arr: string[] = []
 					var arr2 = []
+					var imageTitles = []
 					if (tour.points.length != 0) {
 						for (var point of tour.points) {
 
-
-
 							const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
 
-							//poi.category = Category.NATURE
+							var poiJson = deserialize(POI, point)
+
+							var item ={
+								images : poiJson.imageTitles,
+								num: poiJson.num
+
+							}
+							imageTitles.push(item)
 
 							arr.push(poi.id)
 							arr2.push(poi)
@@ -343,11 +351,11 @@ export class TourRouter extends BaseRouter {
 						var partnerImages = []
 						for (var f of req.files) {
 
-							if (f.originalname.substring(0, 7).trim() === 'partner') {
+							if (f.originalname.substring(1, 8).trim() === 'partner') {
 
 								var help = f.originalname.split('---')
 
-								var help2 = help[0].substring(7)
+								var help2 = help[0].substring(8)
 								console.log(help2)
 
 								var h = {
@@ -357,6 +365,7 @@ export class TourRouter extends BaseRouter {
 								partnerImages.push(h)
 							}
 						}
+
 						//if the names are the same
 						var arrayy = []
 						for (var i of arr2) {
@@ -364,17 +373,25 @@ export class TourRouter extends BaseRouter {
 
 								if (im.name == i.num) {
 
-									//var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/" + globalThis.rString;
+									
 									arrayy.push(im.path);
-
 								}
 							}
-							await this.poiManager.uploadImages(i.id, arrayy);
+
+							var obj : Obj = new Obj();
+
+							for(var title of imageTitles){
+								if(title.num  == i.num){
+									obj.names = title.images
+								}
+							}
+							obj.paths = arrayy
+							await this.poiManager.uploadImages(i.id, obj);
 							arrayy = []
 						}
 
-
 						for (var i of arr2) {
+							console.log(i)
 							for (var f of req.files) {
 
 								if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -390,8 +407,6 @@ export class TourRouter extends BaseRouter {
 							}
 						}
 					}
-
-
 					arr = arr.reverse()
 
 					var t = {
@@ -412,7 +427,6 @@ export class TourRouter extends BaseRouter {
 					const createdTour: Tour = await this.tourManager.createTour(
 						deserialize(Tour, t)
 					);
-
 
 
 					for (var file of req.files) {
@@ -450,31 +464,39 @@ export class TourRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.tour);
 					let tour = jsonObj as Tour;
 
-					console.log(tour)
 
 					var arr: string[] = []
 					var arr2 = []
+					var imageTitles = []
 					if (tour.points.length != 0) {
 						for (var point of tour.points) {
 
-
-
 							const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
 
-							//poi.category = Category.NATURE
+							var poiJson = deserialize(POI, point)
+
+							var item ={
+								images : poiJson.imageTitles,
+								num: poiJson.num
+
+							}
+							imageTitles.push(item)
 
 							arr.push(poi.id)
 							arr2.push(poi)
 						}
 
 						var partnerImages = []
+
+						
 						for (var f of req.files) {
 
-							if (f.originalname.substring(0, 7).trim() === 'partner') {
+							if (f.originalname.substring(1, 8).trim() === 'partner') {
 
 								var help = f.originalname.split('---')
 
-								var help2 = help[0].substring(7)
+								var help2 = help[0].substring(8)
+								console.log(help2)
 
 								var h = {
 									name: help2,
@@ -482,6 +504,8 @@ export class TourRouter extends BaseRouter {
 								}
 								partnerImages.push(h)
 							}
+
+							
 						}
 						//if the names are the same
 						var arrayy = []
@@ -490,13 +514,20 @@ export class TourRouter extends BaseRouter {
 
 								if (im.name == i.num) {
 
-									//var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/" + globalThis.rString;
 									arrayy.push(im.path);
 
 								}
 							}
 
-							await this.poiManager.uploadImages(i.id, arrayy);
+							var obj : Obj = new Obj();
+
+							for(var title of imageTitles){
+								if(title.num  == i.num){
+									obj.names = title.images
+								}
+							}
+							obj.paths = arrayy
+							await this.poiManager.uploadImages(i.id, obj);
 							arrayy = []
 						}
 

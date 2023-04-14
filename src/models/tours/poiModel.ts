@@ -48,6 +48,17 @@ class FromTo {
 
 }
 
+export class Image {
+	@jsonProperty()
+	@dbField()
+	image: string;
+
+	@jsonProperty()
+	@dbField()
+	title: LocalizedField;
+
+}
+
 class WorkingHours {
 	@jsonProperty()
 	@dbField()
@@ -78,7 +89,15 @@ class WorkingHours {
 	sunday: FromTo;
 
 }
+class ImageTitle {
+	@jsonProperty()
+	number: string;
 
+	@jsonProperty()
+	name: LocalizedField;
+
+
+}
 export class POI {
 
 	@id()
@@ -128,9 +147,12 @@ export class POI {
 	@dbField()
 	workingHours: WorkingHours;
 
-	@jsonProperty({ type: String })
-	@dbField({ type: String })
-	images: string[];
+	@jsonProperty({ type: Image })
+	@dbField({ type: Image })
+	images: Image[];
+
+	@jsonProperty({ type: ImageTitle })
+	imageTitles: ImageTitle[];
 
 	@jsonProperty()
 	@dbField()
@@ -170,4 +192,6 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	audio: string;
+
+
 }
