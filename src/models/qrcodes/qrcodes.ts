@@ -26,4 +26,8 @@ export class QRCodes {
 	@dbField()
 	@jsonProperty({ deserialize: true, serialize: true })
 	tourId: string;
+
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	qrCodeId: string;
 }

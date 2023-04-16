@@ -128,19 +128,20 @@ export class TourManager {
 
 		//change url
 
-		var qr: QRCodes = await this.qrcodesRepository.findOne({tourId: tourId}).catch((err) => {
+		/*var qr: QRCodes = await this.qrcodesRepository.findOne({tourId: tourId}).catch((err) => {
 			throw new Error('Error getting qr code');
 		});
 		if(qr!=null){
 			throw new Error('Qr code already generated for this tour');
-		}else{
+		}else{*/
 		var qrcode: QRCodes = new QRCodes();
 		const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
 
 
+		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
 		//in url sending tourId
 
-		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=9a7ba670-e1ac-4350-892e-e15a55a145cc", {
+		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url="+qrCodeId, {
 			scale: 15,
 			width: "1000px"
 		}, async function (err, base64) {
@@ -169,11 +170,12 @@ export class TourManager {
 		qrcode.code = Math.floor(100000 + Math.random() * 900000);
 		qrcode.used = false;
 		qrcode.tourId = tourId
+		qrcode.qrCodeId = qrCodeId
 
 		return await this.qrcodesRepository.createOne(qrcode).catch(() => {
 			throw new CustomError(500, 'QRCode not created!');
 		});
-	}
+	//}
 	}
 
 
@@ -274,11 +276,11 @@ export class TourManager {
 		}
 	}
 
-	async getSingleTour(tourId: string, longitude: string, latitude: string, language: string): Promise<TourData> {
+	async getSingleTour(qrCodeId: string, longitude: string, latitude: string, language: string): Promise<TourData> {
 
 		try {
 
-			var qrcode: QRCodes = await this.qrcodesRepository.findOne({tourId: tourId}).catch((err) => {
+			var qrcode: QRCodes = await this.qrcodesRepository.findOne({qrCodeId: qrCodeId}).catch((err) => {
 				throw new Error('Error getting qrcode');
 			});
 
@@ -294,7 +296,7 @@ export class TourManager {
 
 
 
-			var tour: Tour = await this.getTour(tourId).catch((err) => {
+			var tour: Tour = await this.getTour(qrcode.tourId).catch((err) => {
 				throw new Error('Error getting Tours');
 			});
 
