@@ -262,12 +262,12 @@ export class TourRouter extends BaseRouter {
 		);
 		/** POST fetches tour data */
 		this.router.post(
-			'/:tourId',
+			'/:qrCodeId',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				//TODO
-				const tour: TourData = await this.tourManager.getSingleTour(req.params.tourId, "", "", req.body.language);
+				const tour: TourData = await this.tourManager.getSingleTour(req.params.qrCodeId, "", "", req.body.language);
 				return res.status(200).send(tour);
 			})
 		);
