@@ -8,10 +8,12 @@ class Location {
 
 }
 
-class ImageTitle {
+export class ImageTitle {
 	number: string;
 
 	name: string;
+
+	image: string;
 
 
 }

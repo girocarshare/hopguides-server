@@ -22,7 +22,7 @@ import { ToursWithPoints, PointsForTours, Logo, POICl } from '../classes/tour/to
 import * as AWS from 'aws-sdk';
 import { BPartner } from '../models/bpartner/bpartner';
 import { Characteristics, Location, Point, TourData } from '../classes/tour/tourData';
-import {  PointData } from '../classes/tour/pointData';
+import {  ImageTitle, PointData } from '../classes/tour/pointData';
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 import { resolve } from 'dns/promises';
 import { QRCodes } from '../models/qrcodes/qrcodes';
@@ -132,7 +132,6 @@ export class TourManager {
 			throw new Error('Error getting qr code');
 		});
 		if(qr!=null){
-			console.log("ovdeee")
 			throw new Error('Qr code already generated for this tour');
 		}else{
 		var qrcode: QRCodes = new QRCodes();
@@ -141,7 +140,7 @@ export class TourManager {
 
 		//in url sending tourId
 
-		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=https%3A%2F%2Fwa.me%2F15551234567", {
+		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=9a7ba670-e1ac-4350-892e-e15a55a145cc", {
 			scale: 15,
 			width: "1000px"
 		}, async function (err, base64) {
@@ -511,11 +510,18 @@ export class TourManager {
 						location.lat = poi.location.latitude;
 						location.lng = poi.location.longitude;
 
+						var images = []
+						for(var poiImage of poi.images){
+						var imageTitles: ImageTitle = new ImageTitle()
+						imageTitles.name = poiImage.title[language];
+						imageTitles.image = poiImage.image;
 
+						images.push(imageTitles)
+						}
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio
-						poiHelp.images = poi.images
+						poiHelp.images = images
 						poiHelp.location = location;
 						poiHelp.name = poi.name[language]
 						poiHelp.shortInfo = poi.shortInfo[language]
@@ -562,11 +568,18 @@ export class TourManager {
 						location.lat = poi.location.latitude;
 						location.lng = poi.location.longitude;
 
+						var images = []
+						for(var poiImage of poi.images){
+						var imageTitles: ImageTitle = new ImageTitle()
+						imageTitles.name = poiImage.title[language];
+						imageTitles.image = poiImage.image;
 
+						images.push(imageTitles)
+						}
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio
-						poiHelp.images = poi.images
+						poiHelp.images = images
 						poiHelp.location = location;
 						poiHelp.name = poi.name[language]
 						poiHelp.shortInfo = poi.shortInfo[language]
