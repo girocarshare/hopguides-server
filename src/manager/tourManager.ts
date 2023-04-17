@@ -167,7 +167,7 @@ export class TourManager {
 		});
 
 		qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
-		qrcode.code = Math.floor(100000 + Math.random() * 900000);
+		qrcode.code = Math.floor(100000000 + Math.random() * 900000000);
 		qrcode.used = false;
 		qrcode.tourId = tourId
 		qrcode.qrCodeId = qrCodeId
