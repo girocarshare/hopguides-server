@@ -11,12 +11,6 @@ import { PoiHelp } from '../models/booking/PoiHelp';
 import { BPartner } from '../models/bpartner/bpartner';
 import { schedule } from 'node-cron';
 
-schedule('* * * * *', () => {
-  console.log('running a task every minute');
-});
-
-// var CronJob = require('cron').CronJob;
-
 // var job = new CronJob(
 //     '0 10 11 * * *',
 // 	//'1 * * * * *',
@@ -51,6 +45,10 @@ const s3bucket = new AWS.S3({
   params: { Bucket: 'hopguides/qrcodes' },
 });
 var QRCode = require('qrcode');
+
+schedule('* * * * *', () => {
+  console.log('running a task every minute');
+});
 export class BookingRouter extends BaseRouter {
   bookingManager = new BookingManager();
   userManager = new UserManager();
