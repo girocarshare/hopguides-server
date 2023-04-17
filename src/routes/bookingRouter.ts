@@ -12,7 +12,7 @@ import { BPartner } from '../models/bpartner/bpartner';
 var CronJob = require('cron').CronJob;
 
 var job = new CronJob(
-    '0 0 0 * * *',
+    '0 10 11 * * *',
 	//'1 * * * * *',
     async function() {
         var bookings: Booking[] = await bookingRepository.getAll();
