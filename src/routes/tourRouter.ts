@@ -54,7 +54,7 @@ function randomstring(length) {
 
 async function getTour1() {
 
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.988995747188019%2C46.127989267713815%3B13.94738552325419%2C46.10240264529747%3B13.932778084586202%2C46.11074537757715%3B13.917095599398841%2C46.11006788635984%3B13.916685347606682%2C46.11037818068329%3B13.923620109187125%2C46.08979153023348%3B13.942740918361155%2C46.08743708478799?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.988995747188019%2C46.127989267713815%3B13.94738552325419%2C46.10240264529747%3B13.932778084586202%2C46.11074537757715%3B13.917095599398841%2C46.11006788635984%3B13.916685347606682%2C46.11037818068329%3B13.923620109187125%2C46.08979153023348%3B13.942740918361155%2C46.08743708478799%3B13.988995747188019%2C46.127989267713815?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
 		.then(res => res.data)
 		.catch(error => {
 			console.log(error);
@@ -65,7 +65,7 @@ async function getTour1() {
 
 async function getTour2() {
 
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.028174022432776%2C46.15268184141383%3B14.028103776814007%2C46.15390804560133%3B14.009808626050265%2C46.14513966813935%3B13.989218009254753%2C46.128126292766574%3B14.009186%2C46.137985?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.028174022432776%2C46.15268184141383%3B14.028103776814007%2C46.15390804560133%3B14.009808626050265%2C46.14513966813935%3B13.989218009254753%2C46.128126292766574%3B14.028174022432776%2C46.15268184141383?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
 		.then(res => res.data)
 		.catch(error => {
 			console.log(error);
