@@ -9,23 +9,6 @@ import { Booking, BookingStatus } from '../models/booking/booking';
 import { Tour } from '../models/tours/tour';
 import { PoiHelp } from '../models/booking/PoiHelp';
 import { BPartner } from '../models/bpartner/bpartner';
-import { schedule } from 'node-cron';
-
-// var job = new CronJob(
-//     '0 10 11 * * *',
-// 	//'1 * * * * *',
-//     async function() {
-//         var bookings: Booking[] = await bookingRepository.getAll();
-// 		for(var booking of bookings){
-// 			booking.status = BookingStatus.FINISHED;
-// 			await bookingRepository.updateOne(booking.id, booking).catch((err) => {
-// 				throw new Error('Error updating booking');
-// 			});
-// 		}
-//     },
-//     null,
-//     true,
-// );
 
 var deeplink = require('node-deeplink');
 import { withErrorHandler } from '../utils/utils';
@@ -45,10 +28,6 @@ const s3bucket = new AWS.S3({
   params: { Bucket: 'hopguides/qrcodes' },
 });
 var QRCode = require('qrcode');
-
-schedule('* * * * *', () => {
-  console.log('running a task every minute');
-});
 export class BookingRouter extends BaseRouter {
   bookingManager = new BookingManager();
   userManager = new UserManager();

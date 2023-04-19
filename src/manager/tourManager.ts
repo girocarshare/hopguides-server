@@ -31,16 +31,6 @@ import userRepository from '../db/repository/userRepository';
 import { UserManager } from './userManager';
 import { User } from '../models/user/user';
 import qrcodesRepository from '../db/repository/qrcodesRepository';
-import { schedule } from 'node-cron';
-
-schedule('0 0 0 * * *', async () => {
-	const qrcodes = await qrcodesRepository.getAll();
-	for (let qrcode of qrcodes) {
-		await qrcodesRepository.updateOne(qrcode.id, { used: false }).catch((err) => {
-			throw new Error('Error updating qrcode');
-		});
-	}
-});
 
 var sizeOf = require('image-size');
 const url = require('url')
