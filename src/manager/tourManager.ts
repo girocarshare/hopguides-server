@@ -455,6 +455,9 @@ export class TourManager {
 				tourReport.agreementDesc = tour.agreementDesc[language];
 				tourReport.termsAndConditionsLink = tour.termsAndConditions;
 				tourReport.bookingId = createdScheduledRent.id;
+				tourReport.support = bpartner.support[language]
+				tourReport.businessPartnerEmail = bpartner.contact.email
+				tourReport.businessPartnerPhone = bpartner.contact.phone
 
 				return tourReport
 			}

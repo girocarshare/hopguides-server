@@ -65,4 +65,10 @@ export class TourData {
 
 	bookingId: string;
 
+	support: string;
+
+	businessPartnerPhone: string;
+
+	businessPartnerEmail: string;
+
 }
