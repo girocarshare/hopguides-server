@@ -259,10 +259,17 @@ export class TourManager {
 	async getSingleTour(qrCodeId: string, longitude: string, latitude: string, language: string): Promise<TourData> {
 
 		try {
-
-			var qrcode: QRCodes = await this.qrcodesRepository.findOne({qrCodeId: qrCodeId}).catch((err) => {
+			var qrcode : QRCodes = new QRCodes()
+			if(qrCodeId.length == 9){
+				 qrcode = await this.qrcodesRepository.findOne({code: Number.parseFloat(qrCodeId)}).catch((err) => {
+					throw new Error('Error getting qrcode');
+				});
+				console.log(qrcode)
+			}else{
+			 qrcode = await this.qrcodesRepository.findOne({qrCodeId: qrCodeId}).catch((err) => {
 				throw new Error('Error getting qrcode');
 			});
+		}
 
 			/*if(qrcode.used==true){
 				throw new Error('You can use this coupon only once a day!');
