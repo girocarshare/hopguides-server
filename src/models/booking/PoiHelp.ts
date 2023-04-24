@@ -15,4 +15,9 @@ export class PoiHelp {
 	@dbField()
 	qrCode: string;
 
+	
+	@jsonProperty()
+	@dbField()
+	name: string;
+
 }

@@ -313,34 +313,9 @@ export class TourManager {
 
 						const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
 
-						QRCode.toDataURL("http://localhost:3000/deeplink", {
-							scale: 15,
-							width: "1000px"
-						}, function (err, base64) {
-
-							const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-							const type = base64.split(';')[0].split('/')[1];
-							const params = {
-								Bucket: 'hopguides/qrcodes',
-								Key: `${image_name}.${type}`, // type is not required
-								Body: base64Data,
-								ACL: 'public-read',
-								ContentEncoding: 'base64', // required
-								ContentType: `image/${type}` // required. Notice the back ticks
-							}
-							s3bucket.upload(params, function (err, data) {
-
-								if (err) {
-									console.log('ERROR MSG: ', err);
-								} else {
-									console.log('Successfully uploaded data');
-								}
-							});
-						});
-
-
 						p.qrCode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
 
+						p.name = image_name
 						points.push(p)
 
 
@@ -415,6 +390,39 @@ export class TourManager {
 					points
 				);
 				if (!createdScheduledRent) throw new CustomError(400, 'Cannot create rent!');
+
+
+
+				for(var p of points){
+
+					QRCode.toDataURL("https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/confirmation/" + createdScheduledRent.id + "/" + p.id , {
+						scale: 15,
+						width: "1000px"
+					}, function (err, base64) {
+
+						const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+						const type = base64.split(';')[0].split('/')[1];
+						const params = {
+							Bucket: 'hopguides/qrcodes',
+							Key: `${p.name}.${type}`, // type is not required
+							Body: base64Data,
+							ACL: 'public-read',
+							ContentEncoding: 'base64', // required
+							ContentType: `image/${type}` // required. Notice the back ticks
+						}
+						s3bucket.upload(params, function (err, data) {
+
+							if (err) {
+								console.log('ERROR MSG: ', err);
+							} else {
+								console.log('Successfully uploaded data');
+							}
+						});
+					});
+
+				}
+
+			
 
 				var logo: Logo = new Logo();
 				logo.image = bpartner.logo;

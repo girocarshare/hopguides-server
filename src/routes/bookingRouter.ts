@@ -76,9 +76,9 @@ export class BookingRouter extends BaseRouter {
             req.params.bookingId,
             req.params.pointId
           );
-          return res.status(200).send('Success');
+          return res.status(200).send(true);
         } catch {
-          return res.status(500).send('Coupon already used');
+          return res.status(500).send(false);
         }
       })
     );
