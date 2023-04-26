@@ -4,39 +4,29 @@ import {
 	withErrorHandler
 } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
-import { User, UserRoles, UserStatus } from '../models/user/user';
 import { UserManager } from '../manager/userManager';
-import { deserialize, serialize } from '../json';
+import { deserialize } from '../json';
 import { Obj, POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
-import { ToursReport } from '../classes/tour/toursReport';
 import { ToursWithPoints } from '../classes/tour/toursWithPoints';
-import { Category, POI } from '../models/tours/poiModel';
+import {  POI } from '../models/tours/poiModel';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
 import 'reflect-metadata';
-import { plainToClass } from 'class-transformer';
 import { simpleAsync } from './util';
 import * as multer from 'multer';
 const axios = require('axios');
-import * as fs from 'fs';
 import 'es6-shim';
 import * as AWS from 'aws-sdk';
-const https = require('https');
-//import fetch from 'node-fetch';
-import { ConnectionIsNotSetError } from 'typeorm';
 import { TourData } from '../classes/tour/tourData';
 import { PointData } from '../classes/tour/pointData';
-import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
+import { QRCodes } from '../models/qrcodes/qrcodes';
 var multerS3 = require('multer-s3');
-
-
 
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "smrq0Ly8nNjP/WXnd2NSnvHCxUmW5zgeIYuMbTab"
 })
-var rString: string;
 interface IBkRequest extends IRequest {
 	tour: Tour;
 }
@@ -60,7 +50,6 @@ async function getTour1() {
 			console.log(error);
 		});
 
-
 }
 
 async function getTour2() {
@@ -70,8 +59,16 @@ async function getTour2() {
 		.catch(error => {
 			console.log(error);
 		});
+}
 
 
+async function getTour3() {
+
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.311659482685728%2C45.34036821801688%3B14.305826319599612%2C45.334600912938576%3B14.311659482685728%2C45.34036821801688?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+		.then(res => res.data)
+		.catch(error => {
+			console.log(error);
+		});
 }
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
@@ -84,7 +81,6 @@ export class TourRouter extends BaseRouter {
 			cb(null, false)
 		}
 	}
-
 
 	multerS3Config = multerS3({
 		s3: s3,
@@ -105,8 +101,6 @@ export class TourRouter extends BaseRouter {
 		storage: this.multerS3Config,
 		fileFilter: this.fileFilter,
 
-
-
 	})
 	constructor() {
 		super(true);
@@ -116,8 +110,6 @@ export class TourRouter extends BaseRouter {
 		this.upload = multer({
 			storage: this.multerS3Config,
 			fileFilter: this.fileFilter,
-
-
 
 		});
 		this.init();
@@ -136,8 +128,8 @@ export class TourRouter extends BaseRouter {
 
 					const tour: Tour = await this.tourManager.getTour(req.params.tourId);
 					if (tour != null) {
-						await this.tourManager.generateQr(req.params.tourId);
-						return res.status(200).send("Success");
+						var qrCode: QRCodes = await this.tourManager.generateQr(req.params.tourId);
+						return res.status(200).send(qrCode);
 					} else {
 						return res.status(412).send("Tour doesn't exist");
 					}
@@ -151,7 +143,7 @@ export class TourRouter extends BaseRouter {
 
 		/** GET already generated qr code for tour */
 		this.router.get(
-			'/getqrcode/:tourId',
+			'/getqrcodes/:tourId',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
@@ -165,7 +157,7 @@ export class TourRouter extends BaseRouter {
 						return res.status(412).send("Tour doesn't exist");
 					}
 				} catch (err) {
-					return res.status(412).send("Qr code for this tour doesn't exist.");
+					return res.status(412).send("Qr codes for this tour doesn't exist.");
 				}
 
 
@@ -307,6 +299,13 @@ export class TourRouter extends BaseRouter {
 				} else if (req.params.tourId == "9a7ba670-e1ac-4350-892e-e15a55a145cc") {
 
 					await getTour2()
+						.then(res => 
+							response = res.routes[0].geometry.coordinates)
+
+						return res.status(200).send(response);
+				}else if (req.params.tourId == "45b0e1f3-2694-43bb-b487-f8567fa9a5be") {
+
+					await getTour3()
 						.then(res => 
 							response = res.routes[0].geometry.coordinates)
 

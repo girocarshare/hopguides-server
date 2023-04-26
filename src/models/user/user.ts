@@ -8,7 +8,6 @@ import { OTPCode } from './OTPCode';
 import { eighteenYearsOld } from '../../utils/utils';
 import { PromoBalance } from './promoBalance';
 import { ChangeLog } from '../classes';
-import { StatusTxt } from '../../utils/valu/enums';
 
 export enum UserStatus {
 	DELETE = 'DELETE',
@@ -196,15 +195,6 @@ export class User extends UserBase {
 			!!this.personalId 
 		);
 	}
-
-
-	hasPaymentMethod(): boolean {
-		return (
-			(!!this.pGReferenceID && !!this.cardMask) ||
-			(!!this.valuTSID && this.valuStatus === StatusTxt.ContractConfirmed)
-		);
-	}
-
 
 	getCardMask(): string {
 		return this.cardMask;

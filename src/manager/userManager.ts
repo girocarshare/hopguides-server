@@ -57,15 +57,13 @@ export class UserManager {
 	}
 
 	async sendRegistrationEmail(user: User): Promise<User> {
-		// search for user, check if it exists, if it does, check for the fields of confirmed and createdAt
+		
 		let createdUser: User = await this.userRepository.findOne({ phone: user.phone });
 		if (!createdUser) {
 			user.invited = true;
 			user.role = UserRoles.PROVIDER;
 			createdUser = await this.userRepository.createOne(user);
-		}
-		// await sendRegistrationMail(createdUser, notification.emailTemplate);
-		else createdUser = await this.userRepository.replaceOne(createdUser.id, user);
+		}else createdUser = await this.userRepository.replaceOne(createdUser.id, user);
 
 		return createdUser;
 	}

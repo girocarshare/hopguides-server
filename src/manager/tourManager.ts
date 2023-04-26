@@ -2,7 +2,6 @@ import tourRepository, { TourRepository } from '../db/repository/tourRepository'
 import { CustomError } from '../classes/customError';
 import { SearchPagination } from '../classes/searchPagination';
 import { Tour } from '../models/tours/tour';
-import { S3Service } from '../utils/s3Service';
 import { MulterFile } from '../classes/interfaces';
 import { ToursReport } from '../classes/tour/toursReport';
 import * as multer from 'multer';
@@ -83,7 +82,6 @@ export class TourManager {
 	bpartner: BookingRepository;
 	bookingManager = new BookingManager();
 	userManager = new UserManager();
-	s3Service: S3Service;
 	poiManager: POIManager;
 	reportManager: ReportManager;
 	bpartnerManager: BPartnerManager;
@@ -91,7 +89,6 @@ export class TourManager {
 		this.tourRepository = tourRepository;
 		this.qrcodesRepository = QrcodesRepository;
 		this.bookingRepository = bookingRepository;
-		this.s3Service = new S3Service("giromobility-dev");
 		this.poiManager = new POIManager();
 		this.reportManager = new ReportManager();
 		this.bpartnerManager = new BPartnerManager();
@@ -159,15 +156,21 @@ export class TourManager {
 	}
 
 
-	async getQRForTour(tourId: string): Promise<QRCodes> {
-		var qr: QRCodes = await this.qrcodesRepository.findOne({tourId: tourId}).catch((err) => {
+	async getQRForTour(tourId: string): Promise<QRCodes[]> {
+		var qr: QRCodes[] = await this.qrcodesRepository.getAll().catch((err) => {
 			throw new Error('Error getting qr code');
 		});
-		if(qr==null){
-			throw new Error("Qr code doesn't exist");
-		}else{
-			return qr
-		}
+		
+		var qrOfTour: QRCodes[]  = []
+
+		for(var qrCode of qr){
+			if(qrCode.tourId == tourId){
+				qrOfTour.push(qrCode)
+			}
+		}			
+		
+		return qrOfTour
+		
 	}
 
 	async getTour(tourId: string): Promise<Tour> {
