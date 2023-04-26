@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { CustomError } from '../classes/customError';
 import { INextFunction, IRequest, IResponse } from '../classes/interfaces';
 import UserRepo, { UserRepository } from '../db/repository/userRepository';
-import { User, UserRoles, UserStatus } from '../models/user/user';
+import { User, UserStatus } from '../models/user/user';
 import { CONSTANTS } from './constants';
 import { Logger } from 'tslog';
 
@@ -175,7 +175,6 @@ export function allowFor(
 	};
 }
 
-var JWT_SECRET="jj8axcJBhpQqZm08O5HxGxpSH9XLmQFhXYbPmt6wnG8B4Q92N98zSPmJrgtceOi"
 
 export function parseJwt(req: IRequest, res: IResponse, next: any): void {
 

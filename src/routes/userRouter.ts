@@ -1,15 +1,14 @@
 
-import { User, UserRoles, UserStatus } from '../models/user/user';
+import { User } from '../models/user/user';
 import { CustomError } from '../classes/customError';
-import { IRequest, IResponse, MulterFile } from '../classes/interfaces';
+import { IRequest, IResponse } from '../classes/interfaces';
 import { LoginPayload } from '../classes/user/loginPayload';
-import { deserialize, serialize } from '../json';
+import { deserialize } from '../json';
 import { UserManager } from '../manager/userManager';
 import { BPartnerManager } from '../manager/bpartnerManager';
 import { simpleAsync } from './util';
 import * as multer from 'multer';
 import * as AWS from 'aws-sdk';
-import * as fs from 'fs';
 import {
 	parseJwt,
 	withErrorHandler
@@ -19,7 +18,6 @@ import { BaseRouter } from './baseRouter';
 import { BPartner } from '../models/bpartner/bpartner';
 import * as sgMail from '@sendgrid/mail';
 import { RegisterPayload } from '../classes/user/registerPayload';
-import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 var multerS3 = require('multer-s3');
 sgMail.setApiKey("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")
 var emailSender = "beta-app@gogiro.app";
@@ -30,7 +28,6 @@ var s3 = new AWS.S3({
 interface IBkRequest extends IRequest {
 	request: RegisterPayload;
 }
-var rString: string;
 
 function randomstring(length) {
 	var result = '';
@@ -46,8 +43,6 @@ function randomstring(length) {
 export class UserRouter extends BaseRouter {
 	userManager: UserManager;
 	bpartnerManager: BPartnerManager;
-	
-
 
 	fileFilter = (req, file, cb) => {
 		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
@@ -67,7 +62,7 @@ export class UserRouter extends BaseRouter {
 		},
 		key: function (req, file, cb) {
 			var list = file.originalname.split('.')
-			globalThis.rString = randomstring(10)+ "." + list[list.length - 1]
+			globalThis.rString = randomstring(10) + "." + list[list.length - 1]
 			cb(null, globalThis.rString)
 		}
 	});
@@ -75,9 +70,6 @@ export class UserRouter extends BaseRouter {
 	upload = multer({
 		storage: this.multerS3Config,
 		fileFilter: this.fileFilter,
-
-
-
 	})
 
 
@@ -89,7 +81,6 @@ export class UserRouter extends BaseRouter {
 		this.upload = multer({
 			storage: this.multerS3Config,
 			fileFilter: this.fileFilter,
-
 		});
 
 		this.init();
@@ -97,6 +88,7 @@ export class UserRouter extends BaseRouter {
 
 	init(): void {
 
+		/* POST Create new user */
 		this.router.post(
 			'/addUser',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
@@ -106,56 +98,54 @@ export class UserRouter extends BaseRouter {
 				return res.status(200).send(createdUser);
 			})
 		);
+
+		/* POST Send registration mail */
 		this.router.post(
 			'/sendRegistrationEmail',
-			//this.getFields.any(),
 			this.upload.single('file'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 
 				{
+					let jsonObj = JSON.parse(req.body.request);
+					let data = jsonObj as RegisterPayload;
+
+					const createdUser: User = await this.userManager.sendRegistrationEmail(
+						deserialize(User, req.body));
 
 
-				let jsonObj = JSON.parse(req.body.request);
-				let data = jsonObj as RegisterPayload;
-				
-				console.log(data)
-				const createdUser: User = await this.userManager.sendRegistrationEmail(
-					deserialize(User, req.body));
+					data.userId = createdUser.id
 
-			
-				data.userId = createdUser.id
+					const bpartnerData: BPartner = deserialize(
+						BPartner,
+						data
+					);
+					const createdBP: BPartner = await this.bpartnerManager.createBP(
+						createdUser,
+						bpartnerData
+					);
 
-				const bpartnerData: BPartner = deserialize(
-					BPartner,
-					data
-				);
-				const createdBP: BPartner = await this.bpartnerManager.createBP(
-					createdUser,
-					bpartnerData
-				);
+					var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/logos/" + globalThis.rString;
+					await this.bpartnerManager.uploadLogo(createdBP.id, fileName);
 
-				console.log(createdBP)
-				var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/logos/" + globalThis.rString;
-				await this.bpartnerManager.uploadLogo(createdBP.id, fileName);
-				sgMail.send({
-					to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
-					from: `${emailSender}`,
-					subject: "Set password",
-					html: `Dear partner,<br/><br/>
+					//TODO
+					sgMail.send({
+						to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
+						from: `${emailSender}`,
+						subject: "Set password",
+						html: `Dear partner,<br/><br/>
 							
 							You have been invited to join our platform. Kindly click on the link below to register.<br/><br/> <a href=http://localhost:3001/#/setPassword/${req.body.email} id=get> Register now </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
 							`
-				})
+					})
 					return res.status(200).send("Success");
 				}
 			})
 		);
 
-
+		/* POST Send mail when password forgotten */
 		this.router.post(
 			'/forgotPassword',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-
 
 				sgMail.send({
 					to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
@@ -170,6 +160,7 @@ export class UserRouter extends BaseRouter {
 			})
 		);
 
+		/* POST Finish user registration */
 		this.router.post(
 			'/register',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
@@ -183,6 +174,7 @@ export class UserRouter extends BaseRouter {
 			})
 		);
 
+		/* POST Login */
 		this.router.post(
 			'/login',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
@@ -190,9 +182,7 @@ export class UserRouter extends BaseRouter {
 					const login: LoginPayload = deserialize(LoginPayload, req.body);
 					validateOrThrow(login);
 					let user: User = await this.userManager.getUserByEmail(login.email);
-					/** START OF SECURITY CHECKS  */
-					//performBasicChecks(user);
-					/** END OF SECURITY CHECKS  */
+
 					if (!user)
 						return res.throwErr(new CustomError(404, 'User does not exist'));
 
@@ -212,6 +202,7 @@ export class UserRouter extends BaseRouter {
 
 		);
 
+		/* GET user role */ 
 		this.router.get(
 			'/getRole',
 			parseJwt,

@@ -1,8 +1,7 @@
-import { Booking } from '../models/booking/booking';
+
 import { IRequest, IResponse } from '../classes/interfaces';
 import { deserialize, serialize } from '../json';
 import { VehicleManager } from '../manager/vehicleManager';
-import { UserManager } from '../manager/userManager';
 import { Vehicle } from '../models/vehicle/vehicle';
 import {
 	

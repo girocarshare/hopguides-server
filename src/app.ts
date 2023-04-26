@@ -6,22 +6,8 @@ import { ReportRouter } from './routes/reportRouter';
 import { POIRouter } from './routes/poiRouter';
 import { TourManager } from './manager/tourManager';
 var deeplink = require('node-deeplink');
-import {
-	AdminRole,
-	allowFor,
-	ManagerRole,
-	paramCheck,
-	ServiceRole,
-	SupportRole,
-	UserRoleWith
-} from './utils/utils';
 import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
-import { request } from 'http';
-import { TourData } from './classes/tour/tourData';
-
-const xmlparser = require('express-xml-bodyparser');
-const bearerToken = require('express-bearer-token');
 
 class App {
 	public app: express.Application;
