@@ -64,7 +64,7 @@ async function getTour2() {
 
 async function getTour3() {
 
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.311659482685728%2C45.34036821801688%3B14.305826319599612%2C45.334600912938576%3B14.311659482685728%2C45.34036821801688?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.305826319599612%2C45.334600912938576%3B14.308979453830549%2C45.33575712738121?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
 		.then(res => res.data)
 		.catch(error => {
 			console.log(error);
