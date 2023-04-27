@@ -30,6 +30,7 @@ import userRepository from '../db/repository/userRepository';
 import { UserManager } from './userManager';
 import { User } from '../models/user/user';
 import qrcodesRepository from '../db/repository/qrcodesRepository';
+import { setMaxIdleHTTPParsers } from 'http';
 
 var sizeOf = require('image-size');
 const url = require('url')
@@ -149,9 +150,18 @@ export class TourManager {
 		qrcode.tourId = tourId
 		qrcode.qrCodeId = qrCodeId
 
-		return await this.qrcodesRepository.createOne(qrcode).catch(() => {
+		var code =  await this.qrcodesRepository.createOne(qrcode).catch(() => {
 			throw new CustomError(500, 'QRCode not created!');
 		});
+
+
+		const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+		await delay(1000)
+		console.log(code)
+		return await this.qrcodesRepository.findOne({code: code.code}).catch(() => {
+			throw new CustomError(500, 'QRCode not created!');
+		});
+
 	//}
 	}
 
