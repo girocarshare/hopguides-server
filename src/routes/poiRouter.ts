@@ -24,9 +24,10 @@ var s3 = new AWS.S3({
 	secretAccessKey: "smrq0Ly8nNjP/WXnd2NSnvHCxUmW5zgeIYuMbTab"
 })
 
-export class HelpObj  {
+export class HelpObj {
 	number: string
-	 name: LocalizedField}
+	name: LocalizedField
+}
 
 var rString: string;
 function randomstring(length) {
@@ -96,22 +97,22 @@ export class POIRouter extends BaseRouter {
 
 	init(): void {
 
-/** GET all poi */
-this.router.get(
-	'/all',
-	//allowFor([AdminRole, SupportRole, ServiceRole]),
-	withErrorHandler(async (req: IRequest, res: IResponse) => {
+		/** GET all poi */
+		this.router.get(
+			'/all',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-		try {
+				try {
 
-			return  res.status(412).send(await this.poiManager.getPois());
-		} catch (err) {
-			return res.status(412).send("Error while getting pois");
-		}
+					return res.status(412).send(await this.poiManager.getPois());
+				} catch (err) {
+					return res.status(412).send("Error while getting pois");
+				}
 
 
-	})
-);
+			})
+		);
 
 		this.router.post(
 			'/:pointId/uploadMenu',
@@ -141,17 +142,19 @@ this.router.get(
 					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;
 
-					var localizedName = []
-					for(var p of point.imageTitles){
-						
-						localizedName.push(p)
-					}
+					console.log("POINTTTT")
+					console.log(point)
+				
 					var arrayy = []
+					console.log("POINTTTT 22222")
+					console.log(point)
+					console.log(point.id)
 					const updatedPoi: POI = await this.poiManager.updatePoi(
 						point.id,
 						point
 					);
 
+					console.log(updatedPoi)
 					for (var f of req.files) {
 
 						if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -171,15 +174,20 @@ this.router.get(
 							arrayy.push(f.location);
 						}
 					}
-					var obj : Obj = new Obj();
+
+					if(point.imageTitles.length !=0){
+					var obj: Obj = new Obj();
 
 					obj.names = point.imageTitles
 					obj.paths = arrayy
 					await this.poiManager.uploadImages(point.id, obj);
+					}
 					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
 
 					return res.status(200).send([]);
 				} catch (err) {
+					console.log(err)
+					console.log(err.error)
 					console.log(err.errors)
 				}
 			})
