@@ -83,9 +83,9 @@ class App {
 			'/deeplink',
 			deeplink({
 				fallback: 'https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/' ,
-				android_package_name: 'com.citylifeapps.cups',
+				android_package_name: 'https://play.google.com/store/apps/details?id=com.hopguidesV1&pli=1',
 				ios_store_link:
-				  'https://itunes.apple.com/us/app/cups-unlimited-coffee/id556462755?mt=8&uo=4',
+				  'https://play.google.com/store/apps/details?id=com.hopguidesV1&pli=1',
 			})
 		);
 
