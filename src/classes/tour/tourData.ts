@@ -71,4 +71,6 @@ export class TourData {
 
 	businessPartnerEmail: string;
 
+	lockCode: string;
+
 }

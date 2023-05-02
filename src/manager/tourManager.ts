@@ -486,6 +486,7 @@ export class TourManager {
 				tourReport.support = bpartner.support[language]
 				tourReport.businessPartnerEmail = bpartner.contact.email
 				tourReport.businessPartnerPhone = bpartner.contact.phone
+				tourReport.lockCode = bpartner.lockCode
 
 				return tourReport
 			}
