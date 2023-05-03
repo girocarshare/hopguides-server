@@ -64,7 +64,7 @@ async function getTour2() {
 
 async function getTour3() {
 
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.305826319599612%2C45.334600912938576%3B14.308979453830549%2C45.33575712738121?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.989310343597712%2C46.1274612555054%3B14.039045755138545%2C46.150261132300656%3B14.048760256715848%2C46.155052734793536%3B14.061266131351102%2C46.16317568864926%3B14.059071910403091%2C46.16255971130006%3B14.068090092982692%2C46.16671905216502%3B13.989310343597712%2C46.1274612555054?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
 		.then(res => res.data)
 		.catch(error => {
 			console.log(error);
@@ -303,7 +303,7 @@ export class TourRouter extends BaseRouter {
 							response = res.routes[0].geometry.coordinates)
 
 						return res.status(200).send(response);
-				}else if (req.params.tourId == "45b0e1f3-2694-43bb-b487-f8567fa9a5be") {
+				}else if (req.params.tourId == "3dbc0dea-4cd6-435c-a7bf-bd1fe800d8c7") {
 
 					await getTour3()
 						.then(res => 
