@@ -70,6 +70,15 @@ async function getTour3() {
 			console.log(error);
 		});
 }
+
+async function getTour4() {
+
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.837456879098585%2C46.25122672743737%3B13.83746326039187%2C46.25123817294437?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+		.then(res => res.data)
+		.catch(error => {
+			console.log(error);
+		});
+}
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
 	poiManager: POIManager;
@@ -306,6 +315,13 @@ export class TourRouter extends BaseRouter {
 				}else if (req.params.tourId == "3dbc0dea-4cd6-435c-a7bf-bd1fe800d8c7") {
 
 					await getTour3()
+						.then(res => 
+							response = res.routes[0].geometry.coordinates)
+
+						return res.status(200).send(response);
+				}else if (req.params.tourId == "d225fdbc-7734-41bc-9031-d8304b49e090") {
+
+					await getTour4()
 						.then(res => 
 							response = res.routes[0].geometry.coordinates)
 
