@@ -45,7 +45,7 @@ export class BPartnerManager {
 	}
 
 	async uploadLogoWithDim(id: string, name: string, dimensions: Dimensions): Promise<BPartner> {
-		var bpartner: BPartner = await this.getBP(id)
+		var bpartner: BPartner = await this.getBPByUser(id)
 
 		bpartner.logo = name
 		bpartner.dimensions = dimensions
@@ -55,7 +55,7 @@ export class BPartnerManager {
 	}
 
 	async updateLockCode(id: string, code: string): Promise<BPartner> {
-		var bpartner: BPartner = await this.getBP(id)
+		var bpartner: BPartner = await this.getBPByUser(id)
 
 		bpartner.lockCode = code
 		return await this.bpartnerRepository.updateOne(id, bpartner).catch(() => {

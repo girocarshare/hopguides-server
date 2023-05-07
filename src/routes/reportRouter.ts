@@ -71,11 +71,6 @@ export class ReportRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
 
-				function sleep(ms) {
-					return new Promise((resolve) => {
-						setTimeout(resolve, ms);
-					});
-				}
 				try {
 
 					var tf = false;

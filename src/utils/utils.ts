@@ -187,7 +187,13 @@ export function parseJwt(req: IRequest, res: IResponse, next: any): void {
 		 token = req.header('authorization').replace('Bearer ', '').trim()
 		}
 	}else{
-		 token = req.body.headers.authorization.trim()
+		if(req.headers.authorization == null){
+			token = req.body.headers.Authorization.trim()
+		}else{
+			token = req.headers.authorization.trim()
+		}
+
+		 
 	}
 	
 	console.log(token)

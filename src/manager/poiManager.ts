@@ -32,7 +32,9 @@ export class POIManager {
      
 		var point: POI = await this.getPoi(pointId)
 
+    console.log(point)
 		point.menu = file      
+    console.log(point)
 		return await this.poiRepository.updateOne(pointId, point).catch(() => {
     
 			throw new Error('Error updating poi');
