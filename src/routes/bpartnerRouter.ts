@@ -144,10 +144,12 @@ export class BPartnerRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.dimensions);
 					let dimensions = jsonObj as Dimensions;
 
-				var user: User = await this.userManager.getUser(req.userId);
+					console.log(req.userId)
+				var user: User = await this.userManager.getUser(req.userId.trim());
 				
-				if (!req.file) console.log("Error while uploading file")
-				
+				if (!req.file) {
+					return res.status(500).send("Error")
+				}
 
 				return await this.bpartnerManager.uploadLogoWithDim(req.userId, req.file.location, dimensions);
 			})
@@ -160,8 +162,14 @@ export class BPartnerRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				// Upload
+				try{
 				var user: User = await this.userManager.getUser(req.userId);
-				return await this.bpartnerManager.updateLockCode(req.userId,req.params.code );
+				await this.bpartnerManager.updateLockCode(req.userId,req.params.code );
+				return res.status(200).send("Success")
+				}
+				catch(e){
+					return res.status(412).send("Error while changing lock code")
+				}
 			})
 		);
 
