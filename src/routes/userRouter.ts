@@ -134,7 +134,7 @@ export class UserRouter extends BaseRouter {
 						subject: "Set password",
 						html: `Dear partner,<br/><br/>
 							
-							You have been invited to join our platform. Kindly click on the link below to register.<br/><br/> <a href=http://localhost:3001/#/setPassword/${req.body.email} id=get> Register now </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
+							You have been invited to join our platform. Kindly click on the link below to register.<br/><br/> <a href=https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/setPassword/${req.body.email} id=get> Register now </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
 							`
 					})
 					return res.status(200).send("Success");
@@ -153,7 +153,7 @@ export class UserRouter extends BaseRouter {
 					subject: "Reset password",
 					html: `Dear partner,<br/><br/>
 							
-							Kindly click on the link below to reset your password.<br/><br/> <a href=http://localhost:3001/#/setPassword/${req.body.email} id=get> Reset password </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
+							Kindly click on the link below to reset your password.<br/><br/> <a href=https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/setPassword/${req.body.email} id=get> Reset password </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
 							`
 				})
 				return res.status(200).send();

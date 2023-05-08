@@ -14,6 +14,11 @@ import * as sgMail from '@sendgrid/mail';
 import * as schedule from 'node-schedule';
 import { simpleAsync } from './util';
 
+function sleep(ms) {
+	return new Promise((resolve) => {
+	  setTimeout(resolve, ms);
+	});
+  }
 interface helpObjectSort {
 	from: string;
 	count: number;
@@ -73,7 +78,7 @@ export class ReportRouter extends BaseRouter {
 
 				try {
 
-					var tf = false;
+					/*var tf = false;
 					tf = await this.reportManager.generateQr(req.params.id);
 
 					if(tf){
@@ -82,6 +87,29 @@ export class ReportRouter extends BaseRouter {
 					}else{
 						
 				return res.status(500).send("Failure")
+					}*/
+
+					var tf = false;
+					tf = await this.reportManager.generateQr(req.params.id);
+
+
+					await sleep(1000);
+
+					if (tf) {
+						fs.readFile("./" + req.params.id.trim() + ".png", (error, data) => {
+							if (error) {
+								throw error;
+							}
+							var file = data
+
+							var filename = req.params.id.trim() + ".png"
+							res.status(200);
+							res.setHeader('Content-Type', 'application/octet-stream');
+							res.setHeader('Content-Disposition', 'attachment; filename=' + filename);
+							res.write(file, 'binary');
+							res.end();
+
+						});
 					}
 
 				} catch (err) {

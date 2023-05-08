@@ -176,9 +176,8 @@ export class ReportManager {
 
 
 	async generateQr(companyId: string): Promise<boolean> {
-
 		try{
-		QRCode.toDataURL("http://localhost:3000/#/report/"+ companyId,{scale: 15,
+		/*QRCode.toDataURL("http://localhost:3000/#/report/"+ companyId,{scale: 15,
 		width: "1000px"}, function (err, base64) {
 			
 			const base64Data : Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
@@ -200,7 +199,15 @@ export class ReportManager {
 					console.log('Successfully uploaded data');
 				}
 			});
-		});
+		});*/
+
+		await QRCode.toFile(companyId.trim() + ".png", "https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/report/" + companyId.trim(),  {
+			width:  600,
+			height:  600
+		   },function (err) {
+
+		//return false
+		})
 		return true
 	}catch{
 		return false

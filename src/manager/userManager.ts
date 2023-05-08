@@ -38,7 +38,7 @@ export class UserManager {
 	
 	async createUser(user: User): Promise<User> {
 		// search for user, check if it exists, if it does, check for the fields of confirmed and createdAt
-		let createdUser: User = await this.userRepository.findOne({ phone: user.phone });
+		let createdUser: User = await this.userRepository.findOne({ email: user.email });
 
 
 		if (!createdUser) {

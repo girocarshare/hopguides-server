@@ -211,12 +211,13 @@ export class BPartnerRouter extends BaseRouter {
 		this.router.get(
 			'/delete/:bpartnerId',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
-			//parseJwt,
+			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 					await this.bpartnerManager.deleteBPartner(req.params.bpartnerId);
 
-					return res.status(200).send("Success");
+					const bpartners: BPartner[] = await this.bpartnerManager.getBPartners({});
+				return res.status(200).send(bpartners);
 				} catch (e) {
 
 					return res.status(500).send("Error");
