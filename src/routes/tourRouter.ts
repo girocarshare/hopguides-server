@@ -241,12 +241,12 @@ export class TourRouter extends BaseRouter {
 		this.router.get(
 			'/deleteTour/:tourId',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
-			//parseJwt,
+			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 					await this.tourManager.deleteTour(req.params.tourId);
-
-					return res.status(200).send("Success");
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					return res.status(200).send(tours);
 				} catch (e) {
 
 					return res.status(500).send("Error");
@@ -258,12 +258,13 @@ export class TourRouter extends BaseRouter {
 		this.router.get(
 			'/deletePoi/:tourId/:poiId',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
-			//parseJwt,
+			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 					await this.tourManager.deletePoi(req.params.tourId, req.params.poiId);
 
-					return res.status(200).send("Success");
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					return res.status(200).send(tours);
 				} catch (e) {
 
 					return res.status(500).send("Error");
@@ -362,7 +363,7 @@ export class TourRouter extends BaseRouter {
 		this.router.post(
 			'/update/tour',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			//parseJwt,
+			parseJwt,
 
 			this.upload.array('file'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
@@ -392,8 +393,8 @@ export class TourRouter extends BaseRouter {
 						tour
 					);
 
-					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
-					return res.status(200).send([]);
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					return res.status(200).send(tours);
 
 				} catch (err) {
 					console.log(err.error)
@@ -404,7 +405,7 @@ export class TourRouter extends BaseRouter {
 		this.router.post(
 			'/addFull/add',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			//parseJwt,
+			parseJwt,
 			this.upload.array('file'),
 			//this.upload.single('audio'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
@@ -528,7 +529,8 @@ export class TourRouter extends BaseRouter {
 						}
 					}
 
-					return res.status(200).send("Success");
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					return res.status(200).send(tours);
 
 				} catch (err) {
 					console.log(err.error)
@@ -541,7 +543,7 @@ export class TourRouter extends BaseRouter {
 		this.router.post(
 			'/addFull/partner',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			//parseJwt,
+			parseJwt,
 			this.upload.array('file'),
 			//this.upload.single('audio'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
@@ -652,7 +654,8 @@ export class TourRouter extends BaseRouter {
 						deserialize(Tour, t)
 					);
 
-					return res.status(200).send("Success");
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					return res.status(200).send(tours);
 
 				} catch (err) {
 					console.log(err.error)
