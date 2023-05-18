@@ -8,7 +8,7 @@ import { TourManager } from './manager/tourManager';
 var deeplink = require('node-deeplink');
 import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
-
+global.CronJob = require('./db/cron.js');
 class App {
 	public app: express.Application;
 

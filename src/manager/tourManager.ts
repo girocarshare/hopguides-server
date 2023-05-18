@@ -769,6 +769,58 @@ export class TourManager {
 	}
 
 
+
+
+	async getToursWithPointsForMapbox(id: string,  filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints> {
+
+		try {
+
+			
+			const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
+				throw new Error('Error getting bookings');
+			});
+			var tour: Tour = await this.getTour(id).catch((err) => {
+				throw new Error('Error getting Tours');
+			});
+
+			console.log(tour)
+
+			
+				var points: PointsForTours[] = []
+				for (var point of tour.points) {
+
+					var poi: POI = await this.poiManager.getPoi(point)
+
+					var p: PointsForTours = new PointsForTours();
+					var poiHelp: POICl = new POICl()
+					poiHelp.id = poi.id;
+					poiHelp.location = poi.location;
+				
+					p.point = poiHelp
+
+					var report: Report = await this.reportManager.getReport(poi.id, {})
+
+					p.monthlyUsed = report.monthlyUsedCoupons;
+
+					points.push(p)
+
+				}
+
+				console.log(points)
+				var tourReport: ToursWithPoints = new ToursWithPoints();
+				tourReport.tourId = tour.id;
+				tourReport.points = points;
+				
+
+			return tourReport
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
+
+
+
 	async getPreviousReportForTour(tourId: string, filter: any, pagination?: any): Promise<PreviousTourReport[]> {
 
 		var groupByArray = function (xs, key) {
