@@ -42,6 +42,16 @@ function randomstring(length) {
 	return result;
 }
 
+async function getTour(string) {
+
+	return await axios.get(string)
+		.then(res => res.data)
+		.catch(error => {
+			console.log(error);
+		});
+
+}
+
 async function getTour1() {
 
 	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.988995747188019%2C46.127989267713815%3B13.94738552325419%2C46.10240264529747%3B13.932778084586202%2C46.11074537757715%3B13.917095599398841%2C46.11006788635984%3B13.916685347606682%2C46.11037818068329%3B13.923620109187125%2C46.08979153023348%3B13.942740918361155%2C46.08743708478799%3B13.988995747188019%2C46.127989267713815?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
@@ -118,7 +128,7 @@ async function getTour8() {
 
 async function getTour9() {
 
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.774526348846582%2C45.65463486462067%3B13.712672627471553%2C45.7026681197649%3B13.764644%2C45.709544%3B13.7571%2C45.67543%3B13.763218%2C45.646884%3B13.772426%2C45.646311%3B13.774526348846582%2C45.65463486462067?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=simplified&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
+	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.774526348846582%2C45.65463486462067%3B13.712672627471553%2C45.7026681197649 %3B13.764644%2C45.709544%3B13.7571%2C45.67543%3B13.763218%2C45.646884%3B13.772426%2C45.646311%3B13.774526348846582%2C45.65463486462067?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=simplified&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
 		.then(res => res.data)
 		.catch(error => {
 			console.log(error);
@@ -340,7 +350,27 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
 				var response = ""
-				if (req.params.tourId == "d87c2c83-59a3-43ff-849f-58f46375790f") {
+
+
+				var tour = await this.tourManager.getToursWithPointsForMapbox(req.params.tourId)
+
+				console.log(tour)
+				var url = "https://api.mapbox.com/directions/v5/mapbox/cycling/"
+
+				for(var poi of tour.points){
+					url += poi.point.location.latitude + "%2C" + poi.point.location.longitude + "%3B"
+				}
+
+				url = url.substring(0, url.length-3);
+				url += "?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A"
+				await getTour(url)
+				.then(res => 
+					response = res.routes[0].geometry.coordinates)
+
+				return res.status(200).send(response);
+
+
+				/*if (req.params.tourId == "d87c2c83-59a3-43ff-849f-58f46375790f") {
 				
 
 
@@ -408,7 +438,7 @@ export class TourRouter extends BaseRouter {
 
 						return res.status(200).send(response);
 				}
-
+*/
 
 			})
 		);
