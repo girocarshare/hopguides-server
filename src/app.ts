@@ -82,7 +82,7 @@ class App {
 		this.app.get(
 			'/deeplink',
 			deeplink({
-				fallback: 'https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/' ,
+				fallback: 'https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=whatsapp%3A%2F%2F' ,
 				android_package_name: 'com.hopguidesV1',
 				ios_store_link:
 				  'https://play.google.com/store/apps/details?id=com.hopguidesV1&pli=1',
