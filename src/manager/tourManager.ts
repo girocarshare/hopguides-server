@@ -102,7 +102,7 @@ export class TourManager {
 	}
 
 
-	async generateQr(tourId: string): Promise<QRCodes> {
+	async generateQr(tourId: string, number: number): Promise<QRCodes[]> {
 
 		//change url
 
@@ -112,6 +112,10 @@ export class TourManager {
 		if(qr!=null){
 			throw new Error('Qr code already generated for this tour');
 		}else{*/
+
+		var ids = []
+		for(var i=0; i<number; i++){
+
 		var qrcode: QRCodes = new QRCodes();
 		const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
 
@@ -158,10 +162,23 @@ export class TourManager {
 		const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 		await delay(1000)
 		console.log(code)
-		return await this.qrcodesRepository.findOne({code: code.code}).catch(() => {
-			throw new CustomError(500, 'QRCode not created!');
-		});
+		ids.push(code)
 
+	}
+
+	if(number == 1){
+		for(var codee of ids){
+			const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+			await delay(1000)
+			return await this.qrcodesRepository.getAll({code: codee.code}).catch(() => {
+				throw new CustomError(500, 'QRCode not created!');
+			});
+		}
+	}else{
+
+		return ids
+	}
+	
 	//}
 	}
 

@@ -184,7 +184,7 @@ export class TourRouter extends BaseRouter {
 
 		/** GET generate qr code for tour */
 		this.router.get(
-			'/qr/:tourId',
+			'/qr/:tourId/:number',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
@@ -192,8 +192,8 @@ export class TourRouter extends BaseRouter {
 
 					const tour: Tour = await this.tourManager.getTour(req.params.tourId);
 					if (tour != null) {
-						var qrCode: QRCodes = await this.tourManager.generateQr(req.params.tourId);
-						return res.status(200).send(qrCode);
+						var qrCodes: QRCodes[] = await this.tourManager.generateQr(req.params.tourId, Number.parseInt(req.params.number));
+						return res.status(200).send(qrCodes);
 					} else {
 						return res.status(412).send("Tour doesn't exist");
 					}
