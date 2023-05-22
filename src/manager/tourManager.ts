@@ -123,7 +123,7 @@ export class TourManager {
 		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
 		//in url sending tourId
 
-		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=instagram%3A%2F%2F", {
+		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=https%3A%2F%2Fapps.apple.com%2Fnl%2Fapp%2Finstagram%2Fid389801252%3Fl%3Den", {
 			scale: 15,
 			width: "1000px"
 		}, async function (err, base64) {

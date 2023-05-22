@@ -85,7 +85,7 @@ class App {
 				fallback: 'https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=whatsapp%3A%2F%2F' ,
 				android_package_name: 'com.hopguidesV1',
 				ios_store_link:
-				  'https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=instagram%3A%2F%2F',
+				  'https://apps.apple.com/nl/app/instagram/id389801252?l=en',
 			})
 		);
 
