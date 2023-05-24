@@ -590,7 +590,6 @@ export class TourRouter extends BaseRouter {
 							}
 						}
 					}
-					arr = arr.reverse()
 
 					var t = {
 						title: tour.title,

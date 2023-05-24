@@ -123,7 +123,7 @@ export class TourManager {
 		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
 		//in url sending tourId
 
-		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url="+qrCodeId, {
+		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=lalalala"+qrCodeId, {
 			scale: 15,
 			width: "1000px"
 		}, async function (err, base64) {
@@ -131,7 +131,7 @@ export class TourManager {
 			const type = base64.split(';')[0].split('/')[1];
 			const params = {
 				Bucket: 'hopguides/qrcodes',
-				Key: `${image_name}.${type}`, // type is not required
+				Key: `1682522226915-574.png`, // type is not required
 				Body: base64Data,
 				ACL: 'public-read',
 				ContentEncoding: 'base64', // required
