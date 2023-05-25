@@ -39,6 +39,7 @@
     "multer-s3": "^2.10.0",
     "node-deeplink": "^0.6.0",
     "node-schedule": "^2.1.1",
+    "openai": "^3.2.1",
     "pdfkit": "^0.13.0",
     "pg": "^8.8.0",
     "qrcode": "^1.5.1",
