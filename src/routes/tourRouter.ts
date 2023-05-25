@@ -22,6 +22,7 @@ import { TourData } from '../classes/tour/tourData';
 import { PointData } from '../classes/tour/pointData';
 import { QRCodes } from '../models/qrcodes/qrcodes';
 var multerS3 = require('multer-s3');
+const { Configuration, OpenAIApi } = require("openai");
 
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -41,6 +42,12 @@ function randomstring(length) {
 	}
 	return result;
 }
+
+const configuration = new Configuration({
+	apiKey: "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",
+  });
+  const openai = new OpenAIApi(configuration);
+
 
 async function getTour(string) {
 
@@ -139,7 +146,7 @@ export class TourRouter extends BaseRouter {
 	poiManager: POIManager;
 	userManager: UserManager;
 	fileFilter = (req, file, cb) => {
-		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4)$/)) {
 			cb(null, true)
 		} else {
 			cb(null, false)
@@ -180,6 +187,23 @@ export class TourRouter extends BaseRouter {
 	}
 
 	init(): void {
+		this.router.post(
+			'/chat/openAI',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				const { prompt } = req.body;
+		  
+			// Generate a response with ChatGPT
+			const completion = await openai.createCompletion({
+			  model: "text-davinci-002",
+			  prompt: prompt,
+			  max_tokens: 2500,
+				n: 1
+			});
+			res.send(completion.data.choices[0].text);
+			})
+			);
 
 
 		/** GET generate qr code for tour */
