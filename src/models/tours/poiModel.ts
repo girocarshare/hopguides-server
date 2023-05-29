@@ -193,5 +193,9 @@ export class POI {
 	@dbField()
 	audio: string;
 
+	
+	@jsonProperty()
+	@dbField()
+	video: string;
 
 }

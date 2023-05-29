@@ -45,5 +45,7 @@ export class PointData {
 	imageTitles: ImageTitle[];
 
 	icon: string;
+	
+	video: string;
 }
 
