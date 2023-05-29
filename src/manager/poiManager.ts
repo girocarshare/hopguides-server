@@ -21,6 +21,12 @@ export class POIManager {
     });
   }
 
+  async getPoiByPreviousId(poiId: string): Promise<POI> {
+    return await this.poiRepository.findOne({previousId: poiId}).catch(() => {
+      throw new CustomError(404, 'POI not found!');
+    });
+  }
+
   async getPois(filter?: any, pagination?: SearchPagination): Promise<POI[]> {
     return await this.poiRepository.getAll(filter, pagination).catch((err) => {
       console.log(err.error)
