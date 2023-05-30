@@ -198,5 +198,10 @@ export class POI {
 	@dbField()
 	previousId: string;
 
+	
+	@jsonProperty()
+	@dbField()
+	video: string;
+
 
 }

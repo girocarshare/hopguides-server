@@ -109,4 +109,6 @@ export class Tour {
 	@jsonProperty()
 	@dbField()
 	previousId: string;
+
+	
 }

@@ -50,12 +50,15 @@ export class POIManager {
  
   async uploadImages(pointId: string, object: Obj): Promise<POI> {
 
-    console.log(object)
     var point: POI = await this.getPoi(pointId);
 
    var images: Image[] = []
     for(var i=0; i<object.paths.length; i++){
 
+      if(object.paths[i].substring(object.paths[i].length-3)== "mp4"){
+        point.video = object.paths[i];
+       
+      }
       var image : Image = new Image()
       image.image = object.paths[i]
       image.title = object.names[i].name
