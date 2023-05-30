@@ -582,6 +582,10 @@ export class TourManager {
 						poiHelp.longInfo = poi.longInfo[language]
 						poiHelp.offerName = poi.offerName
 
+						if(poi.video != null){
+							poiHelp.video = poi.video
+						}
+
 						if (poi.category == "HISTORY") {
 
 							poiHelp.icon = "castle";
@@ -639,7 +643,9 @@ export class TourManager {
 						poiHelp.shortInfo = poi.shortInfo[language]
 						poiHelp.longInfo = poi.longInfo[language]
 						poiHelp.hasVoucher = false;
-
+						if(poi.video != null){
+							poiHelp.video = poi.video
+						}
 						if (poi.category == "HISTORY") {
 
 							poiHelp.icon = "castle";
