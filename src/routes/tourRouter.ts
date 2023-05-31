@@ -574,6 +574,7 @@ export class TourRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.tour);
 					let tour = jsonObj as Tour;
 
+					tour.update = false;
 					var arr: string[] = []
 					var arr2 = []
 					var imageTitles = []
@@ -668,6 +669,7 @@ export class TourRouter extends BaseRouter {
 						agreementTitle: tour.agreementTitle,
 						agreementDesc: tour.agreementDesc,
 						bpartnerId: tour.bpartnerId,
+						update: tour.update,
 						points: arr
 					}
 					const createdTour: Tour = await this.tourManager.createTour(
@@ -733,7 +735,6 @@ export class TourRouter extends BaseRouter {
 						}
 
 						var partnerImages = []
-
 
 						for (var f of req.files) {
 

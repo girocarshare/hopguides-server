@@ -58,7 +58,7 @@ export class POIRouter extends BaseRouter {
 	userManager: UserManager;
 
 	fileFilter = (req, file, cb) => {
-		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4)$/)) {
 			cb(null, true)
 		} else {
 			cb(null, false)
@@ -146,12 +146,10 @@ export class POIRouter extends BaseRouter {
 				try {
 
 					
-					console.log("LALALALALA")
 					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;
 					var arrayy = []
 
-					console.log("LALALALALA")
 					var tour = null;
 					var tours : Tour[] = await this.tourManager.getTours();
 
@@ -166,9 +164,6 @@ export class POIRouter extends BaseRouter {
 					var user = await this.userManager.getUser(req.userId)
 					var poiPrevious = await this.poiManager.getPoiByPreviousId(point.id)
 
-					console.log("LALALALALA")
-					console.log(point.id)
-					console.log(poiPrevious)
 
 					if (poiPrevious != null) {
 						if (user.role == "ADMIN") {
@@ -179,7 +174,8 @@ export class POIRouter extends BaseRouter {
 							poiPrevious.id,
 							point
 						);
-	
+						console.log("FAJ::::LLL")
+						console.log(req.files)
 						for (var f of req.files) {
 	
 							if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -196,6 +192,8 @@ export class POIRouter extends BaseRouter {
 	
 							if (f.originalname.substring(1, 8).trim() === 'partner') {
 	
+								console.log("FAJ::::LLL")
+								console.log(f)
 								arrayy.push(f.location);
 							}
 						}
@@ -211,7 +209,7 @@ export class POIRouter extends BaseRouter {
 	
 
 					
-						return res.status(200).send([]);
+						//return res.status(200).send([]);
 
 
 					}else{
@@ -240,7 +238,8 @@ export class POIRouter extends BaseRouter {
 							}
 	
 							if (f.originalname.substring(1, 8).trim() === 'partner') {
-	
+								console.log("FAJ::::LLL")
+								console.log(f)
 								arrayy.push(f.location);
 							}
 						}
@@ -284,7 +283,8 @@ export class POIRouter extends BaseRouter {
 						point.id,
 						point
 					);
-
+					console.log("FAJ::::LLLddddd")
+					console.log(req.files)
 					for (var f of req.files) {
 
 						if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -300,7 +300,8 @@ export class POIRouter extends BaseRouter {
 						}
 
 						if (f.originalname.substring(1, 8).trim() === 'partner') {
-
+							console.log("FAJ::::LLL")
+							console.log(f)
 							arrayy.push(f.location);
 						}
 					}
@@ -314,7 +315,7 @@ export class POIRouter extends BaseRouter {
 					}
 					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
 
-					return res.status(200).send([]);
+					//return res.status(200).send([]);
 				}
 			}
 				} catch (err) {
