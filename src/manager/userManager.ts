@@ -24,7 +24,9 @@ export class UserManager {
 	}
 
 	async getUser(userId: string): Promise<User> {
+		console.log("GET USERRRRRR")
 		return await this.userRepository.getByIdOrThrow(userId).catch(() => {
+			console.log("ddddd")
 			throw new CustomError(404, 'User not found!');
 		});
 	}

@@ -94,13 +94,21 @@ export class Tour {
 	@dbField()
 	length: string;
 
-	
 	@jsonProperty()
 	@dbField()
 	highestPoint: string;
 
-
 	@jsonProperty()
 	@dbField()
 	termsAndConditions: string;
+
+	@jsonProperty()
+	@dbField()
+	update: boolean;
+
+	@jsonProperty()
+	@dbField()
+	previousId: string;
+
+	
 }

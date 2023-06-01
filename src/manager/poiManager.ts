@@ -21,6 +21,12 @@ export class POIManager {
     });
   }
 
+  async getPoiByPreviousId(poiId: string): Promise<POI> {
+    return await this.poiRepository.findOne({previousId: poiId}).catch(() => {
+      throw new CustomError(404, 'POI not found!');
+    });
+  }
+
   async getPois(filter?: any, pagination?: SearchPagination): Promise<POI[]> {
     return await this.poiRepository.getAll(filter, pagination).catch((err) => {
       console.log(err.error)
@@ -44,17 +50,22 @@ export class POIManager {
  
   async uploadImages(pointId: string, object: Obj): Promise<POI> {
 
-    console.log(object)
     var point: POI = await this.getPoi(pointId);
 
    var images: Image[] = []
     for(var i=0; i<object.paths.length; i++){
 
+      console.log(object.paths[i])
+      if(object.paths[i].substring(object.paths[i].length-3)== "mp4"){
+        point.video = object.paths[i];
+       
+      }else{
       var image : Image = new Image()
       image.image = object.paths[i]
       image.title = object.names[i].name
 
       images.push(image)
+      }
 
     }
 

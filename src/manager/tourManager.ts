@@ -207,6 +207,15 @@ export class TourManager {
 		});
 	}
 
+
+	async getTourByPreviousId(tourId: string): Promise<Tour> {
+		return await this.tourRepository.findOne({previousId: tourId}).catch((e) => {
+
+			throw new CustomError(404, 'Tour not found!');
+		});
+	}
+
+
 	async deleteTour(tourId: string) {
 
 
@@ -220,6 +229,20 @@ export class TourManager {
 				throw new CustomError(404, 'POI not deleted.');
 			});
 		}
+		await this.tourRepository.deleteOne({ _id: tourId }).catch((e) => {
+
+			throw new CustomError(404, 'Tour not deleted.');
+		});
+	}
+
+	async deleteUpdatedTour(tourId: string) {
+
+
+		var tour: Tour = await this.getTour(tourId).catch((err) => {
+			throw new Error('Error getting Tours');
+		});
+
+		
 		await this.tourRepository.deleteOne({ _id: tourId }).catch((e) => {
 
 			throw new CustomError(404, 'Tour not deleted.');
@@ -670,7 +693,7 @@ export class TourManager {
 
 
 
-	async getToursWithPoints(id: string, filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints[]> {
+	async getToursWithPoints(id: string, update: boolean, filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints[]> {
 
 		try {
 
@@ -679,7 +702,7 @@ export class TourManager {
 			var toursReport: ToursWithPoints[] = []
 			var tours: Tour[] = []
 			if(role== "ADMIN"){
-				 tours = await this.tourRepository.getAll(filter, pagination).catch((err) => {
+				 tours = await this.tourRepository.getAll({update: update}, pagination).catch((err) => {
 					throw new Error('Error getting Tours');
 				});
 			}else if(role== "USER" || role== "BPARTNER"){
@@ -748,6 +771,7 @@ export class TourManager {
 					poiHelp.offerName = poi.offerName
 					poiHelp.price = poi.price
 					poiHelp.partner = poi.partner
+					poiHelp.video = poi.video
 
 					p.point = poiHelp
 

@@ -10,7 +10,7 @@ import { Obj, POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
 import { ToursWithPoints } from '../classes/tour/toursWithPoints';
-import {  POI } from '../models/tours/poiModel';
+import { POI } from '../models/tours/poiModel';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
 import 'reflect-metadata';
 import { simpleAsync } from './util';
@@ -45,8 +45,8 @@ function randomstring(length) {
 
 const configuration = new Configuration({
 	apiKey: "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",
-  });
-  const openai = new OpenAIApi(configuration);
+});
+const openai = new OpenAIApi(configuration);
 
 
 async function getTour(string) {
@@ -193,17 +193,17 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
 				const { prompt } = req.body;
-		  
-			// Generate a response with ChatGPT
-			const completion = await openai.createCompletion({
-			  model: "text-davinci-002",
-			  prompt: prompt,
-			  max_tokens: 2500,
-				n: 1
-			});
-			res.send(completion.data.choices[0].text);
+
+				// Generate a response with ChatGPT
+				const completion = await openai.createCompletion({
+					model: "text-davinci-002",
+					prompt: prompt,
+					max_tokens: 2500,
+					n: 1
+				});
+				res.send(completion.data.choices[0].text);
 			})
-			);
+		);
 
 
 		/** GET generate qr code for tour */
@@ -273,7 +273,20 @@ export class TourRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
+
+				return res.status(200).send(tours);
+
+			})
+		);
+
+		this.router.get(
+			'/allUpdatedToursWithPoints',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
 
 				return res.status(200).send(tours);
 
@@ -315,7 +328,7 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 					await this.tourManager.deleteTour(req.params.tourId);
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
 					return res.status(200).send(tours);
 				} catch (e) {
 
@@ -333,7 +346,7 @@ export class TourRouter extends BaseRouter {
 				try {
 					await this.tourManager.deletePoi(req.params.tourId, req.params.poiId);
 
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
 					return res.status(200).send(tours);
 				} catch (e) {
 
@@ -381,88 +394,19 @@ export class TourRouter extends BaseRouter {
 				console.log(tour)
 				var url = "https://api.mapbox.com/directions/v5/mapbox/cycling/"
 
-				for(var poi of tour.points){
+				for (var poi of tour.points) {
 					url += poi.point.location.latitude + "%2C" + poi.point.location.longitude + "%3B"
 				}
 
-				url = url.substring(0, url.length-3);
+				url = url.substring(0, url.length - 3);
 				url += "?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A"
 				await getTour(url)
-				.then(res => 
-					response = res.routes[0].geometry.coordinates)
+					.then(res =>
+						response = res.routes[0].geometry.coordinates)
 
 				return res.status(200).send(response);
 
 
-				/*if (req.params.tourId == "d87c2c83-59a3-43ff-849f-58f46375790f") {
-				
-
-
-					
-					await getTour1()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-
-				} else if (req.params.tourId == "9a7ba670-e1ac-4350-892e-e15a55a145cc") {
-
-					await getTour2()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-				}else if (req.params.tourId == "3dbc0dea-4cd6-435c-a7bf-bd1fe800d8c7") {
-
-					await getTour3()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-				}else if (req.params.tourId == "d225fdbc-7734-41bc-9031-d8304b49e090") {
-
-					await getTour4()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-				}else if (req.params.tourId == "606917af-d0d6-4c11-a7f6-5f7061215ca6") {
-
-					await getTour5()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-				}else if (req.params.tourId == "d87c2c83-59a3-43ff-849f-58f463757901") {
-
-					await getTour6()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-				}else if (req.params.tourId == "b4e4de00-925d-4f82-b19d-a2d207d67634") {
-
-					await getTour7()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-				}else if (req.params.tourId == "3e212d06-8c1a-4732-a4a7-be026f70ca9c") {
-
-					await getTour8()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-				}else if (req.params.tourId == "b0771f79-2599-49fb-b525-73b08e33e8f6" || req.params.tourId == "b15f457b-e86d-485c-bcf9-e524e03cef0d" ) {
-
-					await getTour9()
-						.then(res => 
-							response = res.routes[0].geometry.coordinates)
-
-						return res.status(200).send(response);
-				}
-*/
 
 			})
 		);
@@ -478,42 +422,138 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
+		/**  */
+		this.router.get(
+			'/approve/:tourid',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try{
+					console.log(req.params.tourid)
+				var tour = await this.tourManager.getTour(req.params.tourid)
+				tour.update = false;
+				await this.tourManager.updateTour(
+					tour.id,
+					tour
+				);
+
+				await this.tourManager.deleteUpdatedTour(
+					tour.previousId
+				);
+				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
+				return res.status(200).send(tours);
+				}catch(err){
+					console.log(err.error)
+				}
+			})
+		);
+
+
+		/**  */
+		this.router.get(
+			'/disapprove/:tourid',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				
+				try{
+				await this.tourManager.deleteUpdatedTour(
+					req.params.tourid
+				);
+				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
+				return res.status(200).send(tours);
+			}catch(err){
+				console.log(err)
+			}
+			})
+		);
+
 		/** PATCH patch tour from ADMIN user */
 		this.router.post(
 			'/update/tour',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			parseJwt,
-
 			this.upload.array('file'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				// Upload
 				try {
 
-
 					let jsonObj = JSON.parse(req.body.tour);
 					let tour = jsonObj as Tour;
 
+					var user = await this.userManager.getUser(req.userId)
 
-					console.log(tour)
-					for (var file of req.files) {
-						if (file.originalname.substring(0, 5).trim() === 'image') {
+					var tourprev = await this.tourManager.getTourByPreviousId(tour.id)
+					var touroriginal = await this.tourManager.getTour(tour.id)
 
-							await this.tourManager.uploadMenu(tour.id, file);
-
-						} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
-
-							await this.tourManager.uploadAudio(tour.id, file);
-
+					if (tourprev != null) {
+						if (user.role == "ADMIN") {
+							return res.status(412).send("Tour already updated by partner");
 						}
+						for (var file of req.files) {
+							if (file.originalname.substring(0, 5).trim() === 'image') {
+
+								await this.tourManager.uploadMenu(tour.id, file);
+
+							} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
+
+								await this.tourManager.uploadAudio(tour.id, file);
+
+							}
+						}
+						tourprev.update = false;
+						await this.tourManager.updateTour(
+							tourprev.id,
+							tour
+						);
+
+					} else {
+						if (user.role == "PROVIDER") {
+							for (var file of req.files) {
+								if (file.originalname.substring(0, 5).trim() === 'image') {
+
+									await this.tourManager.uploadMenu(tour.id, file);
+
+								} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
+
+									await this.tourManager.uploadAudio(tour.id, file);
+
+								}
+							}
+
+							tour.previousId = tour.id
+							tour.update = true;
+							var t = await this.tourManager.createTour(
+								deserialize(Tour, touroriginal)
+							);
+							await this.tourManager.updateTour(
+								t.id,
+								tour
+							);
+						} else if (user.role == "ADMIN") {
+
+
+							for (var file of req.files) {
+								if (file.originalname.substring(0, 5).trim() === 'image') {
+
+									await this.tourManager.uploadMenu(tour.id, file);
+
+								} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
+
+									await this.tourManager.uploadAudio(tour.id, file);
+
+								}
+							}
+							tour.update = false;
+							await this.tourManager.updateTour(
+								tour.id,
+								tour
+							);
+						}
+						const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
+						return res.status(200).send(tours);
 					}
-
-					await this.tourManager.updateTour(
-						tour.id,
-						tour
-					);
-
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
-					return res.status(200).send(tours);
 
 				} catch (err) {
 					console.log(err.error)
@@ -534,6 +574,7 @@ export class TourRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.tour);
 					let tour = jsonObj as Tour;
 
+					tour.update = false;
 					var arr: string[] = []
 					var arr2 = []
 					var imageTitles = []
@@ -628,6 +669,7 @@ export class TourRouter extends BaseRouter {
 						agreementTitle: tour.agreementTitle,
 						agreementDesc: tour.agreementDesc,
 						bpartnerId: tour.bpartnerId,
+						update: tour.update,
 						points: arr
 					}
 					const createdTour: Tour = await this.tourManager.createTour(
@@ -647,7 +689,7 @@ export class TourRouter extends BaseRouter {
 						}
 					}
 
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
 					return res.status(200).send(tours);
 
 				} catch (err) {
@@ -671,7 +713,6 @@ export class TourRouter extends BaseRouter {
 					let jsonObj = JSON.parse(req.body.tour);
 					let tour = jsonObj as Tour;
 
-
 					var arr: string[] = []
 					var arr2 = []
 					var imageTitles = []
@@ -694,7 +735,6 @@ export class TourRouter extends BaseRouter {
 						}
 
 						var partnerImages = []
-
 
 						for (var f of req.files) {
 
@@ -772,7 +812,7 @@ export class TourRouter extends BaseRouter {
 						deserialize(Tour, t)
 					);
 
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId);
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
 					return res.status(200).send(tours);
 
 				} catch (err) {
