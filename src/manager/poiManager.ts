@@ -53,20 +53,19 @@ export class POIManager {
     var point: POI = await this.getPoi(pointId);
 
    var images: Image[] = []
-   console.log("LALALALALA333")
-   console.log(object)
     for(var i=0; i<object.paths.length; i++){
 
       console.log(object.paths[i])
       if(object.paths[i].substring(object.paths[i].length-3)== "mp4"){
         point.video = object.paths[i];
        
-      }
+      }else{
       var image : Image = new Image()
       image.image = object.paths[i]
       image.title = object.names[i].name
 
       images.push(image)
+      }
 
     }
 

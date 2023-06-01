@@ -82,6 +82,7 @@ export class POICl {
 
 	
 	audio: string;
+	video: string;
   
 
   }
