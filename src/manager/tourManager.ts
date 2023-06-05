@@ -104,15 +104,6 @@ export class TourManager {
 
 	async generateQr(tourId: string, number: number): Promise<QRCodes[]> {
 
-		//change url
-
-		/*var qr: QRCodes = await this.qrcodesRepository.findOne({tourId: tourId}).catch((err) => {
-			throw new Error('Error getting qr code');
-		});
-		if(qr!=null){
-			throw new Error('Qr code already generated for this tour');
-		}else{*/
-
 		var ids = []
 		for(var i=0; i<number; i++){
 
@@ -121,9 +112,9 @@ export class TourManager {
 
 
 		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
-		//in url sending tourId
+	
 
-		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=lalalala"+qrCodeId, {
+		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url="+qrCodeId, {
 			scale: 15,
 			width: "1000px"
 		}, async function (err, base64) {
@@ -131,7 +122,7 @@ export class TourManager {
 			const type = base64.split(';')[0].split('/')[1];
 			const params = {
 				Bucket: 'hopguides/qrcodes',
-				Key: `1682522226915-574.png`, // type is not required
+				Key: `${image_name}.png`, // type is not required
 				Body: base64Data,
 				ACL: 'public-read',
 				ContentEncoding: 'base64', // required
