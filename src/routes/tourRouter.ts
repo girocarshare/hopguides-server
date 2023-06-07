@@ -23,6 +23,8 @@ import { PointData } from '../classes/tour/pointData';
 import { QRCodes } from '../models/qrcodes/qrcodes';
 var multerS3 = require('multer-s3');
 const { Configuration, OpenAIApi } = require("openai");
+var gpxParser = require('gpxparser');
+var gpxParse = require("gpx-parse");
 
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -31,6 +33,7 @@ var s3 = new AWS.S3({
 interface IBkRequest extends IRequest {
 	tour: Tour;
 }
+
 
 function randomstring(length) {
 	var result = '';
@@ -59,88 +62,6 @@ async function getTour(string) {
 
 }
 
-async function getTour1() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.988995747188019%2C46.127989267713815%3B13.94738552325419%2C46.10240264529747%3B13.932778084586202%2C46.11074537757715%3B13.917095599398841%2C46.11006788635984%3B13.916685347606682%2C46.11037818068329%3B13.923620109187125%2C46.08979153023348%3B13.942740918361155%2C46.08743708478799%3B13.988995747188019%2C46.127989267713815?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-
-}
-
-async function getTour2() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.028174022432776%2C46.15268184141383%3B14.028103776814007%2C46.15390804560133%3B14.009808626050265%2C46.14513966813935%3B13.989218009254753%2C46.128126292766574%3B14.028174022432776%2C46.15268184141383?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-}
-
-
-async function getTour3() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.989310343597712%2C46.1274612555054%3B14.039045755138545%2C46.150261132300656%3B14.048760256715848%2C46.155052734793536%3B14.061266131351102%2C46.16317568864926%3B14.059071910403091%2C46.16255971130006%3B14.068090092982692%2C46.16671905216502%3B13.989310343597712%2C46.1274612555054?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-}
-
-async function getTour4() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.837456879098585%2C46.25122672743737%3B13.840588045483033%2C46.26352054074271?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-}
-
-async function getTour5() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.498683481577352%2C46.07316498842294%3B14.4847756774313%2C46.0781352616732?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-}
-
-async function getTour6() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.52631430989233%2C46.300752124149376%3B14.52575366181582%2C46.27501392035784%3B14.487019678375963%2C46.25305594698747%3B14.549031296360074%2C46.19495389800865%3B14.607446600532661%2C46.22215141303892%3B14.52631430989233%2C46.300752124149376?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-}
-
-async function getTour7() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/15.594464867474043%2C46.15701450237126%3B15.571758737307192%2C46.166738846290826%3B15.560585685035239%2C46.14692043332319%3B15.56263831951681%2C46.14983665364953%3B15.563893142944742%2C46.15070249558895%3B15.564515198078679%2C46.14444852635371%3B15.594464867474043%2C46.15701450237126?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-}
-
-async function getTour8() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/14.527071229776212%2C45.958869863428866%3B14.499042884314187%2C45.91128573220706%3B14.480071122810324%2C45.98285652471492%3B14.47939171633004%2C45.98232457665211%3B14.491428791607662%2C45.96942227381013%3B14.535719158455112%2C45.96556621108463%3B14.548536053002215%2C45.94155237302911%3B14.527071229776212%2C45.958869863428866?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-}
-
-async function getTour9() {
-
-	return await axios.get('https://api.mapbox.com/directions/v5/mapbox/cycling/13.774526348846582%2C45.65463486462067%3B13.712672627471553%2C45.7026681197649 %3B13.764644%2C45.709544%3B13.7571%2C45.67543%3B13.763218%2C45.646884%3B13.772426%2C45.646311%3B13.774526348846582%2C45.65463486462067?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=simplified&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A')
-		.then(res => res.data)
-		.catch(error => {
-			console.log(error);
-		});
-}
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
 	poiManager: POIManager;
@@ -386,30 +307,99 @@ export class TourRouter extends BaseRouter {
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				var response = ""
+				try {
+					var response = ""
+					console.log(req.params.tourId)
+					var tour1 = await this.tourManager.getTour(req.params.tourId)
+					if (tour1 != null) {
+						if (tour1.gpx != null) {
+							console.log(tour1.gpx)
 
+							return res.status(200).send(tour1.gpx);
+						} else {
+							var tour = await this.tourManager.getToursWithPointsForMapbox(req.params.tourId)
 
-				var tour = await this.tourManager.getToursWithPointsForMapbox(req.params.tourId)
+							var url = "https://api.mapbox.com/directions/v5/mapbox/cycling/"
 
-				console.log(tour)
-				var url = "https://api.mapbox.com/directions/v5/mapbox/cycling/"
+							for (var poi of tour.points) {
+								url += poi.point.location.latitude + "%2C" + poi.point.location.longitude + "%3B"
+							}
 
-				for (var poi of tour.points) {
-					url += poi.point.location.latitude + "%2C" + poi.point.location.longitude + "%3B"
+							url = url.substring(0, url.length - 3);
+							url += "?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A"
+							await getTour(url)
+								.then(res =>
+									response = res.routes[0].geometry.coordinates)
+
+									var str = "["
+					for (var objec of response) {
+						str += "[" + objec + "],"
+
+					}
+					str += "]"
+							return res.status(200).send(str);
+
+						}
+					}
+				} catch (e) {
+					console.log(e.error.errors)
 				}
-
-				url = url.substring(0, url.length - 3);
-				url += "?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoibHVuYXppdmtvdmljIiwiYSI6ImNremJ1N2l3YzBneDEybm50YTk2OWw1Y2gifQ.iDYohamiOMua_de_Y_wZ-A"
-				await getTour(url)
-					.then(res =>
-						response = res.routes[0].geometry.coordinates)
-
-				return res.status(200).send(response);
 
 
 
 			})
 		);
+
+		function getSubstring(string: string, char1: string, char2: string) {
+			return string.slice(
+				string.indexOf(char1) + 1,
+				string.lastIndexOf(char2),
+			);
+		}
+
+
+		/** POST fetches points data for a tour */
+		this.router.post(
+			'/parse/gpx',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			//parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				var response = []
+				var gpx = new gpxParser(); //Create gpxParser Object
+				gpx.parse(req.body.text); //parse gpx file from string data
+
+				for (var item of gpx.tracks[0].points) {
+					var obj = []
+					obj.push(item.lon)
+					obj.push(item.lat)
+					response.push(obj)
+				}
+
+				var tour = await this.tourManager.getTour(req.body.id)
+				if (tour != null) {
+
+					var str = "["
+					for (var objec of response) {
+						str += "[" + objec + "],"
+
+					}
+					str += "]"
+					tour.gpx = str;
+					await this.tourManager.updateTour(
+						tour.id,
+						tour
+					);
+				} else {
+					return res.status(412).send("Tour doesnt exist");
+				}
+
+				return res.status(200).send(response);
+
+
+			})
+		);
+
 
 		/** GET terms and conditions for a tour */
 		this.router.get(
@@ -429,21 +419,20 @@ export class TourRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				try{
-					console.log(req.params.tourid)
-				var tour = await this.tourManager.getTour(req.params.tourid)
-				tour.update = false;
-				await this.tourManager.updateTour(
-					tour.id,
-					tour
-				);
+				try {
+					var tour = await this.tourManager.getTour(req.params.tourid)
+					tour.update = false;
+					await this.tourManager.updateTour(
+						tour.id,
+						tour
+					);
 
-				await this.tourManager.deleteUpdatedTour(
-					tour.previousId
-				);
-				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
-				return res.status(200).send(tours);
-				}catch(err){
+					await this.tourManager.deleteUpdatedTour(
+						tour.previousId
+					);
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
+					return res.status(200).send(tours);
+				} catch (err) {
 					console.log(err.error)
 				}
 			})
@@ -456,16 +445,16 @@ export class TourRouter extends BaseRouter {
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				
-				try{
-				await this.tourManager.deleteUpdatedTour(
-					req.params.tourid
-				);
-				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
-				return res.status(200).send(tours);
-			}catch(err){
-				console.log(err)
-			}
+
+				try {
+					await this.tourManager.deleteUpdatedTour(
+						req.params.tourid
+					);
+					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
+					return res.status(200).send(tours);
+				} catch (err) {
+					console.log(err)
+				}
 			})
 		);
 
@@ -689,8 +678,8 @@ export class TourRouter extends BaseRouter {
 						}
 					}
 
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
-					return res.status(200).send(tours);
+					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
+					return res.status(200).send("Success");
 
 				} catch (err) {
 					console.log(err.error)

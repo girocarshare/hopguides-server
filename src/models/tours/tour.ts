@@ -111,4 +111,9 @@ export class Tour {
 	previousId: string;
 
 	
+	@jsonProperty()
+	@dbField()
+	gpx: string;
+
+	
 }

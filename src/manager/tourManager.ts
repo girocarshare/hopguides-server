@@ -192,7 +192,7 @@ export class TourManager {
 	}
 
 	async getTour(tourId: string): Promise<Tour> {
-		return await this.tourRepository.getByIdOrThrow(tourId).catch((e) => {
+		return await this.tourRepository.getByIdOrThrow(tourId.trim()).catch((e) => {
 
 			throw new CustomError(404, 'Tour not found!');
 		});
