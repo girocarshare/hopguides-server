@@ -152,7 +152,6 @@ export class TourManager {
 
 		const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 		await delay(1000)
-		console.log(code)
 		ids.push(code)
 
 	}
@@ -308,7 +307,6 @@ export class TourManager {
 				 qrcode = await this.qrcodesRepository.findOne({code: Number.parseFloat(qrCodeId)}).catch((err) => {
 					throw new Error('Error getting qrcode');
 				});
-				console.log(qrcode)
 			}else{
 			 qrcode = await this.qrcodesRepository.findOne({qrCodeId: qrCodeId}).catch((err) => {
 				throw new Error('Error getting qrcode');
@@ -821,7 +819,6 @@ export class TourManager {
 				throw new Error('Error getting Tours');
 			});
 
-			console.log(tour)
 
 			
 				var points: PointsForTours[] = []
@@ -844,7 +841,6 @@ export class TourManager {
 
 				}
 
-				console.log(points)
 				var tourReport: ToursWithPoints = new ToursWithPoints();
 				tourReport.tourId = tour.id;
 				tourReport.points = points;
