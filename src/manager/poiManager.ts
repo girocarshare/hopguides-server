@@ -69,6 +69,7 @@ export class POIManager {
 
     }
 
+    console.log("IMAGESSS")
     console.log(images)
     point.images = images;
     return await this.poiRepository.updateOne(pointId, point).catch(() => {

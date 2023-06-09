@@ -309,11 +309,9 @@ export class TourRouter extends BaseRouter {
 
 				try {
 					var response = ""
-					console.log(req.params.tourId)
 					var tour1 = await this.tourManager.getTour(req.params.tourId)
 					if (tour1 != null) {
 						if (tour1.gpx != null) {
-							console.log(tour1.gpx)
 
 							return res.status(200).send(tour1.gpx);
 						} else {
@@ -628,7 +626,6 @@ export class TourRouter extends BaseRouter {
 						}
 
 						for (var i of arr2) {
-							console.log(i)
 							for (var f of req.files) {
 
 								if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -732,7 +729,6 @@ export class TourRouter extends BaseRouter {
 								var help = f.originalname.split('---')
 
 								var help2 = help[0].substring(8)
-								console.log(help2)
 
 								var h = {
 									name: help2,
@@ -794,7 +790,6 @@ export class TourRouter extends BaseRouter {
 					}
 					t.points = pois
 
-					console.log(t)
 
 					await this.tourManager.updateTour(
 						t.id,

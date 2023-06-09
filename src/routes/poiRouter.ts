@@ -166,6 +166,7 @@ export class POIRouter extends BaseRouter {
 
 
 					if (poiPrevious != null) {
+						
 						if (user.role == "ADMIN") {
 							return res.status(412).send("Poi already updated by partner");
 						}
@@ -278,6 +279,7 @@ export class POIRouter extends BaseRouter {
 						return res.status(200).send([]);
 					}else if(user.role == "ADMIN"){
 
+						console.log("gggggggggggggggggggggggggg")
 
 					const updatedPoi: POI = await this.poiManager.updatePoi(
 						point.id,
@@ -306,16 +308,16 @@ export class POIRouter extends BaseRouter {
 						}
 					}
 
-					if(point.imageTitles.length !=0){
+					//if(point.imageTitles.length !=0){
 					var obj: Obj = new Obj();
 
 					obj.names = point.imageTitles
 					obj.paths = arrayy
 					await this.poiManager.uploadImages(point.id, obj);
-					}
+					//}
 					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
 
-					//return res.status(200).send([]);
+					return res.status(200).send([]);
 				}
 			}
 				} catch (err) {
