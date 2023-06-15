@@ -175,8 +175,7 @@ export class POIRouter extends BaseRouter {
 							poiPrevious.id,
 							point
 						);
-						console.log("FAJ::::LLL")
-						console.log(req.files)
+				
 						for (var f of req.files) {
 	
 							if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -239,8 +238,7 @@ export class POIRouter extends BaseRouter {
 							}
 	
 							if (f.originalname.substring(1, 8).trim() === 'partner') {
-								console.log("FAJ::::LLL")
-								console.log(f)
+						
 								arrayy.push(f.location);
 							}
 						}
@@ -279,14 +277,12 @@ export class POIRouter extends BaseRouter {
 						return res.status(200).send([]);
 					}else if(user.role == "ADMIN"){
 
-						console.log("gggggggggggggggggggggggggg")
 
 					const updatedPoi: POI = await this.poiManager.updatePoi(
 						point.id,
 						point
 					);
-					console.log("FAJ::::LLLddddd")
-					console.log(req.files)
+				
 					for (var f of req.files) {
 
 						if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -296,14 +292,13 @@ export class POIRouter extends BaseRouter {
 						}
 						if (f.originalname.substring(0, 4).trim() === 'menu') {
 
-							console.log(point.id + f.location)
+						
 							await this.poiManager.uploadMenu(point.id, f.location);
 
 						}
 
 						if (f.originalname.substring(1, 8).trim() === 'partner') {
-							console.log("FAJ::::LLL")
-							console.log(f)
+		
 							arrayy.push(f.location);
 						}
 					}

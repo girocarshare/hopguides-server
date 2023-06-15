@@ -761,6 +761,7 @@ export class TourManager {
 					poiHelp.price = poi.price
 					poiHelp.partner = poi.partner
 					poiHelp.video = poi.video
+					poiHelp.currency = tour.currency
 
 					p.point = poiHelp
 
