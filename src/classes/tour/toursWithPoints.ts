@@ -102,6 +102,30 @@ export class PointsForTours {
   voucherDesc: string;
 }
 
+export class PointsShort {
+
+	point: PointShort;
+	monthlyUsed: number;
+	
+  }
+
+
+  
+export class PointShort {
+
+	
+	id: string;
+  
+	category: string;
+  
+	offerName: string;
+	
+	price: number;
+
+	name: LocalizedField;
+	
+  }
+
 export class Logo {
 	image: string;
   
@@ -117,17 +141,64 @@ export class ToursWithPoints {
 	
 	currency: string;
 
-	points: PointsForTours[];
+	points: PointsShort[];
 
 	title: LocalizedField;
+
+	price: number;
+	
+	//longInfo: LocalizedField;
+	
+	//shortInfo: LocalizedField;
+
+	//images: string[];
+
+	//price: number;
+	
+	//image: string;
+	
+	//audio: string;
+	
+	//duration: string;
+
+	//length: string;
+
+	//highestPoint: string;
+
+	//logo: Logo;
+
+	//termsAndConditions: string;
+
+	//agreementTitle: LocalizedField;
+
+	
+	//agreementDesc: LocalizedField;
+	
+	//partnerName: string;
+
+	//support: string;
+
+	//bpartnerId: string;
+	
+}
+
+
+
+export class TourData {
+
+	tourId: string;
+	
+	currency: string;
+
+	title: LocalizedField;
+
+	price: number;
 	
 	longInfo: LocalizedField;
 	
 	shortInfo: LocalizedField;
 
 	images: string[];
-
-	price: number;
 	
 	image: string;
 	
@@ -145,12 +216,32 @@ export class ToursWithPoints {
 
 	agreementTitle: LocalizedField;
 
-	
 	agreementDesc: LocalizedField;
 	
 	partnerName: string;
 
 	support: string;
+
 	bpartnerId: string;
+	
+}
+
+
+export class PointsForGeoJson {
+
+	id: string;
+
+	location: GeoLocation;
+
+	
+	
+}
+export class ToursForGeoJson {
+
+	tourId: string;
+
+	points: PointsForGeoJson[];
+
+	
 	
 }

@@ -189,6 +189,32 @@ export class TourRouter extends BaseRouter {
 		);
 
 		this.router.get(
+			'/gettourdata/:id',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				const tour: Tour = await this.tourManager.getTourData(req.params.id);
+
+				return res.status(200).send(tour);
+
+			})
+		);
+
+		this.router.get(
+			'/getpoidata/:id',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				const poi: POI = await this.tourManager.getPoiData(req.params.id);
+
+				return res.status(200).send(poi);
+
+			})
+		);
+
+		this.router.get(
 			'/allToursWithPoints',
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			parseJwt,
@@ -200,6 +226,7 @@ export class TourRouter extends BaseRouter {
 
 			})
 		);
+
 
 		this.router.get(
 			'/allUpdatedToursWithPoints',
@@ -320,7 +347,7 @@ export class TourRouter extends BaseRouter {
 							var url = "https://api.mapbox.com/directions/v5/mapbox/cycling/"
 
 							for (var poi of tour.points) {
-								url += poi.point.location.latitude + "%2C" + poi.point.location.longitude + "%3B"
+								url += poi.location.latitude + "%2C" + poi.location.longitude + "%3B"
 							}
 
 							url = url.substring(0, url.length - 3);
@@ -591,7 +618,6 @@ export class TourRouter extends BaseRouter {
 								var help = f.originalname.split('---')
 
 								var help2 = help[0].substring(8)
-								console.log(help2)
 
 								var h = {
 									name: help2,
