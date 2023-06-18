@@ -146,6 +146,8 @@ export class POIRouter extends BaseRouter {
 				try {
 
 					
+					console.log("req.body.point")
+					console.log(req.body.point)
 					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;
 					var arrayy = []
@@ -176,6 +178,8 @@ export class POIRouter extends BaseRouter {
 							point
 						);
 				
+						console.log("updatedPoi")
+						console.log(updatedPoi)
 						for (var f of req.files) {
 	
 							if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -303,14 +307,19 @@ export class POIRouter extends BaseRouter {
 						}
 					}
 
-					//if(point.imageTitles.length !=0){
-					var obj: Obj = new Obj();
+					if(point.images){
 
-					obj.names = point.imageTitles
-					obj.paths = arrayy
-					await this.poiManager.uploadImages(point.id, obj);
-					//}
-					//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+					}else{
+//if(point.imageTitles.length !=0){
+	var obj: Obj = new Obj();
+
+	obj.names = point.imageTitles
+	obj.paths = arrayy
+	await this.poiManager.uploadImages(point.id, obj);
+	//}
+	//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+					}
+					
 
 					return res.status(200).send([]);
 				}
