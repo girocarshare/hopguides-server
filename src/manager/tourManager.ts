@@ -17,7 +17,7 @@ import { POI } from '../models/tours/poiModel';
 import { POIManager } from './poiManager';
 import { ReportManager } from './reportManager';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
-import { ToursWithPoints, PointsForTours, Logo, POICl } from '../classes/tour/toursWithPoints';
+import { ToursWithPoints, PointsForTours, Logo, POICl, PointsShort, PointShort, PointsForGeoJson, ToursForGeoJson } from '../classes/tour/toursWithPoints';
 import * as AWS from 'aws-sdk';
 import { BPartner } from '../models/bpartner/bpartner';
 import { Characteristics, Location, Point, TourData } from '../classes/tour/tourData';
@@ -658,13 +658,9 @@ export class TourManager {
 							poiHelp.icon = "boat";
 						}
 
-
 						pointsArr.push(poiHelp)
 					}
 				}
-
-
-
 
 				return pointsArr
 			}
@@ -732,11 +728,43 @@ export class TourManager {
 
 
 				}
+				var points: PointsShort[] = []
+				for (var point of tour.points) {
+
+					var poi: POI = await this.poiManager.getPoi(point)
+
+					var p: PointsShort = new PointsShort();
+					var poiHelp: PointShort = new PointShort();
+					
+					poiHelp.id = poi.id;
+					poiHelp.category = poi.category;
+					poiHelp.name = poi.name
+					poiHelp.offerName = poi.offerName
+					poiHelp.price = poi.price
+
+					p.point = poiHelp
+
+					var report: Report = await this.reportManager.getReport(poi.id, {})
+
+					p.monthlyUsed = report.monthlyUsedCoupons;
+
+					points.push(p)
+
+				}
+
+				var tourReport: ToursWithPoints = new ToursWithPoints();
+				tourReport.tourId = tour.id;
+				tourReport.points = points;
+				tourReport.title = tour.title;
+				tourReport.currency = tour.currency;
+				tourReport.price = tour.price;
+				tourReport.noOfRidesAMonth = count;
 
 
+				toursReport.push(tourReport)
+			}
 
-
-				var points: PointsForTours[] = []
+				/*var points: PointsForTours[] = []
 				for (var point of tour.points) {
 
 					var poi: POI = await this.poiManager.getPoi(point)
@@ -797,7 +825,7 @@ export class TourManager {
 				toursReport.push(tourReport)
 			}
 
-
+*/
 
 			return toursReport
 		} catch (err) {
@@ -807,8 +835,38 @@ export class TourManager {
 
 
 
+	
+	async getTourData(id: string): Promise<Tour> {
 
-	async getToursWithPointsForMapbox(id: string,  filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints> {
+		try {
+
+				var tour: Tour = await this.getTour(id)
+
+			return tour
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
+
+	
+	
+	async getPoiData(id: string): Promise<POI> {
+
+		try {
+
+				var poi: POI = await this.poiManager.getPoi(id)
+
+			return poi
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
+
+
+
+	async getToursWithPointsForMapbox(id: string,  filter?: any, pagination?: SearchPagination): Promise<ToursForGeoJson> {
 
 		try {
 
@@ -822,27 +880,22 @@ export class TourManager {
 
 
 			
-				var points: PointsForTours[] = []
+				var points: PointsForGeoJson[] = []
 				for (var point of tour.points) {
 
 					var poi: POI = await this.poiManager.getPoi(point)
 
-					var p: PointsForTours = new PointsForTours();
-					var poiHelp: POICl = new POICl()
+					var poiHelp: PointsForGeoJson = new PointsForGeoJson();
+					
 					poiHelp.id = poi.id;
 					poiHelp.location = poi.location;
 				
-					p.point = poiHelp
 
-					var report: Report = await this.reportManager.getReport(poi.id, {})
-
-					p.monthlyUsed = report.monthlyUsedCoupons;
-
-					points.push(p)
+					points.push(poiHelp)
 
 				}
 
-				var tourReport: ToursWithPoints = new ToursWithPoints();
+				var tourReport: ToursForGeoJson = new ToursForGeoJson();
 				tourReport.tourId = tour.id;
 				tourReport.points = points;
 				
