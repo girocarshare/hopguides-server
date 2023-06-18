@@ -65,13 +65,11 @@ export class POIManager {
       image.title = object.names[i].name
 
       images.push(image)
+      point.images = images;
       }
 
     }
 
-    console.log("IMAGESSS")
-    console.log(images)
-    point.images = images;
     return await this.poiRepository.updateOne(pointId, point).catch(() => {
       throw new Error('Error updating poi');
     });
