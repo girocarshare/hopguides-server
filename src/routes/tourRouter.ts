@@ -229,43 +229,33 @@ export class TourRouter extends BaseRouter {
 
 				const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false, null, pagination);
 
-				// example array of 150 items to be paged
-				 // const items = [...Array(150).keys()].map(i => ({ id: (i + 1), name: 'Item ' + (i + 1) }));
- 
-				  // get page from query params or default to first page
-				 // const page = parseInt(req.params.page) || 1;
-			   
-				  // get pager object for specified page
-				  const pageSize = 2;
 				  const pager = {
 					currentPage:Number.parseInt(req.params.page)  
 				  };
 			   
-				  // get page of items from items array
-				 // const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
-			   
-
-				  // return pager object and current page of items
 				  return res.json({ pager, pageOfItems });
-
-
-				
-
-				//return res.status(200).send(pageOfItems);
 
 			})
 		);
 
 
 		this.router.get(
-			'/allUpdatedToursWithPoints',
+			'/allUpdatedToursWithPoints/:page',
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
+				const pagination: SearchPagination = new SearchPagination();
+				pagination.page = Number.parseInt(req.params.page);
+				pagination.pageSize = 2;
 
-				return res.status(200).send(tours);
+				const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
+
+				  const pager = {
+					currentPage:Number.parseInt(req.params.page)  
+				  };
+			   
+				  return res.json({ pager, pageOfItems });
 
 			})
 		);
@@ -305,8 +295,20 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 					await this.tourManager.deleteTour(req.params.tourId);
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
-					return res.status(200).send(tours);
+
+					const pagination: SearchPagination = new SearchPagination();
+					pagination.page = Number.parseInt(req.params.page);
+					pagination.pageSize = 2;
+	
+					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
+	
+					  const pager = {
+						currentPage:Number.parseInt(req.params.page)  
+					  };
+				   
+					  return res.json({ pager, pageOfItems });
+
+			
 				} catch (e) {
 
 					return res.status(500).send("Error");
@@ -322,9 +324,18 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
 					await this.tourManager.deletePoi(req.params.tourId, req.params.poiId);
-
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
-					return res.status(200).send(tours);
+					
+					const pagination: SearchPagination = new SearchPagination();
+					pagination.page = 0;
+					pagination.pageSize = 2;
+	
+					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false, null, pagination);
+	
+					  const pager = {
+						currentPage:0
+					  };
+				   
+					  return res.json({ pager, pageOfItems });
 				} catch (e) {
 
 					return res.status(500).send("Error");
@@ -484,8 +495,19 @@ export class TourRouter extends BaseRouter {
 					await this.tourManager.deleteUpdatedTour(
 						tour.previousId
 					);
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
-					return res.status(200).send(tours);
+					
+					const pagination: SearchPagination = new SearchPagination();
+					pagination.page = 0;
+					pagination.pageSize = 2;
+	
+					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
+	
+					  const pager = {
+						currentPage:0
+					  };
+				   
+					  return res.json({ pager, pageOfItems });
+
 				} catch (err) {
 					console.log(err.error)
 				}
@@ -504,8 +526,17 @@ export class TourRouter extends BaseRouter {
 					await this.tourManager.deleteUpdatedTour(
 						req.params.tourid
 					);
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true);
-					return res.status(200).send(tours);
+					const pagination: SearchPagination = new SearchPagination();
+					pagination.page = 0;
+					pagination.pageSize = 2;
+	
+					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
+	
+					  const pager = {
+						currentPage:0
+					  };
+				   
+					  return res.json({ pager, pageOfItems });
 				} catch (err) {
 					console.log(err)
 				}

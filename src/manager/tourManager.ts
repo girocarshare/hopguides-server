@@ -706,6 +706,7 @@ export class TourManager {
 				throw new Error('Error getting bookings');
 			});
 
+			
 
 			for (var tour of tours) {
 
@@ -728,6 +729,8 @@ export class TourManager {
 
 
 				}
+
+				
 				var points: PointsShort[] = []
 				for (var point of tour.points) {
 
@@ -752,6 +755,8 @@ export class TourManager {
 
 				}
 
+				
+			console.log(points)
 				var tourReport: ToursWithPoints = new ToursWithPoints();
 				tourReport.tourId = tour.id;
 				tourReport.points = points;
@@ -763,69 +768,6 @@ export class TourManager {
 
 				toursReport.push(tourReport)
 			}
-
-				/*var points: PointsForTours[] = []
-				for (var point of tour.points) {
-
-					var poi: POI = await this.poiManager.getPoi(point)
-
-					var p: PointsForTours = new PointsForTours();
-					var poiHelp: POICl = new POICl()
-					poiHelp.id = poi.id;
-					poiHelp.audio = poi.audio
-					poiHelp.bpartnerId = poi.bpartnerId
-					poiHelp.category = poi.category;
-					poiHelp.contact = poi.contact
-					poiHelp.workingHours = poi.workingHours
-					poiHelp.files = poi.files;
-					poiHelp.icon = poi.icon
-					poiHelp.images = poi.images
-					poiHelp.location = poi.location;
-					poiHelp.name = poi.name
-					poiHelp.shortInfo = poi.shortInfo
-					poiHelp.longInfo = poi.longInfo
-					poiHelp.menu = poi.menu
-					poiHelp.offerName = poi.offerName
-					poiHelp.price = poi.price
-					poiHelp.partner = poi.partner
-					poiHelp.video = poi.video
-					poiHelp.currency = tour.currency
-
-					p.point = poiHelp
-
-					var report: Report = await this.reportManager.getReport(poi.id, {})
-
-					p.monthlyUsed = report.monthlyUsedCoupons;
-
-					points.push(p)
-
-				}
-
-				var tourReport: ToursWithPoints = new ToursWithPoints();
-				tourReport.tourId = tour.id;
-				tourReport.points = points;
-				tourReport.title = tour.title;
-				tourReport.shortInfo = tour.shortInfo;
-				tourReport.longInfo = tour.longInfo;
-				tourReport.currency = tour.currency;
-				tourReport.images = tour.images;
-				tourReport.price = tour.price;
-				tourReport.image = tour.image;
-				tourReport.audio = tour.audio;
-				tourReport.duration = tour.duration;
-				tourReport.length = tour.length;
-				tourReport.highestPoint = tour.highestPoint;
-				tourReport.agreementTitle = tour.agreementTitle;
-				tourReport.agreementDesc = tour.agreementDesc;
-				tourReport.termsAndConditions = tour.termsAndConditions;
-				tourReport.noOfRidesAMonth = count;
-				tourReport.bpartnerId = tour.bpartnerId;
-
-
-				toursReport.push(tourReport)
-			}
-
-*/
 
 			return toursReport
 		} catch (err) {
