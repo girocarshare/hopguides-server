@@ -21,6 +21,7 @@ import * as AWS from 'aws-sdk';
 import { TourData } from '../classes/tour/tourData';
 import { PointData } from '../classes/tour/pointData';
 import { QRCodes } from '../models/qrcodes/qrcodes';
+import { SearchPagination } from '../classes/searchPagination';
 var multerS3 = require('multer-s3');
 const { Configuration, OpenAIApi } = require("openai");
 var gpxParser = require('gpxparser');
@@ -222,21 +223,28 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
 			
+				const pagination: SearchPagination = new SearchPagination();
+				pagination.page = Number.parseInt(req.params.page);
+				pagination.pageSize = 2;
 
-				const items: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
-				  // example array of 150 items to be paged
+				const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false, null, pagination);
+
+				// example array of 150 items to be paged
 				 // const items = [...Array(150).keys()].map(i => ({ id: (i + 1), name: 'Item ' + (i + 1) }));
  
 				  // get page from query params or default to first page
-				  const page = parseInt(req.params.page) || 1;
+				 // const page = parseInt(req.params.page) || 1;
 			   
 				  // get pager object for specified page
 				  const pageSize = 2;
-				  const pager = paginate(items.length, page, pageSize);
+				  const pager = {
+					currentPage:Number.parseInt(req.params.page)  
+				  };
 			   
 				  // get page of items from items array
-				  const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+				 // const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
 			   
+
 				  // return pager object and current page of items
 				  return res.json({ pager, pageOfItems });
 
