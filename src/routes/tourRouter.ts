@@ -25,6 +25,7 @@ var multerS3 = require('multer-s3');
 const { Configuration, OpenAIApi } = require("openai");
 var gpxParser = require('gpxparser');
 var gpxParse = require("gpx-parse");
+const paginate = require('jw-paginate');
 
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -215,14 +216,34 @@ export class TourRouter extends BaseRouter {
 		);
 
 		this.router.get(
-			'/allToursWithPoints',
+			'/allToursWithPoints/:page',
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
+			
 
-				return res.status(200).send(tours);
+				const items: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
+				  // example array of 150 items to be paged
+				 // const items = [...Array(150).keys()].map(i => ({ id: (i + 1), name: 'Item ' + (i + 1) }));
+ 
+				  // get page from query params or default to first page
+				  const page = parseInt(req.params.page) || 1;
+			   
+				  // get pager object for specified page
+				  const pageSize = 2;
+				  const pager = paginate(items.length, page, pageSize);
+			   
+				  // get page of items from items array
+				  const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+			   
+				  // return pager object and current page of items
+				  return res.json({ pager, pageOfItems });
+
+
+				
+
+				//return res.status(200).send(pageOfItems);
 
 			})
 		);
