@@ -45,7 +45,7 @@ export class ReportManager {
 	async getReport(companyId: string, filter: any, pagination?: any): Promise<Report> {
 		try{
 		const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
-			console.log("evo me")
+	
 			throw new Error('Error getting bookings');
 		});
 

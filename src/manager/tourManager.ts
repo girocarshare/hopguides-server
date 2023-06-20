@@ -764,6 +764,7 @@ export class TourManager {
 				tourReport.currency = tour.currency;
 				tourReport.price = tour.price;
 				tourReport.noOfRidesAMonth = count;
+				tourReport.bpartnerId = tour.bpartnerId;
 
 
 				toursReport.push(tourReport)
