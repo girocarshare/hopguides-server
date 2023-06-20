@@ -147,38 +147,8 @@ export class ToursWithPoints {
 
 	price: number;
 	
-	//longInfo: LocalizedField;
+	bpartnerId: string;
 	
-	//shortInfo: LocalizedField;
-
-	//images: string[];
-
-	//price: number;
-	
-	//image: string;
-	
-	//audio: string;
-	
-	//duration: string;
-
-	//length: string;
-
-	//highestPoint: string;
-
-	//logo: Logo;
-
-	//termsAndConditions: string;
-
-	//agreementTitle: LocalizedField;
-
-	
-	//agreementDesc: LocalizedField;
-	
-	//partnerName: string;
-
-	//support: string;
-
-	//bpartnerId: string;
 	
 }
 
