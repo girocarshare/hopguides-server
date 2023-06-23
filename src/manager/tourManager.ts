@@ -113,10 +113,16 @@ export class TourManager {
 
 		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
 	
-
+		var opts = {
+			margin: 1,
+			color: {
+			  dark:"#010599FF",
+			  light:"#FFBF60FF"
+			}
+		  }
 		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url="+qrCodeId, {
 			scale: 15,
-			width: "1000px"
+			width: "1000px",
 		}, async function (err, base64) {
 			const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
 			const type = base64.split(';')[0].split('/')[1];
