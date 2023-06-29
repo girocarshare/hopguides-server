@@ -18,6 +18,7 @@ import { simpleAsync } from './util';
 import { ToursReport } from '../classes/tour/toursReport';
 import { TourManager } from '../manager/tourManager';
 
+import * as sgMail from '@sendgrid/mail';
 import { ToursWithPoints } from '../classes/tour/toursWithPoints';
 
 import * as AWS from 'aws-sdk';
@@ -51,6 +52,9 @@ interface IBkRequest extends IRequest {
 	pointId: string;
 }
 
+
+sgMail.setApiKey("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")
+var emailSender = "luna.zivkovic@gogiro.app";
 export class POIRouter extends BaseRouter {
 	poiManager: POIManager;
 	bpartnerManager: BPartnerManager;
@@ -145,9 +149,6 @@ export class POIRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				try {
 
-
-					console.log("req.body.point")
-					console.log(req.body.point)
 					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;
 					var arrayy = []
@@ -178,8 +179,6 @@ export class POIRouter extends BaseRouter {
 							point
 						);
 
-						console.log("updatedPoi")
-						console.log(updatedPoi)
 						for (var f of req.files) {
 
 							if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -189,15 +188,12 @@ export class POIRouter extends BaseRouter {
 							}
 							if (f.originalname.substring(0, 4).trim() === 'menu') {
 
-								console.log(point.id + f.location)
 								await this.poiManager.uploadMenu(point.id, f.location);
 
 							}
 
 							if (f.originalname.substring(1, 8).trim() === 'partner') {
 
-								console.log("FAJ::::LLL")
-								console.log(f)
 								arrayy.push(f.location);
 							}
 						}
@@ -209,12 +205,16 @@ export class POIRouter extends BaseRouter {
 							obj.paths = arrayy
 							await this.poiManager.uploadImages(poiPrevious.id, obj);
 						}
-						//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
-
-
-
-						//return res.status(200).send([]);
-
+						
+						sgMail.send({
+							to: "luna.zivkovic@gogiro.app", // change so that poi.contact.email gets email
+							from: emailSender,
+							subject: "Point of interest updated",
+							html: `Dear,<br/><br/>
+								
+								Point of interest with id: ${poiPrevious.id} and name ${poiPrevious.name.english} has been updated by partner with id ${req.userId}. Please approve or disapprove the changes. <br/><br/> <br/>
+								`
+						})
 
 					} else {
 
@@ -254,8 +254,6 @@ export class POIRouter extends BaseRouter {
 								obj.paths = arrayy
 								await this.poiManager.uploadImages(poiUpdated.id, obj);
 							}
-							//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
-
 
 							var points = []
 							for (var p of tour.points) {
@@ -277,6 +275,16 @@ export class POIRouter extends BaseRouter {
 								t.id,
 								tour
 							);
+
+							sgMail.send({
+								to: "luna.zivkovic@gogiro.app", // change so that poi.contact.email gets email
+								from: emailSender,
+								subject: "Point of interest updated",
+								html: `Dear,<br/><br/>
+									
+									Point of interest with id: ${poi.id} and name ${poi.name.english} has been updated by partner with id ${req.userId}. Please approve or disapprove the changes. <br/><br/> <br/>
+									`
+							})
 
 							return res.status(200).send([]);
 						} else if (user.role == "ADMIN") {

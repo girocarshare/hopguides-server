@@ -65,8 +65,9 @@ export class POIManager {
       image.title = object.names[i].name
 
       images.push(image)
-      point.images = images;
       }
+      
+      point.images = images;
 
     }
 

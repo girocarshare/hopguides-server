@@ -778,7 +778,7 @@ export class TourManager {
 
 			return toursReport
 		} catch (err) {
-			console.log(err)
+			console.log(err.error)
 		}
 	}
 

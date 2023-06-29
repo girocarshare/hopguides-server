@@ -6,6 +6,7 @@ import {
 import { BaseRouter } from './baseRouter';
 import { UserManager } from '../manager/userManager';
 import { deserialize } from '../json';
+import { BPartnerManager } from '../manager/bpartnerManager';
 import { Obj, POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
@@ -27,11 +28,16 @@ const { Configuration, OpenAIApi } = require("openai");
 var gpxParser = require('gpxparser');
 var gpxParse = require("gpx-parse");
 const paginate = require('jw-paginate');
+import * as sgMail from '@sendgrid/mail';
 
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "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"
 })
+
+
+sgMail.setApiKey("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")
+var emailSender = "beta-app@gogiro.app";
 interface IBkRequest extends IRequest {
 	tour: Tour;
 }
@@ -67,6 +73,7 @@ async function getTour(string) {
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
 	poiManager: POIManager;
+	bpartnerManager: BPartnerManager;
 	userManager: UserManager;
 	fileFilter = (req, file, cb) => {
 		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4)$/)) {
@@ -101,6 +108,7 @@ export class TourRouter extends BaseRouter {
 		this.tourManager = new TourManager();
 		this.poiManager = new POIManager();
 		this.userManager = new UserManager();
+		this.bpartnerManager = new BPartnerManager();
 		this.upload = multer({
 			storage: this.multerS3Config,
 			fileFilter: this.fileFilter,
@@ -491,10 +499,19 @@ export class TourRouter extends BaseRouter {
 						tour.id,
 						tour
 					);
-
+					var bpartner = await this.bpartnerManager.getBP(tour.bpartnerId)
 					await this.tourManager.deleteUpdatedTour(
 						tour.previousId
 					);
+
+					for(var poi of tour.points){
+						var point = await this.poiManager.getPoi(poi)
+						if(point.previousId){
+							await this.poiManager.deletePOI(
+								point.previousId
+							);
+						}
+					}
 					
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = 0;
@@ -506,6 +523,16 @@ export class TourRouter extends BaseRouter {
 						currentPage:0
 					  };
 				   
+					  
+					  sgMail.send({
+						to: bpartner.contact.email, // change so that poi.contact.email gets email
+						from: emailSender,
+						subject: "Tour changes accepted",
+						html: `Dear,<br/><br/>
+							
+							Changes made on tour with id: ${tour.id} and name ${tour.title.english} has been approved by admin. <br/><br/> Kind regards, Hopguides. <br/>
+							`
+					})
 					  return res.json({ pager, pageOfItems });
 
 				} catch (err) {
@@ -523,19 +550,40 @@ export class TourRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
 				try {
+					var tour = await this.tourManager.getTour(req.params.tourid)
 					await this.tourManager.deleteUpdatedTour(
 						req.params.tourid
 					);
+					for(var poi of tour.points){
+						var point = await this.poiManager.getPoi(poi)
+						if(point.previousId){
+							await this.poiManager.deletePOI(
+								poi
+							);
+						}
+					}
+					
+
+					var bpartner = await this.bpartnerManager.getBP(tour.bpartnerId)
+					sgMail.send({
+						to: bpartner.contact.email, // change so that poi.contact.email gets email
+						from: emailSender,
+						subject: "Tour changes disapproved",
+						html: `Dear,<br/><br/>
+							
+							Changes made on tour with id: ${tour.previousId} and name ${tour.title.english} has been diapproved by admin. <br/><br/> Kind regards, Hopguides. <br/>
+							`
+						})
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = 0;
 					pagination.pageSize = 2;
-	
+					
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 	
 					  const pager = {
 						currentPage:0
 					  };
-				   
+					  
 					  return res.json({ pager, pageOfItems });
 				} catch (err) {
 					console.log(err)
@@ -582,6 +630,17 @@ export class TourRouter extends BaseRouter {
 							tour
 						);
 
+						sgMail.send({
+							to: "luna.zivkovic@gogiro.app", // change so that poi.contact.email gets email
+							from: emailSender,
+							subject: "Tour updated",
+							html: `Dear,<br/><br/>
+								
+								Tour with id: ${tourprev.id} and name ${tourprev.title.english} has been updated by partner with id ${req.userId}. Please approve or disapprove the changes. <br/><br/> <br/>
+								`
+						})
+
+
 					} else {
 						if (user.role == "PROVIDER") {
 							for (var file of req.files) {
@@ -605,6 +664,18 @@ export class TourRouter extends BaseRouter {
 								t.id,
 								tour
 							);
+
+							sgMail.send({
+								to: "luna.zivkovic@gogiro.app", // change so that poi.contact.email gets email
+								from: emailSender,
+								subject: "Tour updated",
+								html: `Dear,<br/><br/>
+									
+									Tour with id: ${t.id} and name ${tour.title.english} has been updated by partner with id ${req.userId}. Please approve or disapprove the changes. <br/><br/> <br/>
+									`
+							})
+	
+	
 						} else if (user.role == "ADMIN") {
 
 
@@ -744,6 +815,8 @@ export class TourRouter extends BaseRouter {
 						update: tour.update,
 						points: arr
 					}
+
+					console.log(t)
 					const createdTour: Tour = await this.tourManager.createTour(
 						deserialize(Tour, t)
 					);
@@ -891,5 +964,57 @@ export class TourRouter extends BaseRouter {
 
 			})
 		);
+
+
+		this.router.post(
+			'/add/teasertour',
+			//allowFor([AdminRole, ManagerRole, MarketingRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				// Upload
+				try {
+
+					
+					let jsonObj = JSON.parse(`{"price":"45","image":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/7BUv3BsMeK.jpg","audio":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/lu3FaaUm0Z.mp3","points":[{"num":1,"audio": "https://hopguides.s3.amazonaws.com/menu/ZwOsbG5A95.mp3","imageTitles":[{"number":"0","name":{"english":"This is short description text","slovenian": "To je kratek opis besedila"}}],"images":[{"image":"https://hopguides.s3.amazonaws.com/menu/sG0Ptf6OQG.png","title":{"english":"This is short description text","slovenian":"To je kratek opis besedila"}}],"price":"","offerName":"","contact":{"phone":"","email":"","webURL":"","name":""},"location":{"latitude":"14.506359","longitude":"46.050977"},"workingHours":{"monday":{"from":"","to":""},"tuesday":{"from":"","to":""},"wednesday":{"from":"","to":""},"thursday":{"from":"","to":""},"friday":{"from":"","to":""},"saturday":{"from":"","to":""},"sunday":{"from":"","to":""}},"bpartnerId":"4ca9b704-5df6-467c-a074-f0bcfe731d0e","category":"NATURE","imageTitles":[{"number":"0","name":{"english":".","slovenian":"."}}],"name":{"english":" Prešern square ","slovenian":"-"},"shortInfo":{"english":" Prešeren Square, located in the heart of Ljubljana, Slovenia, is a vibrant public square named after poet France Prešeren. It features a stunning statue of Prešeren and the iconic pink Franciscan Church. The square hosts markets, exhibitions, and concerts, surrounded by diverse architectural styles. It symbolizes national identity and unity, serving as a social hub with cafes and shops. A must-visit destination in Ljubljana for its beauty and cultural significance. ","slovenian":"- "},"longInfo":{"english":"Prešeren Square is a vibrant and iconic public square located in the heart of Ljubljana, the capital city of Slovenia. Named after France Prešeren, Slovenias greatest poet, the square holds significant cultural and historical importance to the country. At the center of the square stands a magnificent bronze statue of France Prešeren, which is a popular meeting point for locals and tourists alike. The statue faces the exquisite pink facade of the Franciscan Church of the Annunciation, one of Ljubljanas most recognizable landmarks. The churchs unique Baroque style and striking color make it an impressive backdrop for the square. Prešeren Square serves as a bustling hub for various activities throughout the year. It hosts lively outdoor markets, art exhibitions, and concerts, providing a vibrant atmosphere for visitors. Surrounded by a mix of architectural styles, including Baroque, Art Nouveau, and modernist buildings, the square showcases the citys rich history and architectural diversity. Beyond its aesthetic appeal, Prešeren Square holds a special place in the hearts of Slovenians as a symbol of national identity and unity. It serves as a gathering place for celebrations, protests, and cultural events, reflecting the spirit of the Slovenian people. Surrounded by numerous cafes, restaurants, and shops, Prešeren Square is not only a cultural and historical landmark but also a vibrant social hub. It offers a perfect blend of architectural beauty, cultural significance, and a lively atmosphere, making it an essential destination for anyone visiting Ljubljana. ","slovenian":"-"}}],"duration":"4h","length":"11km","highestPoint":"155m","termsAndConditions":"","currency":"€","bpartnerId":"4ca9b704-5df6-467c-a074-f0bcfe731d0e","update":false,"title":{"english":" Ljubljana tour ","slovenian":"-"},"agreementTitle":{"english":"/ ","slovenian":" -"},"agreementDesc":{"english":"/","slovenian":"- "},"shortInfo":{"english":" Ljubljana is the capital of Slovenia, a vibrant and cosmopolitan city that is home to more than a quarter of the countrys population. Its fairytale character is visible in its historic buildings, cobbled streets, lively outdoor cafes, and green river promenades. With its rich cultural heritage and lively student presence, Ljubljana provides an eclectic mix of activities that appeal to all types of travelers. ","slovenian":"- "},"longInfo":{"english":"Ljubljana, the capital of Slovenia, is a vibrant and cosmopolitan city, combining both modern and traditional styles of architecture. With its many attractions, like the iconic Ljubljana Castle, a striking variety of churches, a lively food and entertainment scene, and plenty of outdoor green spaces, its a destination with something for everyone. Whether strolling through the cobbled streets full of baroque architecture, touring the castles and historic buildings, or admiring one of the many bridges connecting the different areas of the city, Ljubljana has something to offer to all kinds of adventurers. Whether its visiting the markets and galleries, taking part in the local festivals and events, exploring the outdoor activities or simply enjoying the peace and quiet, Ljubljana has a lot to offer, and visitors will no doubt return wanting more. ","slovenian":"-"}}`);
+					let tour = jsonObj as Tour;
+
+					console.log("TOURRR")
+
+					tour.title.english = req.body.title
+					
+					console.log(tour)
+					var points = []
+					for(var i=0;i<tour.points.length; i++){
+						var point = deserialize(POI, tour.points[i])
+						//let point = poi as unknown as POI;
+						point.name.english = req.body.points[i].title
+						point.location.longitude = req.body.points[i].longitude
+						point.location.latitude = req.body.points[i].latitude
+						const poi: POI = await this.poiManager.createPOI(point);
+						points.push(point.id)
+					}
+					tour.points= points
+					console.log(tour)
+					
+
+					const createdTour: Tour = await this.tourManager.createTour(
+						deserialize(Tour, tour)
+					);
+
+					return res.status(200).send("Success");
+					
+
+				} catch (err) {
+					console.log(err.error)
+				}
+			})
+		);
+
+
+
+
+
 	}
+
+	
 }
