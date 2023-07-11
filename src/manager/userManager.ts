@@ -46,6 +46,7 @@ export class UserManager {
 		if (!createdUser) {
 			user.password = await bcrypt.hash(user.password, 8)
 
+			user.role = UserRoles.PROVIDER
 			createdUser = await this.userRepository.createOne(user);
 		}
 		// await sendRegistrationMail(createdUser, notification.emailTemplate);
