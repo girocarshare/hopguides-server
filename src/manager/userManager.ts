@@ -92,7 +92,6 @@ export class UserManager {
 			throw new CustomError(404, 'User not found!');
 		});
 		
-		console.log(user)
 		const isMatch = await bcrypt.compare(login.password, user.password)
 		
 
@@ -105,7 +104,7 @@ export class UserManager {
 		}
 
 	}catch(err){
-		console.log(err)
+		console.log(err.error)
 	}
 	}
 }

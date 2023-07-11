@@ -196,6 +196,7 @@ export class UserRouter extends BaseRouter {
 
 					}
 				} catch (err) {
+					console.log(err.error)
 					return res.status(412).send(err);
 				}
 			})
@@ -207,7 +208,23 @@ export class UserRouter extends BaseRouter {
 			'/registerandlogin',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
-
+					console.log("fffffffffffffffffff")
+					var us = await this.userManager.getUserByEmail(req.body.email);
+					console.log("fkudhfksdnfjksnkjfd")
+					console.log(us)
+					if(us!=null){
+						const login: LoginPayload = deserialize(LoginPayload, req.body);
+					
+						const loggedUserData: {
+							userData: User;
+							userJwt: string;
+						} = await this.userManager.login(login);
+						console.log("loggedUserData")
+						console.log(loggedUserData)
+						res.append('accessToken', loggedUserData.userJwt);
+						return res.status(200).send({ userJwt: loggedUserData.userJwt });
+					}
+				
 					const createdUser: User = await this.userManager.createUser(
 						deserialize(User, req.body));
 
