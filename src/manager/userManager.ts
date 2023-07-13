@@ -46,6 +46,7 @@ export class UserManager {
 		if (!createdUser) {
 			user.password = await bcrypt.hash(user.password, 8)
 
+			user.role = UserRoles.PROVIDER
 			createdUser = await this.userRepository.createOne(user);
 		}
 		// await sendRegistrationMail(createdUser, notification.emailTemplate);
@@ -91,7 +92,6 @@ export class UserManager {
 			throw new CustomError(404, 'User not found!');
 		});
 		
-		console.log(user)
 		const isMatch = await bcrypt.compare(login.password, user.password)
 		
 
@@ -104,7 +104,7 @@ export class UserManager {
 		}
 
 	}catch(err){
-		console.log(err)
+		console.log(err.error)
 	}
 	}
 }

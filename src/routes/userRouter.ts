@@ -196,6 +196,68 @@ export class UserRouter extends BaseRouter {
 
 					}
 				} catch (err) {
+					console.log(err.error)
+					return res.status(412).send(err);
+				}
+			})
+
+		);
+
+		/* POST Login */
+		this.router.post(
+			'/registerandlogin',
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				try {
+					var us = await this.userManager.getUserByEmail(req.body.email);
+					console.log(us)
+					if(us!=null){
+						const login: LoginPayload = deserialize(LoginPayload, req.body);
+					
+						const loggedUserData: {
+							userData: User;
+							userJwt: string;
+						} = await this.userManager.login(login);
+						console.log("loggedUserData")
+						console.log(loggedUserData)
+						res.append('accessToken', loggedUserData.userJwt);
+						return res.status(200).send({ userJwt: loggedUserData.userJwt });
+					}
+				
+					const createdUser: User = await this.userManager.createUser(
+						deserialize(User, req.body));
+
+						var data ={
+						userId : createdUser.id
+						}
+
+					const bpartnerData: BPartner = deserialize(
+						BPartner,
+						data
+					);
+					const createdBP: BPartner = await this.bpartnerManager.createBP(
+						createdUser,
+						bpartnerData
+					);
+
+					var fileName = "https://hopguides.s3.eu-central-1.amazonaws.com/logos/" + globalThis.rString;
+					await this.bpartnerManager.uploadLogo(createdBP.id, fileName);
+					const login: LoginPayload = deserialize(LoginPayload, req.body);
+					validateOrThrow(login);
+					let user: User = await this.userManager.getUserByEmail(login.email);
+
+					if (!user)
+						return res.throwErr(new CustomError(404, 'User does not exist'));
+
+					else {
+						const loggedUserData: {
+							userData: User;
+							userJwt: string;
+						} = await this.userManager.login(login);
+						res.append('accessToken', loggedUserData.userJwt);
+						return res.status(200).send({ userJwt: loggedUserData.userJwt });
+
+					}
+				} catch (err) {
 					return res.status(412).send(err);
 				}
 			})

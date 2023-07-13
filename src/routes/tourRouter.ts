@@ -230,6 +230,7 @@ export class TourRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
+				
 			
 				const pagination: SearchPagination = new SearchPagination();
 				pagination.page = Number.parseInt(req.params.page);
