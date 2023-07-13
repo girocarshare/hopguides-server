@@ -208,9 +208,7 @@ export class UserRouter extends BaseRouter {
 			'/registerandlogin',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
-					console.log("fffffffffffffffffff")
 					var us = await this.userManager.getUserByEmail(req.body.email);
-					console.log("fkudhfksdnfjksnkjfd")
 					console.log(us)
 					if(us!=null){
 						const login: LoginPayload = deserialize(LoginPayload, req.body);

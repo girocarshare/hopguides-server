@@ -196,6 +196,7 @@ export function parseJwt(req: IRequest, res: IResponse, next: any): void {
 		 
 	}
 	
+	console.log("dfjhksdjfhksjfk")
 	console.log(token)
 	//var token = req.body.headers.authorization.trim()
 	if (!token) return res.throwErr(new CustomError(401, 'No token'));
