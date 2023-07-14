@@ -225,12 +225,35 @@ export class TourRouter extends BaseRouter {
 		);
 
 		this.router.get(
+			'/search/:data',
+			//allowFor([AdminRole, SupportRole, ManagerRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				const pagination: SearchPagination = new SearchPagination();
+				pagination.page = 0;
+				pagination.pageSize = 2;
+
+				const pageOfItems: ToursWithPoints[] = await this.tourManager.searchForTours(req.userId, req.params.data, null, pagination);
+	
+				console.log("dddddddddddddpageOfItems")
+				console.log(pageOfItems)
+				const pager = {
+				  currentPage:Number.parseInt(req.params.page)  
+				};
+			 
+				return res.json({ pager, pageOfItems });
+
+			})
+		);
+
+		this.router.get(
 			'/allToursWithPoints/:page',
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				
+
 			
 				const pagination: SearchPagination = new SearchPagination();
 				pagination.page = Number.parseInt(req.params.page);

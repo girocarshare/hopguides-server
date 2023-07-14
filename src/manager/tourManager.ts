@@ -21,7 +21,7 @@ import { ToursWithPoints, PointsForTours, Logo, POICl, PointsShort, PointShort, 
 import * as AWS from 'aws-sdk';
 import { BPartner } from '../models/bpartner/bpartner';
 import { Characteristics, Location, Point, TourData } from '../classes/tour/tourData';
-import {  ImageTitle, PointData } from '../classes/tour/pointData';
+import { ImageTitle, PointData } from '../classes/tour/pointData';
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 import { resolve } from 'dns/promises';
 import { QRCodes } from '../models/qrcodes/qrcodes';
@@ -36,15 +36,15 @@ var sizeOf = require('image-size');
 const url = require('url')
 const https = require('https')
 function makeid(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
+	let result = '';
+	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	const charactersLength = characters.length;
+	let counter = 0;
+	while (counter < length) {
+		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+		counter += 1;
+	}
+	return result;
 }
 class Size {
 	height: string;
@@ -105,77 +105,77 @@ export class TourManager {
 	async generateQr(tourId: string, number: number): Promise<QRCodes[]> {
 
 		var ids = []
-		for(var i=0; i<number; i++){
+		for (var i = 0; i < number; i++) {
 
-		var qrcode: QRCodes = new QRCodes();
-		const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+			var qrcode: QRCodes = new QRCodes();
+			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
 
 
-		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
-	
-		var opts = {
-			margin: 1,
-			color: {
-			  dark:"#010599FF",
-			  light:"#FFBF60FF"
-			}
-		  }
-		await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url="+qrCodeId, {
-			scale: 15,
-			width: "1000px",
-		}, async function (err, base64) {
-			const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-			const type = base64.split(';')[0].split('/')[1];
-			const params = {
-				Bucket: 'hopguides/qrcodes',
-				Key: `${image_name}.png`, // type is not required
-				Body: base64Data,
-				ACL: 'public-read',
-				ContentEncoding: 'base64', // required
-				ContentType: `image/${type}` // required. Notice the back ticks
-			}
-			 s3bucket.upload(params, function (err, data) {
+			const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
 
-				if (err) {
-					console.log('ERROR MSG: ', err);
-				} else {
-					console.log('Successfully uploaded data');
+			var opts = {
+				margin: 1,
+				color: {
+					dark: "#010599FF",
+					light: "#FFBF60FF"
 				}
+			}
+			await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=" + qrCodeId, {
+				scale: 15,
+				width: "1000px",
+			}, async function (err, base64) {
+				const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+				const type = base64.split(';')[0].split('/')[1];
+				const params = {
+					Bucket: 'hopguides/qrcodes',
+					Key: `${image_name}.png`, // type is not required
+					Body: base64Data,
+					ACL: 'public-read',
+					ContentEncoding: 'base64', // required
+					ContentType: `image/${type}` // required. Notice the back ticks
+				}
+				s3bucket.upload(params, function (err, data) {
+
+					if (err) {
+						console.log('ERROR MSG: ', err);
+					} else {
+						console.log('Successfully uploaded data');
+					}
+				});
+
 			});
 
-		});
+			qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
+			qrcode.code = Math.floor(100000000 + Math.random() * 900000000);
+			qrcode.used = false;
+			qrcode.tourId = tourId
+			qrcode.qrCodeId = qrCodeId
 
-		qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
-		qrcode.code = Math.floor(100000000 + Math.random() * 900000000);
-		qrcode.used = false;
-		qrcode.tourId = tourId
-		qrcode.qrCodeId = qrCodeId
-
-		var code =  await this.qrcodesRepository.createOne(qrcode).catch(() => {
-			throw new CustomError(500, 'QRCode not created!');
-		});
-
-
-		const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-		await delay(1000)
-		ids.push(code)
-
-	}
-
-	if(number == 1){
-		for(var codee of ids){
-			const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-			await delay(1000)
-			return await this.qrcodesRepository.getAll({code: codee.code}).catch(() => {
+			var code = await this.qrcodesRepository.createOne(qrcode).catch(() => {
 				throw new CustomError(500, 'QRCode not created!');
 			});
-		}
-	}else{
 
-		return ids
-	}
-	
-	//}
+
+			const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+			await delay(1000)
+			ids.push(code)
+
+		}
+
+		if (number == 1) {
+			for (var codee of ids) {
+				const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+				await delay(1000)
+				return await this.qrcodesRepository.getAll({ code: codee.code }).catch(() => {
+					throw new CustomError(500, 'QRCode not created!');
+				});
+			}
+		} else {
+
+			return ids
+		}
+
+		//}
 	}
 
 
@@ -183,17 +183,17 @@ export class TourManager {
 		var qr: QRCodes[] = await this.qrcodesRepository.getAll().catch((err) => {
 			throw new Error('Error getting qr code');
 		});
-		
-		var qrOfTour: QRCodes[]  = []
 
-		for(var qrCode of qr){
-			if(qrCode.tourId == tourId){
+		var qrOfTour: QRCodes[] = []
+
+		for (var qrCode of qr) {
+			if (qrCode.tourId == tourId) {
 				qrOfTour.push(qrCode)
 			}
-		}			
-		
+		}
+
 		return qrOfTour
-		
+
 	}
 
 	async getTour(tourId: string): Promise<Tour> {
@@ -205,7 +205,7 @@ export class TourManager {
 
 
 	async getTourByPreviousId(tourId: string): Promise<Tour> {
-		return await this.tourRepository.findOne({previousId: tourId}).catch((e) => {
+		return await this.tourRepository.findOne({ previousId: tourId }).catch((e) => {
 
 			throw new CustomError(404, 'Tour not found!');
 		});
@@ -219,9 +219,9 @@ export class TourManager {
 			throw new Error('Error getting Tours');
 		});
 
-		for(var poi of tour.points){
+		for (var poi of tour.points) {
 			await this.poiManager.deletePOI(poi).catch((e) => {
-				
+
 				throw new CustomError(404, 'POI not deleted.');
 			});
 		}
@@ -238,7 +238,7 @@ export class TourManager {
 			throw new Error('Error getting Tours');
 		});
 
-		
+
 		await this.tourRepository.deleteOne({ _id: tourId }).catch((e) => {
 
 			throw new CustomError(404, 'Tour not deleted.');
@@ -308,16 +308,16 @@ export class TourManager {
 	async getSingleTour(qrCodeId: string, longitude: string, latitude: string, language: string): Promise<TourData> {
 
 		try {
-			var qrcode : QRCodes = new QRCodes()
-			if(qrCodeId.length == 9){
-				 qrcode = await this.qrcodesRepository.findOne({code: Number.parseFloat(qrCodeId)}).catch((err) => {
+			var qrcode: QRCodes = new QRCodes()
+			if (qrCodeId.length == 9) {
+				qrcode = await this.qrcodesRepository.findOne({ code: Number.parseFloat(qrCodeId) }).catch((err) => {
 					throw new Error('Error getting qrcode');
 				});
-			}else{
-			 qrcode = await this.qrcodesRepository.findOne({qrCodeId: qrCodeId}).catch((err) => {
-				throw new Error('Error getting qrcode');
-			});
-		}
+			} else {
+				qrcode = await this.qrcodesRepository.findOne({ qrCodeId: qrCodeId }).catch((err) => {
+					throw new Error('Error getting qrcode');
+				});
+			}
 
 			/*if(qrcode.used==true){
 				throw new Error('You can use this coupon only once a day!');
@@ -441,9 +441,9 @@ export class TourManager {
 
 
 
-				for(var p of points){
+				for (var p of points) {
 
-					QRCode.toDataURL("https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/confirmation/" + createdScheduledRent.id + "/" + p.id , {
+					QRCode.toDataURL("https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/confirmation/" + createdScheduledRent.id + "/" + p.id, {
 						scale: 15,
 						width: "1000px"
 					}, function (err, base64) {
@@ -470,7 +470,7 @@ export class TourManager {
 
 				}
 
-			
+
 
 				var logo: Logo = new Logo();
 				logo.image = bpartner.logo;
@@ -560,12 +560,12 @@ export class TourManager {
 						location.lng = poi.location.longitude;
 
 						var images = []
-						for(var poiImage of poi.images){
-						var imageTitles: ImageTitle = new ImageTitle()
-						imageTitles.name = poiImage.title[language];
-						imageTitles.image = poiImage.image;
+						for (var poiImage of poi.images) {
+							var imageTitles: ImageTitle = new ImageTitle()
+							imageTitles.name = poiImage.title[language];
+							imageTitles.image = poiImage.image;
 
-						images.push(imageTitles)
+							images.push(imageTitles)
 						}
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
@@ -577,7 +577,7 @@ export class TourManager {
 						poiHelp.longInfo = poi.longInfo[language]
 						poiHelp.offerName = poi.offerName
 
-						if(poi.video != null){
+						if (poi.video != null) {
 							poiHelp.video = poi.video
 						}
 
@@ -622,12 +622,12 @@ export class TourManager {
 						location.lng = poi.location.longitude;
 
 						var images = []
-						for(var poiImage of poi.images){
-						var imageTitles: ImageTitle = new ImageTitle()
-						imageTitles.name = poiImage.title[language];
-						imageTitles.image = poiImage.image;
+						for (var poiImage of poi.images) {
+							var imageTitles: ImageTitle = new ImageTitle()
+							imageTitles.name = poiImage.title[language];
+							imageTitles.image = poiImage.image;
 
-						images.push(imageTitles)
+							images.push(imageTitles)
 						}
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
@@ -638,7 +638,7 @@ export class TourManager {
 						poiHelp.shortInfo = poi.shortInfo[language]
 						poiHelp.longInfo = poi.longInfo[language]
 						poiHelp.hasVoucher = false;
-						if(poi.video != null){
+						if (poi.video != null) {
 							poiHelp.video = poi.video
 						}
 						if (poi.category == "HISTORY") {
@@ -692,27 +692,27 @@ export class TourManager {
 			var role = user.role
 			var toursReport: ToursWithPoints[] = []
 			var tours: Tour[] = []
-			if(role== "ADMIN"){
-				 tours = await this.tourRepository.getAll({update: update}, pagination).catch((err) => {
+			if (role == "ADMIN") {
+				tours = await this.tourRepository.getAll({ update: update }, pagination).catch((err) => {
 					throw new Error('Error getting Tours');
 				});
-			}else if(role== "USER" || role== "BPARTNER"){
+			} else if (role == "USER" || role == "BPARTNER") {
 				throw new Error('You are unable to get all the available tours');
-			}else if(role=="PROVIDER"){
+			} else if (role == "PROVIDER") {
 
 				var bpartner: BPartner = await this.bpartnerManager.getBPByUser(id).catch((err) => {
 					throw new Error('Error getting business partner');
 				});
-				tours = await this.tourRepository.getAll({bpartnerId: bpartner.id}, pagination).catch((err) => {
+				tours = await this.tourRepository.getAll({ bpartnerId: bpartner.id }, pagination).catch((err) => {
 					throw new Error('Error getting Tours');
 				});
 			}
-			
+
 			const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
 				throw new Error('Error getting bookings');
 			});
 
-			
+
 
 			for (var tour of tours) {
 
@@ -736,7 +736,7 @@ export class TourManager {
 
 				}
 
-				
+
 				var points: PointsShort[] = []
 				for (var point of tour.points) {
 
@@ -744,7 +744,7 @@ export class TourManager {
 
 					var p: PointsShort = new PointsShort();
 					var poiHelp: PointShort = new PointShort();
-					
+
 					poiHelp.id = poi.id;
 					poiHelp.category = poi.category;
 					poiHelp.name = poi.name
@@ -761,8 +761,111 @@ export class TourManager {
 
 				}
 
-				
-			console.log(points)
+
+				console.log(points)
+				var tourReport: ToursWithPoints = new ToursWithPoints();
+				tourReport.tourId = tour.id;
+				tourReport.points = points;
+				tourReport.title = tour.title;
+				tourReport.currency = tour.currency;
+				tourReport.price = tour.price;
+				tourReport.noOfRidesAMonth = count;
+				tourReport.bpartnerId = tour.bpartnerId;
+
+
+				toursReport.push(tourReport)
+			}
+
+			return toursReport
+		} catch (err) {
+			console.log(err.error)
+		}
+	}
+
+
+	async searchForTours(id: string, searchData: string, filter?: any, pagination?: SearchPagination): Promise<ToursWithPoints[]> {
+
+		try {
+
+			var user: User = await this.userManager.getUser(id)
+			var role = user.role
+			var toursReport: ToursWithPoints[] = []
+			var tours: Tour[] = []
+			if (role == "ADMIN") {
+
+				/*tours = await this.tourRepository.aggregateGetTours("44").catch(() => {
+					throw new Error('Error getting Vehicle with User');
+				});*/
+				tours = await this.tourRepository.getAll({ "title.english": { $regex: searchData } }, pagination).catch((err) => {
+					throw new Error('Error getting Tours');
+				});
+			} else if (role == "USER" || role == "BPARTNER") {
+				throw new Error('You are unable to get all the available tours');
+			} else if (role == "PROVIDER") {
+
+				var bpartner: BPartner = await this.bpartnerManager.getBPByUser(id).catch((err) => {
+					throw new Error('Error getting business partner');
+				});
+				tours = await this.tourRepository.getAll({ bpartnerId: bpartner.id }, pagination).catch((err) => {
+					throw new Error('Error getting Tours');
+				});
+			}
+
+			const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
+				throw new Error('Error getting bookings');
+			});
+
+
+
+			for (var tour of tours) {
+
+				var count = 0
+				let monthIndex: number = new Date().getMonth();
+				let yearIndex: number = new Date().getFullYear();
+
+				for (var booking of bookings) {
+					var date = new Date(booking.from);
+
+					let monthBooking: number = date.getMonth();
+					let yearBooking: number = date.getFullYear();
+
+
+					if (booking.tourId == tour.id && monthIndex == monthBooking && yearBooking == yearIndex) {
+
+						count = count + 1
+					}
+
+
+
+				}
+
+
+				var points: PointsShort[] = []
+				for (var point of tour.points) {
+
+					var poi: POI = await this.poiManager.getPoi(point)
+
+					var p: PointsShort = new PointsShort();
+					var poiHelp: PointShort = new PointShort();
+
+					poiHelp.id = poi.id;
+					poiHelp.category = poi.category;
+					poiHelp.name = poi.name
+					poiHelp.offerName = poi.offerName
+					poiHelp.price = poi.price
+
+					p.point = poiHelp
+
+					var report: Report = await this.reportManager.getReport(poi.id, {})
+
+					p.monthlyUsed = report.monthlyUsedCoupons;
+
+					points.push(p)
+
+				}
+
+
+				console.log(points)
 				var tourReport: ToursWithPoints = new ToursWithPoints();
 				tourReport.tourId = tour.id;
 				tourReport.points = points;
@@ -784,12 +887,12 @@ export class TourManager {
 
 
 
-	
+
 	async getTourData(id: string): Promise<Tour> {
 
 		try {
 
-				var tour: Tour = await this.getTour(id)
+			var tour: Tour = await this.getTour(id)
 
 			return tour
 		} catch (err) {
@@ -798,13 +901,13 @@ export class TourManager {
 	}
 
 
-	
-	
+
+
 	async getPoiData(id: string): Promise<POI> {
 
 		try {
 
-				var poi: POI = await this.poiManager.getPoi(id)
+			var poi: POI = await this.poiManager.getPoi(id)
 
 			return poi
 		} catch (err) {
@@ -815,11 +918,11 @@ export class TourManager {
 
 
 
-	async getToursWithPointsForMapbox(id: string,  filter?: any, pagination?: SearchPagination): Promise<ToursForGeoJson> {
+	async getToursWithPointsForMapbox(id: string, filter?: any, pagination?: SearchPagination): Promise<ToursForGeoJson> {
 
 		try {
 
-			
+
 			const bookings: Booking[] = await this.bookingRepository.getAll(filter, pagination).catch(() => {
 				throw new Error('Error getting bookings');
 			});
@@ -828,26 +931,26 @@ export class TourManager {
 			});
 
 
-			
-				var points: PointsForGeoJson[] = []
-				for (var point of tour.points) {
 
-					var poi: POI = await this.poiManager.getPoi(point)
+			var points: PointsForGeoJson[] = []
+			for (var point of tour.points) {
 
-					var poiHelp: PointsForGeoJson = new PointsForGeoJson();
-					
-					poiHelp.id = poi.id;
-					poiHelp.location = poi.location;
-				
+				var poi: POI = await this.poiManager.getPoi(point)
 
-					points.push(poiHelp)
+				var poiHelp: PointsForGeoJson = new PointsForGeoJson();
 
-				}
+				poiHelp.id = poi.id;
+				poiHelp.location = poi.location;
 
-				var tourReport: ToursForGeoJson = new ToursForGeoJson();
-				tourReport.tourId = tour.id;
-				tourReport.points = points;
-				
+
+				points.push(poiHelp)
+
+			}
+
+			var tourReport: ToursForGeoJson = new ToursForGeoJson();
+			tourReport.tourId = tour.id;
+			tourReport.points = points;
+
 
 			return tourReport
 		} catch (err) {
