@@ -29,6 +29,7 @@ var gpxParser = require('gpxparser');
 var gpxParse = require("gpx-parse");
 const paginate = require('jw-paginate');
 import * as sgMail from '@sendgrid/mail';
+import { User } from '../models/user/user';
 
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -137,6 +138,37 @@ export class TourRouter extends BaseRouter {
 		);
 
 
+		this.router.post(
+			'/get/demovideo',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try{
+			
+				console.log(req.body)
+				console.log(req.userId)
+				const user: User = await this.userManager.getUser(req.userId);
+				//conditions to decide which video to send
+
+			/*	sgMail.send({
+					to: user.email, // change so that poi.contact.email gets email
+					from: emailSender,
+					subject: "Hopguides demo tour",
+					html: `Dear,<br/><br/>
+						
+						Here I'm sending demo video <br/><br/> Kind regards, Hopguides. <br/>
+						`
+				})*/
+
+				return res.status(200).send("success");
+			}catch{
+				
+				return res.status(412).send("error");
+			}
+			})
+		);
+
 		/** GET generate qr code for tour */
 		this.router.get(
 			'/qr/:tourId/:number',
@@ -236,8 +268,6 @@ export class TourRouter extends BaseRouter {
 
 				const pageOfItems: ToursWithPoints[] = await this.tourManager.searchForTours(req.userId, req.params.data, null, pagination);
 	
-				console.log("dddddddddddddpageOfItems")
-				console.log(pageOfItems)
 				const pager = {
 				  currentPage:Number.parseInt(req.params.page)  
 				};
