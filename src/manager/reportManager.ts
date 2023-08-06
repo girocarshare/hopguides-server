@@ -49,9 +49,12 @@ export class ReportManager {
 			throw new Error('Error getting bookings');
 		});
 
+		
 		const p: POI = await this.poiManager.getPoi(companyId).catch(() => {
 			throw new Error('Error getting poi');
 		});
+
+		console.log(p.bpartnerId)
 		const bPartner: BPartner = await this.bpartnerManager.getBP(p.bpartnerId).catch(() => {
 			throw new Error('Error getting business partner');
 		});
