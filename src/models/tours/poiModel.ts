@@ -89,7 +89,7 @@ class WorkingHours {
 	sunday: FromTo;
 
 }
-class ImageTitle {
+export class ImageTitle {
 	@jsonProperty()
 	number: string;
 
