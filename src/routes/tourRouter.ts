@@ -1109,6 +1109,8 @@ export class TourRouter extends BaseRouter {
 						image.image = "https://hopguides.s3.amazonaws.com/menu/sG0Ptf6OQG.png"
 						image.title = new LocalizedField
 						image.title.english = "This is short description text"
+						image.title.slovenian = "-"
+						
 						point.images.push(image)
 						point.price = 0
 						point.offerName = ""
@@ -1119,9 +1121,13 @@ export class TourRouter extends BaseRouter {
 						point.category = "NATURE"
 						point.shortInfo = new LocalizedField
 						point.shortInfo.english = " In the heart of a vibrant metropolis stands an enchanting architectural marvel. Its grand façade tells stories of the past, while inside, opulent art and ancient relics await. This point of interest is not just a celebration of history but also a vibrant cultural center, hosting diverse events. A journey here is a captivating experience, igniting wonder and appreciation for human expression. Whether a history buff, art enthusiast, or curious soul, it leaves an unforgettable impression, yearning for more. "
+						point.shortInfo.slovenian = " - "
+						
 						point.longInfo = new LocalizedField
 						point.longInfo.english = "In the heart of a vibrant metropolis lies a captivating point of interest, a place that enchants locals and tourists alike. This architectural marvel stands tall, defying time and weather, weaving together the past and present with exquisite craftsmanship. Its grand façade, adorned with intricate carvings and sculptures, tells the stories of a bygone era. Step inside, and you are transported to a realm of opulence and elegance. The interior boasts a breathtaking display of art, from striking murals that adorn the ceilings to delicate mosaics that grace the floors. Each room exudes a unique ambiance, carrying the essence of the period it represents. As you wander through the labyrinth of hallways and chambers, you encounter relics of history preserved with utmost care. Ancient artifacts whisper tales of ancient civilizations, while carefully curated exhibits shed light on the region's rich cultural heritage. The point of interest not only celebrates history but also serves as a vibrant cultural center. Throughout the year, it hosts an array of events, from art exhibitions and classical concerts to traditional dance performances and contemporary showcases. Here, art and culture blend seamlessly, offering a delightful experience to enthusiasts from all walks of life. Visiting this point of interest is like embarking on a captivating journey through time and creativity. It leaves a lasting impression, igniting a sense of wonder and appreciation for the beauty and diversity of human expression. Whether you are an avid history buff, an art aficionado, or simply a curious soul seeking inspiration, this point of interest promises to be an unforgettable destination that leaves you yearning for more."
+						point.longInfo.slovenian = " - "
 						point.name = new LocalizedField
+						point.name.slovenian = " - "
 						point.name.english = tour2.points[i].title
 						point.location.longitude = tour2.points[i].longitude
 						point.location.latitude = tour2.points[i].latitude
@@ -1192,6 +1198,7 @@ export class TourRouter extends BaseRouter {
 
 
 					for (var file of req.files) {
+						console.log(file)
 						if (file.originalname.substring(0, 5).trim() === 'image') {
 
 							await this.tourManager.uploadMenu(createdTour.id, file);
