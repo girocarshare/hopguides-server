@@ -374,7 +374,7 @@ export class TourManager {
 							po.icon = "castle";
 						} else if (poi.category == "DRINKS") {
 
-							po.icon = "drinks";
+							po.icon = "coffe";
 						} else if (poi.category == "NATURE") {
 
 							po.icon = "tree";
@@ -403,7 +403,7 @@ export class TourManager {
 							po.icon = "castle";
 						} else if (poi.category == "DRINKS") {
 
-							po.icon = "drinks";
+							po.icon = "coffe";
 						} else if (poi.category == "NATURE") {
 
 							po.icon = "tree";
@@ -586,7 +586,7 @@ export class TourManager {
 							poiHelp.icon = "castle";
 						} else if (poi.category == "DRINKS") {
 
-							poiHelp.icon = "drinks";
+							poiHelp.icon = "coffe";
 						} else if (poi.category == "NATURE") {
 
 							poiHelp.icon = "tree";
@@ -646,7 +646,7 @@ export class TourManager {
 							poiHelp.icon = "castle";
 						} else if (poi.category == "DRINKS") {
 
-							poiHelp.icon = "drinks";
+							poiHelp.icon = "coffe";
 						} else if (poi.category == "NATURE") {
 
 							poiHelp.icon = "tree";
