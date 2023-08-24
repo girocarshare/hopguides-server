@@ -575,7 +575,7 @@ export class TourRouter extends BaseRouter {
 					if (tour1 != null) {
 						if (tour1.gpx != null) {
 
-							console.log("blablaaaaaaaaa")
+							console.log("blablaaaaaaaaa2222222222222")
 							return res.status(200).send(tour1.gpx);
 							
 						} else {
@@ -637,8 +637,8 @@ export class TourRouter extends BaseRouter {
 
 				for (var item of gpx.tracks[0].points) {
 					var obj = []
-					obj.push(item.lat)
 					obj.push(item.lon)
+					obj.push(item.lat)
 					response.push(obj)
 				}
 
