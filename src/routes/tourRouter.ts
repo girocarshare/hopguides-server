@@ -637,8 +637,8 @@ export class TourRouter extends BaseRouter {
 
 				for (var item of gpx.tracks[0].points) {
 					var obj = []
-					obj.push(item.lon.slice(0, 8))
-					obj.push(item.lat.slice(0, 8))
+					obj.push(item.lon.toString().slice(0, 8))
+					obj.push(item.lat.toString().slice(0, 8))
 					response.push(obj)
 				}
 
