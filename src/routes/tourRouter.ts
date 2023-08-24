@@ -78,6 +78,32 @@ async function getTour(string) {
 
 }
 
+
+async function did(response) {
+
+	console.log(response.data.id)
+	function sleep(ms) {
+		return new Promise((resolve) => {
+		  setTimeout(resolve, ms);
+		});
+	  }
+	  await sleep(5000);
+	return await axios.get("https://api.d-id.com/talks/" + response.data.id, {
+							headers: {
+								'Authorization': `Basic bHVuYXppdmtvdmljKzJAZ21haWwuY29t:KezlIP_-dCnCfGoiTTDlU`,
+								'Content-Type': 'application/json'
+							}
+						})
+							.then(res => {
+								console.log(res)
+								return res.data.result_url 
+							})
+							.catch(err => {
+								console.log("error " + err)
+							});
+
+}
+
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
 	poiManager: POIManager;
@@ -165,7 +191,67 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
+		this.router.post(
+			'/d-id/generate',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
+
+				console.log(req.body)
+
+				var text = "Hi, your checkin is at" + req.body.checkIn + " " + ". And checkout is at " + req.body.checkOut
+				const data = JSON.parse(`{
+					"script": {
+					  "type": "text",
+					  "input": "Hi, your checkin is at ${req.body.checkIn}. And checkout is at  ${req.body.checkOut}. ${req.body.words}"
+					},
+					"source_url": "https://static.generated.photos/vue-static/face-generator/landing/wall/12.jpg"
+				  }`)
+				await axios.post("https://api.d-id.com/talks", data, {
+					headers: {
+						'Authorization': `Basic bHVuYXppdmtvdmljKzJAZ21haWwuY29t:KezlIP_-dCnCfGoiTTDlU`,
+						'Content-Type': 'application/json'
+					}
+				})
+					.then(async response => {
+						var resp = await did(response)
+
+						console.log(resp)
+						res.status(200).send({ data: resp });
+							
+
+
+					})
+					.catch(error => {
+						console.log("error " + error)
+					});
+
+
+			})
+		);
+
+	
+		this.router.get(
+			'/d-id/:id',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				axios.get("https://api.d-id.com/talks/tlk_1mKjC8X2fs9eQIUtBOTGd", {
+					headers: {
+						'Authorization': `Basic bHVuYXppdmtvdmljKzFAZ21haWwuY29t:7DyJuingHY4tMae09rwWY`,
+						'Content-Type': 'application/json'
+					}
+				})
+					.then(response => {
+						console.log(response)
+					})
+					.catch(error => {
+						console.log("error " + error)
+					});
+
+
+			})
+		);
 		this.router.post(
 			'/chat/openAI',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
@@ -489,8 +575,11 @@ export class TourRouter extends BaseRouter {
 					if (tour1 != null) {
 						if (tour1.gpx != null) {
 
+							console.log("blablaaaaaaaaa")
 							return res.status(200).send(tour1.gpx);
+							
 						} else {
+							console.log("blablaaaaaaaaa")
 							var tour = await this.tourManager.getToursWithPointsForMapbox(req.params.tourId)
 
 							var url = "https://api.mapbox.com/directions/v5/mapbox/cycling/"
@@ -511,6 +600,9 @@ export class TourRouter extends BaseRouter {
 
 							}
 							str += "]"
+
+							
+							console.log("blablaaaaaaaaa " + str)
 							return res.status(200).send(str);
 
 						}
@@ -545,8 +637,8 @@ export class TourRouter extends BaseRouter {
 
 				for (var item of gpx.tracks[0].points) {
 					var obj = []
-					obj.push(item.lon)
 					obj.push(item.lat)
+					obj.push(item.lon)
 					response.push(obj)
 				}
 
@@ -559,6 +651,8 @@ export class TourRouter extends BaseRouter {
 
 					}
 					str += "]"
+
+					console.log(str)
 					tour.gpx = str;
 					await this.tourManager.updateTour(
 						tour.id,
@@ -1067,6 +1161,7 @@ export class TourRouter extends BaseRouter {
 		);
 
 
+
 		this.router.post(
 			'/add/teasertour',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
@@ -1110,7 +1205,7 @@ export class TourRouter extends BaseRouter {
 						image.title = new LocalizedField
 						image.title.english = "This is short description text"
 						image.title.slovenian = "-"
-						
+
 						point.images.push(image)
 						point.price = 0
 						point.offerName = ""
@@ -1122,7 +1217,7 @@ export class TourRouter extends BaseRouter {
 						point.shortInfo = new LocalizedField
 						point.shortInfo.english = " In the heart of a vibrant metropolis stands an enchanting architectural marvel. Its grand façade tells stories of the past, while inside, opulent art and ancient relics await. This point of interest is not just a celebration of history but also a vibrant cultural center, hosting diverse events. A journey here is a captivating experience, igniting wonder and appreciation for human expression. Whether a history buff, art enthusiast, or curious soul, it leaves an unforgettable impression, yearning for more. "
 						point.shortInfo.slovenian = " - "
-						
+
 						point.longInfo = new LocalizedField
 						point.longInfo.english = "In the heart of a vibrant metropolis lies a captivating point of interest, a place that enchants locals and tourists alike. This architectural marvel stands tall, defying time and weather, weaving together the past and present with exquisite craftsmanship. Its grand façade, adorned with intricate carvings and sculptures, tells the stories of a bygone era. Step inside, and you are transported to a realm of opulence and elegance. The interior boasts a breathtaking display of art, from striking murals that adorn the ceilings to delicate mosaics that grace the floors. Each room exudes a unique ambiance, carrying the essence of the period it represents. As you wander through the labyrinth of hallways and chambers, you encounter relics of history preserved with utmost care. Ancient artifacts whisper tales of ancient civilizations, while carefully curated exhibits shed light on the region's rich cultural heritage. The point of interest not only celebrates history but also serves as a vibrant cultural center. Throughout the year, it hosts an array of events, from art exhibitions and classical concerts to traditional dance performances and contemporary showcases. Here, art and culture blend seamlessly, offering a delightful experience to enthusiasts from all walks of life. Visiting this point of interest is like embarking on a captivating journey through time and creativity. It leaves a lasting impression, igniting a sense of wonder and appreciation for the beauty and diversity of human expression. Whether you are an avid history buff, an art aficionado, or simply a curious soul seeking inspiration, this point of interest promises to be an unforgettable destination that leaves you yearning for more."
 						point.longInfo.slovenian = " - "
