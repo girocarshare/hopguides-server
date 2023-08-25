@@ -575,11 +575,9 @@ export class TourRouter extends BaseRouter {
 					if (tour1 != null) {
 						if (tour1.gpx != null) {
 
-							console.log("blablaaaaaaaaa2222222222222")
 							return res.status(200).send(tour1.gpx);
 							
 						} else {
-							console.log("blablaaaaaaaaa")
 							var tour = await this.tourManager.getToursWithPointsForMapbox(req.params.tourId)
 
 							var url = "https://api.mapbox.com/directions/v5/mapbox/cycling/"
@@ -596,13 +594,17 @@ export class TourRouter extends BaseRouter {
 
 							var str = "["
 							for (var objec of response) {
+								var hlp = objec.split(',')
+
+								console.log(objec)
+								
+								str += "[" + hlp[0].slice(0,8) + "," + hlp[1].slice(0,8) + "],"
 								str += "[" + objec + "],"
 
 							}
 							str += "]"
 
 							
-							console.log("blablaaaaaaaaa " + str)
 							return res.status(200).send(str);
 
 						}
