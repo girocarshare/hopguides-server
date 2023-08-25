@@ -87,7 +87,7 @@ async function did(response) {
 		  setTimeout(resolve, ms);
 		});
 	  }
-	  await sleep(5000);
+	  await sleep(6000);
 	return await axios.get("https://api.d-id.com/talks/" + response.data.id, {
 							headers: {
 								'Authorization': `Basic bHVuYXppdmtvdmljKzJAZ21haWwuY29t:KezlIP_-dCnCfGoiTTDlU`,
@@ -205,7 +205,7 @@ export class TourRouter extends BaseRouter {
 					  "type": "text",
 					  "input": "Hi, your checkin is at ${req.body.checkIn}. And checkout is at  ${req.body.checkOut}. ${req.body.words}"
 					},
-					"source_url": "https://static.generated.photos/vue-static/face-generator/landing/wall/12.jpg"
+					"source_url": "${req.body.character}"
 				  }`)
 				await axios.post("https://api.d-id.com/talks", data, {
 					headers: {
