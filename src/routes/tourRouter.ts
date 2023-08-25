@@ -594,11 +594,9 @@ export class TourRouter extends BaseRouter {
 
 							var str = "["
 							for (var objec of response) {
-								var hlp = objec.split(',')
-
-								console.log(objec)
+							
 								
-								str += "[" + hlp[0].slice(0,8) + "," + hlp[1].slice(0,8) + "],"
+								str += "[" + objec[0].toString().slice(0,8) + "," + objec[1].toString().slice(0,8) + "],"
 								str += "[" + objec + "],"
 
 							}
@@ -610,7 +608,7 @@ export class TourRouter extends BaseRouter {
 						}
 					}
 				} catch (e) {
-					console.log(e.error.errors)
+					console.log(e)
 				}
 
 
