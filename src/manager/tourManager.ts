@@ -203,6 +203,13 @@ export class TourManager {
 		});
 	}
 
+	async getTourById(tourId: string): Promise<Tour> {
+		return await this.tourRepository.findOne({ id: tourId }).catch((e) => {
+
+			throw new CustomError(404, 'Tour not found!');
+		});
+	}
+
 
 	async getTourByPreviousId(tourId: string): Promise<Tour> {
 		return await this.tourRepository.findOne({ previousId: tourId }).catch((e) => {
@@ -331,7 +338,7 @@ export class TourManager {
 
 
 
-			var tour: Tour = await this.getTour(qrcode.tourId).catch((err) => {
+			var tour: Tour = await this.getTourById( qrcode.tourId).catch((err) => {
 				throw new Error('Error getting Tours');
 			});
 
