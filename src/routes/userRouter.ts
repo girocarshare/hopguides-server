@@ -258,6 +258,9 @@ export class UserRouter extends BaseRouter {
 
 					}
 				} catch (err) {
+					console.log(err)
+					console.log(err.error)
+					console.log(err.error.error)
 					return res.status(412).send(err);
 				}
 			})
