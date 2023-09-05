@@ -59,6 +59,28 @@ export class UserManager {
 		return createdUser;
 	}
 
+	async addUser(user: User): Promise<User> {
+		// search for user, check if it exists, if it does, check for the fields of confirmed and createdAt
+		let createdUser: User = await this.userRepository.findOne({ email: user.email });
+
+
+		if (!createdUser) {
+			user.password = await bcrypt.hash(user.password, 8)
+
+			user.phone = user.email
+			user.role = UserRoles.USER
+			createdUser = await this.userRepository.createOne(user);
+		}
+		// await sendRegistrationMail(createdUser, notification.emailTemplate);
+		else if (createdUser.statusMB === UserStatus.BANNED)
+			throw new CustomError(403, 'User blacklisted');
+		else if (createdUser.statusMB === UserStatus.VERIFIED)
+			throw new CustomError(408, 'User exists');
+		else createdUser = await this.userRepository.replaceOne(createdUser.id, user);
+
+		return createdUser;
+	}
+
 	async sendRegistrationEmail(user: User): Promise<User> {
 		
 		let createdUser: User = await this.userRepository.findOne({ phone: user.phone });

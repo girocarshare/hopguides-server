@@ -84,23 +84,23 @@ async function did(response) {
 	console.log(response.data.id)
 	function sleep(ms) {
 		return new Promise((resolve) => {
-		  setTimeout(resolve, ms);
+			setTimeout(resolve, ms);
 		});
-	  }
-	  await sleep(6000);
+	}
+	await sleep(10000);
 	return await axios.get("https://api.d-id.com/talks/" + response.data.id, {
-							headers: {
-								'Authorization': `Basic bHVuYXppdmtvdmljKzJAZ21haWwuY29t:KezlIP_-dCnCfGoiTTDlU`,
-								'Content-Type': 'application/json'
-							}
-						})
-							.then(res => {
-								console.log(res)
-								return res.data.result_url 
-							})
-							.catch(err => {
-								console.log("error " + err)
-							});
+		headers: {
+			'Authorization': `Basic bHVuYXppdmtvdmljKzJAZ21haWwuY29t:KezlIP_-dCnCfGoiTTDlU`,
+			'Content-Type': 'application/json'
+		}
+	})
+		.then(res => {
+			console.log(res)
+			return res.data.result_url
+		})
+		.catch(err => {
+			console.log("error " + err)
+		});
 
 }
 
@@ -198,15 +198,47 @@ export class TourRouter extends BaseRouter {
 
 
 				console.log(req.body)
+				var img = ""
 
-				var text = "Hi, your checkin is at" + req.body.checkIn + " " + ". And checkout is at " + req.body.checkOut
+				if (req.body.character == 1) {
+
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/isabella.png"
+				} else if (req.body.character == 2) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/lorenzo.png"
+				} else if (req.body.character == 3) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/maria.png"
+				} else if (req.body.character == 4) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/johann.png"
+				} else if (req.body.character == 5) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/nia.png"
+				} else if (req.body.character == 6) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/sam.png"
+				} else if (req.body.character == 7) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/esperanza.png"
+				} else if (req.body.character == 8) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/diego.png"
+				} else if (req.body.character == 9) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/sophie.png"
+				} else if (req.body.character == 10) {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/samuel.png"
+				}
+
+				console.log(img)
+
 				const data = JSON.parse(`{
 					"script": {
 					  "type": "text",
-					  "input": "Hi, your checkin is at ${req.body.checkIn}. And checkout is at  ${req.body.checkOut}. ${req.body.words}"
+					  "input": "${req.body.words}",
+					  "provider":{
+						"type":"elevenlabs",
+						"voice_id":"2EiwWnXFnvU5JabPnv8n"
+					 }
 					},
-					"source_url": "${req.body.character}"
+					"source_url": "${img}"
 				  }`)
+
+
+
 				await axios.post("https://api.d-id.com/talks", data, {
 					headers: {
 						'Authorization': `Basic bHVuYXppdmtvdmljKzJAZ21haWwuY29t:KezlIP_-dCnCfGoiTTDlU`,
@@ -218,7 +250,7 @@ export class TourRouter extends BaseRouter {
 
 						console.log(resp)
 						res.status(200).send({ data: resp });
-							
+
 
 
 					})
@@ -230,7 +262,7 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
-	
+
 		this.router.get(
 			'/d-id/:id',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
@@ -576,7 +608,7 @@ export class TourRouter extends BaseRouter {
 						if (tour1.gpx != null) {
 
 							return res.status(200).send(tour1.gpx);
-							
+
 						} else {
 							var tour = await this.tourManager.getToursWithPointsForMapbox(req.params.tourId)
 
@@ -594,15 +626,15 @@ export class TourRouter extends BaseRouter {
 
 							var str = "["
 							for (var objec of response) {
-							
-								
-								str += "[" + objec[0].toString().slice(0,8) + "," + objec[1].toString().slice(0,8) + "],"
+
+
+								str += "[" + objec[0].toString().slice(0, 8) + "," + objec[1].toString().slice(0, 8) + "],"
 								str += "[" + objec + "],"
 
 							}
 							str += "]"
 
-							
+
 							return res.status(200).send(str);
 
 						}
