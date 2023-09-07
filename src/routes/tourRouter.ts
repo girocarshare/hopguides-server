@@ -205,28 +205,40 @@ export class TourRouter extends BaseRouter {
 				
 				console.log(req.body)
 				var img = ""
+				var voice = ""
 			
 				if (req.body.character == "imgIsabella") {
 
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/isabella.png"
+					voice = "z9fAnlkpzviPz146aGWa"
+
 				} else if (req.body.character == "imgLorenzo") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/lorenzo.png"
+					voice = "zcAOhNBS3c14rBihAFp1"
 				} else if (req.body.character == "imgMaria") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/maria.png"
+					voice = "oWAxZDx7w5VEj9dCyTzz"
 				} else if (req.body.character == "imgJohann") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/johann.png"
+					voice = "TxGEqnHWrfWFTfGW9XjX"
 				} else if (req.body.character == "imgNia") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/nia.png"
+					voice = "ThT5KcBeYPX3keUQqHPh"
 				} else if (req.body.character == "imgSam") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/sam.png"
+					voice = "2EiwWnXFnvU5JabPnv8n"
 				} else if (req.body.character == "imgEsperanza") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/esperanza.png"
+					voice = "EXAVITQu4vr4xnSDxMaL"
 				} else if (req.body.character == "imgDiego") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/diego.png"
+					voice = "TX3LPaxmHKxFdv7VOQHJ"
 				} else if (req.body.character == "imgSophie") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/sophie.png"
+					voice = "XrExE9yKIg1WjnnlVkGX"
 				} else if (req.body.character == "imgSamuel") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/samuel.png"
+					voice = "flq6f7yk4E4fJM5XTYuZ"
 				}
 
 				console.log(img)
@@ -237,7 +249,7 @@ export class TourRouter extends BaseRouter {
 					  "input": "${req.body.words}",
 					  "provider":{
 						"type":"elevenlabs",
-						"voice_id":"21m00Tcm4TlvDq8ikWAM"
+						"voice_id":"${voice}"
 					 }
 					},
 					"source_url": "${img}"
