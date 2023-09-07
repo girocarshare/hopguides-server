@@ -46,7 +46,7 @@ class DbClient {
 
     await database
       .collection('users')
-      .createIndex({ phone: 1, inviteCode: 1 }, { unique: true });
+      .createIndex({ phone: 1 }, { unique: true });
     await database
       .collection('users')
       .createIndex({ 'address.geoLocation': '2dsphere' });

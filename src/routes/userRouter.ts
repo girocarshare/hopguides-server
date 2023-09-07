@@ -93,11 +93,46 @@ export class UserRouter extends BaseRouter {
 			'/addUser',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				console.log(req.body)
-				const createdUser: User = await this.userManager.createUser(
-					deserialize(User, req.body));
-				return res.status(200).send(createdUser);
+				try{
+					const createdUser: User = await this.userManager.addUser(
+						deserialize(User, req.body));
+						sgMail.send({
+							to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
+							from: `${emailSender}`,
+							subject: "Verify your email",
+							html: ` <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+						
+							<img src="https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/sam.png" alt="Hopguides Logo" style="display: block; margin: 20px auto; width: 100px; height: 100px;">
+				
+						
+							<h2>Welcome to Hopguides,</h2>
+							<p>Hello, We are excited to have you on board. Your account has been successfully created.</p>
+							<p>Please verify your email address by clicking the following link:</p>
+				
+							<a href="https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/welcome" style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 4px;">Confirm my account</a>
+				
+							<p style="margin-top: 20px;">Can't click the button above? Copy and paste this link into your browser:</p>
+							<a href="https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/welcome" style="word-wrap: break-word; color: #007BFF; text-decoration: none;">https://auth.d-id.com/u/email-verification?ticket=uJ0r4RJN7jbm5loOfxk3fOcgTbAAHJUE#</a>
+				
+							<p>Thanks for being an early adapter of synthetic media technology.</p>
+							<p>Warm regards,</p>
+							<p>Team Hopguides</p>
+				
+							<p style="margin-top: 30px; font-size: 0.9em;">If you are having any issues with your account, please don’t hesitate to contact us at <a href="mailto:support@hopguides.com" style="color: #007BFF;">support@hopguides.com</a></p>
+						</div>
+								`
+						})
+					
+					return res.status(200).send(createdUser);
+				}catch(err){
+
+					console.log(err)
+				}
+				
 			})
 		);
+
+	
 
 		/* POST Send registration mail */
 		this.router.post(
@@ -192,7 +227,7 @@ export class UserRouter extends BaseRouter {
 							userJwt: string;
 						} = await this.userManager.login(login);
 						res.append('accessToken', loggedUserData.userJwt);
-						return res.status(200).send({ userJwt: loggedUserData.userJwt });
+						return res.status(200).send({ userJwt: loggedUserData.userJwt, tokens:user.tokens  });
 
 					}
 				} catch (err) {
