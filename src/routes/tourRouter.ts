@@ -90,7 +90,7 @@ async function did(response) {
 	await sleep(10000);
 	return await axios.get("https://api.d-id.com/talks/" + response.data.id, {
 		headers: {
-			'Authorization': `Basic bHVuYXppdmtvdmljKzVAZ21haWwuY29t:EGo9tyIQWgpzSToU9p1AB`,
+			'Authorization': `Basic bHVuYXppdmtvdmljKzZAZ21haWwuY29t:422iqW2SSI4GxeIGu4idK`,
 			'Content-Type': 'application/json'
 		}
 	})
@@ -247,7 +247,7 @@ export class TourRouter extends BaseRouter {
 
 				await axios.post("https://api.d-id.com/talks", data, {
 					headers: {
-						'Authorization': `Basic bHVuYXppdmtvdmljKzVAZ21haWwuY29t:EGo9tyIQWgpzSToU9p1AB`,
+						'Authorization': `Basic bHVuYXppdmtvdmljKzZAZ21haWwuY29t:422iqW2SSI4GxeIGu4idK`,
 						'Content-Type': 'application/json'
 					}
 				})
