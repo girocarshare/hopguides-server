@@ -50,6 +50,10 @@ export class User extends UserBase {
 
 	@jsonProperty()
 	@dbField()
+	tokens: number;
+
+	@jsonProperty()
+	@dbField()
 	firstName: string;
 
 	@jsonProperty()

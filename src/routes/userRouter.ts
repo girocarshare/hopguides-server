@@ -20,7 +20,7 @@ import * as sgMail from '@sendgrid/mail';
 import { RegisterPayload } from '../classes/user/registerPayload';
 var multerS3 = require('multer-s3');
 sgMail.setApiKey("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")
-var emailSender = "news@girocarshare.com";
+var emailSender = "beta-app@gogiro.app";
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "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"
@@ -227,7 +227,7 @@ export class UserRouter extends BaseRouter {
 							userJwt: string;
 						} = await this.userManager.login(login);
 						res.append('accessToken', loggedUserData.userJwt);
-						return res.status(200).send({ userJwt: loggedUserData.userJwt });
+						return res.status(200).send({ userJwt: loggedUserData.userJwt, tokens:user.tokens  });
 
 					}
 				} catch (err) {

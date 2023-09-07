@@ -67,6 +67,7 @@ export class UserManager {
 		if (!createdUser) {
 			user.password = await bcrypt.hash(user.password, 8)
 
+			user.tokens = 20
 			user.phone = user.email
 			user.role = UserRoles.USER
 			createdUser = await this.userRepository.createOne(user);
@@ -129,4 +130,14 @@ export class UserManager {
 		console.log(err.error)
 	}
 	}
+
+	async updateUser(userId: string, data: Partial<User>) {
+
+		await this.userRepository.updateOne(userId, data).catch((err) => {
+			throw new Error('Error updating User');
+		});
+
+	}
 }
+
+
