@@ -79,7 +79,7 @@ async function getTour(string) {
 }
 
 
-async function did(response) {
+async function did(response, user) {
 
 	console.log(response.data.id)
 	function sleep(ms) {
@@ -90,7 +90,7 @@ async function did(response) {
 	await sleep(10000);
 	return await axios.get("https://api.d-id.com/talks/" + response.data.id, {
 		headers: {
-			'Authorization': `Basic bHVuYXppdmtvdmljKzZAZ21haWwuY29t:422iqW2SSI4GxeIGu4idK`,
+			'Authorization': `Basic ${user.didapi}`,
 			'Content-Type': 'application/json'
 		}
 	})
@@ -197,9 +197,16 @@ export class TourRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				var tokens = req.body.tokens
-
+				
 				var user = await this.userManager.getUser(req.userId)
+				var ofTokens = user.tokens - parseFloat(req.body.tokensneeded)
+
+
+				if(ofTokens<0){
+					return res.status(412).send({ message: "There are not enough tokens"});
+				}
+				var tokens = ofTokens
+
 				user.tokens = tokens
 				await this.userManager.updateUser(user.id, user)
 				
@@ -259,13 +266,13 @@ export class TourRouter extends BaseRouter {
 
 				await axios.post("https://api.d-id.com/talks", data, {
 					headers: {
-						'Authorization': `Basic bHVuYXppdmtvdmljKzZAZ21haWwuY29t:422iqW2SSI4GxeIGu4idK`,
+						'Authorization': `Basic ${user.didapi}`,
 						'Content-Type': 'application/json'
 					}
 				})
 					.then(async response => {
 						console.log(response)
-						var resp = await did(response)
+						var resp = await did(response, user)
 
 						console.log(resp)
 						res.status(200).send({ data: resp , tokens: tokens});
@@ -274,7 +281,9 @@ export class TourRouter extends BaseRouter {
 
 					})
 					.catch(error => {
+						
 						console.log("error " + error)
+						return res.status(402).send({message: "You do not have enough tokens in d-id"});
 					});
 
 
@@ -299,6 +308,23 @@ export class TourRouter extends BaseRouter {
 					.catch(error => {
 						console.log("error " + error)
 					});
+
+
+			})
+		);
+
+				this.router.get(
+			'/d-id/api/:api',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),	
+				parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				var user = await this.userManager.getUser(req.userId)
+			
+				user.didapi = req.params.api
+				await this.userManager.updateUser(user.id, user)
+
+				return res.status(200).send("success")
 
 
 			})

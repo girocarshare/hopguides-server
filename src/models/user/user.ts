@@ -54,6 +54,10 @@ export class User extends UserBase {
 
 	@jsonProperty()
 	@dbField()
+	didapi: string;
+
+	@jsonProperty()
+	@dbField()
 	firstName: string;
 
 	@jsonProperty()
