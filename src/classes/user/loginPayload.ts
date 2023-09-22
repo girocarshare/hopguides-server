@@ -11,3 +11,10 @@ export class LoginPayload {
 	@notEmpty()
 	password: string;
 }
+export class VerifyPayload {
+	@jsonProperty()
+	@required()
+	@email()
+	email: string;
+
+}
