@@ -44,6 +44,9 @@ var s3 = new AWS.S3({
 })
 
 
+const client = require('@sendgrid/client');
+client.setApiKey("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");
+
 sgMail.setApiKey("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")
 var emailSender = "beta-app@gogiro.app";
 interface IBkRequest extends IRequest {
@@ -87,7 +90,7 @@ async function did(response, user) {
 			setTimeout(resolve, ms);
 		});
 	}
-	await sleep(10000);
+	await sleep(15000);
 	return await axios.get("https://api.d-id.com/talks/" + response.data.id, {
 		headers: {
 			'Authorization': `Basic ${user.didapi}`,
@@ -1389,6 +1392,105 @@ export class TourRouter extends BaseRouter {
 		);
 
 
+
+		this.router.post(
+			'/d-id/premade',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				
+				var user = await this.userManager.getUser(req.userId)
+				var ofTokens = user.tokens - parseFloat(req.body.tokensneeded)
+
+
+				if(ofTokens<0){
+					return res.status(412).send({ message: "There are not enough tokens"});
+				}
+				var tokens = ofTokens
+
+				user.tokens = tokens
+				await this.userManager.updateUser(user.id, user)
+				
+				console.log(req.body)
+				var img = ""
+				var voice = ""
+			
+				if (req.body.character == "imgIsabella") {
+
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/isabella.png"
+					voice = "z9fAnlkpzviPz146aGWa"
+
+				} else if (req.body.character == "imgLorenzo") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/lorenzo.png"
+					voice = "zcAOhNBS3c14rBihAFp1"
+				} else if (req.body.character == "imgMaria") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/maria.png"
+					voice = "oWAxZDx7w5VEj9dCyTzz"
+				} else if (req.body.character == "imgJohann") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/johann.png"
+					voice = "TxGEqnHWrfWFTfGW9XjX"
+				} else if (req.body.character == "imgNia") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/nia.png"
+					voice = "ThT5KcBeYPX3keUQqHPh"
+				} else if (req.body.character == "imgSam") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/sam.png"
+					voice = "2EiwWnXFnvU5JabPnv8n"
+				} else if (req.body.character == "imgEsperanza") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/esperanza.png"
+					voice = "EXAVITQu4vr4xnSDxMaL"
+				} else if (req.body.character == "imgDiego") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/diego.png"
+					voice = "TX3LPaxmHKxFdv7VOQHJ"
+				} else if (req.body.character == "imgSophie") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/sophie.png"
+					voice = "XrExE9yKIg1WjnnlVkGX"
+				} else if (req.body.character == "imgSamuel") {
+					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/samuel.png"
+					voice = "flq6f7yk4E4fJM5XTYuZ"
+				}
+
+				console.log(img)
+
+				const data = JSON.parse(`{
+					"script": {
+					  "type": "text",
+					  "input": "Hello and welcome. We're genuinely excited to have you here. Let's quickly touch on a few essentials to make your arrival seamless. Once you're here, our reception desk is where you'll start. They'll guide you through the check-in process. You'll be given access to your room, either through a key card or a digital method. Please remember that check-in starts from ${req.body.checkIn}, and please check out by ${req.body.checkOut}. Of course, we're always here to help, so if you have any questions or need flexibility, don't hesitate to ask. Welcome to [Property Name], and we hope you have a memorable stay.",
+					  "provider":{
+						"type":"elevenlabs",
+						"voice_id":"${voice}"
+					 }
+					},
+					"source_url": "${img}"
+				  }`)
+
+
+
+				await axios.post("https://api.d-id.com/talks", data, {
+					headers: {
+						'Authorization': `Basic ${user.didapi}`,
+						'Content-Type': 'application/json'
+					}
+				})
+					.then(async response => {
+						console.log(response)
+						var resp = await did(response, user)
+
+						console.log(resp)
+						res.status(200).send({ data: resp , tokens: tokens});
+
+
+
+					})
+					.catch(error => {
+						
+						console.log("error " + error)
+						return res.status(402).send({message: "You do not have enough tokens in d-id"});
+					});
+
+
+			})
+		);
 
 
 

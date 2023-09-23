@@ -80,6 +80,10 @@ export class User extends UserBase {
 
 	@dbField()
 	confirmed: boolean = false;
+
+	@jsonProperty()
+	@dbField()
+	paid: boolean = false;
 	
 	@dbField()
 	invited: boolean = false;

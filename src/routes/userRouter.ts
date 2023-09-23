@@ -1,8 +1,8 @@
 
-import { User } from '../models/user/user';
+import { User, UserStatus } from '../models/user/user';
 import { CustomError } from '../classes/customError';
 import { IRequest, IResponse } from '../classes/interfaces';
-import { LoginPayload } from '../classes/user/loginPayload';
+import { LoginPayload, VerifyPayload } from '../classes/user/loginPayload';
 import { deserialize } from '../json';
 import { UserManager } from '../manager/userManager';
 import { BPartnerManager } from '../manager/bpartnerManager';
@@ -16,15 +16,23 @@ import {
 import { validateOrThrow } from '../validations';
 import { BaseRouter } from './baseRouter';
 import { BPartner } from '../models/bpartner/bpartner';
-import * as sgMail from '@sendgrid/mail';
 import { RegisterPayload } from '../classes/user/registerPayload';
 var multerS3 = require('multer-s3');
-sgMail.setApiKey("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")
-var emailSender = "beta-app@gogiro.app";
+var emailSender = "luna.zivkovic@gogiro.app";
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "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"
 })
+
+const client = require('@sendgrid/client');
+client.setApiKey("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");
+
+import sgMail = require('@sendgrid/mail');
+sgMail.setApiKey("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")
+//var sgMail = require('@sendgrid/mail')('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');
+
+
+
 interface IBkRequest extends IRequest {
 	request: RegisterPayload;
 }
@@ -93,46 +101,58 @@ export class UserRouter extends BaseRouter {
 			'/addUser',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				console.log(req.body)
-				try{
+				try {
 					const createdUser: User = await this.userManager.addUser(
 						deserialize(User, req.body));
-						sgMail.send({
-							to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
-							from: `${emailSender}`,
-							subject: "Verify your email",
-							html: ` <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+
+
+						var val = `<html lang=\\"en\\"><head><meta charset=\\"UTF-8\\"><meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\"><title>Hopguides Email Template</title></head><body><div style=\\"font-family: Arial, sans-serif; text-align: center; max-width: 600px; margin: 0 auto;\\"><img src=\\"https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/Screenshot_2023-04-26_at_18.31.44-removebg-preview.png\\" alt=\\"Hopguides Logo\\" style=\\"display: block; margin: 20px auto; width: 100px; text-align: center;\\"><h2>Welcome to Hopguides,</h2><p>Hello, We are excited to have you on board. Your account has been successfully created.</p><p>Please verify your email address by clicking the following link:</p><a href=\\"http://localhost:3000/#/verified/${req.body.email}\\" style=\\"display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 4px;\\">Confirm my account</a><p>Thanks for being an early adapter of synthetic media technology.</p><p>Warm regards,</p><p>Team Hopguides</p><p style=\\"margin-top: 30px; font-size: 0.9em;\\">If you are having any issues with your account, please don’t hesitate to contact us at <a href=\\"mailto:support@hopguides.com\\" style=\\"color: #007BFF;\\">support@hopguides.com</a></p></div></body></html>`
+
+						const body= `{
+							"content": [
+								{
+								  "type": "text/html", 
+								  "value": "${val}"
+								  
+								}
+							  ], 
+							"personalizations" : [
+							  {
+								"to" : [
+								  {
+									"email" : "luna.zivkovic@gogiro.app"
+								  }
+								],
+								"subject" : "Verify your email"
+							  }
+							],
+							"from" : {
+							  "email" : "${emailSender}"
+							}
+						  }`
+						const request = {
+							method: 'POST',
+							url: '/v3/mail/send',
+							body: body
+						  };
+						  client.request(request)
+						  
+						  .then(([response, body]) => {
+							console.log(response.statusCode);
+							console.log(body);
+						  })
 						
-							<img src="https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/sam.png" alt="Hopguides Logo" style="display: block; margin: 20px auto; width: 100px; height: 100px;">
-				
-						
-							<h2>Welcome to Hopguides,</h2>
-							<p>Hello, We are excited to have you on board. Your account has been successfully created.</p>
-							<p>Please verify your email address by clicking the following link:</p>
-				
-							<a href="https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/welcome" style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 4px;">Confirm my account</a>
-				
-							<p style="margin-top: 20px;">Can't click the button above? Copy and paste this link into your browser:</p>
-							<a href="https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/welcome" style="word-wrap: break-word; color: #007BFF; text-decoration: none;">https://auth.d-id.com/u/email-verification?ticket=uJ0r4RJN7jbm5loOfxk3fOcgTbAAHJUE#</a>
-				
-							<p>Thanks for being an early adapter of synthetic media technology.</p>
-							<p>Warm regards,</p>
-							<p>Team Hopguides</p>
-				
-							<p style="margin-top: 30px; font-size: 0.9em;">If you are having any issues with your account, please don’t hesitate to contact us at <a href="mailto:support@hopguides.com" style="color: #007BFF;">support@hopguides.com</a></p>
-						</div>
-								`
-						})
-					
+						  
 					return res.status(200).send(createdUser);
-				}catch(err){
+				} catch (err) {
 
 					console.log(err)
 				}
-				
+
 			})
 		);
 
-	
+
 
 		/* POST Send registration mail */
 		this.router.post(
@@ -182,18 +202,120 @@ export class UserRouter extends BaseRouter {
 			'/forgotPassword',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				sgMail.send({
-					to: "lunazivkovic@gmail.com", // change so that poi.contact.email gets email
-					from: `${emailSender}`,
-					subject: "Reset password",
-					html: `Dear partner,<br/><br/>
-							
-							Kindly click on the link below to reset your password.<br/><br/> <a href=https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/setPassword/${req.body.email} id=get> Reset password </a><br/><br/>In case of any issues or questions, feel free to contact us at info@gogiro.com.<br/><br/><text style=\"color:red;\">***Important: Please do not reply to this email.  This mailbox is not set up to receive email.</text><br/><br/><br/>Kind regards,<br/><br/> <text style=\"color:gray;\">GoGiro</text><br/>
-							`
-				})
+
+				var val = `<html><head></head><body><p>Dear partner,</p><p>Kindly click on the link below to reset your password.</p><a href=\\"https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/setPassword/${req.body.email}\\" id=\\"get\\">Reset password</a><p>In case of any issues or questions, feel free to contact us at info@gogiro.com.</p><p style=\\"color:red;\\">***Important: Please do not reply to this email. This mailbox is not set up to receive email.</p><p>Kind regards,</p><p style=\\"color:gray;\\">Hopguides</p></body></html>`
+
+				
+
+				const body= `{
+					"content": [
+						{
+						  "type": "text/html", 
+						  "value": "${val}"
+						  
+						}
+					  ], 
+					"personalizations" : [
+					  {
+						"to" : [
+						  {
+							"email" : "luna.zivkovic@gogiro.app"
+						  }
+						],
+						"subject" : "Reset password"
+					  }
+					],
+					"from" : {
+					  "email" : "${emailSender}"
+					}
+				  }`
+				const request = {
+					method: 'POST',
+					url: '/v3/mail/send',
+					body: body
+				  };
+				  client.request(request)
+				  
+				  .then(([response, body]) => {
+					console.log(response.statusCode);
+					console.log(body);
+				  })
+				  
+				
 				return res.status(200).send();
 			})
 		);
+
+		this.router.get(
+			'/verify/:email',
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				var body = {
+					email: req.params.email
+				}
+				const login: VerifyPayload = deserialize(VerifyPayload, body);
+				validateOrThrow(login);
+				let user: User = await this.userManager.getUserByEmail(req.params.email);
+
+				if (!user)
+					return res.throwErr(new CustomError(404, 'User does not exist'));
+
+				else {
+					user.status = UserStatus.VERIFIED
+					user.paid = false;
+					 await this.userManager.updateUser(user.id, user)
+					 
+					const loggedUserData: {
+						userData: User;
+						userJwt: string;
+					} = await this.userManager.verify(login);
+					res.append('accessToken', loggedUserData.userJwt);
+					return res.status(200).send({ userJwt: loggedUserData.userJwt, tokens: user.tokens, paid: user.paid });
+
+				}
+			
+			})
+		);
+
+		/* GET user role */
+		this.router.get(
+			'/paid',
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				var user: User = await this.userManager.getUser(req.userId);
+				var paid = user.paid
+				return res.status(200).send(paid);
+			})
+		);
+
+		this.router.get(
+			'/login/:email',
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				var body = {
+					email: req.params.email
+				}
+				const login: VerifyPayload = deserialize(VerifyPayload, body);
+				validateOrThrow(login);
+				let user: User = await this.userManager.getUserByEmail(req.params.email);
+
+				if (!user)
+					return res.status(404).send( "User does not exist" );
+				if(user.status != UserStatus.VERIFIED){
+					return res.status(412).send( 'User  not verified' );
+				}
+				else {
+					const loggedUserData: {
+						userData: User;
+						userJwt: string;
+					} = await this.userManager.verify(login);
+					res.append('accessToken', loggedUserData.userJwt);
+					return res.status(200).send({ userJwt: loggedUserData.userJwt, tokens: user.tokens, paid: user.paid });
+
+				}
+			
+			})
+		);
+
+
 
 		/* POST Finish user registration */
 		this.router.post(
@@ -209,6 +331,8 @@ export class UserRouter extends BaseRouter {
 			})
 		);
 
+	
+
 		/* POST Login */
 		this.router.post(
 			'/login',
@@ -217,9 +341,11 @@ export class UserRouter extends BaseRouter {
 					const login: LoginPayload = deserialize(LoginPayload, req.body);
 					validateOrThrow(login);
 					let user: User = await this.userManager.getUserByEmail(login.email);
-
 					if (!user)
-						return res.throwErr(new CustomError(404, 'User does not exist'));
+					return res.status(404).send( "User does not exist" );
+				if(user.status != UserStatus.VERIFIED){
+					return res.status(412).send( 'User  not verified' );
+				}
 
 					else {
 						const loggedUserData: {
@@ -227,12 +353,12 @@ export class UserRouter extends BaseRouter {
 							userJwt: string;
 						} = await this.userManager.login(login);
 						res.append('accessToken', loggedUserData.userJwt);
-						return res.status(200).send({ userJwt: loggedUserData.userJwt, tokens:user.tokens  });
+						return res.status(200).send({ userJwt: loggedUserData.userJwt, tokens: user.tokens, paid: user.paid });
 
 					}
 				} catch (err) {
 					console.log(err.error)
-					return res.status(412).send(err);
+					return res.status(415).send(err);
 				}
 			})
 
@@ -245,9 +371,9 @@ export class UserRouter extends BaseRouter {
 				try {
 					var us = await this.userManager.getUserByEmail(req.body.email);
 					console.log(us)
-					if(us!=null){
+					if (us != null) {
 						const login: LoginPayload = deserialize(LoginPayload, req.body);
-					
+
 						const loggedUserData: {
 							userData: User;
 							userJwt: string;
@@ -257,13 +383,13 @@ export class UserRouter extends BaseRouter {
 						res.append('accessToken', loggedUserData.userJwt);
 						return res.status(200).send({ userJwt: loggedUserData.userJwt });
 					}
-				
+
 					const createdUser: User = await this.userManager.createUser(
 						deserialize(User, req.body));
 
-						var data ={
-						userId : createdUser.id
-						}
+					var data = {
+						userId: createdUser.id
+					}
 
 					const bpartnerData: BPartner = deserialize(
 						BPartner,
@@ -302,7 +428,7 @@ export class UserRouter extends BaseRouter {
 
 		);
 
-		/* GET user role */ 
+		/* GET user role */
 		this.router.get(
 			'/getRole',
 			parseJwt,
@@ -310,6 +436,18 @@ export class UserRouter extends BaseRouter {
 				var user: User = await this.userManager.getUser(req.userId);
 				var role: string = user.role
 				return res.status(200).send(role);
+			})
+		);
+
+		/* GET user role */
+		this.router.get(
+			'/tokens',
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				var user: User = await this.userManager.getUser(req.userId);
+				var tokens = user.tokens
+				console.log(tokens)
+				return res.status(200).send(tokens.toString());
 			})
 		);
 
