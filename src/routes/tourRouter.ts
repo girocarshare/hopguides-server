@@ -1455,7 +1455,7 @@ export class TourRouter extends BaseRouter {
 				const data = JSON.parse(`{
 					"script": {
 					  "type": "text",
-					  "input": "${req.body.words}",
+					  "input": "Hello and welcome. We're genuinely excited to have you here. Let's quickly touch on a few essentials to make your arrival seamless. Once you're here, our reception desk is where you'll start. They'll guide you through the check-in process. You'll be given access to your room, either through a key card or a digital method. Please remember that check-in starts from ${req.body.checkIn}, and please check out by ${req.body.checkOut}. Of course, we're always here to help, so if you have any questions or need flexibility, don't hesitate to ask. Welcome to [Property Name], and we hope you have a memorable stay.",
 					  "provider":{
 						"type":"elevenlabs",
 						"voice_id":"${voice}"
