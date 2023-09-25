@@ -106,9 +106,36 @@ export class UserRouter extends BaseRouter {
 						deserialize(User, req.body));
 
 
-						var val = `<html lang=\\"en\\"><head><meta charset=\\"UTF-8\\"><meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\"><title>Hopguides Email Template</title></head><body><div style=\\"font-family: Arial, sans-serif; text-align: center; max-width: 600px; margin: 0 auto;\\"><img src=\\"https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/Screenshot_2023-04-26_at_18.31.44-removebg-preview.png\\" alt=\\"Hopguides Logo\\" style=\\"display: block; margin: 20px auto; width: 100px; text-align: center;\\"><h2>Welcome to Hopguides,</h2><p>Hello, We are excited to have you on board. Your account has been successfully created.</p><p>Please verify your email address by clicking the following link:</p><a href=\\"http://localhost:3000/#/verified/${req.body.email}\\" style=\\"display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 4px;\\">Confirm my account</a><p>Thanks for being an early adapter of synthetic media technology.</p><p>Warm regards,</p><p>Team Hopguides</p><p style=\\"margin-top: 30px; font-size: 0.9em;\\">If you are having any issues with your account, please don’t hesitate to contact us at <a href=\\"mailto:support@hopguides.com\\" style=\\"color: #007BFF;\\">support@hopguides.com</a></p></div></body></html>`
 
-						const body= `{
+					const data = {
+						"contacts": [
+							{
+								"email": req.body.email,
+
+							}
+						]
+					};
+
+					const requ = {
+						url: `/v3/marketing/contacts`,
+						method: 'PUT',
+						body: data
+					}
+
+					client.request(requ)
+						.then(([response, body]) => {
+							console.log(response.statusCode);
+							console.log(response.body);
+						})
+						.catch(error => {
+							console.error(error);
+						});
+
+
+
+					var val = `<html lang=\\"en\\"><head><meta charset=\\"UTF-8\\"><meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\"><title>Hopguides Email Template</title></head><body><div style=\\"font-family: Arial, sans-serif; text-align: center; max-width: 600px; margin: 0 auto;\\"><img src=\\"https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/Screenshot_2023-04-26_at_18.31.44-removebg-preview.png\\" alt=\\"Hopguides Logo\\" style=\\"display: block; margin: 20px auto; width: 100px; text-align: center;\\"><h2>Welcome to Hopguides,</h2><p>Hello, We are excited to have you on board. Your account has been successfully created.</p><p>Please verify your email address by clicking the following link:</p><a href=\\"http://localhost:3000/#/verified/${req.body.email}\\" style=\\"display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 4px;\\">Confirm my account</a><p>Thanks for being an early adapter of synthetic media technology.</p><p>Warm regards,</p><p>Team Hopguides</p><p style=\\"margin-top: 30px; font-size: 0.9em;\\">If you are having any issues with your account, please don’t hesitate to contact us at <a href=\\"mailto:support@hopguides.com\\" style=\\"color: #007BFF;\\">support@hopguides.com</a></p></div></body></html>`
+
+					const body = `{
 							"content": [
 								{
 								  "type": "text/html", 
@@ -130,19 +157,19 @@ export class UserRouter extends BaseRouter {
 							  "email" : "${emailSender}"
 							}
 						  }`
-						const request = {
-							method: 'POST',
-							url: '/v3/mail/send',
-							body: body
-						  };
-						  client.request(request)
-						  
-						  .then(([response, body]) => {
+					const request = {
+						method: 'POST',
+						url: '/v3/mail/send',
+						body: body
+					};
+					client.request(request)
+
+						.then(([response, body]) => {
 							console.log(response.statusCode);
 							console.log(body);
-						  })
-						
-						  
+						})
+
+
 					return res.status(200).send(createdUser);
 				} catch (err) {
 
@@ -205,9 +232,9 @@ export class UserRouter extends BaseRouter {
 
 				var val = `<html><head></head><body><p>Dear partner,</p><p>Kindly click on the link below to reset your password.</p><a href=\\"https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/setPassword/${req.body.email}\\" id=\\"get\\">Reset password</a><p>In case of any issues or questions, feel free to contact us at info@gogiro.com.</p><p style=\\"color:red;\\">***Important: Please do not reply to this email. This mailbox is not set up to receive email.</p><p>Kind regards,</p><p style=\\"color:gray;\\">Hopguides</p></body></html>`
 
-				
 
-				const body= `{
+
+				const body = `{
 					"content": [
 						{
 						  "type": "text/html", 
@@ -233,15 +260,15 @@ export class UserRouter extends BaseRouter {
 					method: 'POST',
 					url: '/v3/mail/send',
 					body: body
-				  };
-				  client.request(request)
-				  
-				  .then(([response, body]) => {
-					console.log(response.statusCode);
-					console.log(body);
-				  })
-				  
-				
+				};
+				client.request(request)
+
+					.then(([response, body]) => {
+						console.log(response.statusCode);
+						console.log(body);
+					})
+
+
 				return res.status(200).send();
 			})
 		);
@@ -262,8 +289,8 @@ export class UserRouter extends BaseRouter {
 				else {
 					user.status = UserStatus.VERIFIED
 					user.paid = false;
-					 await this.userManager.updateUser(user.id, user)
-					 
+					await this.userManager.updateUser(user.id, user)
+
 					const loggedUserData: {
 						userData: User;
 						userJwt: string;
@@ -272,7 +299,7 @@ export class UserRouter extends BaseRouter {
 					return res.status(200).send({ userJwt: loggedUserData.userJwt, tokens: user.tokens, paid: user.paid });
 
 				}
-			
+
 			})
 		);
 
@@ -298,9 +325,9 @@ export class UserRouter extends BaseRouter {
 				let user: User = await this.userManager.getUserByEmail(req.params.email);
 
 				if (!user)
-					return res.status(404).send( "User does not exist" );
-				if(user.status != UserStatus.VERIFIED){
-					return res.status(412).send( 'User  not verified' );
+					return res.status(404).send("User does not exist");
+				if (user.status != UserStatus.VERIFIED) {
+					return res.status(412).send('User  not verified');
 				}
 				else {
 					const loggedUserData: {
@@ -311,7 +338,7 @@ export class UserRouter extends BaseRouter {
 					return res.status(200).send({ userJwt: loggedUserData.userJwt, tokens: user.tokens, paid: user.paid });
 
 				}
-			
+
 			})
 		);
 
@@ -331,7 +358,7 @@ export class UserRouter extends BaseRouter {
 			})
 		);
 
-	
+
 
 		/* POST Login */
 		this.router.post(
@@ -342,10 +369,10 @@ export class UserRouter extends BaseRouter {
 					validateOrThrow(login);
 					let user: User = await this.userManager.getUserByEmail(login.email);
 					if (!user)
-					return res.status(404).send( "User does not exist" );
-				if(user.status != UserStatus.VERIFIED){
-					return res.status(412).send( 'User  not verified' );
-				}
+						return res.status(404).send("User does not exist");
+					if (user.status != UserStatus.VERIFIED) {
+						return res.status(412).send('User  not verified');
+					}
 
 					else {
 						const loggedUserData: {
