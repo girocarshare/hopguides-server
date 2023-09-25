@@ -9,6 +9,8 @@ import { BPartnerManager } from '../manager/bpartnerManager';
 import { simpleAsync } from './util';
 import * as multer from 'multer';
 import * as AWS from 'aws-sdk';
+
+const axios = require('axios');
 import {
 	parseJwt,
 	withErrorHandler
@@ -181,6 +183,7 @@ export class UserRouter extends BaseRouter {
 
 
 
+
 		/* POST Send registration mail */
 		this.router.post(
 			'/sendRegistrationEmail',
@@ -273,6 +276,10 @@ export class UserRouter extends BaseRouter {
 			})
 		);
 
+
+
+
+
 		this.router.get(
 			'/verify/:email',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
@@ -303,6 +310,26 @@ export class UserRouter extends BaseRouter {
 			})
 		);
 
+		
+		async function gettokens(api) {
+
+			return await axios.get("https://api.d-id.com/credits", {
+					headers: {
+						'Authorization': `Basic ${api}`,
+						'Content-Type': 'application/json'
+					}
+				})
+					.then(res => {
+						console.log(res.data.remaining)
+						console.log(res.data)
+						return res.data.remaining
+					})
+					.catch(err => {
+						console.log("error " + err)
+					});
+
+		}
+
 		/* GET user role */
 		this.router.get(
 			'/paid',
@@ -310,9 +337,18 @@ export class UserRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				var user: User = await this.userManager.getUser(req.userId);
 				var paid = user.paid
-				return res.status(200).send(paid);
+
+				var tokens = await gettokens(user.didapi)
+
+				console.log("tokens")
+				console.log(tokens)
+
+
+				return res.status(200).send({paid: paid, tokens: tokens});
 			})
 		);
+
+
 
 		this.router.get(
 			'/login/:email',
