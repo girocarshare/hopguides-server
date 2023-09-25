@@ -120,7 +120,7 @@ export class UserRouter extends BaseRouter {
 							  {
 								"to" : [
 								  {
-									"email" : "luna.zivkovic@gogiro.app"
+									"email" : "${req.body.email}"
 								  }
 								],
 								"subject" : "Verify your email"
@@ -219,7 +219,7 @@ export class UserRouter extends BaseRouter {
 					  {
 						"to" : [
 						  {
-							"email" : "luna.zivkovic@gogiro.app"
+							"email" : "${req.body.email}"
 						  }
 						],
 						"subject" : "Reset password"
