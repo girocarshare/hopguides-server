@@ -66,6 +66,7 @@ export class UserManager {
 
 		if (!createdUser) {
 			var pass = await bcrypt.hash(user.password, 8)
+			console.log("pass")
 			console.log(pass)
 			user.password = pass
 
