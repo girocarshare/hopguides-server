@@ -8,11 +8,13 @@ import { TourManager } from './manager/tourManager';
 var deeplink = require('node-deeplink');
 import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
+import { CityRouter } from './routes/cityRouter';
 //global.CronJob = require('./db/cron.js');
 class App {
 	public app: express.Application;
 
 	private userRouter: UserRouter;
+	private cityRouter: CityRouter;
 	private vehicleRouter: VehicleRouter;
 	private bookingRouter: BookingRouter;
 	private bpartnerRouter: BPartnerRouter;
@@ -23,6 +25,7 @@ class App {
 	constructor() {
 		this.app = express();
 		this.userRouter = new UserRouter();
+		this.cityRouter = new CityRouter();
 		this.tourManager = new TourManager();
 		this.vehicleRouter = new VehicleRouter();
 		this.bookingRouter = new BookingRouter();
@@ -78,6 +81,8 @@ class App {
 		this.app.use('/api/bp', this.bpartnerRouter.router);
 
 		this.app.use('/api/reports', this.reportRouter.router);
+
+		this.app.use('/api/amadeus', this.cityRouter.router);
 
 
 		this.app.get(

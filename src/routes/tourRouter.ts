@@ -200,23 +200,23 @@ export class TourRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				
+
 				var user = await this.userManager.getUser(req.userId)
 				var ofTokens = user.tokens - parseFloat(req.body.tokensneeded)
 
 
-				if(ofTokens<0){
-					return res.status(412).send({ message: "There are not enough tokens"});
+				if (ofTokens < 0) {
+					return res.status(412).send({ message: "There are not enough tokens" });
 				}
 				var tokens = ofTokens
 
 				user.tokens = tokens
 				await this.userManager.updateUser(user.id, user)
-				
+
 				console.log(req.body)
 				var img = ""
 				var voice = ""
-			
+
 				if (req.body.character == "imgIsabella") {
 
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/isabella.png"
@@ -278,15 +278,15 @@ export class TourRouter extends BaseRouter {
 						var resp = await did(response, user)
 
 						console.log(resp)
-						res.status(200).send({ data: resp , tokens: tokens});
+						res.status(200).send({ data: resp, tokens: tokens });
 
 
 
 					})
 					.catch(error => {
-						
+
 						console.log("error " + error)
-						return res.status(402).send({message: "You do not have enough tokens in d-id"});
+						return res.status(402).send({ message: "You do not have enough tokens in d-id" });
 					});
 
 
@@ -316,14 +316,14 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
-				this.router.get(
+		this.router.get(
 			'/d-id/api/:api',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),	
-				parseJwt,
+			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
 				var user = await this.userManager.getUser(req.userId)
-			
+
 				user.didapi = req.params.api
 				await this.userManager.updateUser(user.id, user)
 
@@ -1399,23 +1399,23 @@ export class TourRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				
+
 				var user = await this.userManager.getUser(req.userId)
 				var ofTokens = user.tokens - parseFloat(req.body.tokensneeded)
 
 
-				if(ofTokens<0){
-					return res.status(412).send({ message: "There are not enough tokens"});
+				if (ofTokens < 0) {
+					return res.status(412).send({ message: "There are not enough tokens" });
 				}
 				var tokens = ofTokens
 
 				user.tokens = tokens
 				await this.userManager.updateUser(user.id, user)
-				
+
 				console.log(req.body)
 				var img = ""
 				var voice = ""
-			
+
 				if (req.body.character == "imgIsabella") {
 
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/isabella.png"
@@ -1477,15 +1477,15 @@ export class TourRouter extends BaseRouter {
 						var resp = await did(response, user)
 
 						console.log(resp)
-						res.status(200).send({ data: resp , tokens: tokens});
+						res.status(200).send({ data: resp, tokens: tokens });
 
 
 
 					})
 					.catch(error => {
-						
+
 						console.log("error " + error)
-						return res.status(402).send({message: "You do not have enough tokens in d-id"});
+						return res.status(402).send({ message: "You do not have enough tokens in d-id" });
 					});
 
 
