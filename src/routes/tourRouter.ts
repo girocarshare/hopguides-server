@@ -249,6 +249,10 @@ export class TourRouter extends BaseRouter {
 				} else if (req.body.character == "imgSamuel") {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/samuel.png"
 					voice = "flq6f7yk4E4fJM5XTYuZ"
+				} else {
+					console.log(req.body.character)
+					img = req.body.character
+					voice = "flq6f7yk4E4fJM5XTYuZ"
 				}
 
 				console.log(img)
@@ -259,7 +263,11 @@ export class TourRouter extends BaseRouter {
 					  "input": "${req.body.words}",
 					  "provider":{
 						"type":"elevenlabs",
-						"voice_id":"${voice}"
+						"voice_id":"${voice}",
+						"voice_config":{
+				"stability":0.3,
+				"similarity_boost":0.7
+			}
 					 }
 					},
 					"source_url": "${img}"
@@ -1490,11 +1498,23 @@ export class TourRouter extends BaseRouter {
 
 
 			})
+
+
+
+
 		);
+
+
+
 
 
 
 	}
 
 
+
+
+
 }
+
+

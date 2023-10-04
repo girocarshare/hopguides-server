@@ -104,6 +104,11 @@ export class UserRouter extends BaseRouter {
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				console.log(req.body)
 				try {
+
+					var user = await this.userManager.getUserByEmail(req.body.email)
+					if(user!=null){
+						return res.status(412).send("User already exists");
+					}
 					const createdUser: User = await this.userManager.addUser(
 						deserialize(User, req.body));
 
@@ -296,6 +301,7 @@ export class UserRouter extends BaseRouter {
 				else {
 					user.status = UserStatus.VERIFIED
 					user.paid = false;
+					user.didapi = "a2xlbWVuLmZ1cmxhbkBnb2dpcm8uYXBw:zEpHTAYD-SP9ilw3dcdi_"
 					await this.userManager.updateUser(user.id, user)
 
 					const loggedUserData: {
@@ -339,10 +345,6 @@ export class UserRouter extends BaseRouter {
 				var paid = user.paid
 
 				var tokens = await gettokens(user.didapi)
-
-				console.log("tokens")
-				console.log(tokens)
-
 
 				return res.status(200).send({paid: paid, tokens: tokens});
 			})
@@ -401,6 +403,7 @@ export class UserRouter extends BaseRouter {
 			'/login',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
+					
 					const login: LoginPayload = deserialize(LoginPayload, req.body);
 					validateOrThrow(login);
 					let user: User = await this.userManager.getUserByEmail(login.email);
