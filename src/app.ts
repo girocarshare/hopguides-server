@@ -91,7 +91,7 @@ class App {
 				fallback: 'https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/' ,
 				android_package_name: 'com.hopguidesV1',
 				ios_store_link:
-				  'https://apps.apple.com/nl/app/instagram/id389801252?l=en',
+				  'https://apps.apple.com/nl/app/hopguides-slovenia/id6447904124?l=en-GB',
 			})
 		);
 
