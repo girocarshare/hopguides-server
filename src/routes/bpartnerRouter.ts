@@ -43,7 +43,7 @@ export class BPartnerRouter extends BaseRouter {
 	userManager: UserManager;
 	bpartnerManager: BPartnerManager;
 	fileFilter = (req, file, cb) => {
-		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|PNG)$/)) {
 			cb(null, true)
 		} else {
 			cb(null, false)

@@ -35,6 +35,8 @@ import { spawn } from 'child_process';
 import { LocalizedField } from '../models/localizedField';
 import { GeoLocation } from '../models/address/geoLocation';
 import { stringAt } from 'pdfkit/js/data';
+import { LibraryManager } from '../manager/libraryManager';
+import { Library } from '../models/library/library';
 
 const exec = require("child_process").exec;
 
@@ -109,11 +111,12 @@ async function did(response, user) {
 
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
+	libraryManager: LibraryManager;
 	poiManager: POIManager;
 	bpartnerManager: BPartnerManager;
 	userManager: UserManager;
 	fileFilter = (req, file, cb) => {
-		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4)$/)) {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4|PNG)$/)) {
 			cb(null, true)
 		} else {
 			cb(null, false)
@@ -143,6 +146,7 @@ export class TourRouter extends BaseRouter {
 	constructor() {
 		super(true);
 		this.tourManager = new TourManager();
+		this.libraryManager = new LibraryManager();
 		this.poiManager = new POIManager();
 		this.userManager = new UserManager();
 		this.bpartnerManager = new BPartnerManager();
@@ -217,6 +221,32 @@ export class TourRouter extends BaseRouter {
 				var img = ""
 				var voice = ""
 
+				if (req.body.voice != "") {
+					if (req.body.voice == "Isabella") {
+
+						voice = "z9fAnlkpzviPz146aGWa"
+	
+					} else if (req.body.voice == "Lorenzo") {
+						voice = "zcAOhNBS3c14rBihAFp1"
+					} else if (req.body.voice == "Maria") {
+						voice = "oWAxZDx7w5VEj9dCyTzz"
+					} else if (req.body.voice == "Johann") {
+						voice = "TxGEqnHWrfWFTfGW9XjX"
+					} else if (req.body.voice == "Nia") {
+						voice = "ThT5KcBeYPX3keUQqHPh"
+					} else if (req.body.voice == "Sam") {
+						voice = "2EiwWnXFnvU5JabPnv8n"
+					} else if (req.body.voice == "Esperanza") {
+						voice = "EXAVITQu4vr4xnSDxMaL"
+					} else if (req.body.voice == "Diego") {
+						voice = "TX3LPaxmHKxFdv7VOQHJ"
+					} else if (req.body.voice == "Sophie") {
+						voice = "XrExE9yKIg1WjnnlVkGX"
+					} else if (req.body.voice == "Samuel") {
+						voice = "flq6f7yk4E4fJM5XTYuZ"
+					} 
+
+				}
 				if (req.body.character == "imgIsabella") {
 
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/isabella.png"
@@ -250,25 +280,31 @@ export class TourRouter extends BaseRouter {
 					img = "https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/samuel.png"
 					voice = "flq6f7yk4E4fJM5XTYuZ"
 				} else {
-					console.log(req.body.character)
 					img = req.body.character
-					voice = "flq6f7yk4E4fJM5XTYuZ"
 				}
 
-				console.log(img)
+				function removeSpecialCharacters(inputString: string): string {
+					// Remove all characters that are not alphanumeric
+					const cleanedString = inputString.replace(/[^a-zA-Z0-9,.':; ]/g, '');
+					return cleanedString;
+				}
 
+				console.log(req.body.words)
+				const cleanedString: string = removeSpecialCharacters(JSON.stringify(req.body.words));
+
+				console.log(cleanedString)
 				const data = JSON.parse(`{
 					"script": {
 					  "type": "text",
-					  "input": "${req.body.words}",
+					  "input": "${cleanedString}",
 					  "provider":{
 						"type":"elevenlabs",
 						"voice_id":"${voice}",
 						"voice_config":{
-				"stability":0.3,
-				"similarity_boost":0.7
-			}
-					 }
+							"stability":0.3,
+							"similarity_boost":0.7
+							}
+					 	}
 					},
 					"source_url": "${img}"
 				  }`)
@@ -282,10 +318,21 @@ export class TourRouter extends BaseRouter {
 					}
 				})
 					.then(async response => {
-						console.log(response)
 						var resp = await did(response, user)
 
 						console.log(resp)
+
+						var qrCode: string = await this.libraryManager.generateQr(resp);
+
+						console.log(qrCode)
+						var library: Library = new Library()
+						library.url = resp
+						library.qrcode = qrCode
+						library.userId = req.userId
+						
+						console.log(library)
+						var libraryVideo: Library = await this.libraryManager.create(library);
+
 						res.status(200).send({ data: resp, tokens: tokens });
 
 
@@ -293,13 +340,34 @@ export class TourRouter extends BaseRouter {
 					})
 					.catch(error => {
 
-						console.log("error " + error)
+						console.log(error)
 						return res.status(402).send({ message: "You do not have enough tokens in d-id" });
 					});
 
 
 			})
 		);
+
+
+			/** GET generate qr code for tour */
+			this.router.get(
+				'/getlibrary/videos',
+				//allowFor([AdminRole, SupportRole, ServiceRole]),
+				parseJwt,
+				withErrorHandler(async (req: IRequest, res: IResponse) => {
+	
+					try {
+	
+							var videos: Library[] = await this.libraryManager.getVideos( req.userId);
+							return res.status(200).send(videos);
+						
+					} catch (err) {
+						return res.status(412).send("Error while getting videos");
+					}
+	
+	
+				})
+			);
 
 
 		this.router.get(
@@ -1463,7 +1531,7 @@ export class TourRouter extends BaseRouter {
 				const data = JSON.parse(`{
 					"script": {
 					  "type": "text",
-					  "input": "Hello and welcome. We're genuinely excited to have you here. Let's quickly touch on a few essentials to make your arrival seamless. Once you're here, our reception desk is where you'll start. They'll guide you through the check-in process. You'll be given access to your room, either through a key card or a digital method. Please remember that check-in starts from ${req.body.checkIn}, and please check out by ${req.body.checkOut}. Of course, we're always here to help, so if you have any questions or need flexibility, don't hesitate to ask. Welcome to [Property Name], and we hope you have a memorable stay.",
+					  "input": "Hello and welcome. We're genuinely excited to have you here. Let's quickly touch on a few essentials to make your arrival seamless. Once you're here, our reception desk is where you'll start. They'll guide you through the check-in process. You'll be given access to your room, either through a key card or a digital method. Please remember that check-in starts from ${req.body.checkIn}, and please check out by ${req.body.checkOut}. Of course, we're always here to help, so if you have any questions or need flexibility, don't hesitate to ask. Welcome again, we hope you have a memorable stay.",
 					  "provider":{
 						"type":"elevenlabs",
 						"voice_id":"${voice}"

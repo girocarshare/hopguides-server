@@ -55,7 +55,7 @@ export class UserRouter extends BaseRouter {
 	bpartnerManager: BPartnerManager;
 
 	fileFilter = (req, file, cb) => {
-		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3)$/)) {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|PNG)$/)) {
 			cb(null, true)
 		} else {
 			cb(null, false)
@@ -380,6 +380,61 @@ export class UserRouter extends BaseRouter {
 			})
 		);
 
+
+		this.router.get(
+			'/googlesignup/:email',
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				try {
+					console.log(req.params.email)
+					var us = await this.userManager.getUserByEmail(req.params.email);
+					var body= {
+						email: req.params.email,
+						password: "43-R3h8v5i0rJPfCwXYor5CNPJnkvI"
+					}
+					if (us != null) {
+						const login: LoginPayload = deserialize(LoginPayload,body);
+
+						const loggedUserData: {
+							userData: User;
+							userJwt: string;
+						} = await this.userManager.login(login);
+						console.log("loggedUserData")
+						console.log(loggedUserData)
+						res.append('accessToken', loggedUserData.userJwt);
+						return res.status(200).send({ userJwt: loggedUserData.userJwt });
+					}
+
+					
+					const createdUser: User = await this.userManager.createUser(
+						deserialize(User, body));
+
+					var data = {
+						userId: createdUser.id
+					}
+
+					const login: LoginPayload = deserialize(LoginPayload, body);
+					validateOrThrow(login);
+					let user: User = await this.userManager.getUserByEmail(login.email);
+
+					if (!user)
+						return res.throwErr(new CustomError(404, 'User does not exist'));
+
+					else {
+						const loggedUserData: {
+							userData: User;
+							userJwt: string;
+						} = await this.userManager.login(login);
+						res.append('accessToken', loggedUserData.userJwt);
+						return res.status(200).send({ userJwt: loggedUserData.userJwt });
+
+					}
+				} catch (err) {
+					console.log(err)
+					console.log(err.error)
+					return res.status(412).send(err);
+				}
+			})
+		);
 
 
 		/* POST Finish user registration */
