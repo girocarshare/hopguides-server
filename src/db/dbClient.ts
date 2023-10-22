@@ -5,6 +5,7 @@ import QrcodesRepository from './repository/qrcodesRepository';
 import VehicleRepository from './repository/vehicleRepository';
 import BookingRepository from './repository/bookingRepository';
 import BPartnerRepository from './repository/bpartnerRepository';
+import LibraryRepository from './repository/libraryRepository';
 import POIRepository from './repository/poiRepository';
 
 import { Logger } from 'tslog';
@@ -46,7 +47,6 @@ class DbClient {
 
     await database
       .collection('users')
-      .createIndex({ phone: 1 }, { unique: true });
     await database
       .collection('users')
       .createIndex({ 'address.geoLocation': '2dsphere' });
@@ -57,6 +57,7 @@ class DbClient {
     BookingRepository.setCollection(database.collection('booking'));
     BPartnerRepository.setCollection(database.collection('bpartner'));
     POIRepository.setCollection(database.collection('poi'));
+    LibraryRepository.setCollection(database.collection('library'));
 
     return true;
   }

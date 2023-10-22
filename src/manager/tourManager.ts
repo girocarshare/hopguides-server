@@ -4,7 +4,6 @@ import { SearchPagination } from '../classes/searchPagination';
 import { Tour } from '../models/tours/tour';
 import { MulterFile } from '../classes/interfaces';
 import { ToursReport } from '../classes/tour/toursReport';
-import * as multer from 'multer';
 import { Report } from '../models/report/report';
 import { BPartnerManager } from '../manager/bpartnerManager';
 import { Booking, BookingStatus } from '../models/booking/booking';

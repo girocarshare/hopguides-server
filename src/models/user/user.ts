@@ -199,7 +199,6 @@ export class User extends UserBase {
 			!!this.firstName &&
 			!!this.lastName &&
 			!!this.confirmed &&
-			!!this.phone &&
 			!!this.notificationEmail &&
 			// !!this.email &&
 			!!this.gender &&
@@ -213,14 +212,13 @@ export class User extends UserBase {
 	}
 
 	getVerificationLvl(): VerificationLevel {
-		const levelRent: boolean = !!this.phone && !!this.firstName && !!this.lastName;
+		const levelRent: boolean = !!this.firstName && !!this.lastName;
 		const levelRideSharing: boolean =
-			!!this.phone && !!this.firstName && !!this.lastName && !!this.avatarURL && !!this.email;
+			 !!this.firstName && !!this.lastName && !!this.avatarURL && !!this.email;
 		const levelCarSharing: boolean =
 			!!this.avatarURL &&
 			!!this.firstName &&
 			!!this.lastName &&
-			!!this.phone &&
 			!!this.email &&
 			!!this.birthDate &&
 			!!this.gender &&

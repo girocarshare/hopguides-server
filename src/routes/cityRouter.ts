@@ -72,7 +72,7 @@ async function getCity(token, city) {
 export class CityRouter extends BaseRouter {
 	cityManager: CityManager;
 	fileFilter = (req, file, cb) => {
-		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4)$/)) {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4|PNG)$/)) {
 			cb(null, true)
 		} else {
 			cb(null, false)

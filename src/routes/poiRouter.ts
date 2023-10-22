@@ -62,7 +62,7 @@ export class POIRouter extends BaseRouter {
 	userManager: UserManager;
 
 	fileFilter = (req, file, cb) => {
-		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4)$/)) {
+		if (file.originalname.match(/\.(pdf|docx|txt|jpg|jpeg|png|ppsx|ppt|mp3|mp4|PNG)$/)) {
 			cb(null, true)
 		} else {
 			cb(null, false)
