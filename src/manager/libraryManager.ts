@@ -11,7 +11,7 @@ import { POIManager } from './poiManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import { deserialize, serialize } from '../json';
 import * as AWS from 'aws-sdk';
-
+import axios from 'axios';
 import libraryRepository, { LibraryRepository } from '../db/repository/libraryRepository';
 import { Library } from '../models/library/library';
 
@@ -78,6 +78,42 @@ export class LibraryManager {
 
 		//}
 	}
+
+
+	
+
+	async saveGeneratedVideo(url: string): Promise<string> {
+  const videoName = Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+  // Fetch the video stream from the URL
+  const response = await axios.get(url, {
+    responseType: 'stream',
+  });
+
+  // Create the S3 upload parameters
+  const params = {
+    Bucket: 'hopguides/library',
+    Key: `${videoName}.mp4`,
+    Body: response.data,
+    ACL: 'public-read',
+    ContentType: response.headers['content-type'],
+  };
+
+  // Upload the video stream to S3
+  return new Promise((resolve, reject) => {
+    s3bucket.upload(params, (err, data) => {
+      if (err) {
+        console.log('ERROR MSG: ', err);
+        reject(err);
+      } else {
+        console.log('Successfully uploaded data');
+        console.log(data);
+        resolve(`https://hopguides.s3.eu-central-1.amazonaws.com/library/${videoName}.mp4`);
+      }
+    });
+  });
+}
+
 
 
 	async create(library: Library): Promise<Library> {

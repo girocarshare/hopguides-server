@@ -85,28 +85,36 @@ async function getTour(string) {
 
 
 async function did(response, user) {
+    // Function to sleep for 'ms' milliseconds
+    function sleep(ms) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
+    }
 
-	console.log(response.data.id)
-	function sleep(ms) {
-		return new Promise((resolve) => {
-			setTimeout(resolve, ms);
-		});
-	}
-	await sleep(15000);
-	return await axios.get("https://api.d-id.com/talks/" + response.data.id, {
-		headers: {
-			'Authorization': `Basic ${user.didapi}`,
-			'Content-Type': 'application/json'
-		}
-	})
-		.then(res => {
-			console.log(res)
-			return res.data.result_url
-		})
-		.catch(err => {
-			console.log("error " + err)
-		});
+    try {
+        // Make the API call
+        const res = await axios.get("https://api.d-id.com/talks/" + response.data.id, {
+            headers: {
+                'Authorization': `Basic ${user.didapi}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
+        // Log the response for debugging
+        console.log(res.data.status);
+
+        // Check the status
+        if (res.data.status === 'done') {
+            return res.data.result_url;
+        } else {
+            // If status is not 'done', wait for 5 seconds and retry
+            await sleep(5000);
+            return await did(response, user);
+        }
+    } catch (err) {
+        console.log("error " + err);
+    }
 }
 
 export class TourRouter extends BaseRouter {
@@ -306,7 +314,10 @@ export class TourRouter extends BaseRouter {
 							}
 					 	}
 					},
-					"source_url": "${img}"
+					"source_url": "${img}",
+					"config": {
+						"stitch": true
+					}
 				  }`)
 
 
@@ -320,17 +331,14 @@ export class TourRouter extends BaseRouter {
 					.then(async response => {
 						var resp = await did(response, user)
 
-						console.log(resp)
+						var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(resp);
+						var qrCode: string = await this.libraryManager.generateQr(generatedVideo);
 
-						var qrCode: string = await this.libraryManager.generateQr(resp);
-
-						console.log(qrCode)
 						var library: Library = new Library()
-						library.url = resp
+						library.url = generatedVideo
 						library.qrcode = qrCode
 						library.userId = req.userId
 						
-						console.log(library)
 						var libraryVideo: Library = await this.libraryManager.create(library);
 
 						res.status(200).send({ data: resp, tokens: tokens });
@@ -1528,19 +1536,25 @@ export class TourRouter extends BaseRouter {
 
 				console.log(img)
 
-				const data = JSON.parse(`{
+			
+				  const data = JSON.parse(`{
 					"script": {
 					  "type": "text",
 					  "input": "Hello and welcome. We're genuinely excited to have you here. Let's quickly touch on a few essentials to make your arrival seamless. Once you're here, our reception desk is where you'll start. They'll guide you through the check-in process. You'll be given access to your room, either through a key card or a digital method. Please remember that check-in starts from ${req.body.checkIn}, and please check out by ${req.body.checkOut}. Of course, we're always here to help, so if you have any questions or need flexibility, don't hesitate to ask. Welcome again, we hope you have a memorable stay.",
 					  "provider":{
 						"type":"elevenlabs",
-						"voice_id":"${voice}"
-					 }
+						"voice_id":"${voice}",
+						"voice_config":{
+							"stability":0.3,
+							"similarity_boost":0.7
+							}
+					 	}
 					},
-					"source_url": "${img}"
+					"source_url": "${img}",
+					"config": {
+						"stitch": true
+					}
 				  }`)
-
-
 
 				await axios.post("https://api.d-id.com/talks", data, {
 					headers: {
@@ -1552,7 +1566,16 @@ export class TourRouter extends BaseRouter {
 						console.log(response)
 						var resp = await did(response, user)
 
-						console.log(resp)
+						var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(resp);
+						var qrCode: string = await this.libraryManager.generateQr(generatedVideo);
+
+						var library: Library = new Library()
+						library.url = generatedVideo
+						library.qrcode = qrCode
+						library.userId = req.userId
+						
+						var libraryVideo: Library = await this.libraryManager.create(library);
+
 						res.status(200).send({ data: resp, tokens: tokens });
 
 
