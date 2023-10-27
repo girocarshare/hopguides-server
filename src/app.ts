@@ -14,7 +14,29 @@ import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
 const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
 //global.CronJob = require('./db/cron.js');
+
+async function handleChargeSucceeded(charge) {
+	const amountPaid = charge.amount / 100; // Stripe provides the amount in cents, so divide by 100 for the actual amount.
+	const currency = charge.currency;
+	const paymentMethod = charge.payment_method_details.card.brand; // Example: 'visa', 'mastercard', etc.
+	const description = charge.description; // Description of the charge (if provided during charge creation)
+  
+	const userId = charge.metadata.userId;
+	console.log("user id " + userId)
+	let user: User = await this.userManager.getByIdOrThrow(userId);
+
+	if(charge.amount == 22800 || charge.amount  == 2999){
+		user.tokens = user.tokens + 100
+	}else if(charge.amount == 12900 || charge.amount == 118800){
+		user.tokens = user.tokens + 500
+	}
+	await this.userManager.updateUser(user.id, user)
+	
+	console.log(`Payment was successful. Amount: ${amountPaid} ${currency} using ${paymentMethod}. Description: ${description}`);
+  }
+
 class App {
+	
 	public app: express.Application;
 
 	private userRouter: UserRouter;
@@ -25,7 +47,7 @@ class App {
 	private reportRouter: ReportRouter;
 	private poiRouter: POIRouter;
 	tourManager: TourManager;
-	userManager: UserManager;
+	public userManager: UserManager;
 
 	constructor() {
 		this.app = express();
@@ -98,25 +120,7 @@ class App {
 			response.send();
 		  });
 		  
-		  async function handleChargeSucceeded(charge) {
-			const amountPaid = charge.amount / 100; // Stripe provides the amount in cents, so divide by 100 for the actual amount.
-			const currency = charge.currency;
-			const paymentMethod = charge.payment_method_details.card.brand; // Example: 'visa', 'mastercard', etc.
-			const description = charge.description; // Description of the charge (if provided during charge creation)
-		  
-			const userId = charge.metadata.userId;
-			console.log("user id " + userId)
-			let user: User = await this.userManager.getByIdOrThrow(userId);
-
-			if(charge.amount == 22800 || charge.amount  == 2999){
-				user.tokens = user.tokens + 100
-			}else if(charge.amount == 12900 || charge.amount == 118800){
-				user.tokens = user.tokens + 500
-			}
-			await this.userManager.updateUser(user.id, user)
-			
-			console.log(`Payment was successful. Amount: ${amountPaid} ${currency} using ${paymentMethod}. Description: ${description}`);
-		  }
+		 
 
 		this.app.use(express.json({limit: '50mb'}));
 		this.app.use(express.urlencoded({limit: '50mb'}));

@@ -1630,11 +1630,13 @@ export class TourRouter extends BaseRouter {
 									recurring: { interval: 'month' },  // You can also set it to 'year' for yearly plans
 								},
 								quantity: req.body.quantity,
+								
+							metadata: { userId: req.userId }
 
 							}],
+							metadata: { userId: req.userId },
 							success_url: `http://localhost:3000/#/success`,
 							cancel_url: `http://localhost:3000/#/failure`,
-							metadata: { userId: req.userId }
 						});
 					} else {
 						session = await stripe.checkout.sessions.create({
@@ -1651,11 +1653,13 @@ export class TourRouter extends BaseRouter {
 									recurring: { interval: 'year' },  // You can also set it to 'year' for yearly plans
 								},
 								quantity: req.body.quantity,
+								
+							metadata: { userId: req.userId }
 
 							}],
+							metadata: { userId: req.userId },
 							success_url: `https://docs.amadeus-discover.com/consumer/First_Steps.html#access-api-environments`,
 							cancel_url: `https://www.7-zip.org/download.html`,
-							metadata: { userId: req.userId }
 						});
 					}
 					res.json({ url: session.url });
