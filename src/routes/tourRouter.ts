@@ -1605,6 +1605,7 @@ export class TourRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
+				console.log("idddddddddddd" + req.userId)
 				try {
 					const storeItems = new Map([
 						[1, { priceInCents: 2999, name: "Basic plan monthly" }],

@@ -10,6 +10,7 @@ import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
 import { CityRouter } from './routes/cityRouter';
 import { User } from './models/user/user';
+import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
 const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
 //global.CronJob = require('./db/cron.js');
@@ -24,12 +25,14 @@ class App {
 	private reportRouter: ReportRouter;
 	private poiRouter: POIRouter;
 	tourManager: TourManager;
+	userManager: UserManager;
 
 	constructor() {
 		this.app = express();
 		this.userRouter = new UserRouter();
 		this.cityRouter = new CityRouter();
 		this.tourManager = new TourManager();
+		this.userManager = new UserManager();
 		this.vehicleRouter = new VehicleRouter();
 		this.bookingRouter = new BookingRouter();
 		this.bpartnerRouter = new BPartnerRouter();
@@ -64,7 +67,7 @@ class App {
 		}
 
 		this.app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
-			console.log("kshksdhkcssssssssss")
+			
 			const sig = request.headers['stripe-signature'];
 		  
 			let event;
