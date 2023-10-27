@@ -57,6 +57,42 @@ class App {
 			}
 		});
 
+		this.app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
+			console.log(request.headers);
+			console.log(request.body);
+			const sig = request.headers['stripe-signature'];
+			let event;
+		  
+			try {
+			  event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+			} catch (err) {
+				
+			console.log(err.message)
+			  response.status(400).send(`Webhook Error: ${err.message}`);
+			  return;
+			}
+		  
+		  
+			// Handle the event
+			switch (event.type) {
+			  case 'checkout.session.completed':
+				const session = event.data.object;
+				handleSuccessfulPayment(session);
+				break;
+			  // ... handle other event types
+			  default:
+				console.log(`Unhandled event type ${event.type}`);
+			}
+		  
+			// Return a 200 response to acknowledge receipt of the event
+			response.send();
+		  });
+		  
+		  async function handleSuccessfulPayment(session) {
+			const userId = session.metadata.userId;
+			console.log(`Payment was successful for user with ID ${userId}.`);
+		  }
+	
 		// morgan ~ Enable logger if required
 		if (process.env.ENV === 'dev') {
 			this.app.use(require('morgan')('dev'));
@@ -97,44 +133,7 @@ class App {
 			})
 		);
 
-		this.app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
-			console.log("kshksdhkcssssssssss")
-			const sig = request.headers['stripe-signature'];
-			console.log("kshksdhkcssssssssss1111111111111111")
-			let event;
-		  
-			try {
-				console.log("asasasasassasa")
-			  event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-			} catch (err) {
-				
-			console.log(err.message)
-			console.log(err)
-			  response.status(400).send(`Webhook Error: ${err.message}`);
-			  return;
-			}
-		  
-		  
-			// Handle the event
-			switch (event.type) {
-			  case 'checkout.session.completed':
-				const session = event.data.object;
-				handleSuccessfulPayment(session);
-				break;
-			  // ... handle other event types
-			  default:
-				console.log(`Unhandled event type ${event.type}`);
-			}
-		  
-			// Return a 200 response to acknowledge receipt of the event
-			response.send();
-		  });
-		  
-		  async function handleSuccessfulPayment(session) {
-			const userId = session.metadata.userId;
-			console.log(`Payment was successful for user with ID ${userId}.`);
-		  }
-	
+		
 	}
 }
 
