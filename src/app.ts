@@ -78,23 +78,31 @@ class App {
 		  
 			// Handle the event
 			switch (event.type) {
-			  case 'checkout.session.completed':
-				const session = event.data.object;
-				handleSuccessfulPayment(session);
-				break;
-			  // ... handle other event types
-			  default:
-				console.log(`Unhandled event type ${event.type}`);
-			}
-		  
+				case 'checkout.session.completed':
+				  const session = event.data.object;
+				  handleChargeSucceeded(session);
+				  break;
+				case 'charge.succeeded':
+				  const charge = event.data.object;
+				  handleChargeSucceeded(charge);
+				  break;
+				// ... handle other event types
+				default:
+				  console.log(`Unhandled event type ${event.type}`);
+			  }
 			// Return a 200 response to acknowledge receipt of the event
 			response.send();
 		  });
 		  
-		  async function handleSuccessfulPayment(session) {
-			const userId = session.metadata.userId;
-			console.log(`Payment was successful for user with ID ${userId}.`);
+		  function handleChargeSucceeded(charge) {
+			const amountPaid = charge.amount / 100; // Stripe provides the amount in cents, so divide by 100 for the actual amount.
+			const currency = charge.currency;
+			const paymentMethod = charge.payment_method_details.card.brand; // Example: 'visa', 'mastercard', etc.
+			const description = charge.description; // Description of the charge (if provided during charge creation)
+		  
+			console.log(`Payment was successful. Amount: ${amountPaid} ${currency} using ${paymentMethod}. Description: ${description}`);
 		  }
+
 		this.app.use(express.json({limit: '50mb'}));
 		this.app.use(express.urlencoded({limit: '50mb'}));
 		this.app.use(express.json());
