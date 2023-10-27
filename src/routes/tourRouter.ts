@@ -1631,7 +1631,6 @@ export class TourRouter extends BaseRouter {
 								},
 								quantity: req.body.quantity,
 								
-							metadata: { userId: req.userId }
 
 							}],
 							metadata: { userId: req.userId },
@@ -1654,7 +1653,6 @@ export class TourRouter extends BaseRouter {
 								},
 								quantity: req.body.quantity,
 								
-							metadata: { userId: req.userId }
 
 							}],
 							metadata: { userId: req.userId },
