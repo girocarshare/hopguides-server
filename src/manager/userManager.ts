@@ -46,6 +46,8 @@ export class UserManager {
 		if (!createdUser) {
 			user.password = await bcrypt.hash(user.password, 8)
 
+			user.didapi= "a2xlbWVuLmZ1cmxhbkBnb2dpcm8uYXBw:qtlz8AKk99Sjxez8H1gYg"
+			user.tokens = 20
 			user.phone = user.email
 			user.status = UserStatus.VERIFIED
 			user.role = UserRoles.PROVIDER

@@ -38,8 +38,10 @@ import { stringAt } from 'pdfkit/js/data';
 import { LibraryManager } from '../manager/libraryManager';
 import { Library } from '../models/library/library';
 
+const bodyParser = require('body-parser');
+const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
 const exec = require("child_process").exec;
-
+const endpointSecret = "whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3";
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "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"
@@ -85,36 +87,36 @@ async function getTour(string) {
 
 
 async function did(response, user) {
-    // Function to sleep for 'ms' milliseconds
-    function sleep(ms) {
-        return new Promise((resolve) => {
-            setTimeout(resolve, ms);
-        });
-    }
+	// Function to sleep for 'ms' milliseconds
+	function sleep(ms) {
+		return new Promise((resolve) => {
+			setTimeout(resolve, ms);
+		});
+	}
 
-    try {
-        // Make the API call
-        const res = await axios.get("https://api.d-id.com/talks/" + response.data.id, {
-            headers: {
-                'Authorization': `Basic ${user.didapi}`,
-                'Content-Type': 'application/json'
-            }
-        });
+	try {
+		// Make the API call
+		const res = await axios.get("https://api.d-id.com/talks/" + response.data.id, {
+			headers: {
+				'Authorization': `Basic ${user.didapi}`,
+				'Content-Type': 'application/json'
+			}
+		});
 
-        // Log the response for debugging
-        console.log(res.data.status);
+		// Log the response for debugging
+		console.log(res.data.status);
 
-        // Check the status
-        if (res.data.status === 'done') {
-            return res.data.result_url;
-        } else {
-            // If status is not 'done', wait for 5 seconds and retry
-            await sleep(5000);
-            return await did(response, user);
-        }
-    } catch (err) {
-        console.log("error " + err);
-    }
+		// Check the status
+		if (res.data.status === 'done') {
+			return res.data.result_url;
+		} else {
+			// If status is not 'done', wait for 5 seconds and retry
+			await sleep(5000);
+			return await did(response, user);
+		}
+	} catch (err) {
+		console.log("error " + err);
+	}
 }
 
 export class TourRouter extends BaseRouter {
@@ -233,7 +235,7 @@ export class TourRouter extends BaseRouter {
 					if (req.body.voice == "Isabella") {
 
 						voice = "z9fAnlkpzviPz146aGWa"
-	
+
 					} else if (req.body.voice == "Lorenzo") {
 						voice = "zcAOhNBS3c14rBihAFp1"
 					} else if (req.body.voice == "Maria") {
@@ -252,7 +254,7 @@ export class TourRouter extends BaseRouter {
 						voice = "XrExE9yKIg1WjnnlVkGX"
 					} else if (req.body.voice == "Samuel") {
 						voice = "flq6f7yk4E4fJM5XTYuZ"
-					} 
+					}
 
 				}
 				if (req.body.character == "imgIsabella") {
@@ -338,7 +340,7 @@ export class TourRouter extends BaseRouter {
 						library.url = generatedVideo
 						library.qrcode = qrCode
 						library.userId = req.userId
-						
+
 						var libraryVideo: Library = await this.libraryManager.create(library);
 
 						res.status(200).send({ data: resp, tokens: tokens });
@@ -357,25 +359,25 @@ export class TourRouter extends BaseRouter {
 		);
 
 
-			/** GET generate qr code for tour */
-			this.router.get(
-				'/getlibrary/videos',
-				//allowFor([AdminRole, SupportRole, ServiceRole]),
-				parseJwt,
-				withErrorHandler(async (req: IRequest, res: IResponse) => {
-	
-					try {
-	
-							var videos: Library[] = await this.libraryManager.getVideos( req.userId);
-							return res.status(200).send(videos);
-						
-					} catch (err) {
-						return res.status(412).send("Error while getting videos");
-					}
-	
-	
-				})
-			);
+		/** GET generate qr code for tour */
+		this.router.get(
+			'/getlibrary/videos',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try {
+
+					var videos: Library[] = await this.libraryManager.getVideos(req.userId);
+					return res.status(200).send(videos);
+
+				} catch (err) {
+					return res.status(412).send("Error while getting videos");
+				}
+
+
+			})
+		);
 
 
 		this.router.get(
@@ -1536,8 +1538,8 @@ export class TourRouter extends BaseRouter {
 
 				console.log(img)
 
-			
-				  const data = JSON.parse(`{
+
+				const data = JSON.parse(`{
 					"script": {
 					  "type": "text",
 					  "input": "Hello and welcome. We're genuinely excited to have you here. Let's quickly touch on a few essentials to make your arrival seamless. Once you're here, our reception desk is where you'll start. They'll guide you through the check-in process. You'll be given access to your room, either through a key card or a digital method. Please remember that check-in starts from ${req.body.checkIn}, and please check out by ${req.body.checkOut}. Of course, we're always here to help, so if you have any questions or need flexibility, don't hesitate to ask. Welcome again, we hope you have a memorable stay.",
@@ -1573,7 +1575,7 @@ export class TourRouter extends BaseRouter {
 						library.url = generatedVideo
 						library.qrcode = qrCode
 						library.userId = req.userId
-						
+
 						var libraryVideo: Library = await this.libraryManager.create(library);
 
 						res.status(200).send({ data: resp, tokens: tokens });
@@ -1597,7 +1599,94 @@ export class TourRouter extends BaseRouter {
 
 
 
+		this.router.post(
+			'/stripe/pay',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
+				try {
+					const storeItems = new Map([
+						[1, { priceInCents: 2999, name: "Basic plan monthly" }],
+						[2, { priceInCents: 12900, name: "Premium plan monthly" }],
+						[3, { priceInCents: 22800, name: "Base plan yearly" }],
+						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
+					])
+					const storeItem = storeItems.get(req.body.id);
+					var session = null
+					if (req.body.id == 1 || req.body.id == 2) {
+						session = await stripe.checkout.sessions.create({
+							payment_method_types: ["card"],
+							mode: "subscription",
+							line_items: [{
+
+								price_data: {
+									currency: "eur",
+									product_data: {
+										name: storeItem.name,
+									},
+									unit_amount: storeItem.priceInCents,
+									recurring: { interval: 'month' },  // You can also set it to 'year' for yearly plans
+								},
+								quantity: req.body.quantity,
+
+							}],
+							success_url: `http://localhost:3000/#/success`,
+							cancel_url: `http://localhost:3000/#/failure`,
+							metadata: { userId: req.userId }
+						});
+					} else {
+						session = await stripe.checkout.sessions.create({
+							payment_method_types: ["card"],
+							mode: "subscription",
+							line_items: [{
+
+								price_data: {
+									currency: "eur",
+									product_data: {
+										name: storeItem.name,
+									},
+									unit_amount: storeItem.priceInCents,
+									recurring: { interval: 'year' },  // You can also set it to 'year' for yearly plans
+								},
+								quantity: req.body.quantity,
+
+							}],
+							success_url: `https://docs.amadeus-discover.com/consumer/First_Steps.html#access-api-environments`,
+							cancel_url: `https://www.7-zip.org/download.html`,
+							metadata: { userId: req.userId }
+						});
+					}
+					res.json({ url: session.url });
+
+				} catch (e) {
+					res.status(500).json({ error: e.message })
+				}
+			})
+		);
+
+
+
+		this.router.get(
+			'/stripe/success',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try {
+
+					var user = await this.userManager.getUser(req.userId)
+					
+					var tokens = user.tokens + 100
+					user.tokens = tokens
+				await this.userManager.updateUser(user.id, user)
+
+
+				} catch (e) {
+					res.status(500).json({ error: e.message })
+				}
+			})
+		);
 
 
 	}
@@ -1607,5 +1696,7 @@ export class TourRouter extends BaseRouter {
 
 
 }
+
+
 
 

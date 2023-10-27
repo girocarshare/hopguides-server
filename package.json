@@ -50,6 +50,7 @@
     "qs": "^6.11.2",
     "reflect-metadata": "^0.1.13",
     "sendgrid": "^5.2.3",
+    "stripe": "^14.1.0",
     "tslog": "^3.3.0",
     "typeorm": "0.3.11",
     "validator": "^13.7.0"
