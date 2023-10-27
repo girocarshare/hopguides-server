@@ -9,6 +9,8 @@ var deeplink = require('node-deeplink');
 import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
 import { CityRouter } from './routes/cityRouter';
+const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
+const endpointSecret = "whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3";
 //global.CronJob = require('./db/cron.js');
 class App {
 	public app: express.Application;
@@ -95,6 +97,37 @@ class App {
 			})
 		);
 
+		this.app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+			const sig = request.headers['stripe-signature'];
+		  
+			let event;
+		  
+			try {
+			  event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+			} catch (err) {
+			  response.status(400).send(`Webhook Error: ${err.message}`);
+			  return;
+			}
+		  
+			// Handle the event
+			switch (event.type) {
+			  case 'checkout.session.completed':
+				const session = event.data.object;
+				handleSuccessfulPayment(session);
+				break;
+			  // ... handle other event types
+			  default:
+				console.log(`Unhandled event type ${event.type}`);
+			}
+		  
+			// Return a 200 response to acknowledge receipt of the event
+			response.send();
+		  });
+		  
+		  async function handleSuccessfulPayment(session) {
+			const userId = session.metadata.userId;
+			console.log(`Payment was successful for user with ID ${userId}.`);
+		  }
 	
 	}
 }
