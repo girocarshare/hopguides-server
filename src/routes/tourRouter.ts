@@ -1634,6 +1634,7 @@ export class TourRouter extends BaseRouter {
 
 							}],
 							metadata: { userId: req.userId },
+							customer: req.userId,
 							success_url: `http://localhost:3000/#/success`,
 							cancel_url: `http://localhost:3000/#/failure`,
 						});
@@ -1656,6 +1657,7 @@ export class TourRouter extends BaseRouter {
 
 							}],
 							metadata: { userId: req.userId },
+							customer: req.userId,
 							success_url: `https://docs.amadeus-discover.com/consumer/First_Steps.html#access-api-environments`,
 							cancel_url: `https://www.7-zip.org/download.html`,
 						});
