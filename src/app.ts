@@ -15,25 +15,6 @@ const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2r
 const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
 //global.CronJob = require('./db/cron.js');
 
-async function handleChargeSucceeded(charge) {
-	const amountPaid = charge.amount / 100; // Stripe provides the amount in cents, so divide by 100 for the actual amount.
-	const currency = charge.currency;
-	const paymentMethod = charge.payment_method_details.card.brand; // Example: 'visa', 'mastercard', etc.
-	const description = charge.description; // Description of the charge (if provided during charge creation)
-  
-	const userId = charge.metadata.userId;
-	console.log("user id " + userId)
-	let user: User = await this.userManager.getByIdOrThrow(userId);
-
-	if(charge.amount == 22800 || charge.amount  == 2999){
-		user.tokens = user.tokens + 100
-	}else if(charge.amount == 12900 || charge.amount == 118800){
-		user.tokens = user.tokens + 500
-	}
-	await this.userManager.updateUser(user.id, user)
-	
-	console.log(`Payment was successful. Amount: ${amountPaid} ${currency} using ${paymentMethod}. Description: ${description}`);
-  }
 
 class App {
 	
@@ -63,6 +44,27 @@ class App {
 		this.config();
 	}
 
+	async handleChargeSucceeded(charge) {
+		const amountPaid = charge.amount / 100; // Stripe provides the amount in cents, so divide by 100 for the actual amount.
+		const currency = charge.currency;
+		const paymentMethod = charge.payment_method_details.card.brand; // Example: 'visa', 'mastercard', etc.
+		const description = charge.description; // Description of the charge (if provided during charge creation)
+	  
+		const userId = charge.metadata.userId;
+		console.log("user id " + userId)
+		let user: User = await this.userManager.getUser(userId);
+	
+		if(charge.amount == 22800 || charge.amount  == 2999){
+			user.tokens = user.tokens + 100
+		}else if(charge.amount == 12900 || charge.amount == 118800){
+			user.tokens = user.tokens + 500
+		}
+		await this.userManager.updateUser(user.id, user)
+		
+		console.log(`Payment was successful. Amount: ${amountPaid} ${currency} using ${paymentMethod}. Description: ${description}`);
+	  }
+
+	  
 	config(): void {
 		this.app.set('trust proxy', true);
 		this.app.use(function (req: any, res: any, next: any) {
@@ -106,11 +108,11 @@ class App {
 			switch (event.type) {
 				case 'checkout.session.completed':
 				  const session = event.data.object;
-				  handleChargeSucceeded(session);
+				  this.handleChargeSucceeded(session);
 				  break;
 				case 'charge.succeeded':
 				  const charge = event.data.object;
-				  handleChargeSucceeded(charge);
+				  this.handleChargeSucceeded(charge);
 				  break;
 				// ... handle other event types
 				default:
