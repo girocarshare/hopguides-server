@@ -362,8 +362,9 @@ export class UserRouter extends BaseRouter {
 				validateOrThrow(login);
 				let user: User = await this.userManager.getUserByEmail(req.params.email);
 
-				if (!user)
-					return res.status(404).send("User does not exist");
+				if (!user){
+					console.log("Evo meeeee")
+					return res.status(404).send("User does not exist");}
 				if (user.status != UserStatus.VERIFIED) {
 					return res.status(412).send('User  not verified');
 				}
@@ -385,7 +386,6 @@ export class UserRouter extends BaseRouter {
 			'/googlesignup/:email',
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
-					console.log(req.params.email)
 					var us = await this.userManager.getUserByEmail(req.params.email);
 					var body= {
 						email: req.params.email,
