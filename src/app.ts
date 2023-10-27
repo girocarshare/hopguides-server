@@ -97,7 +97,7 @@ class App {
 			})
 		);
 
-		this.app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+		this.app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
 			const sig = request.headers['stripe-signature'];
 		  
 			let event;
@@ -108,6 +108,7 @@ class App {
 			  response.status(400).send(`Webhook Error: ${err.message}`);
 			  return;
 			}
+		  
 		  
 			// Handle the event
 			switch (event.type) {
