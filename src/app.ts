@@ -57,17 +57,20 @@ class App {
 			}
 		});
 
+		// morgan ~ Enable logger if required
+		if (process.env.ENV === 'dev') {
+			this.app.use(require('morgan')('dev'));
+		}
+
 		this.app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
-			console.log(request.headers);
-			console.log(request.body);
+			console.log("kshksdhkcssssssssss")
 			const sig = request.headers['stripe-signature'];
+		  
 			let event;
 		  
 			try {
 			  event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
 			} catch (err) {
-				
-			console.log(err.message)
 			  response.status(400).send(`Webhook Error: ${err.message}`);
 			  return;
 			}
@@ -92,12 +95,6 @@ class App {
 			const userId = session.metadata.userId;
 			console.log(`Payment was successful for user with ID ${userId}.`);
 		  }
-	
-		// morgan ~ Enable logger if required
-		if (process.env.ENV === 'dev') {
-			this.app.use(require('morgan')('dev'));
-		}
-
 		this.app.use(express.json({limit: '50mb'}));
 		this.app.use(express.urlencoded({limit: '50mb'}));
 		this.app.use(express.json());
@@ -133,7 +130,7 @@ class App {
 			})
 		);
 
-		
+	
 	}
 }
 
