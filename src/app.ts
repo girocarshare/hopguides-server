@@ -52,7 +52,7 @@ class App {
 	  
 		const userId = charge.metadata.userId;
 		console.log("user id " + userId)
-		console.log("user id ddd" + charge.customer)
+		console.log(charge)
 		let user: User = await this.userManager.getUser(userId);
 	
 		if(charge.amount == 22800 || charge.amount  == 2999){
