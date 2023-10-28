@@ -1637,7 +1637,7 @@ export class TourRouter extends BaseRouter {
 								"payment_type": "schedule_visit",
 								"visit_id": "123"
 							  },
-							  payment_intent_data:{
+							  subscription_data:{
 								"metadata": {
 								  "payment_type": "schedule_visit",
 								  "visit_id": "123"
@@ -1669,7 +1669,7 @@ export class TourRouter extends BaseRouter {
 								"payment_type": "schedule_visit",
 								"visit_id": "123"
 							  },
-							  payment_intent_data:{
+							  subscription_data:{
 								"metadata": {
 								  "payment_type": "schedule_visit",
 								  "visit_id": "123"
