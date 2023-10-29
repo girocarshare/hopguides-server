@@ -1643,7 +1643,8 @@ export class TourRouter extends BaseRouter {
 							  subscription_data:{
 								"metadata": {
 								  "payment_type": "schedule_visit",
-								  "visit_id": "123"
+								  "visit_id": "123",
+								  "userId": req.userId
 								}
 							  },
 							//metadata: { userId: req.userId },
@@ -1676,7 +1677,8 @@ export class TourRouter extends BaseRouter {
 							  subscription_data:{
 								"metadata": {
 								  "payment_type": "schedule_visit",
-								  "visit_id": "123"
+								  "visit_id": "123",
+								  "userId": req.userId
 								}
 							  },
 							success_url: `https://docs.amadeus-discover.com/consumer/First_Steps.html#access-api-environments`,

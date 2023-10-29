@@ -91,8 +91,35 @@ class App {
 		if (process.env.ENV === 'dev') {
 			this.app.use(require('morgan')('dev'));
 		}
+		this.app.post('/webhook', (req, res) => {
+			const event = req.body;
+		
+			// Handle the event
+			switch (event['type']) {
+				case 'checkout.session.completed':
+					const session = event['data']['object'];  // contains a stripe.checkout.Session
+					handleCheckoutSessionCompleted(session);
+					break;
+				// ... handle other event types
+				default:
+					console.log(`Unhandled event type: ${event['type']}`);
+			}
+		
+			// Return a response to acknowledge receipt of the event
+			res.json({received: true});
+		});
+		
+		
+		async function handleCheckoutSessionCompleted(session) {
+			console.log('Checkout session completed:', session);
+		
+			// Extract metadata from the session
+			const metadata = session.metadata;
+			console.log('Metadata:', metadata);
+		}
 
-		this.app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
+
+		/*this.app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
 			
 			const sig = request.headers['stripe-signature'];
 		  
@@ -130,7 +157,7 @@ class App {
 			  }
 			// Return a 200 response to acknowledge receipt of the event
 			response.send();
-		  });
+		  });*/
 		  
 		 
 
