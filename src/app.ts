@@ -81,7 +81,7 @@ class App {
 			}
 
 			// Handle the checkout.session.completed event
-			if (event.type === 'checkout.session.completed') {
+			if (event.type === 'charge.succeeded') {
 				const session = event.data.object;
 
 				// Accessing the metadata
