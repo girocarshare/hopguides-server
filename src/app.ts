@@ -12,7 +12,7 @@ import { CityRouter } from './routes/cityRouter';
 import { User } from './models/user/user';
 import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
-const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
+const endpointSecret = "whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3";
 //global.CronJob = require('./db/cron.js');
 
 
@@ -44,29 +44,7 @@ class App {
 		this.config();
 	}
 
-	async handleChargeSucceeded(charge) {
-		const amountPaid = charge.amount / 100; // Stripe provides the amount in cents, so divide by 100 for the actual amount.
-		const currency = charge.currency;
-		const paymentMethod = charge.payment_method_details.card.brand; // Example: 'visa', 'mastercard', etc.
-		const description = charge.description; // Description of the charge (if provided during charge creation)
-	  
-		const userId = charge.metadata.userId;
-		console.log("user id " + userId)
-		console.log(charge)
-		console.log(charge.customer)
-		let user: User = await this.userManager.getUser(userId);
 	
-		if(charge.amount == 22800 || charge.amount  == 2999){
-			user.tokens = user.tokens + 100
-		}else if(charge.amount == 12900 || charge.amount == 118800){
-			user.tokens = user.tokens + 500
-		}
-		await this.userManager.updateUser(user.id, user)
-		
-		console.log(`Payment was successful. Amount: ${amountPaid} ${currency} using ${paymentMethod}. Description: ${description}`);
-	  }
-
-	  
 	config(): void {
 		this.app.set('trust proxy', true);
 		this.app.use(function (req: any, res: any, next: any) {
@@ -91,74 +69,32 @@ class App {
 		if (process.env.ENV === 'dev') {
 			this.app.use(require('morgan')('dev'));
 		}
-		this.app.post('/webhook', (req, res) => {
-			const event = req.body;
-		
-			// Handle the event
-			switch (event['type']) {
-				case 'checkout.session.completed':
-					const session = event['data']['object'];  // contains a stripe.checkout.Session
-					handleCheckoutSessionCompleted(session);
-					break;
-				// ... handle other event types
-				default:
-					console.log(`Unhandled event type: ${event['type']}`);
+	
+		this.app.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
+			let event;
+			
+			try {
+				event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], endpointSecret);
+			} catch (err) {
+				console.log(`⚠️  Webhook signature verification failed. Check the logs to see the exact error message.`);
+				return res.sendStatus(400);
 			}
-		
+
+			// Handle the checkout.session.completed event
+			if (event.type === 'checkout.session.completed') {
+				const session = event.data.object;
+
+				// Accessing the metadata
+				const sessionMetadata = session.metadata;
+				const subscriptionMetadata = (session.subscription_data && session.subscription_data.metadata) || {};
+
+				console.log('Session Metadata:', sessionMetadata);
+				console.log('Subscription Metadata:', subscriptionMetadata);
+			}
+
 			// Return a response to acknowledge receipt of the event
 			res.json({received: true});
 		});
-		
-		
-		async function handleCheckoutSessionCompleted(session) {
-			console.log('Checkout session completed:', session);
-		
-			// Extract metadata from the session
-			const metadata = session.metadata;
-			console.log('Metadata:', metadata);
-		}
-
-
-		/*this.app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
-			
-			const sig = request.headers['stripe-signature'];
-		  
-			let event;
-		  
-			try {
-			  event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-			} catch (err) {
-			  response.status(400).send(`Webhook Error: ${err.message}`);
-			  return;
-			}
-		  
-		  
-			// Handle the event
-			switch (event.type) {
-				case 'checkout.session.completed':
-				  const session = event.data.object;
-				  this.handleChargeSucceeded(session);
-				  break;
-				case 'charge.succeeded':
-				  const charge = event.data.object;
-				  this.handleChargeSucceeded(charge);
-				  break;
-				  case 'subscription.succeeded':
-				  const ch = event.data.object;
-				  this.handleChargeSucceeded(ch);
-				  break;
-				  case 'subscription_intent.succeeded':
-				  const cha = event.data.object;
-				  this.handleChargeSucceeded(cha);
-				  break;
-				// ... handle other event types
-				default:
-				  console.log(`Unhandled event type ${event.type}`);
-			  }
-			// Return a 200 response to acknowledge receipt of the event
-			response.send();
-		  });*/
-		  
 		 
 
 		this.app.use(express.json({limit: '50mb'}));
