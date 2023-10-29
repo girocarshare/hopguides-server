@@ -69,7 +69,9 @@ class App {
 		if (process.env.ENV === 'dev') {
 			this.app.use(require('morgan')('dev'));
 		}
-	
+		function isEmpty(obj: object): boolean {
+			return Object.keys(obj).length === 0 && obj.constructor === Object;
+		}
 		this.app.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
 			let event;
 			
@@ -89,16 +91,21 @@ class App {
 				const subscriptionMetadata = (session.subscription_data && session.subscription_data.metadata) || {};
 
 				console.log('Session Metadata:', sessionMetadata);
-				console.log('Session Metadata:', sessionMetadata.userId);
+				if(!isEmpty(sessionMetadata) ){
+
+					let user: User = await this.userManager.getUser(sessionMetadata.userId);
+		
+			
+					user.tokens = user.tokens + 100
+				
+				await this.userManager.updateUser(user.id, user)
+				}
+
+				
 				console.log('Subscription Metadata:', subscriptionMetadata);
 
 
-				let user: User = await this.userManager.getUser(sessionMetadata.userId);
-		
-			
-				user.tokens = user.tokens + 100
-			
-			await this.userManager.updateUser(user.id, user)
+				
 
 
 			}
