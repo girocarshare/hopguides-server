@@ -20,7 +20,7 @@ var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "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"
 })
-
+const path = require('path'); 
 interface IBkRequest extends IRequest {
 	str: string
 }
@@ -126,7 +126,9 @@ export class CityRouter extends BaseRouter {
 
 			if (req.params.city.toLowerCase() === 'ljubljana') {
 				setTimeout(async () => {
-					fs.readFile('src/db/folder/amadeus/ljubljana.txt', 'utf8', (err, data) => {
+					
+const filePath = path.join(__dirname, '../db/folder/amadeus/ljubljana.txt');
+fs.readFile(filePath, 'utf8', (err, data) => {
 						if (err) {
 							console.error(err);
 							return res.status(500).send(err);  // Send error response if file read fails
@@ -139,7 +141,9 @@ export class CityRouter extends BaseRouter {
 				}, 1000);  // Wait for 3 seconds before reading the file
 			} else if (req.params.city.toLowerCase() === 'tel aviv') {
 					setTimeout(async () => {
-						fs.readFile('src/db/folder/amadeus/telaviv.txt', 'utf8', (err, data) => {
+						
+const filePath = path.join(__dirname, '../db/folder/amadeus/telaviv.txt');
+fs.readFile(filePath, 'utf8', (err, data) => {
 							if (err) {
 								console.error(err);
 								return res.status(500).send(err);  // Send error response if file read fails
