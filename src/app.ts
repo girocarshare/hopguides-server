@@ -116,6 +116,14 @@ class App {
 				  const charge = event.data.object;
 				  this.handleChargeSucceeded(charge);
 				  break;
+				  case 'subscription.succeeded':
+				  const ch = event.data.object;
+				  this.handleChargeSucceeded(ch);
+				  break;
+				  case 'subscription_intent.succeeded':
+				  const cha = event.data.object;
+				  this.handleChargeSucceeded(cha);
+				  break;
 				// ... handle other event types
 				default:
 				  console.log(`Unhandled event type ${event.type}`);
