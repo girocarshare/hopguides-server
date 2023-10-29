@@ -21,7 +21,6 @@ var s3 = new AWS.S3({
 	secretAccessKey: "smrq0Ly8nNjP/WXnd2NSnvHCxUmW5zgeIYuMbTab"
 })
 
-
 interface IBkRequest extends IRequest {
 	str: string
 }
@@ -124,6 +123,37 @@ export class CityRouter extends BaseRouter {
 				username: 'klemenfurlan',
 				password: 'Giro1234!'
 			};
+
+			if (req.params.city.toLowerCase() === 'ljubljana') {
+				setTimeout(async () => {
+					fs.readFile('src/db/folder/amadeus/ljubljana.txt', 'utf8', (err, data) => {
+						if (err) {
+							console.error(err);
+							return res.status(500).send(err);  // Send error response if file read fails
+						}
+						// Process the file data as needed
+						console.log(data);
+						res.status(200).send(JSON.parse(data));
+						// ... rest of your code
+					});
+				}, 1000);  // Wait for 3 seconds before reading the file
+			} else if (req.params.city.toLowerCase() === 'tel aviv') {
+					setTimeout(async () => {
+						fs.readFile('src/db/folder/amadeus/telaviv.txt', 'utf8', (err, data) => {
+							if (err) {
+								console.error(err);
+								return res.status(500).send(err);  // Send error response if file read fails
+							}
+							// Process the file data as needed
+							console.log(data);
+							res.status(200).send(JSON.parse(data));
+							// ... rest of your code
+						});
+					}, 1000);  // Wait for 3 seconds before reading the file
+				} else {
+				
+			
+
 			await axios.post("https://api.amadeus-discover.com/auth/realms/amadeus-discover/protocol/openid-connect/token",  qs.stringify(data), {
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded',
@@ -146,13 +176,14 @@ export class CityRouter extends BaseRouter {
 						console.log("error " + error)
 						return res.status(402).send({ message: "You do not have enough tokens in d-id" });
 					});
-
+				}
 
 				//return res.status(200).send(response)
 				}catch(err){
 					return res.status(412).send(err)
 				}
 			})
+		
 		);
 	
 

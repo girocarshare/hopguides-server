@@ -1613,10 +1613,7 @@ export class TourRouter extends BaseRouter {
 						[3, { priceInCents: 22800, name: "Base plan yearly" }],
 						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
 					])
-					const customer = await stripe.customers.create({
-						email: 'user@example.com',
-						metadata: { userId: req.userId }
-					});
+					
 
 					const storeItem = storeItems.get(req.body.id);
 					var session = null
@@ -1624,7 +1621,6 @@ export class TourRouter extends BaseRouter {
 						session = await stripe.checkout.sessions.create({
 							payment_method_types: ["card"],
 							mode: "subscription",  
-							customer: customer.id,
 							line_items: [{
 
 								price_data: {
@@ -1641,7 +1637,8 @@ export class TourRouter extends BaseRouter {
 							}],
 							metadata:{
 								"payment_type": "schedule_visit",
-								"visit_id": "123"
+								"visit_id": "123",
+								"userId": req.userId
 							  },
 							  subscription_data:{
 								"metadata": {
@@ -1656,7 +1653,6 @@ export class TourRouter extends BaseRouter {
 					} else {
 						session = await stripe.checkout.sessions.create({
 							payment_method_types: ["card"],
-							customer: customer.id,
 							mode: "subscription",
 							line_items: [{
 
@@ -1674,7 +1670,8 @@ export class TourRouter extends BaseRouter {
 							}],
 							metadata:{
 								"payment_type": "schedule_visit",
-								"visit_id": "123"
+								"visit_id": "123",
+								"userId": req.userId
 							  },
 							  subscription_data:{
 								"metadata": {

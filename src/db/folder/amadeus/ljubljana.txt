@@ -1,0 +1,2180 @@
+[
+    {
+        "id": 136062961,
+        "externalId": "GW-47625",
+        "title": "The oldest music instrument and the other treasures in the National Museum of Slovenia Free Tour (Available in English)",
+        "creationDate": "2023-05-03T01:00:17.891+00:00",
+        "reference": "47625",
+        "instantConfirmation": true,
+        "availabilityType": "START_TIME",
+        "description": "<p>We are inviting you to join us in our National Museum of Slovenia. It is a pleasant home many very important artefacts that remind us, how rich is the history of Slovenia. The most important are: the oldest music instrument in the world, an exceptionally well preserved vessel Situla as well as numerous findings from the Roman period.</p><p>Free tour: Book for free and pay what you want at the end</p>",
+        "thumbnailImage": "45abac8a-0590-45f5-bc55-ca36184d18e0",
+        "bookingEngine": "GURUWALK",
+        "bookingEngineName": "GuruWalk",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKD2MzqoHO",
+        "minPrice": 0,
+        "maxPrice": 0,
+        "pricingUnit": "PER_PERSON",
+        "address": "Muzejska ulica 1, 1000 Ljubljana, Slovenia",
+        "placeId": "ChIJaVTc9WAtZUcRK1KrZ1Nss90",
+        "geoLocation": {
+            "latitude": 46.051992,
+            "longitude": 14.499683,
+            "geoHash": "u24mczw271e2"
+        },
+        "duration": "1 hour 30 minutes",
+        "galleryImages": [
+            {
+                "url": "https://media.guruwalk.com/w5a9yilxzg2rhwai4y4rwv89gso0",
+                "order": 1
+            },
+            {
+                "url": "https://media.guruwalk.com/ygtyu46dlrugojrwk6qa7avjn3bs",
+                "order": 0
+            },
+            {
+                "url": "https://media.guruwalk.com/h3n8wgjnm260dh3odsakr8ckl1wb",
+                "order": 2
+            },
+            {
+                "url": "https://media.guruwalk.com/smnspijpy6gavxqflc8tv39h7418",
+                "order": 3
+            },
+            {
+                "url": "https://media.guruwalk.com/jkg327vek7e625h0xyyfsjboeq5h",
+                "order": 4
+            }
+        ],
+        "categories": [],
+        "supplier": {
+            "id": 3222234,
+            "name": "GuruWalk",
+            "externalId": "GW",
+            "creationDate": "2022-06-07T14:44:43.630+00:00",
+            "logo": "https://assets.guruwalk.com/assets/logo-ce0df5b68abe87a9d428d811a5dd64d71274d03d2abd265d26ede5ff134b0059.png",
+            "countryCode": "ES",
+            "countryName": "Spain"
+        },
+        "onlineBookable": true,
+        "placeDetail": {
+            "id": "a47fbd67-e5f7-450e-bbd5-8848c2ae2bcd",
+            "formattedAddress": "Muzejska ulica 1, 1000 Ljubljana, Slovenia",
+            "addressComponents": [
+                {
+                    "types": [
+                        "street_number"
+                    ],
+                    "long_name": "1",
+                    "short_name": "1"
+                },
+                {
+                    "types": [
+                        "route"
+                    ],
+                    "long_name": "Muzejska ulica",
+                    "short_name": "Muzejska ulica"
+                },
+                {
+                    "types": [
+                        "postal_town"
+                    ],
+                    "long_name": "Ljubljana",
+                    "short_name": "Ljubljana"
+                },
+                {
+                    "types": [
+                        "administrative_area_level_1",
+                        "political"
+                    ],
+                    "long_name": "Ljubljana",
+                    "short_name": "Ljubljana"
+                },
+                {
+                    "types": [
+                        "country",
+                        "political"
+                    ],
+                    "long_name": "Slovenia",
+                    "short_name": "SI"
+                },
+                {
+                    "types": [
+                        "postal_code"
+                    ],
+                    "long_name": "1000",
+                    "short_name": "1000"
+                }
+            ],
+            "geometry": {
+                "location": {
+                    "lat": 46.0519915,
+                    "lng": 14.4996832
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 46.0531036802915,
+                        "lng": 14.5011077802915
+                    },
+                    "southwest": {
+                        "lat": 46.05040571970851,
+                        "lng": 14.4984098197085
+                    }
+                }
+            },
+            "photos": []
+        },
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 0,
+        "numberOfRatings": 0,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        }
+    },
+    {
+        "id": 138931359,
+        "externalId": "GW-47657",
+        "title": "The oldest wooden wheel in the World and other findings from the City Museum Free Tour (Available in English)",
+        "creationDate": "2023-05-05T07:03:39.128+00:00",
+        "reference": "47657",
+        "instantConfirmation": true,
+        "availabilityType": "START_TIME",
+        "description": "<p>Would you like to know why is the oldest wooden wheel, which was found in Ljubljana Marshes, so unique? Well, also the rest of the findings are very interesting and will reveal the diverse history of Ljubljana's region&nbsp;</p><p>Free tour: Book for free and pay what you want at the end</p>",
+        "thumbnailImage": "240001af-764f-4a6a-9cbf-6ef4ec9f068a",
+        "bookingEngine": "GURUWALK",
+        "bookingEngineName": "GuruWalk",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKvRFTaTFO",
+        "minPrice": 0,
+        "maxPrice": 0,
+        "pricingUnit": "PER_PERSON",
+        "address": "Gosposka ulica 15, 1000 Ljubljana, Slovenia",
+        "placeId": "ChIJfXsIUmQtZUcRU_O4u-vCQJQ",
+        "geoLocation": {
+            "latitude": 46.046969,
+            "longitude": 14.504136,
+            "geoHash": "u24mfn9e4c5t"
+        },
+        "duration": "1 hour 30 minutes",
+        "galleryImages": [
+            {
+                "url": "https://media.guruwalk.com/kuwntsmde5wo43ydjqlts9fw9n6z",
+                "order": 2
+            },
+            {
+                "url": "https://media.guruwalk.com/cql2pkfpdis2xnlvm6uy16rxre4l",
+                "order": 3
+            },
+            {
+                "url": "https://media.guruwalk.com/sj4us3ej4eue60sw5bgslo666k4n",
+                "order": 0
+            },
+            {
+                "url": "https://media.guruwalk.com/xeekw2ypu1a3bqpt79ufh9ncorbx",
+                "order": 1
+            },
+            {
+                "url": "https://media.guruwalk.com/qa3irt2vr5jbc4zyi8u49olnq811",
+                "order": 4
+            }
+        ],
+        "categories": [],
+        "supplier": {
+            "id": 3222234,
+            "name": "GuruWalk",
+            "externalId": "GW",
+            "creationDate": "2022-06-07T14:44:43.630+00:00",
+            "logo": "https://assets.guruwalk.com/assets/logo-ce0df5b68abe87a9d428d811a5dd64d71274d03d2abd265d26ede5ff134b0059.png",
+            "countryCode": "ES",
+            "countryName": "Spain"
+        },
+        "onlineBookable": true,
+        "placeDetail": {
+            "id": "65fd6356-6594-4a0d-8f33-6c62c75cc5a9",
+            "formattedAddress": "Gosposka ulica 15, 1000 Ljubljana, Slovenia",
+            "addressComponents": [
+                {
+                    "types": [
+                        "street_number"
+                    ],
+                    "long_name": "15",
+                    "short_name": "15"
+                },
+                {
+                    "types": [
+                        "route"
+                    ],
+                    "long_name": "Gosposka ulica",
+                    "short_name": "Gosposka ulica"
+                },
+                {
+                    "types": [
+                        "postal_town"
+                    ],
+                    "long_name": "Ljubljana",
+                    "short_name": "Ljubljana"
+                },
+                {
+                    "types": [
+                        "administrative_area_level_1",
+                        "political"
+                    ],
+                    "long_name": "Ljubljana",
+                    "short_name": "Ljubljana"
+                },
+                {
+                    "types": [
+                        "country",
+                        "political"
+                    ],
+                    "long_name": "Slovenia",
+                    "short_name": "SI"
+                },
+                {
+                    "types": [
+                        "postal_code"
+                    ],
+                    "long_name": "1000",
+                    "short_name": "1000"
+                }
+            ],
+            "geometry": {
+                "location": {
+                    "lat": 46.0469692,
+                    "lng": 14.5041359
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 46.0483312302915,
+                        "lng": 14.5053847802915
+                    },
+                    "southwest": {
+                        "lat": 46.0456332697085,
+                        "lng": 14.5026868197085
+                    }
+                }
+            },
+            "photos": []
+        },
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 0,
+        "numberOfRatings": 0,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        }
+    },
+    {
+        "id": 138974654,
+        "externalId": "GW-50226",
+        "title": "Sightseeing of Ljubljana with an experienced tour guide & art historian  (Available in English)",
+        "creationDate": "2023-08-25T01:01:52.991+00:00",
+        "updateDate": "2023-10-10T02:03:59.825+00:00",
+        "reference": "50226",
+        "instantConfirmation": true,
+        "availabilityType": "START_TIME",
+        "description": "<p>Enjoy strolling around Ljubljana, see the main monuments of a small European Capital, deeply rooted in a millenary history; definitively a small but original civilisation, a blend of Slavic, German and Italian influences. <br><br><strong>I will show you some old maps of the medieval and baroque towns and old pictures of some sights. </strong>You will find out about <strong>fascinating archaeological findings, the trade with mercury from the mines in Idrija, the legend about Jason and the Argonauts</strong> as founding fathers of Ljubljana, described by Johan Ludwig Schönleben in the 17th century. <br><strong>You will learn about the expulsion of the Jews in 1510, the legacy of the protestant movement, the construction of a church financed by an alchemist, the records of witch charges</strong> (<em>maleficium</em>) and punishment methods for dishonest bakers like the ducking stool. <br>In few words I will present you some great scholars of the past and present like Valvasor, Hallerstein and Žižek. Being a great admirer of the architectural oeuvre of Jože Plečnik, now under UNESCO protection, <strong>I will share with you some insights in his renovation of the German Teutonic Order monastery </strong>(where he expressed his disapproval of the socialist regime in the crippled red star). I will show you a photo of the so-called Infernal courtyard with a myriad of convex lamps, positioned on the walls. <strong>Next we will visit Plečnik’s National and University Library. </strong>Have a look at the magnificent black marble staircase and hear the explanation about the allegory of spiritual elevation from ignorance to knowledge. <strong>I will also introduce you to the events of the Second World War and the following socialist period when in the National Library operated a special department for forbidden ideologically suspicious books </strong>(known as the Fond D) and much more. Having personally done some research, written and published some scientific articles, I will use visual material to introduce you to some fascinating iconographic elements, present in paintings from this territory: like an extremely rare depiction of an automaton from the 15th century. &nbsp;<br><br>If you like an infotainment type of tour, that might be a good choice for you.&nbsp;<br><br>Please note that this tour does not take place if it is raining heavily.</p><p>Free tour: Book for free and pay what you want at the end</p>",
+        "thumbnailImage": "2f433cfe-3607-408b-8839-97c021b10966",
+        "bookingEngine": "GURUWALK",
+        "bookingEngineName": "GuruWalk",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKcrnQLcDl",
+        "minPrice": 0,
+        "maxPrice": 0,
+        "pricingUnit": "PER_PERSON",
+        "address": "Čopova ulica 11a, 1000 Ljubljana, Slovenia",
+        "placeId": "ChIJq-3r3WMtZUcRF5QLicLYHIU",
+        "geoLocation": {
+            "latitude": 46.050358,
+            "longitude": 14.503816,
+            "geoHash": "u24mfp1qg2vj"
+        },
+        "duration": "1 hour 45 minutes",
+        "galleryImages": [
+            {
+                "url": "https://media.guruwalk.com/lldna3mblp494au4jbahx0drd0y3",
+                "order": 0
+            },
+            {
+                "url": "https://media.guruwalk.com/c4tto7n6y1bqia1h1lfnxyp6a8z1",
+                "order": 1
+            },
+            {
+                "url": "https://media.guruwalk.com/tufwd1fzze3w0d2w48l8vnl2e46y",
+                "order": 2
+            },
+            {
+                "url": "https://media.guruwalk.com/oun423p3xulpv122z2g5q7irse0o",
+                "order": 4
+            },
+            {
+                "url": "https://media.guruwalk.com/38evqw75kjxy751w297a736p8yot",
+                "order": 3
+            }
+        ],
+        "categories": [],
+        "supplier": {
+            "id": 3222234,
+            "name": "GuruWalk",
+            "externalId": "GW",
+            "creationDate": "2022-06-07T14:44:43.630+00:00",
+            "logo": "https://assets.guruwalk.com/assets/logo-ce0df5b68abe87a9d428d811a5dd64d71274d03d2abd265d26ede5ff134b0059.png",
+            "countryCode": "ES",
+            "countryName": "Spain"
+        },
+        "onlineBookable": true,
+        "placeDetail": {
+            "id": "d5f68daf-bbd1-485c-831b-115a032e1e70",
+            "photos": []
+        },
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 5,
+        "numberOfRatings": 1,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        }
+    },
+    {
+        "id": 138954561,
+        "externalId": "GW-49143",
+        "title": "The green places in Ljubljana - from the castle to the Tivoli park (Available in English, Spanish)",
+        "creationDate": "2023-07-06T01:03:07.394+00:00",
+        "updateDate": "2023-08-14T02:02:56.171+00:00",
+        "reference": "49143",
+        "instantConfirmation": true,
+        "availabilityType": "START_TIME",
+        "description": "<p>Escape to the captivating city of Ljubljana, where every step reveals a new adventure and a new perspective awaits. Ascend to the pinnacle of Castle Hill and be rewarded with a breathtaking panoramic view that will leave you in awe. As the sun kisses the cityscape, let the castle's stories come to life, transporting you back to a time of grandeur and intrigue.<br><br> But our journey does not stop there. Step into the green embrace of Tivoli Park, where nature unfolds its vibrant tapestry. Stroll down winding paths, surrounded by lush greenery and fragrant flowers, as the gentle breeze whispers secrets of tranquility. Lose yourself in this oasis of serenity, where the bustling city melts away and you can connect with nature in its purest form.<br><br> As we delve deeper into the heart of Ljubljana, let's take a moment to understand the vibrant pulse of its people. Engage in conversations that reveal the colorful tapestry of modern life, as we explore the bustling markets, trendy cafes, and hidden corners where the locals congregate. Experience first-hand the warmth and hospitality that defines the spirit of Ljubljana, as friendly faces welcome you into their vibrant community.<br><br> Together we will discover the hidden treasures that make Ljubljana an unforgettable destination. From its ancient castle to its serene parks and the vibrant energy of its people, this city offers a perfect blend of history, nature and contemporary life. Come and immerse yourself in the soul of Ljubljana, where past and present intertwine, and discover a world that will leave you enchanted and wanting more.<br><br> In a few words: During the walk through the green places of Ljubljana, we will compare the city, customs, lifestyle of Ljubljana with the country where you come from. There will be enough time for a chat with the local guide.</p><p>Free tour: Book for free and pay what you want at the end</p>",
+        "thumbnailImage": "19a3755e-6412-4d93-83cc-5c005ea7ccb4",
+        "bookingEngine": "GURUWALK",
+        "bookingEngineName": "GuruWalk",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKcMvkjQVf",
+        "minPrice": 0,
+        "maxPrice": 0,
+        "pricingUnit": "PER_PERSON",
+        "address": "Krekov trg 2, 1000 Ljubljana, Slovenia",
+        "placeId": "ChIJDQ8n0XwtZUcRiR9hsHxtajQ",
+        "geoLocation": {
+            "latitude": 46.050232,
+            "longitude": 14.510134,
+            "geoHash": "u24mfpjyn9kj"
+        },
+        "duration": "1 hour 45 minutes",
+        "galleryImages": [
+            {
+                "url": "https://media.guruwalk.com/v0ch5n3jn87izbgbkrkpr0iwxzvs",
+                "order": 3
+            },
+            {
+                "url": "https://media.guruwalk.com/nvw0wwukgfhouvuibi22cubl4pt2",
+                "order": 2
+            },
+            {
+                "url": "https://media.guruwalk.com/lnjm8yt53qfz8zhm8hw3e0daargk",
+                "order": 0
+            },
+            {
+                "url": "https://media.guruwalk.com/wz4ctejfirbi1d5werioa6m1zki1",
+                "order": 4
+            },
+            {
+                "url": "https://media.guruwalk.com/ptb6il5uccszfzjyjyvg9mopm2s6",
+                "order": 1
+            }
+        ],
+        "categories": [],
+        "supplier": {
+            "id": 3222234,
+            "name": "GuruWalk",
+            "externalId": "GW",
+            "creationDate": "2022-06-07T14:44:43.630+00:00",
+            "logo": "https://assets.guruwalk.com/assets/logo-ce0df5b68abe87a9d428d811a5dd64d71274d03d2abd265d26ede5ff134b0059.png",
+            "countryCode": "ES",
+            "countryName": "Spain"
+        },
+        "onlineBookable": true,
+        "placeDetail": {
+            "id": "b8205bdc-73fb-426c-9dc4-a17ff974647d",
+            "photos": []
+        },
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 4,
+        "numberOfRatings": 1,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        }
+    },
+    {
+        "id": 138942705,
+        "externalId": "c6bc2778-0ef4-406b-a001-0c0c3ef30a62",
+        "title": "Ljubljana Scavenger Hunt and Walking Tour",
+        "creationDate": "2023-06-05T23:52:05.868+00:00",
+        "updateDate": "2023-10-27T23:51:47.366+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><div><p>Use clues at each attraction to find your next destination and challenge yourself to use logic, imagination, observation, and team spirit to complete the game. Uncover local information and facts about the city as you explore. Discover hidden gems and narrow streets.</p><p>Without a schedule and at your own pace, pause anytime and continue later or even another day.</p><p>Work as a team or compete with each other. A unique team-building activity perfect for couples, families, companies, students and groups of friends.</p></div></div>",
+        "thumbnailImage": "510539aa-5720-4347-8f49-0a2c0baa1090",
+        "bookingEngine": "HOLIBOB_VIATOR",
+        "bookingEngineName": "Holibob Viator",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RK_1L2pcXy",
+        "minPrice": 6,
+        "maxPrice": 6,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0501947,
+            "longitude": 14.5037723,
+            "geoHash": "u24mfp1mf"
+        },
+        "duration": "120 minutes",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2ExOGNkYmM1LWEwZmQtNGY3YS1hY2RmLWY3YzVhYTRhODA2ZiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzliMzY3NGM2LTljNWEtNDU1My1hY2U4LWMzZWE3MTkxYjFiYiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzgwNWFiM2UyLTQyNTEtNDc2My1iMDNiLTJiNTU5OThiZjI5MCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzBlMjA2YTM5LWUzMTctNDQ4Yi1iNTNkLTRmYzI1YmIzYWE2ZiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzQzZmI3NGMxLTZiMWUtNGNhZC05Y2QxLTUzOGZjOTUzY2MxYiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzIxNDI2N2UxLWEyMmMtNDdkYS04MDdiLWI3NDE5Nzg3Y2MyNyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2NhMjIwODgyLWUxYTYtNDA4Zi1hYmE5LTdmYTkyNGZlNTJkMCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "tours"
+            }
+        ],
+        "supplier": {
+            "id": 57152005,
+            "name": "WoRLD CiTY TRaiL- RhODES",
+            "externalId": "2c331234-48d6-4874-9104-91cf4d0704b1",
+            "creationDate": "2023-05-04T06:49:50.952+00:00",
+            "updateDate": "2023-10-29T10:18:26.405+00:00",
+            "contact": {},
+            "countryCode": "IT",
+            "countryName": "Italy"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": "App-Navigation-Tour",
+        "modalitiesExcluded": "Food and Drinks",
+        "modalitiesAdditionalInfo": "E-Voucher/nService animals allowed/nPublic transportation options are available nearby/nNot recommended for travelers with spinal injuries/nSuitable for all physical fitness levels",
+        "handiAccess": false
+    },
+    {
+        "id": 138942992,
+        "externalId": "1dc3713e-85e5-46bd-98d7-ffc9c89be960",
+        "title": "House of Illusions Ljubljana Entrance Ticket",
+        "creationDate": "2023-06-05T23:52:14.394+00:00",
+        "updateDate": "2023-10-26T23:51:46.556+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><div><p>Pre-book tickets to the Museum of Illusions Ljubljana to enter a mind-bending world of optical illusions and interactive exhibits sure to trick your senses. Securing your Museum of Illusions Ljubljana tickets before arrival combines the convenience of advance planning with the flexibility to arrive on your own schedule; with tickets in hand, you won’t need to use your limited travel time for logistics.</p></div></div>",
+        "thumbnailImage": "7110cd0a-f9b6-45e9-b862-d0d7139ee8d3",
+        "bookingEngine": "HOLIBOB_VIATOR",
+        "bookingEngineName": "Holibob Viator",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKx94mgQ4a",
+        "minPrice": 13,
+        "maxPrice": 13,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.049623,
+            "longitude": 14.5034036,
+            "geoHash": "u24mfp143"
+        },
+        "duration": "",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzQ3YjhhNDY4LWM5N2ItNDc3NS04OTgwLTQyNGE5MmVhOTFiZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzJjYjE5ZmU3LWRjZjItNDI2NS05NTcxLWFiNDJhMjI3NGUyOCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzQxNjFiYmIzLTU5NDQtNDJkNC04ZjZkLTIyOGVmYmU1NGQyMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2FmODVlNGQ5LWY0ODEtNDk2OS04Y2I5LWUyNzUyNWUyZjQ1YiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2Y3ZjAxNmVmLTUwZmEtNDEwNC05NDFlLTkxMzY3OTJjM2VjMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzc5YWRkZTMxLTg4MTEtNDVmMy05ZmFjLWNlOTcxNWIxZjU4NyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2ZhNGE4NzliLTliYzgtNGFiMi1iYWJkLTBiMTUyYTQ1ODQ3MyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "fun_games"
+            }
+        ],
+        "supplier": {
+            "id": 138830522,
+            "name": "DTG d.o.o.",
+            "externalId": "89ff80a3-fb50-429e-97eb-96d1b4d8e854",
+            "creationDate": "2023-06-05T23:51:53.677+00:00",
+            "updateDate": "2023-10-27T23:51:28.274+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 4.498452,
+        "numberOfRatings": 323,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6",
+                    "name": "Culture",
+                    "level": 1,
+                    "slug": "activities-culture",
+                    "family": "activities",
+                    "parentUuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Culture",
+                    "value": 0.7117365002632141
+                },
+                {
+                    "uuid": "2ba0dbb3-7437-8210-8540-6e3ffd4202a1",
+                    "name": "Tickets & passes",
+                    "level": 2,
+                    "slug": "activities-culture-tickets-passes",
+                    "family": "activities",
+                    "nameFullPath": "Culture#Tickets & passes",
+                    "parentUuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6#2ba0dbb3-7437-8210-8540-6e3ffd4202a1",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Tickets & passes",
+                    "value": 0.7117365002632141
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": " Get a Photo in a room that totally defies the laws of gravity/n70 Exhibits",
+        "modalitiesExcluded": "Tickets bought online do not include skiping the line. If there is a line you have to wait./nAnimals registered as service animals are allowed into all public areas of the Museum. Other animals must have the appropriate equipment for the protection of other visitors and for their own safety (they must be on a leash, they must have a muzzle, or be in an appropriate basket that is closed, etc.",
+        "modalitiesAdditionalInfo": "E-Voucher/nInfants and small children can ride in a pram or stroller/nPublic transportation options are available nearby/nSuitable for all physical fitness levels/nChildren must be accompanied by an adult",
+        "handiAccess": false,
+        "experienceHighlights": "Flexible admission means you can arrive at point during museum hours/nChoose between convenient mobile or paper ticket options/nEnjoy the freedom to see the museum at your own pace/nBring home memorable photos that engage the museum exhibits"
+    },
+    {
+        "id": 138942876,
+        "externalId": "5c09d629-a0c1-4728-bb58-6529bee1cf57",
+        "title": "Ljubljana Castle: Entrance Ticket",
+        "creationDate": "2023-06-05T23:52:11.109+00:00",
+        "updateDate": "2023-10-26T23:51:43.276+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><div><p>Make your own way to the Ljubljana Castle ticket office at a time of your choosing and hop on the funicular (if option selected) for a scenic ride to the top of Castle Hill.</p><p></p><p> On arrival, set out on a self-guided tour of the castle, starting by browsing the exhibitions and learning more about Slovenian history. Visit the Penitentiary, the Castle Chapel of St George, and the Pentagonal Tower, then stop by the Mini Theatre to watch a puppet show or browse the Rustika gallery of arts and crafts.</p><p></p><p> Be sure to take in the views from the Watchtower and stop for a coffee at the Castle Coffee House (own expense), before heading back down on the funicular.</p></div></div>",
+        "thumbnailImage": "4d48bd16-42ce-4458-b8e7-f084cdd311c8",
+        "bookingEngine": "HOLIBOB_VIATOR",
+        "bookingEngineName": "Holibob Viator",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKEBOgU-O5",
+        "minPrice": 16,
+        "maxPrice": 16,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0487823,
+            "longitude": 14.5089142,
+            "geoHash": "u24mfnvjd"
+        },
+        "duration": "",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2ViYzdmNmUwLThkZjctNDIxZi05Y2JmLWQ0ZTdhOWY2N2Q2YSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2E1MGRlMGQ5LWFkN2EtNDA4Zi04MTMzLTRhNTExN2E3ZmRlZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2Y4ZTczNzFiLTExZTctNDk5Ny05MDNkLTcyZDdhYmFmNzdiNSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2E4ZGMyOTNkLTM1NzgtNDJjMC1iMjcyLWI2MmU5NTEzYTQzZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzM2MzAyMjcwLTgyYjMtNDAyZS05ZWFjLWVmZDUwMmU5YWZkMSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzQxYThlM2I1LTFmNTEtNGZmMi1iNmU1LTM0NDhjNDNiZGI0NCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzk1ZjE1NGMwLTkyNzItNGZlZi1iMjU5LTdhMGYwYWVlOTE2MSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            }
+        ],
+        "categories": [],
+        "supplier": {
+            "id": 138830555,
+            "name": "Ljubljana castle",
+            "externalId": "de8b662f-d6b7-4baf-af3f-669ef8ea6ef3",
+            "creationDate": "2023-06-05T23:51:54.007+00:00",
+            "updateDate": "2023-10-28T23:51:28.023+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 3.4261603,
+        "numberOfRatings": 237,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6",
+                    "name": "Culture",
+                    "level": 1,
+                    "slug": "activities-culture",
+                    "family": "activities",
+                    "parentUuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Culture",
+                    "value": 0.9594550132751465
+                },
+                {
+                    "uuid": "2ba0dbb3-7437-8210-8540-6e3ffd4202a1",
+                    "name": "Tickets & passes",
+                    "level": 2,
+                    "slug": "activities-culture-tickets-passes",
+                    "family": "activities",
+                    "nameFullPath": "Culture#Tickets & passes",
+                    "parentUuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6#2ba0dbb3-7437-8210-8540-6e3ffd4202a1",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Tickets & passes",
+                    "value": 0.9594550132751465
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": "Audioguide (if option selected)/nFunicular return journey (if option selected)",
+        "modalitiesAdditionalInfo": "E-Voucher/nWheelchair accessible/nInfants and small children can ride in a pram or stroller/nService animals allowed/nPublic transportation options are available nearby/nTransportation options are wheelchair accessible/nSuitable for all physical fitness levels/nChildren must be accompanied by an adult./nDogs must be securely muzzled and held on a leash in the Funicular railway./nDogs may enter the Castle Courtyard, but they are not permitted in the indoor and event areas.",
+        "handiAccess": true,
+        "experienceHighlights": "Entrance Ticket to Ljubljana Castle/nRide the funicular to the hilltop Ljubljana Castle/nVisit the Pentagonal Tower, Castle Chapel of St George, Penitentiary, and Rustika gallery/nLearn more about the history of Ljubljana and the castle as you browse the exhibitions/nSelf-guided tour offers greater flexibility"
+    },
+    {
+        "id": 138943096,
+        "externalId": "14f1ce2f-fc1c-4988-a1fe-986137b45f40",
+        "title": "Pub Crawl Ljubljana",
+        "creationDate": "2023-06-05T23:52:20.180+00:00",
+        "updateDate": "2023-10-25T23:52:00.323+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><div><p>Experience Ljubljana’s nightlife with a pub crawl through Slovenia’s capital city. This tour is perfect for solo travelers or groups interested in meeting other travelers. You’ll spend time getting to know the other members of your tour at the first pub and then make your way through the city ending the night in one of the hottest dance clubs in Ljubljana. Your party guide will sponsor challenges and games along the way to ensure everyone has a fantastic time.</p></div></div>",
+        "thumbnailImage": "1c746031-d510-48cb-a97f-b0ec087ef5bd",
+        "bookingEngine": "HOLIBOB_VIATOR",
+        "bookingEngineName": "Holibob Viator",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKyltTYWiJ",
+        "minPrice": 22,
+        "maxPrice": 22,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.05224279999999,
+            "longitude": 14.5099487,
+            "geoHash": "u24mfptcf"
+        },
+        "duration": "300 minutes",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzcxNTFmMmRlLWQ2MmEtNDUwZS04Mzc0LWFlMTcwMGIwN2I3YyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 7
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzc4NWM1NjA2LTJlZTMtNDQ2Yy04MDczLWE0NmZmOGJiMzdjZSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzA4MjY0NDE3LTI5MzUtNGE3My05NWNkLWJlMGM2YzBiZTFkMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzBlNjc1MDI0LWI1YTctNGVlOS1hMGMyLTM3ZmEyMTgxN2E4YiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2FjM2I5YmUwLTEwNjEtNGYwMS1hNTU2LTMzOGY5NWE0MzFjYSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 8
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2NiZGYzN2ZkLTgxYzUtNGRiOS04MmIyLTlkYjVmZTVhMzQ1ZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2NiZjliYjc3LTViYTktNDBmMy1hNDE2LWZiZDYzNTNlMDNlNiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzI5YTAyZDQwLTk5NDMtNGMxOS1iYmJhLWM2M2RiOGZiOThmYiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2M5ZTg3Mzk0LTg1OWItNDNiOS04YTEyLTAxMTAwNjZkZmFhOSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            }
+        ],
+        "categories": [],
+        "supplier": {
+            "id": 138830578,
+            "name": "Pub Crawl Ljubljana",
+            "externalId": "4b1f3c90-249c-40f8-b0b3-d2e6cbbbf3a4",
+            "creationDate": "2023-06-05T23:51:54.243+00:00",
+            "updateDate": "2023-10-28T23:51:28.179+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 4.663934,
+        "numberOfRatings": 488,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": "Challenges/nParty guide for the night/nDrinking Games/nFree entry to one of the best clubs/dance bars in Ljubljana/n5 shots/nKaraoke",
+        "modalitiesAdditionalInfo": "E-Voucher/nWheelchair accessible/nInfants and small children can ride in a pram or stroller/nService animals allowed/nPublic transportation options are available nearby/nTransportation options are wheelchair accessible/nNot recommended for pregnant travelers/nSuitable for all physical fitness levels/nMinimum age is 18 years",
+        "handiAccess": true,
+        "experienceHighlights": "Delve into Ljubljana’s nightlife with a pub crawl alongside fellow travelers/nA guide will lead you from pub to pub and to one of Ljubljana hottest dance clubs/nConnect with other travelers by completing challenges and playing games/nDrinks and club entries are included making this tour an excellent deal"
+    },
+    {
+        "id": 138942752,
+        "externalId": "af1682ee-f074-4527-82ff-54b7d0e3e509",
+        "title": "Ljubljana: Broken Bones Gin Distillery Visit With Tastings",
+        "creationDate": "2023-06-05T23:52:07.247+00:00",
+        "updateDate": "2023-10-26T23:51:39.290+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><div><p>Gin lovers—this one’s for you. Instead of going to a bar, take your Slovenian gin knowledge to the next level by visiting one of Ljubljana’s only gin and whisky distilleries. Enjoy commentary about the distillery’s history and how its signature spirits were developed and perfected; then, best of all—taste Broken Bones Gin and three delicious cocktails.</p></div></div>",
+        "thumbnailImage": "96766327-f7d8-4eee-b9af-6b4517ed575f",
+        "bookingEngine": "HOLIBOB_VIATOR",
+        "bookingEngineName": "Holibob Viator",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKH02Sz97J",
+        "minPrice": 34,
+        "maxPrice": 34,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.03795710000001,
+            "longitude": 14.4676714,
+            "geoHash": "u24mchzn9"
+        },
+        "duration": "120 minutes",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzY4MTA5Y2QxLTc1ZTgtNDA5NS1iMzcyLWM3Y2VjYzM2M2Y1ZSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzNkNTcwOTlkLWRkZmYtNDNkZC05NjBkLTk2YmM5MTM5MTFjMiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzQwNjBkNTYxLTkyMGYtNGRhMi1iMTQzLTg0MTZhMzE1NTg4ZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzU1Njk3OGNlLWQ0OTctNDE0My05YzA5LTdhZTBkZjkyNjQxYiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzMyNjI4Y2EwLTA2MDItNDM2Yy1iNDUyLTZhMmYxNGJmMDQ4YSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzk2Mjg5ODE1LWVhNTctNDg3Yi04YzEwLTQzYWZlYzU2NjJlMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzg0NmVhNjhhLTA5YTItNGVkMS04MzAyLTMxZTFkNzQxMDcyZiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "tours"
+            }
+        ],
+        "supplier": {
+            "id": 138830491,
+            "name": "Broken Bones Distillery",
+            "externalId": "89e4f43f-d3c6-4eb9-8ef8-f0d0a82f539c",
+            "creationDate": "2023-06-05T23:51:53.184+00:00",
+            "updateDate": "2023-10-28T23:51:28.158+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 5,
+        "numberOfRatings": 8,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": "Snacks",
+        "modalitiesAdditionalInfo": "E-Voucher/nInfants and small children can ride in a pram or stroller/nService animals allowed/nPublic transportation options are available nearby/nSuitable for all physical fitness levels/nBroken Bones Experience is not suitable for persons under 18 years of age",
+        "handiAccess": false,
+        "experienceHighlights": " A special opportunity to visit a gin and whisky distillery in Ljubljana /nEnjoy the perk of sampling cocktails made with Broken Bones Gin/nFind out stories about the history of the brand and how it was launched /nLearn insider secrets about how the on-site spirits are produced"
+    },
+    {
+        "id": 138942798,
+        "externalId": "6f2dc47c-64e8-42b2-82a3-1f4f362bc7d6",
+        "title": "Ljubljana Card",
+        "creationDate": "2023-06-05T23:52:08.651+00:00",
+        "updateDate": "2023-10-28T23:51:42.652+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><p></p><p><strong>Ljubljana Card</strong></p><p> is a combined ticket to Ljubljana's major sights enabling visitors to explore the city in a comfortable way and at the lowest cost. It is conceived as a smart card containing a RFID chip for card validation and free admission.</p><p></p><p></p><p>The card offers visitors to Ljubljana numerous privileges, from free tickets to a large number of museums and galleries, free travel on city buses, free tickets for sightseeing tours and many other privileges. The card, which is valid for 24, 48 or 72 hours from the time of purchase, costs respectively 31€, 39€ and 45€, with a special children’s rate of 18€, 23€ and 27€. The card will grant you free access to a network of many establishments, which offer tourist or tourism-related services and products.</p><p></p><p></p><p>Ljubljana Card is here for you to save time and money. The card comes with a free city guide; it is a package of useful information (working hours, transport and contact information) and more, so you can get the best of Ljubljana, including more than 25 top attractions.</p><p></p><p></p><p>The Ljubljana Card can be purchased at numerous selling places in Ljubljana including the Tourist Information Centres located in the city centre.</p><p></p><p><strong>Card use</strong></p><p></p><p>On entering an establishment, hand over your card to the ticket salesperson to be swiped. Upon boarding a city bus, hold your card close to the card reader. Card benefits are limited to one ticket purchase from a single establishment, while on buses the use of the card is unlimited within the card validity period. No benefits can be claimed after the expiration of the card validity period.</p><p></p><p><strong>Savings</strong></p><p></p><p>Using the </p><strong>Ljubljana Card</strong><p>, can save you </p><strong>up to 165 € </strong><p>on expenses such as entrance fees and public transport fares. The card makes your sightseeing a lot easier: rather than making multiple payments, you simply show your card.</p><p></p><p><strong>The card will grant you free access to</strong></p><p>:</p><p></p><p></p><p>City buses - unlimited rides</p>\n<p>LPP transport Airport – Ljubljana – Airport, return ride</p>\n<p>Ljubljana Bike - four-hour hire period</p>\n<p>Urban – electric train ride</p>\n<p>Ljubljana tourist boat</p>\n<p>Ljubljanica tourist boat</p>\n<p>Regularly scheduled city tour</p>\n<p>Internet access at the Slovenian Tourist Information Centre - one hour</p>\n<p>National Gallery</p>\n<p>International Centre of Graphic Arts</p>\n<p>City Museum of Ljubljana</p>\n<p>Museum of Modern Art</p>\n<p>Slovene Ethnographic Museum</p>\n<p>National Museum of Slovenia</p>\n<p>National Museum of Slovenia - Metelkova</p>\n<p>National Museum of Contemporary History</p>\n<p>Slovenian Museum of Natural History</p>\n<p>Plečnik House</p>\n<p>House of Illusions</p>\n<p>Museum of Contemporary Art Metelkova (MSUM)</p>\n<p>MAO – Museum of Architecture and Design</p>\n<p>Railway Museum</p>\n<p>Union Experience</p>\n<p>Ljubljana Castle (Ljubljana Castle funicular, Virtual Castle, Outlook Tower, permanent exhibition Slovenian History, Puppet Museum)</p>\n<p>Minicity</p>\n<p>Ljubljana Zoo</p>\n<p>Volčji Potok Arboretum</p>\n<p>Vrhnika Cultural Centre</p>\n<p>Snovik Spa</p><p></p><p></p></div>",
+        "thumbnailImage": "4d6a1dde-b3fb-4df8-8622-efdd87544d26",
+        "bookingEngine": "HOLIBOB_MUSEMENT",
+        "bookingEngineName": "Holibob Musement",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKF0Q-Xt6Z",
+        "minPrice": 37,
+        "maxPrice": 37,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0507657,
+            "longitude": 14.5066462,
+            "geoHash": "u24mfp73j"
+        },
+        "duration": "",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzMwZDRhNzQ0LWIyOTctNDI0Zi1iOGVkLWIxN2NmMWRkMTQxZiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 13
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2RkMjU2YTJjLTA4NjctNDlkOS05ZjEwLWFiOGM2MTA2ZDZlYSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 7
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzMyYjZhNzk0LWU1ZDgtNDEwNi04ZDkwLWY1NzUyNjM5N2IxMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 16
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzc2Zjg3ZDI1LWJjNDYtNGQzOS1iNjc3LTMyYTFlNGUwYWRjZiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzNmNmI1ZWM1LTZjOWQtNDk1NC04YzZlLWY0MTU4OTMwZmFlOCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 12
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2RlM2Q0MDUxLWFjZWEtNGU4OS1iYzEyLTZjOWMxMzBhNGI0MSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzU2NWU0NjQ2LWM0YTQtNDYzZi04M2FlLWYyZDg1YWQ0ODJjMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzYwNDhlOTA0LThkZjQtNDM4Zi05NjNlLWQyODc4NDZiMGViZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzgwYjc0NWU1LTUyMTYtNGE1NC1iZmY5LWIxMzY4MjFkMGVlZSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 14
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzU5N2NmZWUxLWIyNWEtNGIzZi04NGMyLTMwYjM1Yzk1ZDJlMSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 19
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2VlNWFjOGY1LTJlMWEtNDdkOS1iZDZiLTBiMDdkZDNjYzc1NSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 10
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2U4YTVkYWQzLWIzNGItNGU3NS1iNGEyLWUwN2QxY2QzYjg0NyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzQ3MTBlYTlhLTA3MDgtNGVjNi05YjdmLTJlMjkxMzc4Mjc5NiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 15
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzM1OWYwYzcwLWRiN2EtNDI1Ni04M2U0LWNkMDU3OWNkNGYzOSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzQ0ZDc2MGQzLTBmMWItNGNiNC05Y2E1LTJiZWUxN2Y2YzAyOCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 17
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzhjMTUwMmI3LWNjYzgtNDJmOC04MDIyLWI1ZmNmMDZiMjc4YiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 11
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzFlYjFlODkxLTk5MzQtNDkzNS05ODcwLTUxZmEyMDE2YWRiMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 8
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2QxZTE4MmEyLWE3NzktNDEwOS1iZDM5LTgyZTNkYTNlYWZlYiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2FhNzUxNGY5LTZlMTAtNDYwNC05YzgyLTZmYjBjNmFjMGMzMCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 18
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzE5ZjRlYmYxLTFlYjEtNGRmYS04MGE0LTNhY2M2NzE1NGRmYSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 9
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "tours"
+            }
+        ],
+        "supplier": {
+            "id": 138830585,
+            "name": "Ljubljana Tourism",
+            "externalId": "deb1551d-f6b4-4b2b-968f-80ddc3011a57",
+            "creationDate": "2023-06-05T23:51:54.316+00:00",
+            "updateDate": "2023-10-28T23:51:28.246+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 5,
+        "numberOfRatings": 2,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6",
+                    "name": "Culture",
+                    "level": 1,
+                    "slug": "activities-culture",
+                    "family": "activities",
+                    "parentUuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Culture",
+                    "value": 0.9972423315048218
+                },
+                {
+                    "uuid": "2ba0dbb3-7437-8210-8540-6e3ffd4202a1",
+                    "name": "Tickets & passes",
+                    "level": 2,
+                    "slug": "activities-culture-tickets-passes",
+                    "family": "activities",
+                    "nameFullPath": "Culture#Tickets & passes",
+                    "parentUuid": "6a334ebe-1fee-37f9-80b8-bfc38cd62fa6#2ba0dbb3-7437-8210-8540-6e3ffd4202a1",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Tickets & passes",
+                    "value": 0.9972423315048218
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesAdditionalInfo": "E-Voucher/nPrivate/nFree Cancellation/nExplore very easily the city and all attractions and events it has to offer with the Ljubljana Card/nThe card validity period (24, 48 or 72 hours) begins to run from the moment when the card is activated, i.e. used for the first time/nAccess freely more than 25 top attractions/nEnjoy the unlimited free rides on city buses granted by the card",
+        "handiAccess": false
+    },
+    {
+        "id": 138942837,
+        "externalId": "065c54b8-1583-46e7-8313-7ab81fd1f629",
+        "title": "Beer Tasting Ljubljana",
+        "creationDate": "2023-06-05T23:52:09.903+00:00",
+        "updateDate": "2023-10-28T23:51:43.789+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><div><p>Discover Slovenian craft beer at a guided beer tasting in Ljubljana that takes a foamy dive into what makes the country’s brews distinctive. You’ll sip your way through a series of seven beers from Slovenia paired with light snacks; interactive games and challenges make it a great way to meet fellow beer lovers, whether you’re a solo traveler or arriving with a group.</p></div></div>",
+        "thumbnailImage": "b8683a7f-3173-4885-a195-99aa0446cdc2",
+        "bookingEngine": "HOLIBOB_VIATOR",
+        "bookingEngineName": "Holibob Viator",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKUN62PulB",
+        "minPrice": 41,
+        "maxPrice": 41,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0530408,
+            "longitude": 14.5040654,
+            "geoHash": "u24mfp9w3"
+        },
+        "duration": "120 minutes",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzhkYTIyNjhlLTkwMTItNDhiYS04YjA1LTc2NzA3ZjU5ODhmMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2IyZjYxMWZhLTJhNzQtNDQxZC1iNTk3LWZhMzExMzYzYzM0NiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2FlYTg4NTFkLWZiMzUtNGVlMS04NDI5LTAyY2IyYjI0M2NjYiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzU3NTZhYjdmLTc3M2UtNDk4Zi1iYjY2LWE5MGE2ZDk1Zjk5YiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "tours"
+            }
+        ],
+        "supplier": {
+            "id": 138830562,
+            "name": "Beer Tasting Ljubljana",
+            "externalId": "5d6104e9-fde4-4858-b16c-bf01b259b4f4",
+            "creationDate": "2023-06-05T23:51:54.077+00:00",
+            "updateDate": "2023-10-28T23:51:28.339+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 4.983051,
+        "numberOfRatings": 59,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": "Certificate for becoming an ambassador of Slovenian beers/nDelicious appetizers/nSnacks/n6 craft Slovenian beers/nPresented by beer expert",
+        "modalitiesExcluded": "Gratuities",
+        "modalitiesAdditionalInfo": "E-Voucher/nPublic transportation options are available nearby/nNot recommended for pregnant travelers/nNot recommended for travelers with poor cardiovascular health/nSuitable for all physical fitness levels/nMinimum age is 18 years",
+        "handiAccess": false,
+        "experienceHighlights": "Included beer tastings feature a range of types/nEnjoy provided appetizers during the beer tasting/nBring home a ‘Slovenian Beer Ambassador’ certificate/nMeet in a convenient location near the river"
+    },
+    {
+        "id": 138942910,
+        "externalId": "2f321a2f-a1d8-4f01-a1b5-ddf946c1c2e1",
+        "title": "Ljubljana Tourist Card",
+        "creationDate": "2023-06-05T23:52:12.133+00:00",
+        "updateDate": "2023-10-26T23:51:44.291+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><div><p>Save money with this convenient Ljubljana Card granting access to top attractions, transportation, and more. The card grants tickets to major museums and galleries including Ljubljana Castle and the National Gallery, and sightseeing tours such as boat rides on the Ljubljanica river. What’s more, with this card your transportation is fully covered with unlimited bus rides, a 4-hour bike rental during the warm season, and more.</p></div></div>",
+        "thumbnailImage": "24f31a98-6027-48dd-a3f7-cad1f03950b2",
+        "bookingEngine": "HOLIBOB_VIATOR",
+        "bookingEngineName": "Holibob Viator",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKdysu3Ezv",
+        "minPrice": 47,
+        "maxPrice": 47,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0527405,
+            "longitude": 14.4720881,
+            "geoHash": "u24mcrdk8"
+        },
+        "duration": "",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzc1ZTFlYWVhLTExNDItNDY2Mi1iYThmLWY0M2IxMmY2YmQ1MSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzdjZjViOGY1LWUzNjctNDllOC1iNzA5LTE1NzY2ZDk4NjYzMyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzdlMjA5MDg1LTdmNmItNDE3ZC05NmE1LTRiYzM2Y2QwYTE0NSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzVhNmQyZDE0LTZhMGItNDAzNi1iYTUxLTkxYjAzMWRlMzFhZSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 9
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2I4OGU0ODQ1LTgwM2UtNDMzNi1iNjljLWE3MTE0M2VhNDVkYyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 11
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzQ5OTRmYWY5LWQzMGMtNGYyYi1hYzk5LTczYTRmMzkwNDYzOCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzEwYTc5Y2Y0LTFjMzItNGI3My05MzUyLTI3YTdlOGI2NjVkNiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzZkN2VjYjUxLTJkODEtNGE5OS1iZWU2LTlkOGI2NzcwYTgwMiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzNjNzE0YWNkLTM5ZDUtNGZhNi1hMTFhLThlYTUwNGQxN2I0OSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 7
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2M0YzNjMmVhLTU4ZDMtNDliNC05ZWIzLWY0ZDI3OTU3ZDUwMiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 12
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzk0ZmQ0YTE2LWY1ZjAtNGI4NS05NjU3LTdjZGIxMjA1Yzc1ZiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 8
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2Y2NTQwZjNlLWJmY2YtNDIzMy1hMWJkLWMwMGVhMjdjY2JmMiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2JjMmY3MmFkLTc4NTUtNDMyZC04ZTZjLTFlZGJiNGQ5Yjc2ZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 10
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "tours"
+            }
+        ],
+        "supplier": {
+            "id": 138830551,
+            "name": "Ljubljana Tourism",
+            "externalId": "ac73207c-d125-47b8-b1fc-549c7543e957",
+            "creationDate": "2023-06-05T23:51:53.962+00:00",
+            "updateDate": "2023-10-28T23:51:27.563+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 3.9,
+        "numberOfRatings": 10,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": "Entrance fees to major Museums and Galleries/nLPP bus transport in Ljubljana - unlimited/nLPP bus transport Airport - Ljubljana - Airport/nBoat ride on Ljubljanica river/nLjubljana Bike - 4 hours free rental (from april to october)/nSightseeing tour of Ljubljana/nUrban - sightseeing electric train",
+        "modalitiesAdditionalInfo": "E-Voucher/nInfants and small children can ride in a pram or stroller/nPublic transportation options are available nearby/nSuitable for all physical fitness levels",
+        "handiAccess": false,
+        "experienceHighlights": "Save money with a comprehensive Ljubljana Tourist Card/nAccess major attractions including Ljubljana Castle and the National Gallery/nUnlimited bus rides and a half-day bike rental during the high season/nIncludes a Ljubljanica river cruise and a ride on a sightseeing train"
+    },
+    {
+        "id": 138942851,
+        "externalId": "2b0be946-fd13-4547-92d1-0e15e6347199",
+        "title": "Traditional 2-hour Slovenian dinner and show",
+        "creationDate": "2023-06-05T23:52:10.350+00:00",
+        "updateDate": "2023-10-28T23:51:44.048+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><p></p><p></p><p>Ljubljana is one of the most charming capitals in Europe. It’s crammed with cobblestone streets and ancient buildings. One of the best ways to get to know the culture is by attending this dinner and folk dance event.</p><p></p><p></p><p>Feast on traditional Slovenian fare and sip wine while watching locals perform centuries-old folk dances. Learn about Slovenian folklore, take part in traditional games, and enjoy a special gift on the way out.</p><p></p><p><strong>All menus include (3-course menu) with food and wine:</strong></p><ul><li>Welcome drink Teran Liqueur and Dried fruit “šklojce”</li><li>A glass of local wine (red and white) OR non – alcoholic drink</li><li>Traditional Slovenian starter</li><li>homemade bread</li><li>Mixed salad with buckwheat kasha</li><li>Traditional Dessert</li></ul><p><strong>Menu options:</strong></p><ul><li>Traditional: Pork roast with peasant-style sauce, flying chicken with potatoes a La Chef</li><li>Vegetarian: Slovenian homemade pasta with vegetable filling</li><li>Vegan: Slovenian style risotto with seasonal vegetables – OR similar</li><li>Chicken only: Flying chicken with potatoes a La Chef</li><li>Pork only: Pork roast with peasant-style sauce and potatoes a La Chef</li></ul><p></p></div>",
+        "thumbnailImage": "4f39a299-41e3-4a26-a395-2cfaf597376c",
+        "bookingEngine": "HOLIBOB_MUSEMENT",
+        "bookingEngineName": "Holibob Musement",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKSj-UNUCs",
+        "minPrice": 60,
+        "maxPrice": 60,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0569522,
+            "longitude": 14.505757,
+            "geoHash": "u24q406v0"
+        },
+        "duration": "",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzE4MzFiNjJmLWJmNTMtNDI1Yy1iNDI3LWVlOTNiNGJiZTJhZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2JjNTIyNDFmLTI4ZDItNDAyZC1iMjg5LTM5NDM0Y2UzMjY1NiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2FhMTRmMTVmLWNmZDUtNDYwNS1hYWQzLWM1OWEyMjQwZWZjYSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzY0NDU3ZmJjLWZjYTktMTFlYi04MDFmLTA2YjgxYWQ0YzU3OSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 11
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzIzNjAyYTkzLWVkMjUtNDAzZi04ZWE2LWZhY2U4ODYzZWZhMiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzUwODFlMGY0LWU1Y2YtNGRiYy04NDJlLTRjYzM0YmQ2ODlmZSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzY0NDU3MzYxLWZjYTktMTFlYi04MDFmLTA2YjgxYWQ0YzU3OSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 8
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzI5ZDhmZjgyLWM5YjMtNDVlMy05YWUwLWFiMTA2ODIxNTNmYiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzY0NDRmZTM3LWZjYTktMTFlYi04MDFmLTA2YjgxYWQ0YzU3OSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 7
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzRkYzA0NDA1LTViYWUtNDVkOS1iMDUxLTQzNTA1MzNlY2RlNCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzY0NDU3NzhlLWZjYTktMTFlYi04MDFmLTA2YjgxYWQ0YzU3OSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 9
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzY0NDU3Y2Q3LWZjYTktMTFlYi04MDFmLTA2YjgxYWQ0YzU3OSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 10
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "fun_games"
+            }
+        ],
+        "supplier": {
+            "id": 138830533,
+            "name": "Zidana marela d.o.o.",
+            "externalId": "904c972a-b0b7-4802-ba28-c9ca28187970",
+            "creationDate": "2023-06-05T23:51:53.771+00:00",
+            "updateDate": "2023-10-27T23:51:27.785+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "18e7a878-acf8-d66d-3db4-197b04295c8e",
+                    "name": "Food & drink",
+                    "level": 1,
+                    "slug": "activities-food-drink",
+                    "family": "activities",
+                    "parentUuid": "18e7a878-acf8-d66d-3db4-197b04295c8e",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Food & drink",
+                    "value": 0.9739123582839966
+                },
+                {
+                    "uuid": "fa2af9e8-9eeb-264e-7983-7635cc54521d",
+                    "name": "Restaurants & bars",
+                    "level": 2,
+                    "slug": "activities-food-drink-restaurants-bars",
+                    "family": "activities",
+                    "nameFullPath": "Food & drink#Restaurants & bars",
+                    "parentUuid": "18e7a878-acf8-d66d-3db4-197b04295c8e#fa2af9e8-9eeb-264e-7983-7635cc54521d",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Restaurants & bars",
+                    "value": 0.9739123582839966
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesAdditionalInfo": "E-Voucher/nSmall Group/nFree Cancellation/nLocal Touch/nMeals Included/nDinner Included/nFeast on a traditional Slovenian dinner/nPlease advise any specific dietary requirements (allergies to cereals, milk, nuts etc.) and what type of menu you would like to receive. The chefs can prepare menus for any diet including vegetarian, vegan, gluten-free or lactose-free. You'll find the tour supplier's details on your voucher after booking/nEnjoy a 3-course menu while sipping on wine/nRestaurants are centrally located and vary according to the size of the group/nWatch local perform centuries-old folk dances/nChild rates only apply when there are at least two adult tickets booked/nDress code is smart casual/nA small amount of walking is involved, venues are wheelchair accessible",
+        "handiAccess": false
+    },
+    {
+        "id": 138943090,
+        "externalId": "d6ff6db2-9f18-4caa-8723-98b4cc4dcffe",
+        "title": "Predjama Castle and Postojna Cave tour from Ljubljana",
+        "creationDate": "2023-06-05T23:52:19.803+00:00",
+        "updateDate": "2023-10-27T23:54:28.703+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><p></p><p></p><p>Visit two of Slovenia’s top attractions in one afternoon on this small-group, half-day tour from Ljubljana. Begin at Predjama Castle, perched on a cliff high above the beautiful Inner Carniola region. Explore the chambers and stairwells and learn about the castle's most famous resident, Erazem of Predjama. Then, continue to Postojna Cave. Ride a mini-train deep into the famous cave and tour the ethereal network of stalactites, stalagmites and caverns with a local guide.</p><p></p><p></p><p>Postojna Cave is one of the greatest tourist attractions in Slovenia and one of the world's largest Karst monuments. You'll start the tour with a unique and adventurous ride on a special train in one of the most diverse cave systems in the world, with 21 km of passages, galleries and magnificent halls, which offer an unparalleled experience of the underground world and underground animals – including the human fish (proteus anguinus).</p><p></p><p></p><p>Besides Postojna Cave you'll also have the chance to visit Predjama Castle. Your guide will show you this magnificent medieval castle peched high up on a vertical cliff in the village of Predjama. It's an interesting and romantic sight throughout the year: in the spring and summer its surroundings are abundant with blossoms and flowers, in the autumn it is clad in the colors of forests and it's at its most enchanting in the winter when the surrounding area is covered in snow. </p><p></p><p></p></div>",
+        "thumbnailImage": "fe51f5af-8b26-4a43-b217-959a0197abc0",
+        "bookingEngine": "HOLIBOB_MUSEMENT",
+        "bookingEngineName": "Holibob Musement",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKQwUaESe4",
+        "minPrice": 65,
+        "maxPrice": 65,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0535506,
+            "longitude": 14.5077873,
+            "geoHash": "u24mfpu1r"
+        },
+        "duration": "5 hours",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzdiM2FmNDJhLThjMzQtMTFlYi05OGVmLTBhMGY2YjA5NjQwZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzdiM2I0M2QzLThjMzQtMTFlYi05OGVmLTBhMGY2YjA5NjQwZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzdiM2FmNzdlLThjMzQtMTFlYi05OGVmLTBhMGY2YjA5NjQwZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzdiM2FhYzZkLThjMzQtMTFlYi05OGVmLTBhMGY2YjA5NjQwZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzdiM2I0NzIzLThjMzQtMTFlYi05OGVmLTBhMGY2YjA5NjQwZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzdiM2E3OTQwLThjMzQtMTFlYi05OGVmLTBhMGY2YjA5NjQwZCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "tours"
+            }
+        ],
+        "supplier": {
+            "id": 138830540,
+            "name": "Slovenia Explorer",
+            "externalId": "1fe69111-b93c-40a5-b19e-0f15fb3e8d04",
+            "creationDate": "2023-06-05T23:51:53.837+00:00",
+            "updateDate": "2023-10-24T23:51:28.845+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "rating": 5,
+        "numberOfRatings": 1,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 48,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than 2 days before the activity start time.",
+        "modalitiesAdditionalInfo": "E-Voucher/nSmall Group/nFree Cancellation/nThe maximum number of people per van is 8/nVisit Postojna Cave – one of the biggest caves in Europe/nThis tour requires a minimum of 4 participants. If the minimum is not met, you'll be offered an alternative date or a full refund/nTake a train ride into the underworld labyrinth of passages dotted with stalagmites and stalactites/nNote the Postojna cave entrance ticket (28.5€) and Predjama castle entrance ticket (17.5€) are not included in the price of this tour. You can buy a combined ticket for both attractions (40.9€)/nExplore the medieval Predjama Castle perched high up on a vertical cliff/nBring with you at least 41€ per person to be paid directly to the locations/nWarm and comfortable clothes and footwear are essential to visiting the Postojna cave (the temperature in the cave is 9°C / 48 Fahrenheit)/nThis activity is not wheelchair accessible. Please keep in mind that there are quite a few stairs at the Predjama castle",
+        "handiAccess": false
+    },
+    {
+        "id": 138943093,
+        "externalId": "d78864fe-b5da-4b59-957a-c97e7d89d93b",
+        "title": "Private transfer from Kamnik to Ljubljana city",
+        "creationDate": "2023-06-05T23:52:19.938+00:00",
+        "updateDate": "2023-10-28T23:54:30.378+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><div><p>We value your comfort above everything else and make sure that our vehicles are sparkly clean and in great technical condition. We’ll also be happy to offer you a small range of soft drinks and free Wi-Fi.</p></div></div>",
+        "thumbnailImage": "2dee6951-ef7e-4102-a676-f49e3448bd8a",
+        "bookingEngine": "HOLIBOB_VIATOR",
+        "bookingEngineName": "Holibob Viator",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKN4_TEA8H",
+        "minPrice": 66,
+        "maxPrice": 66,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0569465,
+            "longitude": 14.5057515,
+            "geoHash": "u24q406v0"
+        },
+        "duration": "27 minutes",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2ZkZDI4MTIxLTM3ZmUtNGU5OS04NTNhLWY2NjU3MjUzYzM0MiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzcxNTFmNDQ3LTExNDItNGYzNS04NzEyLWFhY2EwMTgzZGI0YyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzRhZDkxMWFjLWZiMjgtNDc0OS05NzU4LWE2MjU1YWZmYTYzNiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzhkMmFiMDlmLWNmNDMtNGQ2My1hYTcwLTY5YjBhNWE1YjU3MiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2I3ZTY2N2QyLWFlOTgtNDI2Yi1hYjMwLTUzNWM2ZjA2NmYwNyIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            }
+        ],
+        "categories": [],
+        "supplier": {
+            "id": 138830525,
+            "name": "Flecab",
+            "externalId": "7e451ec1-d485-4d8e-ab8a-1458bd462148",
+            "creationDate": "2023-06-05T23:51:53.701+00:00",
+            "updateDate": "2023-10-28T23:51:27.576+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": "One-way private transfer/nAll taxes, fees and handling charges/nBottled water/nPickup and drop-off from designated meeting points/nTransport by air-conditioned/nInfant seats available (on request)/nHotel Pickup/nTransport by private vehicle",
+        "modalitiesAdditionalInfo": "E-Voucher/nSpecialized infant seats are available/nSuitable for all physical fitness levels/nThe duration of transfers are approximate, the exact duration will depend on the time of day and traffic conditions",
+        "handiAccess": false
+    },
+    {
+        "id": 138942843,
+        "externalId": "789aa74f-7829-11ea-97db-06a107791d08",
+        "title": "Postojna Cave and Predjama Castle Half-DayTour from Ljubljana",
+        "creationDate": "2023-06-05T23:52:10.084+00:00",
+        "updateDate": "2023-10-26T23:51:42.336+00:00",
+        "availabilityType": "OPENING_HOURS",
+        "description": "<div><p></p><p></p><p>Visit two of Slovenia's top attractions on this half-day small-group tour from Ljubljana.</p><p></p><p>The number of participants is limited to eight to ensure a personalized experience.</p><p></p><p>Postojna Cave is the most famous cave in the world. It is also the biggest tourist attraction in Slovenia and one of the largest karst monuments in the world, a must-see when visiting Slovenia. Enjoy the tour with a unique and adventurous ride in a special train in one of the most diverse cave systems in the world, with 21 km of corridors, an ethereal network of stalactites, stalagmites, and caverns, galleries, and magnificent halls that offer an unparalleled experience of the underground world and a great variety of underground animals - including the world-famous human fish (Proteus anguinus).</p><p></p><p></p><p>In addition to Postojna Cave, you will also have the opportunity to visit Predjama Castle. We will show you this magnificent medieval castle perched high on a vertical cliff in the idyllic village of Predjama. Explore the chambers and staircases and learn about the castle's most famous resident, Erazem of Predjama. The castle is an interesting and romantic sight all year round: in spring and summer the surroundings are rich in blossoms and flowers, in autumn it is wrapped in the colors of the surrounding forests, and in winter when the surroundings are covered with snow, it is at its most enchanting.</p><p></p><p></p></div>",
+        "thumbnailImage": "10627727-7266-4dcb-933d-86fba88b85b0",
+        "bookingEngine": "HOLIBOB",
+        "bookingEngineName": "Holibob",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RKEQZmR0ta",
+        "minPrice": 68,
+        "maxPrice": 68,
+        "priceCurrency": "EUR",
+        "pricingUnit": "NONE",
+        "address": "Ljubljana, Slovenia",
+        "geoLocation": {
+            "latitude": 46.0535506,
+            "longitude": 14.5077873,
+            "geoHash": "u24mfpu1r"
+        },
+        "duration": "5 hours",
+        "galleryImages": [
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzEwMzg0NDQzLTQyZmYtNGNjYy05OThmLWRkZjZjNWU2N2JjZSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 2
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2ZjZTIxNWUxLWZjMTUtNDk4ZC04NzQ0LWU2YmY2Nzc1ZDgwYiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 6
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzAxNGM1ZjM0LWEyMjQtNDdhMi1iNGQyLTIxNjY1NGM3YTc1YiIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 3
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzExNTE4MTBmLTQxOTQtNDQ5OS1hMmZlLTNkODU4YWY1N2ZjMSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 5
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2Q2MDBmMTcxLWUwYmItNDgzNC05YWEyLThkOWMzYjdjODhjOCIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 1
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzLzgxOTM4ZDY4LThjZTUtNDk1MC1iZDBmLTQ2NjcyNTQ4NWE5OSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 0
+            },
+            {
+                "url": "https://images.holibob.tech/eyJrZXkiOiJwcm9kdWN0SW1hZ2VzL2M3MjhlYTU1LWY0ODctNGJkZi04OGZmLWYxZTMzMTk1OGYzNSIsImVkaXRzIjp7InJlc2l6ZSI6eyJmaXQiOiJjb3ZlciIsIndpZHRoIjoxOTIwLCJoZWlnaHQiOjEwODB9fX0=",
+                "order": 4
+            }
+        ],
+        "categories": [
+            {
+                "level": 1,
+                "code": "tours"
+            }
+        ],
+        "supplier": {
+            "id": 138830559,
+            "name": "Slovenia Explorer",
+            "externalId": "5131284f-b0a5-476f-9141-543d81d28b50",
+            "creationDate": "2023-06-05T23:51:54.053+00:00",
+            "updateDate": "2023-10-28T23:51:27.991+00:00",
+            "contact": {},
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [
+            "de",
+            "en",
+            "fr",
+            "es"
+        ],
+        "periods": [],
+        "cityName": "Ljubljana",
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "name": "No Category",
+                    "level": 1,
+                    "slug": "activities-no-category",
+                    "family": "activities",
+                    "nameFullPath": "No Category",
+                    "parentUuid": "41a2aefb-2282-40ac-8b33-cdea80a9e358",
+                    "version": 1,
+                    "isCurrent": true,
+                    "startDate": "2022-03-22T19:17:56.534158Z",
+                    "nameTranslation": "",
+                    "value": 1
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "isCancellable": true,
+        "cancellationCutOffAmount": 24,
+        "cancellationCutOffUnit": "hours",
+        "cancellationCutOff": "A full refund will apply if you cancel more than a day before the activity start time.",
+        "modalitiesIncluded": "Central Ljubljana pickup point/nComfortable transport by air-conditioned minivan/nProfessional English-speaking guide",
+        "modalitiesExcluded": "Postojna Cave & Predjama Castle combined ticket: 41 € per person/nPostojna cave only: 29 € per person/nPredjama Castle only: 18 € per person",
+        "modalitiesAdditionalInfo": "Couples/nGuided/nGroups/nFamily Friendly/nRainy Day/nMeet On Location/nSmall group tour - up to 8 people per van/nPlease keep in mind that there are quite a few stairs at the Predjama Castle, but you would do that at a fairly slow pace./nWarm and comfortable clothes and shoes are essential for visiting Postojna Cave (the temperature in the cave is 9°C / 48 Fahrenheit)./nNot suitable for wheelchairs and strollers./nInfants are not allowed to sit on laps (we can provide child seats upon request)./nNo public transportation nearby/nA minimum number of participants applies. There is a possibility of cancellation after confirmation if there are not enough passengers to meet the requirements. In this case, we will offer you an alternative or a full refund.",
+        "handiAccess": false
+    },
+    {
+        "id": 138953517,
+        "externalId": "49871",
+        "creationDate": "2023-07-05T17:28:30.279+00:00",
+        "updateDate": "2023-10-05T16:00:06.834+00:00",
+        "instantConfirmation": true,
+        "description": "Join the latest culinary trend of immersive and social dining where local hosts invite you into their homes for a magical meal.<br><br>Join your two passionate hosts, Dejan and Natasa, for a magical dinner that will take you on a creative culinary tour of Ljubljana. Learn about their local cuisine - the highlight of which is seafood! While you enjoy their delicious and unique dishes, they will tell you about their upbringing in Slovenia, the hidden gem of Europe.\n",
+        "thumbnailImage": "81138999-d409-4fc4-a312-960d040c0c80",
+        "bookingEngine": "EATWITH",
+        "bookingEngineName": "Eatwith",
+        "bookingUrl": "https://to.discover-exp.com/2Mvaoa9RK-AOB732J",
+        "minPrice": 72.8,
+        "maxPrice": 72.8,
+        "priceCurrency": "EUR",
+        "pricingUnit": "PER_PERSON",
+        "minParticipants": 1,
+        "address": "Ljubljana",
+        "geoLocation": {
+            "latitude": 46.04135902879967,
+            "longitude": 14.469999627476302
+        },
+        "duration": "3 hours 30 minutes",
+        "galleryImages": [
+            {
+                "url": "https://screen-api.eatwith.com/files/1295556/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 0
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1279751/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 2
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295562/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 13
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1279756/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 6
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295561/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 12
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1279757/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 7
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1279755/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 5
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295555/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 9
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295565/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 15
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295566/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 16
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1279750/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 1
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1279752/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 3
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295557/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 10
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295568/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 18
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295567/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 17
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295560/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 11
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1279753/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 4
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295563/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 14
+            },
+            {
+                "url": "https://screen-api.eatwith.com/files/1295552/-/preview/-/progressive/yes/-/format/jpeg/image.jpg",
+                "order": 8
+            }
+        ],
+        "categories": [],
+        "supplier": {
+            "id": 138834331,
+            "name": "Eatwith",
+            "externalId": "1",
+            "creationDate": "2023-07-05T09:05:05.964+00:00",
+            "updateDate": "2023-07-05T11:17:24.904+00:00",
+            "endpoint": "https://www.eatwith.net.cn",
+            "logo": "https://frozen.eatwith.com/assets/images/rebranding_2022-11/logo_rgb_eatwith_intl_vertical.png",
+            "contact": {
+                "website": "https://www.eatwith.net.cn",
+                "email": "support@eatwith.com",
+                "address": "Paris, France"
+            },
+            "geoLocation": {
+                "latitude": 48.85717,
+                "longitude": 2.3414,
+                "geoHash": "u09tvq0vwsd7"
+            },
+            "countryCode": "FR",
+            "countryName": "France"
+        },
+        "onlineBookable": true,
+        "descriptors": [],
+        "availableLanguages": [],
+        "priceLevel": 3,
+        "periods": [],
+        "cityName": "Ljubljana",
+        "zipCode": "1000",
+        "rating": 5,
+        "numberOfRatings": 14,
+        "countryName": "Slovenia",
+        "taxonomies": [
+            [
+                {
+                    "uuid": "18e7a878-acf8-d66d-3db4-197b04295c8e",
+                    "name": "Food & drink",
+                    "level": 1,
+                    "slug": "activities-food-drink",
+                    "family": "activities",
+                    "parentUuid": "18e7a878-acf8-d66d-3db4-197b04295c8e",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Food & drink",
+                    "value": 0.9963335990905762
+                },
+                {
+                    "uuid": "9fc163b8-0ee9-9959-9320-c3a94326cd97",
+                    "name": "Food & drink tours",
+                    "level": 2,
+                    "slug": "activities-food-drink-food-drink-tours",
+                    "family": "activities",
+                    "nameFullPath": "Food & drink#Food & drink tours",
+                    "parentUuid": "18e7a878-acf8-d66d-3db4-197b04295c8e#9fc163b8-0ee9-9959-9320-c3a94326cd97",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Food & drink tours",
+                    "value": 0.9963335990905762
+                }
+            ],
+            [
+                {
+                    "uuid": "8385073f-4317-0889-6bc4-d52fe0337577",
+                    "name": "Tours by theme",
+                    "level": 1,
+                    "slug": "activities-tours-by-theme",
+                    "family": "activities",
+                    "parentUuid": "8385073f-4317-0889-6bc4-d52fe0337577",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Tours by theme",
+                    "value": 0.9963335990905762
+                },
+                {
+                    "uuid": "6af0be4c-998b-240e-0960-14ccba494134",
+                    "name": "Food & drink tours",
+                    "level": 2,
+                    "slug": "activities-tours-by-theme-food-drink-tours",
+                    "family": "activities",
+                    "nameFullPath": "Tours by theme#Food & drink tours",
+                    "parentUuid": "8385073f-4317-0889-6bc4-d52fe0337577#6af0be4c-998b-240e-0960-14ccba494134",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Food & drink tours",
+                    "value": 0.9963335990905762
+                }
+            ],
+            [
+                {
+                    "uuid": "18e7a878-acf8-d66d-3db4-197b04295c8e",
+                    "name": "Food & drink",
+                    "level": 1,
+                    "slug": "activities-food-drink",
+                    "family": "activities",
+                    "parentUuid": "18e7a878-acf8-d66d-3db4-197b04295c8e",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Food & drink",
+                    "value": 0.7768093943595886
+                },
+                {
+                    "uuid": "fa2af9e8-9eeb-264e-7983-7635cc54521d",
+                    "name": "Restaurants & bars",
+                    "level": 2,
+                    "slug": "activities-food-drink-restaurants-bars",
+                    "family": "activities",
+                    "nameFullPath": "Food & drink#Restaurants & bars",
+                    "parentUuid": "18e7a878-acf8-d66d-3db4-197b04295c8e#fa2af9e8-9eeb-264e-7983-7635cc54521d",
+                    "version": 2,
+                    "isCurrent": true,
+                    "startDate": "2022-10-26T14:05:58.401751Z",
+                    "nameTranslation": "Restaurants & bars",
+                    "value": 0.7768093943595886
+                }
+            ]
+        ],
+        "availabilityPeriods": {
+            "weeklyPeriods": []
+        },
+        "experienceHighlights": "6-course dinner that changes with the seasons and is made with fresh, local produce\n\nA welcome drink, a Sorbetto, and one glass of wine per person are included\n\nThe hosts home is easily accessible by public transportation\n\nBoth hosts work in the world of finance but are passionate about food!\n\nVegetarian options available\n\n"
+    }
+]
