@@ -12,7 +12,7 @@ import { CityRouter } from './routes/cityRouter';
 import { User } from './models/user/user';
 import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
-const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
+const endpointSecret = "whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3";
 //global.CronJob = require('./db/cron.js');
 
 
@@ -69,7 +69,9 @@ class App {
 		if (process.env.ENV === 'dev') {
 			this.app.use(require('morgan')('dev'));
 		}
-	
+		function isEmpty(obj: object): boolean {
+			return Object.keys(obj).length === 0 && obj.constructor === Object;
+		}
 		this.app.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
 			let event;
 			
@@ -89,16 +91,21 @@ class App {
 				const subscriptionMetadata = (session.subscription_data && session.subscription_data.metadata) || {};
 
 				console.log('Session Metadata:', sessionMetadata);
-				console.log('Session Metadata:', sessionMetadata.userId);
+				if(!isEmpty(sessionMetadata) ){
+
+					let user: User = await this.userManager.getUser(sessionMetadata.userId);
+		
+			
+					user.tokens = user.tokens + 100
+				
+				await this.userManager.updateUser(user.id, user)
+				}
+
+				
 				console.log('Subscription Metadata:', subscriptionMetadata);
 
 
-				let user: User = await this.userManager.getUser(sessionMetadata.userId);
-		
-			
-				user.tokens = user.tokens + 100
-			
-			await this.userManager.updateUser(user.id, user)
+				
 
 
 			}
