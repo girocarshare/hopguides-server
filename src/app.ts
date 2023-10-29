@@ -89,13 +89,25 @@ class App {
 				const subscriptionMetadata = (session.subscription_data && session.subscription_data.metadata) || {};
 
 				console.log('Session Metadata:', sessionMetadata);
+				console.log('Session Metadata:', sessionMetadata.userId);
 				console.log('Subscription Metadata:', subscriptionMetadata);
+
+
+				let user: User = await this.userManager.getUser(sessionMetadata.userId);
+		
+			
+				user.tokens = user.tokens + 100
+			
+			await this.userManager.updateUser(user.id, user)
+
+
 			}
 
 			// Return a response to acknowledge receipt of the event
 			res.json({received: true});
 		});
 		 
+		
 
 		this.app.use(express.json({limit: '50mb'}));
 		this.app.use(express.urlencoded({limit: '50mb'}));
