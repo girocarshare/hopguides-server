@@ -127,7 +127,7 @@ export class CityRouter extends BaseRouter {
 			if (req.params.city.toLowerCase() === 'ljubljana') {
 				setTimeout(async () => {
 					
-const filePath = path.join(__dirname, '../db/folder/amadeus/ljubljana.txt');
+					const filePath = path.join(__dirname, '../../src/db/folder/amadeus/ljubljana.txt');
 fs.readFile(filePath, 'utf8', (err, data) => {
 						if (err) {
 							console.error(err);
@@ -142,7 +142,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 			} else if (req.params.city.toLowerCase() === 'tel aviv') {
 					setTimeout(async () => {
 						
-const filePath = path.join(__dirname, '../db/folder/amadeus/telaviv.txt');
+const filePath = path.join(__dirname, '../../src/db/folder/amadeus/telaviv.txt');
 fs.readFile(filePath, 'utf8', (err, data) => {
 							if (err) {
 								console.error(err);
