@@ -127,32 +127,28 @@ export class CityRouter extends BaseRouter {
 			if (req.params.city.toLowerCase() === 'ljubljana') {
 				setTimeout(async () => {
 					
-					const filePath = path.join(__dirname, '../../src/db/folder/amadeus/ljubljana.txt');
-fs.readFile(filePath, 'utf8', (err, data) => {
-						if (err) {
-							console.error(err);
-							return res.status(500).send(err);  // Send error response if file read fails
-						}
-						// Process the file data as needed
-						console.log(data);
-						res.status(200).send(JSON.parse(data));
-						// ... rest of your code
-					});
+axios.get("https://hopguides.s3.eu-central-1.amazonaws.com/amadeus/ljubljana.txt")
+.then(response => {
+	console.log(response.data);
+	res.status(200).send(response.data);
+})
+.catch(error => {
+	console.error('Error:', error);
+});
+					
+
 				}, 1000);  // Wait for 3 seconds before reading the file
 			} else if (req.params.city.toLowerCase() === 'tel aviv') {
 					setTimeout(async () => {
-						
-const filePath = path.join(__dirname, '../../src/db/folder/amadeus/telaviv.txt');
-fs.readFile(filePath, 'utf8', (err, data) => {
-							if (err) {
-								console.error(err);
-								return res.status(500).send(err);  // Send error response if file read fails
-							}
-							// Process the file data as needed
-							console.log(data);
-							res.status(200).send(JSON.parse(data));
-							// ... rest of your code
+						axios.get("https://hopguides.s3.eu-central-1.amazonaws.com/amadeus/telaviv.txt")
+						.then(response => {
+							console.log(response.data);
+							res.status(200).send(response.data);
+						})
+						.catch(error => {
+							console.error('Error:', error);
 						});
+									
 					}, 1000);  // Wait for 3 seconds before reading the file
 				} else {
 				
