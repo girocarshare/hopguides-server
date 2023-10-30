@@ -1613,41 +1613,46 @@ export class TourRouter extends BaseRouter {
 						[3, { priceInCents: 22800, name: "Base plan yearly" }],
 						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
 					])
-					
+
 
 					const storeItem = storeItems.get(req.body.id);
 					var session = null
 					if (req.body.id == 1 || req.body.id == 2) {
-						session = await stripe.checkout.sessions.create({
-							payment_method_types: ["card"],
-							mode: "subscription",  
-							line_items: [{
 
+						const subscription = await stripe.subscriptions.create({
+							customer: 'cus_...',
+							items: [{ plan: 'plan_...' }],
+							metadata: {
+								orderId: '1234'
+							}
+						});
+
+						const session = await stripe.checkout.sessions.create({
+							payment_method_types: ['card'],
+							mode: 'subscription',
+							line_items: [{
 								price_data: {
-									currency: "eur",
+									currency: 'eur',
 									product_data: {
 										name: storeItem.name,
 									},
 									unit_amount: storeItem.priceInCents,
-									recurring: { interval: 'month' },  // You can also set it to 'year' for yearly plans
+									recurring: { interval: 'month' }, // You can also set it to 'year' for yearly plans
 								},
-								quantity: req.body.quantity,
-								
-
+								quantity: 1, // Replace with req.body.quantity if you're fetching this from a request
 							}],
-							metadata:{
-								"payment_type": "schedule_visit",
-								"visit_id": "123",
-								"userId": req.userId
-							  },
-							  subscription_data:{
-								"metadata": {
-								  "payment_type": "schedule_visit",
-								  "visit_id": "123",
-								  "userId": req.userId
+							metadata: {
+								payment_type: 'schedule_visit',
+								visit_id: '123',
+								userId: req.userId // Replace with req.userId if you're fetching this from a request
+							},
+							subscription_data: {
+								metadata: {
+									payment_type: 'schedule_visit',
+									visit_id: '123',
+									userId: req.userId // Replace with req.userId if you're fetching this from a request
 								}
-							  },
-							//metadata: { userId: req.userId },
+							},
 							success_url: `http://localhost:3000/#/success`,
 							cancel_url: `http://localhost:3000/#/failure`,
 						});
@@ -1666,21 +1671,21 @@ export class TourRouter extends BaseRouter {
 									recurring: { interval: 'year' },  // You can also set it to 'year' for yearly plans
 								},
 								quantity: req.body.quantity,
-								
+
 
 							}],
-							metadata:{
+							metadata: {
 								"payment_type": "schedule_visit",
 								"visit_id": "123",
 								"userId": req.userId
-							  },
-							  subscription_data:{
+							},
+							subscription_data: {
 								"metadata": {
-								  "payment_type": "schedule_visit",
-								  "visit_id": "123",
-								  "userId": req.userId
+									"payment_type": "schedule_visit",
+									"visit_id": "123",
+									"userId": req.userId
 								}
-							  },
+							},
 							success_url: `https://docs.amadeus-discover.com/consumer/First_Steps.html#access-api-environments`,
 							cancel_url: `https://www.7-zip.org/download.html`,
 						});
@@ -1704,10 +1709,10 @@ export class TourRouter extends BaseRouter {
 				try {
 
 					var user = await this.userManager.getUser(req.userId)
-					
+
 					var tokens = user.tokens + 100
 					user.tokens = tokens
-				await this.userManager.updateUser(user.id, user)
+					await this.userManager.updateUser(user.id, user)
 
 
 				} catch (e) {
