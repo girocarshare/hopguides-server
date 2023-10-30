@@ -83,22 +83,18 @@ class App {
 			}
 
 			// Handle the checkout.session.completed event
-			if (event.type === 'charge.succeeded') {
-				const charge = event.data.object;
-				console.log(charge)
-				const metadata = charge.metadata;  // Here's your metadata
-			
-				console.log(metadata)
-				// Perform your logic here, e.g., update your database, send notification, etc.
-			  }else if (event.type === 'invoice.paid') {
+		 if (event.type === 'invoice.paid') {
 				const invoice = event.data.object;
 				
+				console.log("Invoice")
 				console.log(invoice)
 				// Access subscription details and metadata
 				const subscriptionDetails = invoice.subscription_details;
 				const metadata = subscriptionDetails ? subscriptionDetails.metadata : null;
 				
 				if (metadata) {
+					
+				console.log("metadataaa")
 					console.log("Received metadata: ", metadata); 
 					console.log("user idddd ", metadata.userId);
 						let user: User = await this.userManager.getUser(metadata.userId);
