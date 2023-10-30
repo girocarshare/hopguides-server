@@ -41,7 +41,7 @@ import { Library } from '../models/library/library';
 const bodyParser = require('body-parser');
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
 const exec = require("child_process").exec;
-const endpointSecret = "whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3"//"whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3";
+const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce"//"whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3";
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
 	secretAccessKey: "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"
@@ -1619,6 +1619,14 @@ export class TourRouter extends BaseRouter {
 					var session = null
 					if (req.body.id == 1 || req.body.id == 2) {
 
+						const subscription = await stripe.subscriptions.create({
+							customer: 'cus_...',
+							items: [{ plan: 'plan_...' }],
+							metadata: {
+								orderId: '1234'
+							}
+						});
+
 						const session = await stripe.checkout.sessions.create({
 							payment_method_types: ['card'],
 							mode: 'subscription',
@@ -1636,7 +1644,7 @@ export class TourRouter extends BaseRouter {
 							metadata: {
 								payment_type: 'schedule_visit',
 								visit_id: '123',
-								userId: req.userId // Replace with req.userId if you're fetching this from a request
+								userId: req.user // Replace with req.userId if you're fetching this from a request
 							},
 							subscription_data: {
 								metadata: {
