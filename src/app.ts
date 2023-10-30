@@ -12,7 +12,7 @@ import { CityRouter } from './routes/cityRouter';
 import { User } from './models/user/user';
 import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
-const endpointSecret = "whsec_idAQGXng7eFhqg0MPe3vAfUOzekwOzI4";
+const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
 //global.CronJob = require('./db/cron.js');
 
 
