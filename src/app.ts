@@ -12,7 +12,7 @@ import { CityRouter } from './routes/cityRouter';
 import { User } from './models/user/user';
 import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
-const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
+const endpointSecret = "whsec_idAQGXng7eFhqg0MPe3vAfUOzekwOzI4";
 //global.CronJob = require('./db/cron.js');
 
 
@@ -83,7 +83,14 @@ class App {
 			}
 
 			// Handle the checkout.session.completed event
-		 if (event.type === 'invoice.paid') {
+			if (event.type === 'charge.succeeded') {
+				const charge = event.data.object;
+				//console.log(charge)
+				const metadata = charge.metadata;  // Here's your metadata
+			
+				//console.log(metadata)
+				// Perform your logic here, e.g., update your database, send notification, etc.
+			  }else if (event.type === 'invoice.paid') {
 				const invoice = event.data.object;
 				
 				console.log("Invoice")
@@ -93,8 +100,6 @@ class App {
 				const metadata = subscriptionDetails ? subscriptionDetails.metadata : null;
 				
 				if (metadata) {
-					
-				console.log("metadataaa")
 					console.log("Received metadata: ", metadata); 
 					console.log("user idddd ", metadata.userId);
 						let user: User = await this.userManager.getUser(metadata.userId);
