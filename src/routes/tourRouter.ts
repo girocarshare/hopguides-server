@@ -1619,14 +1619,6 @@ export class TourRouter extends BaseRouter {
 					var session = null
 					if (req.body.id == 1 || req.body.id == 2) {
 
-						const subscription = await stripe.subscriptions.create({
-							customer: 'cus_...',
-							items: [{ plan: 'plan_...' }],
-							metadata: {
-								orderId: '1234'
-							}
-						});
-
 						const session = await stripe.checkout.sessions.create({
 							payment_method_types: ['card'],
 							mode: 'subscription',
