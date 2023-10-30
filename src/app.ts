@@ -12,7 +12,7 @@ import { CityRouter } from './routes/cityRouter';
 import { User } from './models/user/user';
 import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
-const endpointSecret = "whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3";
+const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
 //global.CronJob = require('./db/cron.js');
 
 
@@ -84,31 +84,36 @@ class App {
 
 			// Handle the checkout.session.completed event
 			if (event.type === 'charge.succeeded') {
-				const session = event.data.object;
-
-				// Accessing the metadata
-				const sessionMetadata = session.metadata;
-				const subscriptionMetadata = (session.subscription_data && session.subscription_data.metadata) || {};
-
-				console.log('Session Metadata:', sessionMetadata);
-				if(!isEmpty(sessionMetadata) ){
-
-					let user: User = await this.userManager.getUser(sessionMetadata.userId);
-		
+				const charge = event.data.object;
+				console.log(charge)
+				const metadata = charge.metadata;  // Here's your metadata
 			
-					user.tokens = user.tokens + 100
+				console.log(metadata)
+				// Perform your logic here, e.g., update your database, send notification, etc.
+			  }else if (event.type === 'invoice.paid') {
+				const invoice = event.data.object;
 				
-				await this.userManager.updateUser(user.id, user)
+				console.log(invoice)
+				// Access subscription details and metadata
+				const subscriptionDetails = invoice.subscription_details;
+				const metadata = subscriptionDetails ? subscriptionDetails.metadata : null;
+				
+				if (metadata) {
+					console.log("Received metadata: ", metadata); 
+					console.log("user idddd ", metadata.userId);
+						let user: User = await this.userManager.getUser(metadata.userId);
+			
+				
+						user.tokens = user.tokens + 100
+					
+					await this.userManager.updateUser(user.id, user)
+					
+
+				  console.log("Received metadata: ", metadata);  // Log it for debugging
+				  // Your logic here
 				}
-
-				
-				console.log('Subscription Metadata:', subscriptionMetadata);
-
-
-				
-
-
-			}
+			  }
+			
 
 			// Return a response to acknowledge receipt of the event
 			res.json({received: true});
