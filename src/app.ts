@@ -82,30 +82,38 @@ class App {
 				return res.sendStatus(400);
 			}
 
-			// Handle the checkout.session.completed event
-			if (event.type === 'charge.succeeded') {
-				const charge = event.data.object;
-				//console.log(charge)
-				const metadata = charge.metadata;  // Here's your metadata
-			
-				//console.log(metadata)
-				// Perform your logic here, e.g., update your database, send notification, etc.
-			  }else if (event.type === 'invoice.paid') {
+			 if (event.type === 'invoice.paid') {
 				const invoice = event.data.object;
-				
-				console.log("Invoice")
-				console.log(invoice)
+				const amountPaid = invoice.amount_paid;
+				console.log("Amount Paid: ", amountPaid / 100); 
 				// Access subscription details and metadata
 				const subscriptionDetails = invoice.subscription_details;
 				const metadata = subscriptionDetails ? subscriptionDetails.metadata : null;
 				
 				if (metadata) {
+					const storeItems = new Map([
+						[1, { priceInCents: 2999, name: "Basic plan monthly" }],
+						[2, { priceInCents: 12900, name: "Premium plan monthly" }],
+						[3, { priceInCents: 22800, name: "Base plan yearly" }],
+						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
+					])
+
 					console.log("Received metadata: ", metadata); 
-					console.log("user idddd ", metadata.userId);
 						let user: User = await this.userManager.getUser(metadata.userId);
 			
+						if(amountPaid == 2999){
+
+							user.tokens = user.tokens + 100
+						}else if(amountPaid == 12900){
+							user.tokens = user.tokens + 500
+						}else if(amountPaid == 22800){
+							
+							user.tokens = user.tokens + 1200
+						}else if(amountPaid == 118800){
+							
+							user.tokens = user.tokens + 6000
+						}
 				
-						user.tokens = user.tokens + 100
 					
 					await this.userManager.updateUser(user.id, user)
 					

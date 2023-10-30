@@ -1605,7 +1605,6 @@ export class TourRouter extends BaseRouter {
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				console.log("idddddddddddd" + req.userId)
 				try {
 					const storeItems = new Map([
 						[1, { priceInCents: 2999, name: "Basic plan monthly" }],
@@ -1636,20 +1635,16 @@ export class TourRouter extends BaseRouter {
 
 							}],
 							metadata:{
-								"payment_type": "schedule_visit",
-								"visit_id": "123",
 								"userId": req.userId
 							  },
 							  subscription_data:{
 								"metadata": {
-								  "payment_type": "schedule_visit",
-								  "visit_id": "123",
 								  "userId": req.userId
 								}
 							  },
 							//metadata: { userId: req.userId },
-							success_url: `http://localhost:3000/#/success`,
-							cancel_url: `http://localhost:3000/#/failure`,
+							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
+							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
 						});
 					} else {
 						session = await stripe.checkout.sessions.create({
@@ -1670,19 +1665,15 @@ export class TourRouter extends BaseRouter {
 
 							}],
 							metadata:{
-								"payment_type": "schedule_visit",
-								"visit_id": "123",
 								"userId": req.userId
 							  },
 							  subscription_data:{
 								"metadata": {
-								  "payment_type": "schedule_visit",
-								  "visit_id": "123",
 								  "userId": req.userId
 								}
 							  },
-							success_url: `https://docs.amadeus-discover.com/consumer/First_Steps.html#access-api-environments`,
-							cancel_url: `https://www.7-zip.org/download.html`,
+							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
+							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
 						});
 					}
 					res.json({ url: session.url });
