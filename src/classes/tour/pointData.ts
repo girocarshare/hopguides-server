@@ -8,15 +8,6 @@ class Location {
 
 }
 
-export class ImageTitle {
-	number: string;
-
-	name: string;
-
-	image: string;
-
-
-}
 export class PointData {
 	id: string;
 
@@ -42,8 +33,6 @@ export class PointData {
 
 	voucherDesc: string;
 	
-	imageTitles: ImageTitle[];
-
 	icon: string;
 	
 	video: string;

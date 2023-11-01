@@ -155,7 +155,6 @@ export class POIRouter extends BaseRouter {
 
 					var tour = null;
 					var tours: Tour[] = await this.tourManager.getTours();
-
 					for (var t of tours) {
 						for (var poi of t.points) {
 							if (point.id == poi) {
@@ -163,7 +162,6 @@ export class POIRouter extends BaseRouter {
 							}
 						}
 					}
-
 					var user = await this.userManager.getUser(req.userId)
 					var poiPrevious = await this.poiManager.getPoiByPreviousId(point.id)
 
@@ -174,10 +172,7 @@ export class POIRouter extends BaseRouter {
 							return res.status(412).send("Poi already updated by partner");
 						}
 
-						const updatedPoi: POI = await this.poiManager.updatePoi(
-							poiPrevious.id,
-							point
-						);
+					
 
 						for (var f of req.files) {
 
@@ -186,11 +181,7 @@ export class POIRouter extends BaseRouter {
 								await this.poiManager.uploadAudio(point.id, f.location);
 
 							}
-							if (f.originalname.substring(0, 4).trim() === 'menu') {
-
-								await this.poiManager.uploadMenu(point.id, f.location);
-
-							}
+							
 
 							if (f.originalname.substring(1, 8).trim() === 'partner') {
 
@@ -198,14 +189,18 @@ export class POIRouter extends BaseRouter {
 							}
 						}
 
-						if (point.imageTitles != null) {
+						
 							var obj: Obj = new Obj();
 
-							obj.names = point.imageTitles
 							obj.paths = arrayy
 							await this.poiManager.uploadImages(poiPrevious.id, obj);
-						}
 						
+						if(poiPrevious.images.length !=0 ){
+							const updatedPoi: POI = await this.poiManager.updatePoi(
+								poiPrevious.id,
+								point
+							);
+						}
 						sgMail.send({
 							to: "luna.zivkovic@gogiro.app", // change so that poi.contact.email gets email
 							from: emailSender,
@@ -222,11 +217,12 @@ export class POIRouter extends BaseRouter {
 							const poi: POI = await this.poiManager.getPoi(point.id);
 							poi.previousId = poi.id
 							const poiUpdated: POI = await this.poiManager.createPOI(deserialize(POI, poi));
-							const updatedPoi: POI = await this.poiManager.updatePoi(
-								poiUpdated.id,
-								point
-							);
-
+						
+							if(point.images.length==0){
+								const updatedPoi: POI = await this.poiManager.updatePoi(
+									poiUpdated.id,
+									point
+								);}
 							for (var f of req.files) {
 
 								if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -247,13 +243,18 @@ export class POIRouter extends BaseRouter {
 								}
 							}
 
-							if (point.imageTitles != null) {
+						
 								var obj: Obj = new Obj();
 
-								obj.names = point.imageTitles
+							
 								obj.paths = arrayy
 								await this.poiManager.uploadImages(poiUpdated.id, obj);
-							}
+							
+								if(point.images.length!=0){
+								const updatedPoi: POI = await this.poiManager.updatePoi(
+									poiUpdated.id,
+									point
+								);}
 
 							var points = []
 							for (var p of tour.points) {
@@ -289,12 +290,13 @@ export class POIRouter extends BaseRouter {
 							return res.status(200).send([]);
 						} else if (user.role == "ADMIN") {
 
-
+						
+								if(point.images.length==0){
 							const updatedPoi: POI = await this.poiManager.updatePoi(
 								point.id,
 								point
 							);
-
+							}
 							for (var f of req.files) {
 
 								if (f.originalname.substring(0, 6).trim() === 'audio2') {
@@ -316,15 +318,17 @@ export class POIRouter extends BaseRouter {
 							}
 
 							
-								//if(point.imageTitles.length !=0){
+								if(arrayy.length!=0){
 								var obj: Obj = new Obj();
 
-								obj.names = point.imageTitles
+							
 								obj.paths = arrayy
 								await this.poiManager.uploadImages(point.id, obj);
+								}
+								
 								//}
 								//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
-							
+								
 
 							return res.status(200).send([]);
 						}

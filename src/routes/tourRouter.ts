@@ -11,7 +11,7 @@ import { Obj, POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
 import { ToursWithPoints } from '../classes/tour/toursWithPoints';
-import { Image, ImageTitle, POI } from '../models/tours/poiModel';
+import { Image,  POI } from '../models/tours/poiModel';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
 import 'reflect-metadata';
 import { simpleAsync } from './util';
@@ -1083,7 +1083,7 @@ export class TourRouter extends BaseRouter {
 					tour.update = false;
 					var arr: string[] = []
 					var arr2 = []
-					var imageTitles = []
+					
 					if (tour.points.length != 0) {
 						for (var point of tour.points) {
 
@@ -1091,12 +1091,6 @@ export class TourRouter extends BaseRouter {
 
 							var poiJson = deserialize(POI, point)
 
-							var item = {
-								images: poiJson.imageTitles,
-								num: poiJson.num
-
-							}
-							imageTitles.push(item)
 
 							arr.push(poi.id)
 							arr2.push(poi)
@@ -1133,11 +1127,7 @@ export class TourRouter extends BaseRouter {
 
 							var obj: Obj = new Obj();
 
-							for (var title of imageTitles) {
-								if (title.num == i.num) {
-									obj.names = title.images
-								}
-							}
+						
 							obj.paths = arrayy
 							await this.poiManager.uploadImages(i.id, obj);
 							arrayy = []
@@ -1221,7 +1211,6 @@ export class TourRouter extends BaseRouter {
 
 					var arr: string[] = []
 					var arr2 = []
-					var imageTitles = []
 					if (tour.points.length != 0) {
 						for (var point of tour.points) {
 
@@ -1229,12 +1218,7 @@ export class TourRouter extends BaseRouter {
 
 							var poiJson = deserialize(POI, point)
 
-							var item = {
-								images: poiJson.imageTitles,
-								num: poiJson.num
-
-							}
-							imageTitles.push(item)
+							
 
 							arr.push(poi.id)
 							arr2.push(poi)
@@ -1273,11 +1257,7 @@ export class TourRouter extends BaseRouter {
 
 							var obj: Obj = new Obj();
 
-							for (var title of imageTitles) {
-								if (title.num == i.num) {
-									obj.names = title.images
-								}
-							}
+						
 							obj.paths = arrayy
 							await this.poiManager.uploadImages(i.id, obj);
 							arrayy = []
@@ -1368,9 +1348,7 @@ export class TourRouter extends BaseRouter {
 						point.images = []
 						var image = new Image
 						image.image = "https://hopguides.s3.amazonaws.com/menu/sG0Ptf6OQG.png"
-						image.title = new LocalizedField
-						image.title.english = "This is short description text"
-						image.title.slovenian = "-"
+					
 
 						point.images.push(image)
 						point.price = 0
