@@ -89,15 +89,6 @@ class WorkingHours {
 	sunday: FromTo;
 
 }
-export class ImageTitle {
-	@jsonProperty()
-	number: string;
-
-	@jsonProperty()
-	name: LocalizedField;
-
-
-}
 export class POI {
 
 	@id()
@@ -151,8 +142,6 @@ export class POI {
 	@dbField({ type: Image })
 	images: Image[];
 
-	@jsonProperty({ type: ImageTitle })
-	imageTitles: ImageTitle[];
 
 	@jsonProperty()
 	@dbField()

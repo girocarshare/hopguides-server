@@ -20,7 +20,7 @@ import { ToursWithPoints, PointsForTours, Logo, POICl, PointsShort, PointShort, 
 import * as AWS from 'aws-sdk';
 import { BPartner } from '../models/bpartner/bpartner';
 import { Characteristics, Location, Point, TourData } from '../classes/tour/tourData';
-import { ImageTitle, PointData } from '../classes/tour/pointData';
+import {  PointData } from '../classes/tour/pointData';
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 import { resolve } from 'dns/promises';
 import { QRCodes } from '../models/qrcodes/qrcodes';
@@ -566,13 +566,7 @@ export class TourManager {
 						location.lng = poi.location.longitude;
 
 						var images = []
-						for (var poiImage of poi.images) {
-							var imageTitles: ImageTitle = new ImageTitle()
-							imageTitles.name = poiImage.title[language];
-							imageTitles.image = poiImage.image;
-
-							images.push(imageTitles)
-						}
+					
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio
@@ -628,13 +622,7 @@ export class TourManager {
 						location.lng = poi.location.longitude;
 
 						var images = []
-						for (var poiImage of poi.images) {
-							var imageTitles: ImageTitle = new ImageTitle()
-							imageTitles.name = poiImage.title[language];
-							imageTitles.image = poiImage.image;
-
-							images.push(imageTitles)
-						}
+					
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio
