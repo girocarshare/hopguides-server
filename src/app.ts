@@ -137,7 +137,6 @@ class App {
 		this.app.post('/webhooktour', express.raw({ type: 'application/json' }), async (req, res) => {
 			let event;
 
-			console.log("USLA U WEBHOOKKKKKKKK")
 			try {
 				event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], "whsec_QcbPPFex4zcyqIQWBX7JVuEdd3MVhOPy");
 			} catch (err) {
@@ -151,21 +150,10 @@ class App {
 
 				console.log(session)
 				// Call your function to send an email
-				sendEmail(session.customer_email, session.metadata.tourId);
+				sendEmail(session.customer_details.email, session.metadata.tourId);
 			}
 
-			if (event.type === 'invoice.paid') {
-				const invoice = event.data.object;
-			
-				// Assuming that the customer email and metadata are available on the invoice object
-				const customerEmail = invoice.customer_email; // Replace with correct field if different
-				const metadata = invoice.metadata; // Assuming metadata is directly on the invoice
-			
-				console.log("Received metadata: ", metadata);
-				if (metadata && customerEmail) {
-				  sendEmail(customerEmail, metadata.tourId);
-				}
-			  }
+		
 
 			// Return a response to acknowledge receipt of the event
 			res.json({ received: true });
