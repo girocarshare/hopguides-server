@@ -80,6 +80,7 @@ class App {
 		this.app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
 			let event;
 
+			console.log("USLA U WEBHOOKKKKKKKK11111111111")
 			try {
 				event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], endpointSecret);
 			} catch (err) {
@@ -136,6 +137,7 @@ class App {
 		this.app.post('/webhooktour', express.raw({ type: 'application/json' }), async (req, res) => {
 			let event;
 
+			console.log("USLA U WEBHOOKKKKKKKK")
 			try {
 				event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], endpointSecret);
 			} catch (err) {
