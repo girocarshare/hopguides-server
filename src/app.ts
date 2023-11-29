@@ -139,7 +139,7 @@ class App {
 
 			console.log("USLA U WEBHOOKKKKKKKK")
 			try {
-				event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], endpointSecret);
+				event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], "whsec_QcbPPFex4zcyqIQWBX7JVuEdd3MVhOPy");
 			} catch (err) {
 				console.log(`⚠️  Webhook signature verification failed. Check the logs to see the exact error message.`);
 				return res.sendStatus(400);
