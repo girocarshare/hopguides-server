@@ -14,11 +14,13 @@ import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
 const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
 //global.CronJob = require('./db/cron.js');
-import * as sgMail from '@sendgrid/mail';
+
 const client = require('@sendgrid/client');
 client.setApiKey("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");
-sgMail.setApiKey("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")
-var emailSender = "beta-app@gogiro.app";
+
+import sgMail = require('@sendgrid/mail');
+sgMail.setApiKey("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")
+var emailSender = "luna.zivkovic@gogiro.app";
 
 
 class App {
@@ -166,15 +168,43 @@ class App {
 			console.log("tooooo " + to)
 
 
-			sgMail.send({
-				to: to, // change so that poi.contact.email gets email
-				from: emailSender,
-				subject: "Tour changes accepted",
-				html: `Dear,<br/><br/>
-					
-					Changes made on tour with id: ${tourId} <br/>
-					`
-			})
+			
+
+
+			const body = `{
+				"content": [
+					{
+					  "type": "text/html", 
+					  "value": "This is tour id ${tourId}"
+					  
+					}
+				  ], 
+				"personalizations" : [
+				  {
+					"to" : [
+					  {
+						"email" : "${to}"
+					  }
+					],
+					"subject" : "Reset password"
+				  }
+				],
+				"from" : {
+				  "email" : "${emailSender}"
+				}
+			  }`
+			const request = {
+				method: 'POST',
+				url: '/v3/mail/send',
+				body: body
+			};
+			client.request(request)
+
+				.then(([response, body]) => {
+					console.log(response.statusCode);
+					console.log(body);
+				})
+
 		}
 
 		this.app.use(express.json({ limit: '50mb' }));
