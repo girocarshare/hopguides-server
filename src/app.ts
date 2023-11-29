@@ -12,7 +12,7 @@ import { CityRouter } from './routes/cityRouter';
 import { User } from './models/user/user';
 import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
-const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
+const endpointSecret = "whsec_a88418a9de74ae6a3247b02b4e9f09210947bb2ac864d040bf451140d72e2fc3"//"whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
 //global.CronJob = require('./db/cron.js');
 import * as sgMail from '@sendgrid/mail';
 const client = require('@sendgrid/client');
@@ -159,8 +159,8 @@ class App {
 				const customerEmail = invoice.customer_email; // Replace with correct field if different
 				const metadata = invoice.metadata; // Assuming metadata is directly on the invoice
 			
+				console.log("Received metadata: ", metadata);
 				if (metadata && customerEmail) {
-				  console.log("Received metadata: ", metadata);
 				  sendEmail(customerEmail, metadata.tourId);
 				}
 			  }
