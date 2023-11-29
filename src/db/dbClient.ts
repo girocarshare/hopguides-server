@@ -1,6 +1,7 @@
 import { Db, MongoClient } from 'mongodb';
 import UserRepository from './repository/userRepository';
 import TourRepository from './repository/tourRepository';
+import TourVideoRepository from './repository/tourVideoRepository';
 import QrcodesRepository from './repository/qrcodesRepository';
 import VehicleRepository from './repository/vehicleRepository';
 import BookingRepository from './repository/bookingRepository';
@@ -52,6 +53,7 @@ class DbClient {
       .createIndex({ 'address.geoLocation': '2dsphere' });
     UserRepository.setCollection(database.collection('users'));
     TourRepository.setCollection(database.collection('tours'));
+    TourVideoRepository.setCollection(database.collection('toursvideo'));
     QrcodesRepository.setCollection(database.collection('qrcodes'));
     VehicleRepository.setCollection(database.collection('vehicle'));
     BookingRepository.setCollection(database.collection('booking'));

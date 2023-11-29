@@ -11,7 +11,7 @@ import { Obj, POIManager } from '../manager/poiManager';
 import { TourManager } from '../manager/tourManager';
 import { Tour } from '../models/tours/tour';
 import { ToursWithPoints } from '../classes/tour/toursWithPoints';
-import { Image,  POI } from '../models/tours/poiModel';
+import { Image, POI } from '../models/tours/poiModel';
 import { PreviousTourReport } from '../classes/tour/previousReportTour';
 import 'reflect-metadata';
 import { simpleAsync } from './util';
@@ -37,6 +37,9 @@ import { GeoLocation } from '../models/address/geoLocation';
 import { stringAt } from 'pdfkit/js/data';
 import { LibraryManager } from '../manager/libraryManager';
 import { Library } from '../models/library/library';
+import { POIVideo } from '../models/tours/poiModelVideo';
+import { TourVideo } from '../models/tours/tourvideo';
+import { TourVideoManager } from '../manager/tourVideoManager';
 
 const bodyParser = require('body-parser');
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
@@ -121,6 +124,7 @@ async function did(response, user) {
 
 export class TourRouter extends BaseRouter {
 	tourManager: TourManager;
+	tourVideoManager: TourVideoManager;
 	libraryManager: LibraryManager;
 	poiManager: POIManager;
 	bpartnerManager: BPartnerManager;
@@ -156,6 +160,7 @@ export class TourRouter extends BaseRouter {
 	constructor() {
 		super(true);
 		this.tourManager = new TourManager();
+		this.tourVideoManager = new TourVideoManager();
 		this.libraryManager = new LibraryManager();
 		this.poiManager = new POIManager();
 		this.userManager = new UserManager();
@@ -350,8 +355,7 @@ export class TourRouter extends BaseRouter {
 					})
 					.catch(error => {
 
-						console.log(error)
-						return res.status(402).send({ message: "You do not have enough tokens in d-id" });
+						return res.status(402).send({ message: error.response.data.description });
 					});
 
 
@@ -1083,7 +1087,7 @@ export class TourRouter extends BaseRouter {
 					tour.update = false;
 					var arr: string[] = []
 					var arr2 = []
-					
+
 					if (tour.points.length != 0) {
 						for (var point of tour.points) {
 
@@ -1127,7 +1131,7 @@ export class TourRouter extends BaseRouter {
 
 							var obj: Obj = new Obj();
 
-						
+
 							obj.paths = arrayy
 							await this.poiManager.uploadImages(i.id, obj);
 							arrayy = []
@@ -1218,7 +1222,7 @@ export class TourRouter extends BaseRouter {
 
 							var poiJson = deserialize(POI, point)
 
-							
+
 
 							arr.push(poi.id)
 							arr2.push(poi)
@@ -1257,7 +1261,7 @@ export class TourRouter extends BaseRouter {
 
 							var obj: Obj = new Obj();
 
-						
+
 							obj.paths = arrayy
 							await this.poiManager.uploadImages(i.id, obj);
 							arrayy = []
@@ -1348,7 +1352,7 @@ export class TourRouter extends BaseRouter {
 						point.images = []
 						var image = new Image
 						image.image = "https://hopguides.s3.amazonaws.com/menu/sG0Ptf6OQG.png"
-					
+
 
 						point.images.push(image)
 						point.price = 0
@@ -1571,10 +1575,55 @@ export class TourRouter extends BaseRouter {
 			})
 
 
-
-
 		);
 
+
+		this.router.post(
+			'/stripe/customizedPayment',
+			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try {
+
+					console.log("BODYYYYY");
+					console.log(req.body);
+					const storeItem = { priceInCents: 1790, name: "Hopguides tour" };
+					var session = null;
+					
+					session = await stripe.checkout.sessions.create({
+						payment_method_types: ["card"],
+						mode: "payment",  // Changed to 'payment' for one-time payments
+						line_items: [{
+							price_data: {
+								currency: "eur",
+								product_data: {
+									name: storeItem.name,
+								},
+								unit_amount: storeItem.priceInCents,
+							},
+							quantity: 1,
+						}],
+						metadata: {
+							"tourId": req.body.tourId // Assuming req.body contains tourId
+						},
+						success_url: `https://hopguides-video-creation.netlify.app/#/success`,
+						cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
+					});
+
+					var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.tourId);
+			
+					tourVideo.paymentLink = session.url; 
+				
+					var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
+					
+					res.status(200).send(session.url)
+
+				} catch (e) {
+					res.status(500).json({ error: e.message })
+				}
+			})
+		);
 
 
 		this.router.post(
@@ -1590,14 +1639,14 @@ export class TourRouter extends BaseRouter {
 						[3, { priceInCents: 22800, name: "Base plan yearly" }],
 						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
 					])
-					
+
 
 					const storeItem = storeItems.get(req.body.id);
 					var session = null
 					if (req.body.id == 1 || req.body.id == 2) {
 						session = await stripe.checkout.sessions.create({
 							payment_method_types: ["card"],
-							mode: "subscription",  
+							mode: "subscription",
 							line_items: [{
 
 								price_data: {
@@ -1609,17 +1658,17 @@ export class TourRouter extends BaseRouter {
 									recurring: { interval: 'month' },  // You can also set it to 'year' for yearly plans
 								},
 								quantity: req.body.quantity,
-								
+
 
 							}],
-							metadata:{
+							metadata: {
 								"userId": req.userId
-							  },
-							  subscription_data:{
+							},
+							subscription_data: {
 								"metadata": {
-								  "userId": req.userId
+									"userId": req.userId
 								}
-							  },
+							},
 							//metadata: { userId: req.userId },
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
@@ -1639,17 +1688,17 @@ export class TourRouter extends BaseRouter {
 									recurring: { interval: 'year' },  // You can also set it to 'year' for yearly plans
 								},
 								quantity: req.body.quantity,
-								
+
 
 							}],
-							metadata:{
+							metadata: {
 								"userId": req.userId
-							  },
-							  subscription_data:{
+							},
+							subscription_data: {
 								"metadata": {
-								  "userId": req.userId
+									"userId": req.userId
 								}
-							  },
+							},
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
 						});
@@ -1664,26 +1713,94 @@ export class TourRouter extends BaseRouter {
 
 
 
-		this.router.get(
-			'/stripe/success',
+		this.router.post(
+			'/videotour/create',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
 				try {
 
+					console.log(req.body)
 					var user = await this.userManager.getUser(req.userId)
-					
-					var tokens = user.tokens + 100
-					user.tokens = tokens
-				await this.userManager.updateUser(user.id, user)
 
+					var pois = []
+					for(var poi of req.body){
+					var newPoi: POIVideo = new POIVideo()
+					newPoi.text =  poi
+					pois.push(newPoi)
 
+				}
+				
+				console.log("dffffff")
+					var tour: TourVideo = new TourVideo()
+					tour.userId = user.id,
+					tour.points = pois
+				
+
+					var tourVideo: TourVideo = await this.tourVideoManager.createTour(tour);
+
+					console.log(tourVideo)
+					res.status(200).send(tourVideo);
 				} catch (e) {
+					
+					console.log(e)
 					res.status(500).json({ error: e.message })
 				}
 			})
 		);
+
+
+
+		this.router.post(
+			'/videotour/update',
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			  try {
+				// Retrieve the existing tour video using the ID provided
+
+				console.log(req.body)
+				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
+				
+				// Identify the point to be updated
+			
+				// Update the point with new data
+				tourVideo.points[req.body.data.chapter].text = req.body.data.words; // Update text field
+				tourVideo.points[req.body.data.chapter].video = req.body.video; // Update text field
+				// Update other fields as necessary...
+		  
+				// Persist the updated tour video
+				var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
+				
+				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
+		
+				res.status(200).send(tourVideo);
+			  } catch (e) {
+				console.log(e);
+				res.status(500).json({ error: e.message });
+			  }
+			})
+		  );
+
+
+		  this.router.get(
+			'/videotour/getAll',
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			  try {
+				// Retrieve the existing tour video using the ID provided
+
+				var tourVideos: TourVideo[] = await this.tourVideoManager.getTours();
+				
+				// Identify the point to be updated
+			
+				res.status(200).send(tourVideos);
+			  } catch (e) {
+				console.log(e);
+				res.status(500).json({ error: e.message });
+			  }
+			})
+		  );
 
 
 	}
