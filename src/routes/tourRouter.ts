@@ -1720,9 +1720,8 @@ export class TourRouter extends BaseRouter {
 								"userId": req.userId
 								 // Assuming req.body contains tourId
 							},
-							discounts: [{ // Include this section for applying discounts
-								promotion_code: 'INFLUENCER300', // Replace with the actual promotion code ID
-							  }],
+							allow_promotion_codes: true,
+							
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
 						});
