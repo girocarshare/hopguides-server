@@ -256,10 +256,6 @@ class App {
 				qrcode.tourId = tourId
 				qrcode.qrCodeId = qrCodeId
 	
-				var code = await this.qrcodesRepository.createOne(qrcode).catch(() => {
-					
-				});
-	
 				return `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
 	
 			

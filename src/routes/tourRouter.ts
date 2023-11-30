@@ -1586,8 +1586,7 @@ export class TourRouter extends BaseRouter {
 
 				try {
 
-					console.log("BODYYYYY");
-					console.log(req.body);
+					
 					const storeItem = { priceInCents: 1790, name: "Hopguides tour" };
 					var session = null;
 					
@@ -1638,6 +1637,7 @@ export class TourRouter extends BaseRouter {
 						[2, { priceInCents: 12900, name: "Premium plan monthly" }],
 						[3, { priceInCents: 22800, name: "Base plan yearly" }],
 						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
+						[5, { priceInCents: 7000, name: "Influencer package" }],
 					])
 
 
@@ -1673,7 +1673,7 @@ export class TourRouter extends BaseRouter {
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
 						});
-					} else {
+					} else if(req.body.id == 3 || req.body.id == 4) {
 						session = await stripe.checkout.sessions.create({
 							payment_method_types: ["card"],
 							mode: "subscription",
@@ -1698,6 +1698,26 @@ export class TourRouter extends BaseRouter {
 								"metadata": {
 									"userId": req.userId
 								}
+							},
+							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
+							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
+						});
+					}else{
+						session = await stripe.checkout.sessions.create({
+							payment_method_types: ["card"],
+							mode: "payment",  // Changed to 'payment' for one-time payments
+							line_items: [{
+								price_data: {
+									currency: "eur",
+									product_data: {
+										name: storeItem.name,
+									},
+									unit_amount: storeItem.priceInCents,
+								},
+								quantity: 1,
+							}],
+							metadata: {
+								"tourId": req.body.tourId // Assuming req.body contains tourId
 							},
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
