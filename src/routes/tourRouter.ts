@@ -1705,24 +1705,26 @@ export class TourRouter extends BaseRouter {
 					}else{
 						session = await stripe.checkout.sessions.create({
 							payment_method_types: ["card"],
-							mode: "payment",  // Changed to 'payment' for one-time payments
+							mode: "payment",
 							line_items: [{
-								price_data: {
-									currency: "eur",
-									product_data: {
-										name: storeItem.name,
-									},
-									unit_amount: storeItem.priceInCents,
+							  price_data: {
+								currency: "eur",
+								product_data: {
+								  name: storeItem.name,
 								},
-								quantity: 1,
+								unit_amount: storeItem.priceInCents,
+							  },
+							  quantity: 1,
 							}],
 							metadata: {
-								"userId": req.userId
-								 // Assuming req.body contains tourId
+							  "userId": req.userId
 							},
+							discounts: [{ // Include this section for applying discounts
+							  promotion_code: 'INFLUENCER300', // Replace with the actual promotion code ID
+							}],
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
-						});
+						  });
 					}
 					res.json({ url: session.url });
 
@@ -1753,7 +1755,6 @@ export class TourRouter extends BaseRouter {
 
 				}
 				
-				console.log("dffffff")
 					var tour: TourVideo = new TourVideo()
 					tour.userId = user.id,
 					tour.points = pois
