@@ -129,8 +129,8 @@ class App {
 					} else if (amountPaid == 118800) {
 
 						user.tokens = user.tokens + 6000
-					}else{
-						
+					} else {
+
 						user.tokens = user.tokens + 300
 					}
 
@@ -167,62 +167,111 @@ class App {
 				const subscriptionDetails = invoice.subscription_details;
 				const metadata = subscriptionDetails ? subscriptionDetails.metadata : null;
 
-				if(metadata.tourId==null){
-				if (metadata) {
-					const storeItems = new Map([
-						[1, { priceInCents: 2999, name: "Basic plan monthly" }],
-						[2, { priceInCents: 12900, name: "Premium plan monthly" }],
-						[3, { priceInCents: 22800, name: "Base plan yearly" }],
-						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
-						[5, { priceInCents: 7000, name: "Influencer package" }],
-					])
+				if (metadata.tourId == null) {
+					if (metadata) {
+						const storeItems = new Map([
+							[1, { priceInCents: 2999, name: "Basic plan monthly" }],
+							[2, { priceInCents: 12900, name: "Premium plan monthly" }],
+							[3, { priceInCents: 22800, name: "Base plan yearly" }],
+							[4, { priceInCents: 118800, name: "Premium plan yearly" }],
+							[5, { priceInCents: 7000, name: "Influencer package" }],
+						])
 
-					console.log("Received metadata: ", metadata);
-					let user: User = await this.userManager.getUser(metadata.userId);
+						console.log("Received metadata: ", metadata);
+						let user: User = await this.userManager.getUser(metadata.userId);
 
-					if (amountPaid == 2999) {
+						if (amountPaid == 2999) {
 
-						user.tokens = user.tokens + 100
-					} else if (amountPaid == 12900) {
-						user.tokens = user.tokens + 500
-					} else if (amountPaid == 22800) {
+							user.tokens = user.tokens + 100
+						} else if (amountPaid == 12900) {
+							user.tokens = user.tokens + 500
+						} else if (amountPaid == 22800) {
 
-						user.tokens = user.tokens + 1200
-					} else if (amountPaid == 118800) {
+							user.tokens = user.tokens + 1200
+						} else if (amountPaid == 118800) {
 
-						user.tokens = user.tokens + 6000
-					}else{
-						
-						user.tokens = user.tokens + 300
+							user.tokens = user.tokens + 6000
+						} else {
+
+							user.tokens = user.tokens + 300
+						}
+
+
+						await this.userManager.updateUser(user.id, user)
+
+
+						console.log("Received metadata: ", metadata);  // Log it for debugging
+						// Your logic here
 					}
-
-
-					await this.userManager.updateUser(user.id, user)
-
-
-					console.log("Received metadata: ", metadata);  // Log it for debugging
-					// Your logic here
 				}
-			}
 			}
 
 			if (event.type === 'checkout.session.completed') {
 				const session = event.data.object;
-				if(session.metadata.tourId!=null){
+				if (session.metadata.tourId != null) {
 					console.log("Received metadata:aaaaaaaaaaaaaaa ");
-					
-	
+
+
 					console.log(session)
 					// Call your function to send an email
 					sendEmail(session.customer_details.email, session.metadata.tourId);
+				} else {
+					console.log("evo meeee")
+					const invoice = event.data.object;
+					const amountPaid = invoice.amount_paid;
+					console.log("Amount Paid: ", amountPaid / 100);
+					// Access subscription details and metadata
+					const subscriptionDetails = invoice.subscription_details;
+					const metadata = subscriptionDetails ? subscriptionDetails.metadata : null;
+
+					if (metadata.tourId == null) {
+						if (metadata) {
+							const storeItems = new Map([
+								[1, { priceInCents: 2999, name: "Basic plan monthly" }],
+								[2, { priceInCents: 12900, name: "Premium plan monthly" }],
+								[3, { priceInCents: 22800, name: "Base plan yearly" }],
+								[4, { priceInCents: 118800, name: "Premium plan yearly" }],
+								[5, { priceInCents: 7000, name: "Influencer package" }],
+							])
+
+							console.log("Received metadata: ", metadata);
+							let user: User = await this.userManager.getUser(metadata.userId);
+
+							if (amountPaid == 2999) {
+
+								user.tokens = user.tokens + 100
+							} else if (amountPaid == 12900) {
+								user.tokens = user.tokens + 500
+							} else if (amountPaid == 22800) {
+
+								user.tokens = user.tokens + 1200
+							} else if (amountPaid == 118800) {
+
+								user.tokens = user.tokens + 6000
+							} else {
+
+								user.tokens = user.tokens + 300
+							}
+
+
+							await this.userManager.updateUser(user.id, user)
+
+
+							console.log("Received metadata: ", metadata);  // Log it for debugging
+							// Your logic here
+
+						}
+
+
+
+					}
 				}
-			
 			}
 
-		
 
 			// Return a response to acknowledge receipt of the event
 			res.json({ received: true });
+
 		});
 
 
@@ -231,7 +280,7 @@ class App {
 
 			var qrCodeLink = await generateQr(tourId)
 			console.log(qrCodeLink)
-			var val = `<html><head></head><body><p>Dear partner,</p><p>Kindly click on the link below to reset your password.</p><a href=\\"https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/setPassword\\" id=\\"get\\">Reset password</a><p>In case of any issues or questions, feel free to contact us at info@gogiro.com.</p><p style=\\"color:red;\\">***Important: Please do not reply to this email. This mailbox is not set up to receive email.</p><p>Kind regards,</p><p style=\\"color:gray;\\">Hopguides</p></body></html>`
+			var val = `<html><head></head><body><p>Dear partner,</p><p>Kindly click on the link below to reset your password.</p><a href=\\"https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/setPassword\\" id=\\"get\\">Reset password</a><img src=\\"${qrCodeLink}\\"></img><p>In case of any issues or questions, feel free to contact us at info@gogiro.com.</p><p style=\\"color:red;\\">***Important: Please do not reply to this email. This mailbox is not set up to receive email.</p><p>Kind regards,</p><p style=\\"color:gray;\\">Hopguides</p></body></html>`
 			const body = `{
 				"content": [
 					{
@@ -272,48 +321,48 @@ class App {
 
 		async function generateQr(tourId: string): Promise<string> {
 
-	
-				var qrcode: QRCodes = new QRCodes();
-				const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
-	
-	
-				const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
-	
-			
-				await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=" + qrCodeId, {
-					scale: 15,
-					width: "1000px",
-				}, async function (err, base64) {
-					const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-					const type = base64.split(';')[0].split('/')[1];
-					const params = {
-						Bucket: 'hopguides/qrcodes',
-						Key: `${image_name}.png`, // type is not required
-						Body: base64Data,
-						ACL: 'public-read',
-						ContentEncoding: 'base64', // required
-						ContentType: `image/${type}` // required. Notice the back ticks
+
+			var qrcode: QRCodes = new QRCodes();
+			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+
+			const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+
+			await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=" + qrCodeId, {
+				scale: 15,
+				width: "1000px",
+			}, async function (err, base64) {
+				const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+				const type = base64.split(';')[0].split('/')[1];
+				const params = {
+					Bucket: 'hopguides/qrcodes',
+					Key: `${image_name}.png`, // type is not required
+					Body: base64Data,
+					ACL: 'public-read',
+					ContentEncoding: 'base64', // required
+					ContentType: `image/${type}` // required. Notice the back ticks
+				}
+				s3bucket.upload(params, function (err, data) {
+
+					if (err) {
+						console.log('ERROR MSG: ', err);
+					} else {
+						console.log('Successfully uploaded data');
 					}
-					s3bucket.upload(params, function (err, data) {
-	
-						if (err) {
-							console.log('ERROR MSG: ', err);
-						} else {
-							console.log('Successfully uploaded data');
-						}
-					});
-	
 				});
-	
-				qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
-				qrcode.code = Math.floor(100000000 + Math.random() * 900000000);
-				qrcode.used = false;
-				qrcode.tourId = tourId
-				qrcode.qrCodeId = qrCodeId
-	
-				return `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
-	
-			
+
+			});
+
+			qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
+			qrcode.code = Math.floor(100000000 + Math.random() * 900000000);
+			qrcode.used = false;
+			qrcode.tourId = tourId
+			qrcode.qrCodeId = qrCodeId
+
+			return `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
+
+
 			//}
 		}
 
