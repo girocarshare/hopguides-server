@@ -1717,7 +1717,8 @@ export class TourRouter extends BaseRouter {
 								quantity: 1,
 							}],
 							metadata: {
-								"tourId": req.body.tourId // Assuming req.body contains tourId
+								"userId": req.userId
+								 // Assuming req.body contains tourId
 							},
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,

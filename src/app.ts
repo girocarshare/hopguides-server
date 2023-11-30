@@ -112,6 +112,7 @@ class App {
 						[2, { priceInCents: 12900, name: "Premium plan monthly" }],
 						[3, { priceInCents: 22800, name: "Base plan yearly" }],
 						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
+						[5, { priceInCents: 7000, name: "Influencer package" }],
 					])
 
 					console.log("Received metadata: ", metadata);
@@ -128,6 +129,9 @@ class App {
 					} else if (amountPaid == 118800) {
 
 						user.tokens = user.tokens + 6000
+					}else{
+						
+						user.tokens = user.tokens + 300
 					}
 
 
@@ -173,9 +177,11 @@ class App {
 		async function sendEmail(to, tourId) {
 
 
+			console.log('send emailllllll');
 			var qrCodeLink = await generateQr(tourId)
 			const emailHtmlContent = `<p>This is your QR Code for tour ID ${tourId}:</p><img src="${qrCodeLink}" alt="QR Code" /><p>Thank you for choosing our service. We hope you enjoy your tour!</p>`;
 
+			console.log('senddddddddddddddddd');
 			const body = `{
 				"content": [
 					{
@@ -217,6 +223,7 @@ class App {
 		async function generateQr(tourId: string): Promise<string> {
 
 			
+			console.log('genrate qrrrrrrrrr');
 	
 				var qrcode: QRCodes = new QRCodes();
 				const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
