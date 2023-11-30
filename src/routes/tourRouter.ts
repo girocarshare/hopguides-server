@@ -1705,26 +1705,27 @@ export class TourRouter extends BaseRouter {
 					}else{
 						session = await stripe.checkout.sessions.create({
 							payment_method_types: ["card"],
-							mode: "payment",
+							mode: "payment",  // Changed to 'payment' for one-time payments
 							line_items: [{
-							  price_data: {
-								currency: "eur",
-								product_data: {
-								  name: storeItem.name,
+								price_data: {
+									currency: "eur",
+									product_data: {
+										name: storeItem.name,
+									},
+									unit_amount: storeItem.priceInCents,
 								},
-								unit_amount: storeItem.priceInCents,
-							  },
-							  quantity: 1,
+								quantity: 1,
 							}],
 							metadata: {
-							  "userId": req.userId
+								"userId": req.userId
+								 // Assuming req.body contains tourId
 							},
 							discounts: [{ // Include this section for applying discounts
-							  promotion_code: 'INFLUENCER300', // Replace with the actual promotion code ID
-							}],
+								promotion_code: 'INFLUENCER300', // Replace with the actual promotion code ID
+							  }],
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
-						  });
+						});
 					}
 					res.json({ url: session.url });
 
