@@ -10,18 +10,26 @@ import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
 import { CityRouter } from './routes/cityRouter';
 import { User } from './models/user/user';
+import * as AWS from 'aws-sdk';
 import { UserManager } from './manager/userManager';
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
 const endpointSecret = "whsec_udE8WsgMxTywVI44nhBJtjoGuZzqB2Ce";
 //global.CronJob = require('./db/cron.js');
 
+var QRCode = require('qrcode')
 const client = require('@sendgrid/client');
 client.setApiKey("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");
 
 import sgMail = require('@sendgrid/mail');
+import { QRCodes } from './models/qrcodes/qrcodes';
 sgMail.setApiKey("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")
 var emailSender = "luna.zivkovic@gogiro.app";
 
+const s3bucket = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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",
+	params: { Bucket: 'hopguides/qrcodes' }
+});
 
 class App {
 
@@ -165,17 +173,14 @@ class App {
 		async function sendEmail(to, tourId) {
 
 
-			console.log("tooooo " + to)
-
-
-			
-
+			var qrCodeLink = await generateQr(tourId)
+			const emailHtmlContent = `<p>This is your QR Code for tour ID ${tourId}:</p><img src="${qrCodeLink}" alt="QR Code" /><p>Thank you for choosing our service. We hope you enjoy your tour!</p>`;
 
 			const body = `{
 				"content": [
 					{
 					  "type": "text/html", 
-					  "value": "This is tour id ${tourId}"
+					  "value": "${emailHtmlContent}"
 					  
 					}
 				  ], 
@@ -206,6 +211,63 @@ class App {
 				})
 
 		}
+
+
+
+		async function generateQr(tourId: string): Promise<string> {
+
+			
+	
+				var qrcode: QRCodes = new QRCodes();
+				const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+	
+	
+				const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
+	
+			
+				await QRCode.toDataURL("https://hopguides-server-main-j7limbsbmq-oc.a.run.app/deeplink?url=" + qrCodeId, {
+					scale: 15,
+					width: "1000px",
+				}, async function (err, base64) {
+					const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+					const type = base64.split(';')[0].split('/')[1];
+					const params = {
+						Bucket: 'hopguides/qrcodes',
+						Key: `${image_name}.png`, // type is not required
+						Body: base64Data,
+						ACL: 'public-read',
+						ContentEncoding: 'base64', // required
+						ContentType: `image/${type}` // required. Notice the back ticks
+					}
+					s3bucket.upload(params, function (err, data) {
+	
+						if (err) {
+							console.log('ERROR MSG: ', err);
+						} else {
+							console.log('Successfully uploaded data');
+						}
+					});
+	
+				});
+	
+				qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
+				qrcode.code = Math.floor(100000000 + Math.random() * 900000000);
+				qrcode.used = false;
+				qrcode.tourId = tourId
+				qrcode.qrCodeId = qrCodeId
+	
+				var code = await this.qrcodesRepository.createOne(qrcode).catch(() => {
+					
+				});
+	
+				return `https://hopguides.s3.eu-central-1.amazonaws.com/qrcodes/${image_name}.png`
+	
+			
+			//}
+		}
+
+
+
 
 		this.app.use(express.json({ limit: '50mb' }));
 		this.app.use(express.urlencoded({ limit: '50mb' }));
