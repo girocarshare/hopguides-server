@@ -177,16 +177,14 @@ class App {
 		async function sendEmail(to, tourId) {
 
 
-			console.log('send emailllllll');
 			var qrCodeLink = await generateQr(tourId)
-			const emailHtmlContent = `<p>This is your QR Code for tour ID ${tourId}:</p><img src="${qrCodeLink}" alt="QR Code" /><p>Thank you for choosing our service. We hope you enjoy your tour!</p>`;
-
-			console.log('senddddddddddddddddd');
+			console.log(qrCodeLink)
+			var val = `<html lang=\\"en\\"><head><meta charset=\\"UTF-8\\"><meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0\\"><title>Hopguides Email Template</title></head><body><div style=\\"font-family: Arial, sans-serif; text-align: center; max-width: 600px; margin: 0 auto;\\"><img src=\\"https://hopguides.s3.eu-central-1.amazonaws.com/video-images/character_descriptions/Screenshot_2023-04-26_at_18.31.44-removebg-preview.png\\" alt=\\"Hopguides Logo\\" style=\\"display: block; margin: 20px auto; width: 100px; text-align: center;\\"><h2>Welcome to Hopguides,</h2><p>Hello, We are excited to have you on board. Your account has been successfully created.</p><p>Please verify your email address by clicking the following link:</p><p>This is your QR Code for tour ID ${tourId}:</p><img src="${qrCodeLink}" alt="QR Code" /><p>Thanks for being an early adapter of synthetic media technology.</p><p>Warm regards,</p><p>Team Hopguides</p><p style=\\"margin-top: 30px; font-size: 0.9em;\\">If you are having any issues with your account, please don’t hesitate to contact us at <a href=\\"mailto:support@hopguides.com\\" style=\\"color: #007BFF;\\">support@hopguides.com</a></p></div></body></html>`
 			const body = `{
 				"content": [
 					{
 					  "type": "text/html", 
-					  "value": "${emailHtmlContent}"
+					  "value": "${val}"
 					  
 					}
 				  ], 
@@ -222,8 +220,6 @@ class App {
 
 		async function generateQr(tourId: string): Promise<string> {
 
-			
-			console.log('genrate qrrrrrrrrr');
 	
 				var qrcode: QRCodes = new QRCodes();
 				const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
