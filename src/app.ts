@@ -218,11 +218,10 @@ class App {
 				} else {
 					console.log("evo meeee")
 					const invoice = event.data.object;
-					const amountPaid = invoice.amount_paid;
+					const amountPaid = invoice.amount_total;
 					console.log("Amount Paid: ", amountPaid / 100);
 					// Access subscription details and metadata
-					const subscriptionDetails = invoice.subscription_details;
-					const metadata = subscriptionDetails ? subscriptionDetails.metadata : null;
+					const metadata = session.metadata
 
 					if (metadata.tourId == null) {
 						if (metadata) {
