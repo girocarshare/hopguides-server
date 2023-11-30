@@ -158,6 +158,51 @@ class App {
 				return res.sendStatus(400);
 			}
 
+			if (event.type === 'invoice.paid') {
+				const invoice = event.data.object;
+				const amountPaid = invoice.amount_paid;
+				console.log("Amount Paid: ", amountPaid / 100);
+				// Access subscription details and metadata
+				const subscriptionDetails = invoice.subscription_details;
+				const metadata = subscriptionDetails ? subscriptionDetails.metadata : null;
+
+				if (metadata) {
+					const storeItems = new Map([
+						[1, { priceInCents: 2999, name: "Basic plan monthly" }],
+						[2, { priceInCents: 12900, name: "Premium plan monthly" }],
+						[3, { priceInCents: 22800, name: "Base plan yearly" }],
+						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
+						[5, { priceInCents: 7000, name: "Influencer package" }],
+					])
+
+					console.log("Received metadata: ", metadata);
+					let user: User = await this.userManager.getUser(metadata.userId);
+
+					if (amountPaid == 2999) {
+
+						user.tokens = user.tokens + 100
+					} else if (amountPaid == 12900) {
+						user.tokens = user.tokens + 500
+					} else if (amountPaid == 22800) {
+
+						user.tokens = user.tokens + 1200
+					} else if (amountPaid == 118800) {
+
+						user.tokens = user.tokens + 6000
+					}else{
+						
+						user.tokens = user.tokens + 300
+					}
+
+
+					await this.userManager.updateUser(user.id, user)
+
+
+					console.log("Received metadata: ", metadata);  // Log it for debugging
+					// Your logic here
+				}
+			}
+			
 			if (event.type === 'checkout.session.completed') {
 				console.log("Received metadata:aaaaaaaaaaaaaaa ");
 				const session = event.data.object;
