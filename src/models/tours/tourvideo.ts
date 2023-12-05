@@ -16,7 +16,7 @@ export class TourVideo {
 
 	@jsonProperty()
 	@dbField()
-	title: LocalizedField;
+	title: string;
 
 	@jsonProperty()
 	@dbField()

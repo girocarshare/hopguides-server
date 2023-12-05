@@ -355,6 +355,7 @@ export class TourRouter extends BaseRouter {
 					})
 					.catch(error => {
 
+						console.log(error)
 						return res.status(402).send({ message: error.response.data.description });
 					});
 
@@ -1737,7 +1738,7 @@ export class TourRouter extends BaseRouter {
 
 
 		this.router.post(
-			'/videotour/create',
+			'/videotour/create/:tourname',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
@@ -1758,6 +1759,7 @@ export class TourRouter extends BaseRouter {
 					var tour: TourVideo = new TourVideo()
 					tour.userId = user.id,
 					tour.points = pois
+					tour.title = req.params.tourname
 				
 
 					var tourVideo: TourVideo = await this.tourVideoManager.createTour(tour);
@@ -1803,6 +1805,39 @@ export class TourRouter extends BaseRouter {
 			  }
 			})
 		  );
+
+
+		  this.router.get(
+			'/videotour/tourname/:tourname',
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			  try {
+				// Retrieve the existing tour video using the ID provided
+
+				console.log(req.body)
+				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
+				
+				// Identify the point to be updated
+			
+				// Update the point with new data
+				tourVideo.points[req.body.data.chapter].text = req.body.data.words; // Update text field
+				tourVideo.points[req.body.data.chapter].video = req.body.video; // Update text field
+				// Update other fields as necessary...
+		  
+				// Persist the updated tour video
+				var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
+				
+				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
+		
+				res.status(200).send(tourVideo);
+			  } catch (e) {
+				console.log(e);
+				res.status(500).json({ error: e.message });
+			  }
+			})
+		  );
+
+
 
 
 		  this.router.get(

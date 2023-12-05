@@ -277,9 +277,16 @@ class App {
 		async function sendEmail(to, tourId) {
 
 
+
+
+
+
+
+
+
 			var qrCodeLink = await generateQr(tourId)
 			console.log(qrCodeLink)
-			var val = `<html><head></head><body><p>Dear partner,</p><p>Kindly click on the link below to reset your password.</p><a href=\\"https://hopguides-web-client-main-j7limbsbmq-oc.a.run.app/#/setPassword\\" id=\\"get\\">Reset password</a><img src=\\"${qrCodeLink}\\"></img><p>In case of any issues or questions, feel free to contact us at info@gogiro.com.</p><p style=\\"color:red;\\">***Important: Please do not reply to this email. This mailbox is not set up to receive email.</p><p>Kind regards,</p><p style=\\"color:gray;\\">Hopguides</p></body></html>`
+			var val = `<html><head></head><body><h1>Navodila za Uporabo Aplikacije HopGuides</h1><p>Začetek Ture: Začnite turo s skeniranjem QR kode, ki ste jo prejeli po e-pošti, ali vnesite edinstveno številko v polje pod skenerjem QR kod.</p><p>Navigacija: Aplikacija bo vodila do izbrane točke z vgrajeno navigacijo.</p><p>Pripovedovanje Zgodb: Ob prihodu na vsako točko bo aplikacija avtomatično predvajala pripoved v povezavi s točko.</p><p>Interaktivne Značilnosti: Na nekaterih točkah bodo na voljo interaktivne funkcije, kot so kvizi ali dodatne informacije.</p><p>Prilagodljivost: Uporabniki lahko prilagodijo vrstni red obiska točk glede na svoje preference.</p><img src=\\"${qrCodeLink}\\"></img><p>In case of any issues or questions, feel free to contact us at info@gogiro.com.</p><p style=\\"color:red;\\">***Important: Please do not reply to this email. This mailbox is not set up to receive email.</p><p>Kind regards,</p><p style=\\"color:gray;\\">Hopguides</p></body></html>`
 			const body = `{
 				"content": [
 					{
