@@ -1638,7 +1638,7 @@ export class TourRouter extends BaseRouter {
 						[2, { priceInCents: 12900, name: "Premium plan monthly" }],
 						[3, { priceInCents: 22800, name: "Base plan yearly" }],
 						[4, { priceInCents: 118800, name: "Premium plan yearly" }],
-						[5, { priceInCents: 7000, name: "Influencer package" }],
+						[5, { priceInCents: 9900, name: "Influencer package" }],
 					])
 
 
@@ -1807,6 +1807,38 @@ export class TourRouter extends BaseRouter {
 		  );
 
 
+		  
+		this.router.post(
+			'/videotour/ads',
+			parseJwt,
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+			  try {
+				// Retrieve the existing tour video using the ID provided
+
+				console.log(req.body)
+				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.tour.id);
+				
+				// Identify the point to be updated
+			
+				// Update the point with new data
+				
+				tourVideo.ads = req.body.ads
+				// Update other fields as necessary...
+		  
+				// Persist the updated tour video
+				var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
+				
+				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.tour.id);
+		
+				res.status(200).send(tourVideo);
+			  } catch (e) {
+				console.log(e);
+				res.status(500).json({ error: e.message });
+			  }
+			})
+		  );
+
+
 		  this.router.get(
 			'/videotour/tourname/:tourname',
 			parseJwt,
@@ -1847,7 +1879,7 @@ export class TourRouter extends BaseRouter {
 			  try {
 				// Retrieve the existing tour video using the ID provided
 
-				var tourVideos: TourVideo[] = await this.tourVideoManager.getTours();
+				var tourVideos: TourVideo[] = await this.tourVideoManager.getTours(req.userId);
 				
 				// Identify the point to be updated
 			
