@@ -18,6 +18,11 @@ export class TourVideo {
 	@dbField()
 	title: string;
 
+	
+	@jsonProperty()
+	@dbField()
+	ads: string;
+
 	@jsonProperty()
 	@dbField()
 	userId: string;

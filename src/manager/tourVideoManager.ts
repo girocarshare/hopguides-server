@@ -90,10 +90,13 @@ export class TourVideoManager {
 	}
 
 
-	async getTours(filter?: any, pagination?: SearchPagination): Promise<TourVideo[]> {
-		return await this.tourVideoRepository.getAll(filter, pagination).catch(() => {
+	async getTours(userId: string, filter?: any, pagination?: SearchPagination): Promise<TourVideo[]> {
+		return await this.tourVideoRepository.getAll({ userId: userId }, pagination).catch(() => {
 			throw new Error('Error getting Tours');
 		});
+
+		
+
 	}
 
 

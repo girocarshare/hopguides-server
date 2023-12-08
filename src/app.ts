@@ -90,7 +90,6 @@ class App {
 		this.app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
 			let event;
 
-			console.log("USLA U WEBHOOKKKKKKKK11111111111")
 			try {
 				event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], endpointSecret);
 			} catch (err) {
@@ -134,6 +133,7 @@ class App {
 						user.tokens = user.tokens + 300
 					}
 
+					user.paid = true
 
 					await this.userManager.updateUser(user.id, user)
 
@@ -196,6 +196,7 @@ class App {
 							user.tokens = user.tokens + 300
 						}
 
+						user.paid = true
 
 						await this.userManager.updateUser(user.id, user)
 
@@ -249,7 +250,7 @@ class App {
 								user.tokens = user.tokens + 6000
 							} else {
 
-								user.tokens = user.tokens + 300
+								user.tokens = user.tokens + 500
 							}
 
 
@@ -278,15 +279,9 @@ class App {
 
 
 
-
-
-
-
-
-
 			var qrCodeLink = await generateQr(tourId)
 			console.log(qrCodeLink)
-			var val = `<html><head></head><body><h1>Navodila za Uporabo Aplikacije HopGuides</h1><p>Začetek Ture: Začnite turo s skeniranjem QR kode, ki ste jo prejeli po e-pošti, ali vnesite edinstveno številko v polje pod skenerjem QR kod.</p><p>Navigacija: Aplikacija bo vodila do izbrane točke z vgrajeno navigacijo.</p><p>Pripovedovanje Zgodb: Ob prihodu na vsako točko bo aplikacija avtomatično predvajala pripoved v povezavi s točko.</p><p>Interaktivne Značilnosti: Na nekaterih točkah bodo na voljo interaktivne funkcije, kot so kvizi ali dodatne informacije.</p><p>Prilagodljivost: Uporabniki lahko prilagodijo vrstni red obiska točk glede na svoje preference.</p><img src=\\"${qrCodeLink}\\"></img><p>In case of any issues or questions, feel free to contact us at info@gogiro.com.</p><p style=\\"color:red;\\">***Important: Please do not reply to this email. This mailbox is not set up to receive email.</p><p>Kind regards,</p><p style=\\"color:gray;\\">Hopguides</p></body></html>`
+			var val = `<html><head></head><body><h2>Navodila za Uporabo Aplikacije HopGuides</h2><p>Začetek Ture: Začnite turo s skeniranjem QR kode, ki ste jo prejeli po e-pošti, ali vnesite edinstveno številko v polje pod skenerjem QR kod.</p><p>Navigacija: Aplikacija bo vodila do izbrane točke z vgrajeno navigacijo.</p><p>Pripovedovanje Zgodb: Ob prihodu na vsako točko bo aplikacija avtomatično predvajala pripoved v povezavi s točko.</p><p>Interaktivne Značilnosti: Na nekaterih točkah bodo na voljo interaktivne funkcije, kot so kvizi ali dodatne informacije.</p><p>Prilagodljivost: Uporabniki lahko prilagodijo vrstni red obiska točk glede na svoje preference.</p><img src=\\"${qrCodeLink}\\"></img><p>In case of any issues or questions, feel free to contact us at info@gogiro.com.</p><p style=\\"color:red;\\">***Important: Please do not reply to this email. This mailbox is not set up to receive email.</p><p>Kind regards,</p><p style=\\"color:gray;\\">Hopguides</p></body></html>`
 			const body = `{
 				"content": [
 					{
