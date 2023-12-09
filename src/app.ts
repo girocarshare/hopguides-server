@@ -254,6 +254,7 @@ class App {
 							}
 
 
+							user.paid = true
 							await this.userManager.updateUser(user.id, user)
 
 
