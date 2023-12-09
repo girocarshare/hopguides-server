@@ -301,7 +301,7 @@ export class UserRouter extends BaseRouter {
 				else {
 					user.status = UserStatus.VERIFIED
 					user.paid = false;
-					user.didapi = "a2xlbWVuLmZ1cmxhbkBnb2dpcm8uYXBw:zEpHTAYD-SP9ilw3dcdi_"
+					user.didapi = "aGkuaG9wZ3VpZGVzQGdtYWlsLmNvbQ:supMmm1zNFSv9IzbL8iw2"
 					await this.userManager.updateUser(user.id, user)
 
 					const loggedUserData: {
