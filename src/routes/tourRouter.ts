@@ -1775,7 +1775,6 @@ export class TourRouter extends BaseRouter {
 		);
 
 
-
 		this.router.post(
 			'/videotour/update',
 			parseJwt,
