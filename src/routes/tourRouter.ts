@@ -1,8 +1,13 @@
+
 import { IRequest, IResponse } from '../classes/interfaces';
 import {
 	parseJwt,
 	withErrorHandler
 } from '../utils/utils';
+
+import * as ffmpeg from 'fluent-ffmpeg';
+import * as fs from 'fs';
+import * as path from 'path';
 import { BaseRouter } from './baseRouter';
 import { UserManager } from '../manager/userManager';
 import { deserialize } from '../json';
@@ -213,12 +218,86 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
+
+		//54387761ed3da88d440dbaddc4b218bd
+
+		async function generateAudioFromText(text: string, voiceId: string) {
+			const CHUNK_SIZE = 1024;
+			const url = "https://api.elevenlabs.io/v1/text-to-speech/" + voiceId;
+
+			const headers = {
+				"Accept": "audio/mpeg",
+				"Content-Type": "application/json",
+				"xi-api-key": "54387761ed3da88d440dbaddc4b218bd" // Make sure to secure your API key
+			};
+
+			const data = {
+				"text": text,
+				"model_id": "eleven_monolingual_v1",
+				"voice_settings": {
+					"stability": 0.5,
+					"similarity_boost": 0.5
+				}
+			};
+
+			try {
+				const response = await axios.post(url, data, { headers: headers, responseType: 'stream' });
+				const outputPath = path.join(__dirname, 'output.mp3');
+				const writer = fs.createWriteStream(outputPath);
+
+				response.data.pipe(writer);
+
+				return new Promise((resolve, reject) => {
+					writer.on('finish', resolve);
+					writer.on('error', reject);
+				});
+			} catch (error) {
+				console.error(error);
+			}
+		}
+		async function downloadImage(url: string, outputPath: string): Promise<void> {
+			const writer = fs.createWriteStream(outputPath);
+			const response = await axios({
+				url,
+				method: 'GET',
+				responseType: 'stream'
+			});
+
+			response.data.pipe(writer);
+
+			return new Promise((resolve, reject) => {
+				writer.on('finish', resolve);
+				writer.on('error', reject);
+			});
+		}
+
+
+
+		function createVideoWithImageAndAudio(imagePath: string, audioPath: string, outputPath: string): Promise<void> {
+			return new Promise((resolve, reject) => {
+				const command = `ffmpeg -loop 1 -i ${imagePath} -i ${audioPath} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest ${outputPath}`;
+				exec(command, (error, stdout, stderr) => {
+					if (error) {
+						console.error(`Error: ${error.message}`);
+						reject(error);
+						return;
+					}
+					if (stderr) {
+						console.error(`stderr: ${stderr}`);
+					}
+					resolve();
+				});
+			});
+		}
+
+
 		this.router.post(
 			'/d-id/generate',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
+				console.log("evo meeeeeeeeee")
 
 				var user = await this.userManager.getUser(req.userId)
 				var ofTokens = user.tokens - parseFloat(req.body.tokensneeded)
@@ -300,18 +379,45 @@ export class TourRouter extends BaseRouter {
 
 				function removeSpecialCharacters(inputString: string): string {
 					// Remove all characters that are not alphanumeric
-					const cleanedString = inputString.replace(/[^a-zA-Z0-9,.':; ]/g, '');
+					const cleanedString = inputString.replace(/[^a-zA-Z0-9,.':;?! ]/g, '');
 					return cleanedString;
 				}
 
-				console.log(req.body.words)
 				const cleanedString: string = removeSpecialCharacters(JSON.stringify(req.body.words));
 
-				console.log(cleanedString)
+				// Regular expression to match the end of a sentence
+				const firstSentenceRegex = /^[^.!?]*[.!?]/;
+
+				// Extract the first sentence
+				const firstSentenceMatch = cleanedString.match(firstSentenceRegex);
+				const firstSentence = firstSentenceMatch?.[0] || '';
+
+				// Extract the rest of the text
+				const restOfText = firstSentenceMatch ? cleanedString.slice(firstSentenceMatch[0].length) : cleanedString;
+
+				console.log("First Sentence:", firstSentence);
+				console.log("Rest of the Text:", restOfText);
+
+
+				await generateAudioFromText(restOfText, voice)
+
+
+				const imageUrl = img;
+				const imagePath = path.join(__dirname, 'image.png');
+				const audioPath = path.join(__dirname, 'output.mp3'); // Path to your audio file
+				const videoPath = path.join(__dirname, 'outputVideo.mp4'); // Output video file path
+
+				// Download image and create video
+				downloadImage(imageUrl, imagePath)
+					.then(() => createVideoWithImageAndAudio(imagePath, audioPath, videoPath))
+					.then(() => console.log('Video created successfully'))
+					.catch(error => console.error(error));
+
+
 				const data = JSON.parse(`{
 					"script": {
 					  "type": "text",
-					  "input": "${cleanedString}",
+					  "input": "${firstSentence}",
 					  "provider":{
 						"type":"elevenlabs",
 						"voice_id":"${voice}",
@@ -319,7 +425,7 @@ export class TourRouter extends BaseRouter {
 							"stability":0.3,
 							"similarity_boost":0.7
 							}
-					 	}
+						  }
 					},
 					"source_url": "${img}",
 					"config": {
@@ -337,8 +443,29 @@ export class TourRouter extends BaseRouter {
 				})
 					.then(async response => {
 						var resp = await did(response, user)
+						console.log("RESPONSEEEE")
+						console.log(resp)
+					
+						const dIdVideoPath = path.join(__dirname, 'dIdVideo.mp4');
 
-						var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(resp);
+						// Function to download the D-ID video
+						downloadImage(resp, dIdVideoPath)
+							.then(() => {
+								console.log('D-ID Video downloaded successfully');
+								const outputVideoPath = path.join(__dirname, 'outputVideo.mp4'); // Path to your existing output video
+								const finalVideoPath = path.join(__dirname, 'outputVideoFinal.mp4'); // Path for the final combined video
+						
+								// Combine the D-ID video and the existing output video
+								return combineVideos(dIdVideoPath, outputVideoPath, finalVideoPath);
+							})
+							.then(() => {
+								console.log('Videos combined successfully');
+								// Further processing or response sending
+							})
+							.catch(error => console.error(error));
+
+						
+						/*var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(resp);
 						var qrCode: string = await this.libraryManager.generateQr(generatedVideo);
 
 						var library: Library = new Library()
@@ -350,7 +477,7 @@ export class TourRouter extends BaseRouter {
 
 						res.status(200).send({ data: resp, tokens: tokens });
 
-
+*/
 
 					})
 					.catch(error => {
@@ -360,9 +487,27 @@ export class TourRouter extends BaseRouter {
 					});
 
 
-			})
+				})
 		);
 
+
+		
+function combineVideos(video1Path: string, video2Path: string, outputPath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        ffmpeg()
+            .input(video1Path)
+            .input(video2Path)
+            .on('error', (err) => {
+                console.error('Error: ' + err.message);
+                reject(err);
+            })
+            .on('end', () => {
+                console.log('Videos combined successfully');
+                resolve();
+            })
+            .mergeToFile(outputPath, '/tmp');
+    });
+}
 
 		/** GET generate qr code for tour */
 		this.router.get(
@@ -1587,10 +1732,10 @@ export class TourRouter extends BaseRouter {
 
 				try {
 
-					
+
 					const storeItem = { priceInCents: 1790, name: "Hopguides tour" };
 					var session = null;
-					
+
 					session = await stripe.checkout.sessions.create({
 						payment_method_types: ["card"],
 						mode: "payment",  // Changed to 'payment' for one-time payments
@@ -1612,11 +1757,11 @@ export class TourRouter extends BaseRouter {
 					});
 
 					var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.tourId);
-			
-					tourVideo.paymentLink = session.url; 
-				
+
+					tourVideo.paymentLink = session.url;
+
 					var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
-					
+
 					res.status(200).send(session.url)
 
 				} catch (e) {
@@ -1674,7 +1819,7 @@ export class TourRouter extends BaseRouter {
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
 						});
-					} else if(req.body.id == 3 || req.body.id == 4) {
+					} else if (req.body.id == 3 || req.body.id == 4) {
 						session = await stripe.checkout.sessions.create({
 							payment_method_types: ["card"],
 							mode: "subscription",
@@ -1703,7 +1848,7 @@ export class TourRouter extends BaseRouter {
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
 						});
-					}else{
+					} else {
 						session = await stripe.checkout.sessions.create({
 							payment_method_types: ["card"],
 							mode: "payment",  // Changed to 'payment' for one-time payments
@@ -1719,10 +1864,10 @@ export class TourRouter extends BaseRouter {
 							}],
 							metadata: {
 								"userId": req.userId
-								 // Assuming req.body contains tourId
+								// Assuming req.body contains tourId
 							},
 							allow_promotion_codes: true,
-							
+
 							success_url: `https://hopguides-video-creation.netlify.app/#/success`,
 							cancel_url: `https://hopguides-video-creation.netlify.app/#/failure`,
 						});
@@ -1749,25 +1894,25 @@ export class TourRouter extends BaseRouter {
 					var user = await this.userManager.getUser(req.userId)
 
 					var pois = []
-					for(var poi of req.body){
-					var newPoi: POIVideo = new POIVideo()
-					newPoi.text =  poi
-					pois.push(newPoi)
+					for (var poi of req.body) {
+						var newPoi: POIVideo = new POIVideo()
+						newPoi.text = poi
+						pois.push(newPoi)
 
-				}
-				
+					}
+
 					var tour: TourVideo = new TourVideo()
 					tour.userId = user.id,
-					tour.points = pois
+						tour.points = pois
 					tour.title = req.params.tourname
-				
+
 
 					var tourVideo: TourVideo = await this.tourVideoManager.createTour(tour);
 
 					console.log(tourVideo)
 					res.status(200).send(tourVideo);
 				} catch (e) {
-					
+
 					console.log(e)
 					res.status(500).json({ error: e.message })
 				}
@@ -1779,116 +1924,116 @@ export class TourRouter extends BaseRouter {
 			'/videotour/update',
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-			  try {
-				// Retrieve the existing tour video using the ID provided
+				try {
+					// Retrieve the existing tour video using the ID provided
 
-				console.log(req.body)
-				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
-				
-				// Identify the point to be updated
-			
-				// Update the point with new data
-				tourVideo.points[req.body.data.chapter].text = req.body.data.words; // Update text field
-				tourVideo.points[req.body.data.chapter].video = req.body.video; // Update text field
-				// Update other fields as necessary...
-		  
-				// Persist the updated tour video
-				var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
-				
-				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
-		
-				res.status(200).send(tourVideo);
-			  } catch (e) {
-				console.log(e);
-				res.status(500).json({ error: e.message });
-			  }
+					console.log(req.body)
+					var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
+
+					// Identify the point to be updated
+
+					// Update the point with new data
+					tourVideo.points[req.body.data.chapter].text = req.body.data.words; // Update text field
+					tourVideo.points[req.body.data.chapter].video = req.body.video; // Update text field
+					// Update other fields as necessary...
+
+					// Persist the updated tour video
+					var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
+
+					var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
+
+					res.status(200).send(tourVideo);
+				} catch (e) {
+					console.log(e);
+					res.status(500).json({ error: e.message });
+				}
 			})
-		  );
+		);
 
 
-		  
+
 		this.router.post(
 			'/videotour/ads',
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-			  try {
-				// Retrieve the existing tour video using the ID provided
+				try {
+					// Retrieve the existing tour video using the ID provided
 
-				console.log(req.body)
-				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.tour.id);
-				
-				// Identify the point to be updated
-			
-				// Update the point with new data
-				
-				tourVideo.ads = req.body.ads
-				// Update other fields as necessary...
-		  
-				// Persist the updated tour video
-				var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
-				
-				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.tour.id);
-		
-				res.status(200).send(tourVideo);
-			  } catch (e) {
-				console.log(e);
-				res.status(500).json({ error: e.message });
-			  }
+					console.log(req.body)
+					var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.tour.id);
+
+					// Identify the point to be updated
+
+					// Update the point with new data
+
+					tourVideo.ads = req.body.ads
+					// Update other fields as necessary...
+
+					// Persist the updated tour video
+					var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
+
+					var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.tour.id);
+
+					res.status(200).send(tourVideo);
+				} catch (e) {
+					console.log(e);
+					res.status(500).json({ error: e.message });
+				}
 			})
-		  );
+		);
 
 
-		  this.router.get(
+		this.router.get(
 			'/videotour/tourname/:tourname',
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-			  try {
-				// Retrieve the existing tour video using the ID provided
+				try {
+					// Retrieve the existing tour video using the ID provided
 
-				console.log(req.body)
-				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
-				
-				// Identify the point to be updated
-			
-				// Update the point with new data
-				tourVideo.points[req.body.data.chapter].text = req.body.data.words; // Update text field
-				tourVideo.points[req.body.data.chapter].video = req.body.video; // Update text field
-				// Update other fields as necessary...
-		  
-				// Persist the updated tour video
-				var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
-				
-				var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
-		
-				res.status(200).send(tourVideo);
-			  } catch (e) {
-				console.log(e);
-				res.status(500).json({ error: e.message });
-			  }
+					console.log(req.body)
+					var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
+
+					// Identify the point to be updated
+
+					// Update the point with new data
+					tourVideo.points[req.body.data.chapter].text = req.body.data.words; // Update text field
+					tourVideo.points[req.body.data.chapter].video = req.body.video; // Update text field
+					// Update other fields as necessary...
+
+					// Persist the updated tour video
+					var tourVideoUpdated: TourVideo = await this.tourVideoManager.updateTour(tourVideo.id, tourVideo);
+
+					var tourVideo: TourVideo = await this.tourVideoManager.getTour(req.body.data.tour.id);
+
+					res.status(200).send(tourVideo);
+				} catch (e) {
+					console.log(e);
+					res.status(500).json({ error: e.message });
+				}
 			})
-		  );
+		);
 
 
 
 
-		  this.router.get(
+		this.router.get(
 			'/videotour/getAll',
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-			  try {
-				// Retrieve the existing tour video using the ID provided
+				try {
+					// Retrieve the existing tour video using the ID provided
 
-				var tourVideos: TourVideo[] = await this.tourVideoManager.getTours(req.userId);
-				
-				// Identify the point to be updated
-			
-				res.status(200).send(tourVideos);
-			  } catch (e) {
-				console.log(e);
-				res.status(500).json({ error: e.message });
-			  }
+					var tourVideos: TourVideo[] = await this.tourVideoManager.getTours(req.userId);
+
+					// Identify the point to be updated
+
+					res.status(200).send(tourVideos);
+				} catch (e) {
+					console.log(e);
+					res.status(500).json({ error: e.message });
+				}
 			})
-		  );
+		);
 
 
 	}
