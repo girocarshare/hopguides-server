@@ -273,9 +273,13 @@ export class TourRouter extends BaseRouter {
 
 
 
-		function createVideoWithImageAndAudio(imagePath: string, audioPath: string, outputPath: string): Promise<void> {
+
+
+		function createVideoWithImageAndAudio(imagePath, audioPath, outputPath): Promise<void> {
 			return new Promise((resolve, reject) => {
-				const command = `ffmpeg -loop 1 -i ${imagePath} -i ${audioPath} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest ${outputPath}`;
+				// Added the -y flag to overwrite existing files
+				const command = `ffmpeg -y -loop 1 -i ${imagePath} -i ${audioPath} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest ${outputPath}`;
+
 				exec(command, (error, stdout, stderr) => {
 					if (error) {
 						console.error(`Error: ${error.message}`);
@@ -291,7 +295,25 @@ export class TourRouter extends BaseRouter {
 		}
 
 
-	/*	this.router.post(
+		function combineVideos(video1Path: string, video2Path: string, outputPath: string): Promise<void> {
+			return new Promise((resolve, reject) => {
+				ffmpeg()
+					.input(video1Path)
+					.input(video2Path)
+					.on('error', (err) => {
+						console.error('Error: ' + err.message);
+						reject(err);
+					})
+					.on('end', () => {
+						console.log('Videos combined successfully');
+						resolve();
+					})
+					.mergeToFile(outputPath, '/tmp');
+			});
+		}
+
+
+		this.router.post(
 			'/d-id/generate',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			parseJwt,
@@ -445,18 +467,32 @@ export class TourRouter extends BaseRouter {
 						var resp = await did(response, user)
 						console.log("RESPONSEEEE")
 						console.log(resp)
-					
+
 						const dIdVideoPath = path.join(__dirname, 'dIdVideo.mp4');
 
 						// Function to download the D-ID video
 						downloadImage(resp, dIdVideoPath)
-							.then(() => {
+							.then(async () => {
 								console.log('D-ID Video downloaded successfully');
 								const outputVideoPath = path.join(__dirname, 'outputVideo.mp4'); // Path to your existing output video
 								const finalVideoPath = path.join(__dirname, 'outputVideoFinal.mp4'); // Path for the final combined video
-						
+
 								// Combine the D-ID video and the existing output video
-								return combineVideos(dIdVideoPath, outputVideoPath, finalVideoPath);
+								await combineVideos(dIdVideoPath, outputVideoPath, finalVideoPath);
+
+								var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(path.join(__dirname, 'outputVideoFinal.mp4'));
+								var qrCode: string = await this.libraryManager.generateQr(generatedVideo);
+
+								var library: Library = new Library()
+								library.url = generatedVideo
+								library.qrcode = qrCode
+								library.userId = req.userId
+
+								var libraryVideo: Library = await this.libraryManager.create(library);
+
+								console.log("GENERATED VIDEO")
+								console.log(generatedVideo)
+								res.status(200).send({ data: generatedVideo, tokens: tokens });
 							})
 							.then(() => {
 								console.log('Videos combined successfully');
@@ -464,8 +500,8 @@ export class TourRouter extends BaseRouter {
 							})
 							.catch(error => console.error(error));
 
-						
-						var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(resp);
+
+						/*var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(resp);
 						var qrCode: string = await this.libraryManager.generateQr(generatedVideo);
 
 						var library: Library = new Library()
@@ -475,7 +511,7 @@ export class TourRouter extends BaseRouter {
 
 						var libraryVideo: Library = await this.libraryManager.create(library);
 
-						res.status(200).send({ data: resp, tokens: tokens });
+						res.status(200).send({ data: resp, tokens: tokens });*/
 
 
 
@@ -487,10 +523,11 @@ export class TourRouter extends BaseRouter {
 					});
 
 
-				})
-		);*/
+			})
+		);
 
-		this.router.post(
+
+		/*this.router.post(
 			'/d-id/generate',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			parseJwt,
@@ -596,7 +633,7 @@ export class TourRouter extends BaseRouter {
 							"stability":0.3,
 							"similarity_boost":0.7
 							}
-					 	}
+						  }
 					},
 					"source_url": "${img}",
 					"config": {
@@ -638,27 +675,9 @@ export class TourRouter extends BaseRouter {
 
 
 			})
-		);
+		);*/
 
 
-
-		
-function combineVideos(video1Path: string, video2Path: string, outputPath: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-        ffmpeg()
-            .input(video1Path)
-            .input(video2Path)
-            .on('error', (err) => {
-                console.error('Error: ' + err.message);
-                reject(err);
-            })
-            .on('end', () => {
-                console.log('Videos combined successfully');
-                resolve();
-            })
-            .mergeToFile(outputPath, '/tmp');
-    });
-}
 
 		/** GET generate qr code for tour */
 		this.router.get(
