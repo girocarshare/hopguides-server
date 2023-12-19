@@ -10,10 +10,13 @@ RUN npm run build
 
 RUN npm ci --production
 
-FROM gcr.io/distroless/nodejs18-debian11
+FROM node:18.15-alpine
 WORKDIR /usr/app
+
+RUN apk add --no-cache ffmpeg
+
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 
 EXPOSE 8080
-CMD ["dist/server.js"]
+CMD ["node", "dist/server.js"]
