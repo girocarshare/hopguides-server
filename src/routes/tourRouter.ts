@@ -477,6 +477,12 @@ export class TourRouter extends BaseRouter {
 								const outputVideoPath = path.join(__dirname, 'outputVideo.mp4'); // Path to your existing output video
 								const finalVideoPath = path.join(__dirname, 'outputVideoFinal.mp4'); // Path for the final combined video
 
+								// check if the output video exists
+								if (!fs.existsSync(outputVideoPath)) {
+									console.error('Output video does not exist');
+									throw new Error('Output video does not exist');
+								}
+
 								// Combine the D-ID video and the existing output video
 								await combineVideos(dIdVideoPath, outputVideoPath, finalVideoPath);
 
