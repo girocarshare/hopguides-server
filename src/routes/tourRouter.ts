@@ -295,7 +295,7 @@ export class TourRouter extends BaseRouter {
 		}
 
 
-		function combineVideos(video1Path: string, video2Path: string, outputPath: string): Promise<void> {
+		/*function combineVideos(video1Path: string, video2Path: string, outputPath: string): Promise<void> {
 			return new Promise((resolve, reject) => {
 				ffmpeg()
 					.input(video1Path)
@@ -309,6 +309,27 @@ export class TourRouter extends BaseRouter {
 						resolve();
 					})
 					.mergeToFile(outputPath, '/tmp');
+			});
+		}*/
+
+		function combineVideos(video1Path, video2Path, outputPath): Promise<void> {
+			return new Promise((resolve, reject) => {
+				// Added the -y flag to overwrite existing files
+				// Using the FFmpeg command to concatenate videos
+				const command = `ffmpeg -y -i ${video1Path} -i ${video2Path} -filter_complex "[0:v][1:v]concat=n=2:v=1:a=0[outv]" -map "[outv]" ${outputPath}`;
+		
+				exec(command, (error, stdout, stderr) => {
+					if (error) {
+						console.error(`Error: ${error.message}`);
+						reject(error);
+						return;
+					}
+					if (stderr) {
+						console.error(`stderr: ${stderr}`);
+					}
+					console.log('Videos combined successfully');
+					resolve();
+				});
 			});
 		}
 
