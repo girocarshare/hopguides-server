@@ -314,9 +314,8 @@ export class TourRouter extends BaseRouter {
 
 		function combineVideos(video1Path, video2Path, outputPath): Promise<void> {
 			return new Promise((resolve, reject) => {
-				// Added the -y flag to overwrite existing files
-				// Using the FFmpeg command to concatenate videos
-				const command = `ffmpeg -y -i ${video1Path} -i ${video2Path} -filter_complex "[0:v][1:v]concat=n=2:v=1:a=0[outv]" -map "[outv]" ${outputPath}`;
+				// Using an FFmpeg command with a different approach for concatenation
+				const command = `ffmpeg -y -i ${video1Path} -i ${video2Path} -filter_complex "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[outv][outa]" -map "[outv]" -map "[outa]" ${outputPath}`;
 		
 				exec(command, (error, stdout, stderr) => {
 					if (error) {
