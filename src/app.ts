@@ -5,6 +5,7 @@ import { BookingRouter } from './routes/bookingRouter';
 import { ReportRouter } from './routes/reportRouter';
 import { POIRouter } from './routes/poiRouter';
 import { TourManager } from './manager/tourManager';
+import { TourVideoManager } from './manager/tourVideoManager';
 var deeplink = require('node-deeplink');
 import { DashboardAppRouter } from './routes/dash/router';
 import { BPartnerRouter } from './routes/bpartnerRouter';
@@ -22,6 +23,7 @@ client.setApiKey("SG.OWJPsb3DS9y1iN3j5bz7Ww.XsCiCfD-SBUBRHEf2s2f4dzirtGkwuEwpn_H
 
 import sgMail = require('@sendgrid/mail');
 import { QRCodes } from './models/qrcodes/qrcodes';
+import { TourVideo } from './models/tours/tourvideo';
 sgMail.setApiKey("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")
 var emailSender = "luna.zivkovic@gogiro.app";
 
@@ -43,6 +45,7 @@ class App {
 	private reportRouter: ReportRouter;
 	private poiRouter: POIRouter;
 	tourManager: TourManager;
+	tourVideoManager: TourVideoManager;
 	public userManager: UserManager;
 
 	constructor() {
@@ -50,6 +53,7 @@ class App {
 		this.userRouter = new UserRouter();
 		this.cityRouter = new CityRouter();
 		this.tourManager = new TourManager();
+		this.tourVideoManager = new TourVideoManager();
 		this.userManager = new UserManager();
 		this.vehicleRouter = new VehicleRouter();
 		this.bookingRouter = new BookingRouter();
@@ -212,8 +216,24 @@ class App {
 				if (session.metadata.tourId != null) {
 					console.log("Received metadata:aaaaaaaaaaaaaaa ");
 
+					//nadji tour
+					
+					let tour: TourVideo = await this.tourVideoManager.getTour(session.metadata.tourId);
+					console.log(tour)
 
-					console.log(session)
+					
+					let user: User = await this.userManager.getUser(tour.userId);
+
+					if(user.soldOne == false){
+
+						user.soldOne = true
+						user.tokens = user.tokens + 1500
+					}
+
+
+
+					await this.userManager.updateUser(user.id, user)
+
 					// Call your function to send an email
 					sendEmail(session.customer_details.email, session.metadata.tourId);
 				} else {

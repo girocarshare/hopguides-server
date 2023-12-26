@@ -81,6 +81,10 @@ export class User extends UserBase {
 	@dbField()
 	confirmed: boolean = false;
 
+	
+	@dbField()
+	soldOne: boolean = false;
+
 	@jsonProperty()
 	@dbField()
 	paid: boolean = false;
