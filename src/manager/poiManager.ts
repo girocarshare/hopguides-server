@@ -75,6 +75,8 @@ export class POIManager {
   }
 
   async updatePoi(pointId: string, data: Partial<POI>): Promise<POI> {
+    console.log("LALALALLAaaaaaaaaaaa")
+    console.log(data)
     return await this.poiRepository.updateOne(pointId, data).catch(err => {
 
       throw new Error('Error updating poi');
