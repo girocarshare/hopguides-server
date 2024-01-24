@@ -565,12 +565,11 @@ export class TourManager {
 						location.lat = poi.location.latitude;
 						location.lng = poi.location.longitude;
 
-						var images = []
 					
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio
-						poiHelp.images = images
+						poiHelp.images = poi.images
 						poiHelp.location = location;
 						poiHelp.name = poi.name[language]
 						poiHelp.shortInfo = poi.shortInfo[language]
@@ -621,12 +620,11 @@ export class TourManager {
 						location.lat = poi.location.latitude;
 						location.lng = poi.location.longitude;
 
-						var images = []
 					
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio
-						poiHelp.images = images
+						poiHelp.images = poi.images
 						poiHelp.location = location;
 						poiHelp.name = poi.name[language]
 						poiHelp.shortInfo = poi.shortInfo[language]
