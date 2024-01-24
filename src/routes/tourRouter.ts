@@ -96,6 +96,8 @@ async function getTour(string) {
 
 async function did(response, user) {
 	// Function to sleep for 'ms' milliseconds
+
+	console.log("tu sam")
 	function sleep(ms) {
 		return new Promise((resolve) => {
 			setTimeout(resolve, ms);
@@ -689,6 +691,7 @@ export class TourRouter extends BaseRouter {
 					})
 					.catch(error => {
 
+						console.log("errrrrrrrrrrrrrrrrrrr")
 						console.log(error)
 						return res.status(402).send({ message: error.response.data.description });
 					});
