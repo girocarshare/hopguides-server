@@ -318,7 +318,7 @@ export class TourRouter extends BaseRouter {
 			return new Promise((resolve, reject) => {
 				// Using an FFmpeg command with a different approach for concatenation
 				const command = `ffmpeg -y -i ${video1Path} -i ${video2Path} -filter_complex "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[outv][outa]" -map "[outv]" -map "[outa]" ${outputPath}`;
-		
+
 				exec(command, (error, stdout, stderr) => {
 					if (error) {
 						console.error(`Error: ${error.message}`);
@@ -335,7 +335,7 @@ export class TourRouter extends BaseRouter {
 		}
 
 
-		this.router.post(
+		/*this.router.post(
 			'/d-id/generate',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			parseJwt,
@@ -494,7 +494,10 @@ export class TourRouter extends BaseRouter {
 
 						// Function to download the D-ID video
 						downloadImage(resp, dIdVideoPath)
+
+						
 							.then(async () => {
+								
 								console.log('D-ID Video downloaded successfully');
 								const outputVideoPath = path.join(__dirname, 'outputVideo.mp4'); // Path to your existing output video
 								const finalVideoPath = path.join(__dirname, 'outputVideoFinal.mp4'); // Path for the final combined video
@@ -528,21 +531,6 @@ export class TourRouter extends BaseRouter {
 							})
 							.catch(error => console.error(error));
 
-
-						/*var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(resp);
-						var qrCode: string = await this.libraryManager.generateQr(generatedVideo);
-
-						var library: Library = new Library()
-						library.url = generatedVideo
-						library.qrcode = qrCode
-						library.userId = req.userId
-
-						var libraryVideo: Library = await this.libraryManager.create(library);
-
-						res.status(200).send({ data: resp, tokens: tokens });*/
-
-
-
 					})
 					.catch(error => {
 
@@ -552,10 +540,10 @@ export class TourRouter extends BaseRouter {
 
 
 			})
-		);
+		);*/
 
 
-		/*this.router.post(
+		this.router.post(
 			'/d-id/generate',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			parseJwt,
@@ -678,9 +666,13 @@ export class TourRouter extends BaseRouter {
 					}
 				})
 					.then(async response => {
+
+
+	
+
 						var resp = await did(response, user)
 
-						var generatedVideo: string = await this.libraryManager.saveGeneratedVideo(resp);
+						var generatedVideo: string = await this.libraryManager.saveGeneratedVideoURL(resp);
 						var qrCode: string = await this.libraryManager.generateQr(generatedVideo);
 
 						var library: Library = new Library()
@@ -704,7 +696,7 @@ export class TourRouter extends BaseRouter {
 
 
 			})
-		);*/
+		);
 
 
 
