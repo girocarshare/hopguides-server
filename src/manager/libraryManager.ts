@@ -82,6 +82,41 @@ export class LibraryManager {
 
 
 
+	async saveGeneratedVideoURL(url: string): Promise<string> {
+		const videoName = Date.now() + "-" + Math.floor(Math.random() * 1000);
+		const response = await axios({
+			method: 'get',
+			url: url,
+			responseType: 'stream'
+		  });
+		
+		// Create the S3 upload parameters
+		const params = {
+			Bucket: 'hopguides/library',
+			Key: `${videoName}.mp4`,
+			Body: response.data,
+			ACL: 'public-read',
+			ContentType: 'video/mp4',
+		};
+
+		// Upload the video stream to S3
+		await new Promise((resolve, reject) => {
+			s3bucket.upload(params, (err, data) => {
+				if (err) {
+					console.log('ERROR MSG: ', err);
+					reject(err);
+				} else {
+					console.log('Successfully uploaded data');
+					console.log(data);
+					resolve(`https://hopguides.s3.eu-central-1.amazonaws.com/library/${videoName}.mp4`);
+				}
+			});
+		});
+
+		return `https://hopguides.s3.eu-central-1.amazonaws.com/library/${videoName}.mp4`
+	}
+
+
 
 	async saveGeneratedVideo(url: string): Promise<string> {
 		const videoName = Date.now() + "-" + Math.floor(Math.random() * 1000);
