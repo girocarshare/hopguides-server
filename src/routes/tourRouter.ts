@@ -698,6 +698,31 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		  }
+
+		//dodaj da uploaduje video pa da napravi qr code
+		this.router.post(
+			'/d-id/qrcodevideo',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			this.upload.array('file'),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				console.log(req.files)
+				for (var file of req.files) {
+					var qrCode: string = await this.libraryManager.generateQr(file.location);
+				}
+				//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
+				await sleep(2000);
+				console.log(qrCode)
+				
+				res.status(200).send(qrCode);
+
+
+			})
+		);
+
 
 
 		/** GET generate qr code for tour */
