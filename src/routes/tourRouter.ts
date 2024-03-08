@@ -709,6 +709,7 @@ export class TourRouter extends BaseRouter {
 			this.upload.array('file'),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
+				try{
 				console.log(req.files)
 				for (var file of req.files) {
 					var qrCode: string = await this.libraryManager.generateQr(file.location);
@@ -718,7 +719,9 @@ export class TourRouter extends BaseRouter {
 				console.log(qrCode)
 				
 				res.status(200).send(qrCode);
-
+			}catch(err){
+				console.log(err)
+			}
 
 			})
 		);
