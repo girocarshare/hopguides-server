@@ -712,8 +712,10 @@ export class TourRouter extends BaseRouter {
 				try{
 				console.log(req.files)
 				for (var file of req.files) {
-					console.log(file)
-					var qrCode: string = await this.libraryManager.generateQr(file.location);
+					console.log(file.location)
+					const parts = file.location.split("tours/");
+const result = parts[1];
+					var qrCode: string = await this.libraryManager.generateQr(result);
 				}
 				//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
 				await sleep(2000);
