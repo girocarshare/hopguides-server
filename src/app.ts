@@ -66,6 +66,8 @@ class App {
 
 	config(): void {
 		this.app.set('trust proxy', true);
+		this.app.use(express.json({ limit: '50mb' }));
+		this.app.use(express.urlencoded({ limit: '50mb', extended: true }));
 		this.app.use(function (req: any, res: any, next: any) {
 			res.header('Access-Control-Allow-Origin', '*');
 			res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE,OPTIONS');
