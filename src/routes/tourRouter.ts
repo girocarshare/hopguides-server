@@ -162,6 +162,7 @@ export class TourRouter extends BaseRouter {
 	upload = multer({
 		storage: this.multerS3Config,
 		fileFilter: this.fileFilter,
+		limits: { fileSize: 1024 * 1024 * 100 },
 
 	})
 	constructor() {
@@ -668,7 +669,7 @@ export class TourRouter extends BaseRouter {
 					.then(async response => {
 
 
-	
+
 
 						var resp = await did(response, user)
 
@@ -700,7 +701,7 @@ export class TourRouter extends BaseRouter {
 
 		function sleep(ms) {
 			return new Promise(resolve => setTimeout(resolve, ms));
-		  }
+		}
 
 		//dodaj da uploaduje video pa da napravi qr code
 		this.router.post(
@@ -709,22 +710,22 @@ export class TourRouter extends BaseRouter {
 			this.upload.array('file'),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				try{
-				console.log(req.files)
-				for (var file of req.files) {
-					console.log(file.location)
-					const parts = file.location.split("tours/");
-const result = parts[1];
-					var qrCode: string = await this.libraryManager.generateQr(result);
+				try {
+					console.log(req.files)
+					for (var file of req.files) {
+						console.log(file.location)
+						const parts = file.location.split("tours/");
+						const result = parts[1];
+						var qrCode: string = await this.libraryManager.generateQr(result);
+					}
+					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
+					await sleep(2000);
+					console.log(qrCode)
+
+					res.status(200).send(qrCode);
+				} catch (err) {
+					console.log(err)
 				}
-				//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
-				await sleep(2000);
-				console.log(qrCode)
-				
-				res.status(200).send(qrCode);
-			}catch(err){
-				console.log(err)
-			}
 
 			})
 		);
