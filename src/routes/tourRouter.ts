@@ -4,6 +4,8 @@ import {
 	parseJwt,
 	withErrorHandler
 } from '../utils/utils';
+const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 import * as ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs';
@@ -703,21 +705,55 @@ export class TourRouter extends BaseRouter {
 			return new Promise(resolve => setTimeout(resolve, ms));
 		}
 
+		
+
+		
+const s3Client = new S3Client({
+	 region: "eu-central-1" ,
+	 credentials: {
+		accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+		secretAccessKey: "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",
+	  }
+	  
+});
+  this.router.get(
+	'/d-id/generate-presigned-url',
+	//allowFor([AdminRole, SupportRole, ServiceRole]),
+	//this.upload.array('file'),
+	withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+		try {
+			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+			const command = new PutObjectCommand({
+			  Bucket: "hopguides",
+			  Key:  "videos/"+  image_name + ".mp4", // Ensure the file name is unique
+			});
+		
+			const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL expires in 1 hour
+			res.json({ url: signedUrl, name:  "videos/"+ image_name + ".mp4"});
+		  } catch (error) {
+			console.error("Error generating signed URL", error);
+			res.status(500).send("Error generating signed URL");
+		  }
+
+	})
+);
+
+
 		//dodaj da uploaduje video pa da napravi qr code
 		this.router.post(
 			'/d-id/qrcodevideo',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
-			this.upload.array('file'),
-			withErrorHandler(async (req: IRequest, res: IResponse) => {
-
+			//this.upload.array('file'),
+			withErrorHandler( async (req, res) => {
+				
 				try {
-					console.log(req.files)
-					for (var file of req.files) {
-						console.log(file.location)
-						const parts = file.location.split("tours/");
+					console.log(req.body.name)
+					const parts = req.body.name.split("videos/");
 						const result = parts[1];
+						console.log(result)
 						var qrCode: string = await this.libraryManager.generateQr(result);
-					}
+					
 					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
 					await sleep(2000);
 					console.log(qrCode)
