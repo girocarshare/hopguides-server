@@ -34,8 +34,6 @@ export class LibraryManager {
 
 	}
 
-
-
 	async generateQr(url: string): Promise<string> {
 
 
@@ -48,7 +46,51 @@ export class LibraryManager {
 				light: "#FFBF60FF"
 			}
 		}
-		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/"+url, {
+		await QRCode.toDataURL(url, {
+			scale: 15,
+			width: "1000px",
+		}, async function (err, base64) {
+			const base64Data: Buffer = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+			const type = base64.split(';')[0].split('/')[1];
+			const params = {
+				Bucket: 'hopguides/library',
+				Key: `${qrCodeId}.png`, // type is not required
+				Body: base64Data,
+				ACL: 'public-read',
+				ContentEncoding: 'base64', // required
+				ContentType: `image/${type}` // required. Notice the back ticks
+			}
+			s3bucket.upload(params, function (err, data) {
+
+				if (err) {
+					console.log('ERROR MSG: ', err);
+				} else {
+					console.log('Successfully uploaded data');
+					console.log(data);
+				}
+			});
+
+		});
+
+
+		return `https://hopguides.s3.eu-central-1.amazonaws.com/library/${qrCodeId}.png`
+
+		//}
+	}
+
+	async generateQr1(url: string, link: string): Promise<string> {
+
+
+		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+		var opts = {
+			margin: 1,
+			color: {
+				dark: "#010599FF",
+				light: "#FFBF60FF"
+			}
+		}
+		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/"+url + `/redirect?firstUrl=${encodeURIComponent(link)}`, {
 			scale: 15,
 			width: "1000px",
 		}, async function (err, base64) {
