@@ -69,6 +69,14 @@ export class ReportRouter extends BaseRouter {
 			})
 		);
 
+		this.router.post(
+			'/instantly',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req, res) => {
+				console.log(req)
+			})
+		);
+
 		/** GET generate qr code for company  */
 		this.router.get(
 			'/qr/:id',
