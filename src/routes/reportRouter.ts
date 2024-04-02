@@ -1,5 +1,5 @@
 import { IRequest, IResponse } from '../classes/interfaces';
-import {  withErrorHandler } from '../utils/utils';
+import { withErrorHandler } from '../utils/utils';
 import { BaseRouter } from './baseRouter';
 import { Report } from '../models/report/report';
 import { Tour } from '../models/tours/tour';
@@ -9,16 +9,16 @@ import * as fs from 'fs';
 import { POI } from '../models/tours/poiModel';
 import { POIManager } from '../manager/poiManager';
 const { createInvoice } = require("../classes/createInvoice");
-
+import fetch from 'node-fetch';
 import * as sgMail from '@sendgrid/mail';
 import * as schedule from 'node-schedule';
 import { simpleAsync } from './util';
-
+import axios from 'axios';
 function sleep(ms) {
 	return new Promise((resolve) => {
-	  setTimeout(resolve, ms);
+		setTimeout(resolve, ms);
 	});
-  }
+}
 interface helpObjectSort {
 	from: string;
 	count: number;
@@ -49,11 +49,11 @@ export class ReportRouter extends BaseRouter {
 			'/:id',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-				try{
-				const filter: any = {};
-				const report: Report = await this.reportManager.getReport(req.params.id, filter);
-				return res.status(200).send(report)
-				}catch(err){
+				try {
+					const filter: any = {};
+					const report: Report = await this.reportManager.getReport(req.params.id, filter);
+					return res.status(200).send(report)
+				} catch (err) {
 					return res.status(412).send(err)
 				}
 			})
@@ -73,7 +73,65 @@ export class ReportRouter extends BaseRouter {
 			'/instantly',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req, res) => {
-				console.log(req.body)
+				//console.log(req.body.campaign_name)
+				//console.log(req.body.email)
+
+				var data = {
+					'campaign_name': req.body.campaign_name,
+					'email': req.body.email
+
+				}
+
+				try {
+
+					await axios.post('https://hooks.zapier.com/hooks/catch/16883860/3pd2lnc/', data)
+						.then(response => {
+							console.log(response.data);
+						})
+						.catch(error => {
+							console.log(error);
+						});
+
+
+
+				} catch (error) {
+					console.error('Error:', error);
+				}
+
+
+			})
+		);
+
+		this.router.post(
+			'/instantly_english',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req, res) => {
+				//console.log(req.body.campaign_name)
+				//console.log(req.body.email)
+
+				var data = {
+					'campaign_name': req.body.campaign_name,
+					'email': req.body.email
+
+				}
+
+				try {
+
+					await axios.post('https://hooks.zapier.com/hooks/catch/16883860/3pd6n4s/', data)
+						.then(response => {
+							console.log(response.data);
+						})
+						.catch(error => {
+							console.log(error);
+						});
+
+
+
+				} catch (error) {
+					console.error('Error:', error);
+				}
+
+
 			})
 		);
 
@@ -202,6 +260,6 @@ export class ReportRouter extends BaseRouter {
 				return res.status(200)
 			})
 		);
-	
+
 	}
 }
