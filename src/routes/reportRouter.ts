@@ -73,7 +73,7 @@ export class ReportRouter extends BaseRouter {
 			'/instantly',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			withErrorHandler(async (req, res) => {
-				console.log(req)
+				console.log(req.body)
 			})
 		);
 
