@@ -9,7 +9,6 @@ import * as fs from 'fs';
 import { POI } from '../models/tours/poiModel';
 import { POIManager } from '../manager/poiManager';
 const { createInvoice } = require("../classes/createInvoice");
-import fetch from 'node-fetch';
 import * as sgMail from '@sendgrid/mail';
 import * as schedule from 'node-schedule';
 import { simpleAsync } from './util';
