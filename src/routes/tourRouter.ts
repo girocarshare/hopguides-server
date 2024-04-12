@@ -753,7 +753,7 @@ const s3Client = new S3Client({
 					const parts = req.body.name.split("videos/");
 						const result = parts[1];
 						console.log(result)
-						var qrCode: string = await this.libraryManager.generateQr1(result, req.body.link);
+						var qrCode: string = await this.libraryManager.generateQr1(result, req.body.link, req.body.text);
 					
 					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
 					await sleep(2000);
