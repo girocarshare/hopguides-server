@@ -78,7 +78,7 @@ export class LibraryManager {
 		//}
 	}
 
-	async generateQr1(url: string, link: string): Promise<string> {
+	async generateQr1(url: string, link: string, text: string): Promise<string> {
 
 
 		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
@@ -90,7 +90,7 @@ export class LibraryManager {
 				light: "#FFBF60FF"
 			}
 		}
-		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/"+url + `/redirect?firstUrl=${encodeURIComponent(link)}`, {
+		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/"+url + `/redirect?firstUrl=${encodeURIComponent(link)}/text?text=${encodeURIComponent(text)}`, {
 			scale: 15,
 			width: "1000px",
 		}, async function (err, base64) {
