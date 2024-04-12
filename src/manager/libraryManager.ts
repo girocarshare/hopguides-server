@@ -90,7 +90,7 @@ export class LibraryManager {
 				light: "#FFBF60FF"
 			}
 		}
-		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/"+url + `/redirect?firstUrl=${encodeURIComponent(link)}/text?text=${encodeURIComponent(text)}`, {
+		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/"+url + `/redirect?firstUrl=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, {
 			scale: 15,
 			width: "1000px",
 		}, async function (err, base64) {
