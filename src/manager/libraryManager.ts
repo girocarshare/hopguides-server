@@ -11,8 +11,11 @@ import { POIManager } from './poiManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import { deserialize, serialize } from '../json';
 import * as AWS from 'aws-sdk';
+import { MongoRepository } from '../db/repository/mongoRepository';
 import axios from 'axios';
+import { QRCodes } from '../models/qrcodes/qrcodes';
 import libraryRepository, { LibraryRepository } from '../db/repository/libraryRepository';
+import qrcodesRepository, { QrcodesRepository } from '../db/repository/qrcodesRepository';
 import { Library } from '../models/library/library';
 
 import * as fs from 'fs';
@@ -28,9 +31,11 @@ export class LibraryManager {
 
 
 	libraryRepository: LibraryRepository;
+	qrcodesRepository: QrcodesRepository;
 
 	constructor() {
 		this.libraryRepository = libraryRepository;
+		this.qrcodesRepository = qrcodesRepository;
 
 	}
 
@@ -90,7 +95,7 @@ export class LibraryManager {
 				light: "#FFBF60FF"
 			}
 		}
-		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/"+url + `/redirect?firstUrl=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, {
+		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/" + url + `/redirect?firstUrl=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, {
 			scale: 15,
 			width: "1000px",
 		}, async function (err, base64) {
@@ -117,11 +122,60 @@ export class LibraryManager {
 		});
 
 
+		var qrcode: QRCodes = new QRCodes();
+		qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/library/${qrCodeId}.png`
+		qrcode.code = Math.floor(100000000 + Math.random() * 900000000);
+		qrcode.qrCodeId = qrCodeId
+		qrcode.video = url;
+		qrcode.text = text;
+		qrcode.link = link;
+		qrcode.forVideo = true;
+
+
+		var code = await this.qrcodesRepository.createOne(qrcode).catch(() => {
+			throw new CustomError(500, 'QRCode not created!');
+		});
+
+
+
 		return `https://hopguides.s3.eu-central-1.amazonaws.com/library/${qrCodeId}.png`
 
 		//}
 	}
 
+	async getAllQrCodes(): Promise<QRCodes[]> {
+		try {
+			const filter = { forVideo: true };
+			// Directly query for QR codes where 'forVideo' is true
+			var qr: QRCodes[] = await this.qrcodesRepository.getAll({
+				forVideo: true
+			});
+			return qr;
+		} catch (err) {
+			throw new Error('Error getting QR codes: ' + err.message);
+		}
+	}
+
+	async updateQrCode(url: string, link: string, text: string, id: string): Promise<QRCodes> {
+		try {
+			// Directly query for QR codes where 'forVideo' is true
+			var qr: QRCodes = await this.qrcodesRepository.getByIdOrThrow(id);
+
+			qr.link = link;
+			qr.text = text;
+
+			if (url != "") {
+				qr.video = url;
+			}
+			console.log(qr)
+
+			var qrupdated: QRCodes = await this.qrcodesRepository.updateOne(id, qr);
+
+			return qrupdated;
+		} catch (err) {
+			throw new Error('Error getting QR codes: ' + err.message);
+		}
+	}
 
 
 	async saveGeneratedVideoURL(url: string): Promise<string> {
@@ -130,8 +184,8 @@ export class LibraryManager {
 			method: 'get',
 			url: url,
 			responseType: 'stream'
-		  });
-		
+		});
+
 		// Create the S3 upload parameters
 		const params = {
 			Bucket: 'hopguides/library',
@@ -192,7 +246,7 @@ export class LibraryManager {
 	}
 
 
-	
+
 
 	async create(library: Library): Promise<Library> {
 		// search for user, check if it exists, if it does, check for the fields of confirmed and createdAt

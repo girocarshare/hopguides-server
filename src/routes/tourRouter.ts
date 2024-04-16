@@ -740,6 +740,26 @@ const s3Client = new S3Client({
 );
 
 
+
+		//dodaj da uploaduje video pa da napravi qr code
+		this.router.get(
+			'/d-id/getallqrcodes',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			//this.upload.array('file'),
+			withErrorHandler( async (req, res) => {
+				
+				try {
+					
+					var qrCodes: QRCodes[] = await this.libraryManager.getAllQrCodes();
+				
+					res.status(200).send(qrCodes);
+				} catch (err) {
+					console.log(err)
+				}
+
+			})
+		);
+
 		//dodaj da uploaduje video pa da napravi qr code
 		this.router.post(
 			'/d-id/qrcodevideo',
@@ -766,6 +786,46 @@ const s3Client = new S3Client({
 
 			})
 		);
+
+
+
+		
+		//dodaj da uploaduje video pa da napravi qr code
+		this.router.post(
+			'/edit/qrcodevideo',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			//this.upload.array('file'),
+			withErrorHandler( async (req, res) => {
+				
+				try {
+					console.log(req.body.name)
+					console.log(req.body.link)
+					console.log(req.body.id)
+
+					var result = ""
+					if(req.body.name == ""){
+						result = ""
+					}else{
+						const parts = req.body.name.split("videos/");
+						result = parts[1];
+						console.log(result)
+					}
+				
+					
+						var newqrCode: QRCodes = await this.libraryManager.updateQrCode(result, req.body.link, req.body.text, req.body.id);
+					
+					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
+					await sleep(2000);
+					console.log(newqrCode)
+
+					res.status(200).send(newqrCode);
+				} catch (err) {
+					console.log(err)
+				}
+
+			})
+		);
+
 
 
 

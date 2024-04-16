@@ -3,7 +3,7 @@ import { MongoRepository } from './mongoRepository';
 import { deserializeFromDb } from '../dbUtils';
 import { QRCodes } from '../../models/qrcodes/qrcodes';
 
-class QrcodesRepository extends MongoRepository<QRCodes> {
+export class QrcodesRepository extends MongoRepository<QRCodes> {
 	constructor() {
 		super();
 	}
@@ -11,6 +11,9 @@ class QrcodesRepository extends MongoRepository<QRCodes> {
 	mapObject(data: any): QRCodes {
 		return deserializeFromDb(QRCodes, data);
 	}
+
+
 }
 
 export default new QrcodesRepository();
+
