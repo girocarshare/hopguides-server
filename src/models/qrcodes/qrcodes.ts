@@ -30,4 +30,20 @@ export class QRCodes {
 	@dbField()
 	@jsonProperty({ deserialize: true, serialize: true })
 	qrCodeId: string;
+
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	video: string;
+
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	text: string;
+
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	link: string;
+
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	forVideo: boolean;
 }
