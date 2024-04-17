@@ -774,7 +774,7 @@ const s3Client = new S3Client({
 						var qrCodes: QRCodes = await this.libraryManager.getGqCodeFromCode(parseInt(code.toString()));
 					
 						console.log(qrCodes.video)
-						res.status(200).send({video: qrCodes.video, link: qrCodes.link, text: qrCodes.text});
+						res.status(200).send({video: qrCodes.video, link: qrCodes.link, text: qrCodes.text, campaign: qrCodes.campaign});
 					} catch (err) {
 						console.log(err)
 					}
@@ -795,7 +795,7 @@ const s3Client = new S3Client({
 					const parts = req.body.name.split("videos/");
 						const result = parts[1];
 						console.log(result)
-						var qrCode: string = await this.libraryManager.generateQr1(result, req.body.link, req.body.text);
+						var qrCode: string = await this.libraryManager.generateQr1(result, req.body.link, req.body.text,req.body.campaign);
 					
 					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
 					await sleep(2000);
@@ -820,9 +820,6 @@ const s3Client = new S3Client({
 			withErrorHandler( async (req, res) => {
 				
 				try {
-					console.log(req.body.name)
-					console.log(req.body.link)
-					console.log(req.body.id)
 
 					var result = ""
 					if(req.body.name == ""){
@@ -832,9 +829,8 @@ const s3Client = new S3Client({
 						result = parts[1];
 						console.log(result)
 					}
-				
 					
-						var newqrCode: QRCodes = await this.libraryManager.updateQrCode(result, req.body.link, req.body.text, req.body.id);
+						var newqrCode: QRCodes = await this.libraryManager.updateQrCode(result, req.body.link, req.body.text, req.body.id, req.body.campaign);
 					
 					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
 					await sleep(2000);
