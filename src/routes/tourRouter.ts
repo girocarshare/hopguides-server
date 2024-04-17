@@ -760,6 +760,28 @@ const s3Client = new S3Client({
 			})
 		);
 
+			//dodaj da uploaduje video pa da napravi qr code
+			this.router.get(
+				'/d-id/getqrcodeofcode',
+				//allowFor([AdminRole, SupportRole, ServiceRole]),
+				//this.upload.array('file'),
+				withErrorHandler( async (req, res) => {
+					
+					try {
+						const code = req.query.code;
+
+						console.log(code)
+						var qrCodes: QRCodes = await this.libraryManager.getGqCodeFromCode(parseInt(code.toString()));
+					
+						console.log(qrCodes.video)
+						res.status(200).send({video: qrCodes.video, link: qrCodes.link, text: qrCodes.text});
+					} catch (err) {
+						console.log(err)
+					}
+	
+				})
+			);
+
 		//dodaj da uploaduje video pa da napravi qr code
 		this.router.post(
 			'/d-id/qrcodevideo',

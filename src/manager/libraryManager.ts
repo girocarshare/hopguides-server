@@ -86,6 +86,7 @@ export class LibraryManager {
 	async generateQr1(url: string, link: string, text: string): Promise<string> {
 
 
+		const codee = Math.floor(100000000 + Math.random() * 900000000)
 		const qrCodeId = Date.now() + "-" + Math.floor(Math.random() * 1000);
 
 		var opts = {
@@ -95,7 +96,7 @@ export class LibraryManager {
 				light: "#FFBF60FF"
 			}
 		}
-		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/" + url + `/redirect?firstUrl=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, {
+		await QRCode.toDataURL("https://hopguides-video-creation.netlify.app/#/videowithlink/" + codee + `/redirect?firstUrl=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, {
 			scale: 15,
 			width: "1000px",
 		}, async function (err, base64) {
@@ -124,7 +125,7 @@ export class LibraryManager {
 
 		var qrcode: QRCodes = new QRCodes();
 		qrcode.qrcode = `https://hopguides.s3.eu-central-1.amazonaws.com/library/${qrCodeId}.png`
-		qrcode.code = Math.floor(100000000 + Math.random() * 900000000);
+		qrcode.code = codee;
 		qrcode.qrCodeId = qrCodeId
 		qrcode.video = url;
 		qrcode.text = text;
@@ -149,6 +150,21 @@ export class LibraryManager {
 			// Directly query for QR codes where 'forVideo' is true
 			var qr: QRCodes[] = await this.qrcodesRepository.getAll({
 				forVideo: true
+			});
+			return qr;
+		} catch (err) {
+			throw new Error('Error getting QR codes: ' + err.message);
+		}
+	}
+
+
+	
+	async getGqCodeFromCode(code: number): Promise<QRCodes> {
+		try {
+			// Directly query for QR codes where 'forVideo' is true
+			
+			var qr: QRCodes = await this.qrcodesRepository.findOne({
+				code: code
 			});
 			return qr;
 		} catch (err) {
