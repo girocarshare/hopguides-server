@@ -83,7 +83,7 @@ export class LibraryManager {
 		//}
 	}
 
-	async generateQr1(url: string, link: string, text: string): Promise<string> {
+	async generateQr1(url: string, link: string, text: string, campaign: string): Promise<string> {
 
 
 		const codee = Math.floor(100000000 + Math.random() * 900000000)
@@ -130,6 +130,7 @@ export class LibraryManager {
 		qrcode.video = url;
 		qrcode.text = text;
 		qrcode.link = link;
+		qrcode.campaign = campaign;
 		qrcode.forVideo = true;
 
 
@@ -172,13 +173,14 @@ export class LibraryManager {
 		}
 	}
 
-	async updateQrCode(url: string, link: string, text: string, id: string): Promise<QRCodes> {
+	async updateQrCode(url: string, link: string, text: string, id: string, campaign: string): Promise<QRCodes> {
 		try {
 			// Directly query for QR codes where 'forVideo' is true
 			var qr: QRCodes = await this.qrcodesRepository.getByIdOrThrow(id);
 
 			qr.link = link;
 			qr.text = text;
+			qr.campaign = campaign
 
 			if (url != "") {
 				qr.video = url;

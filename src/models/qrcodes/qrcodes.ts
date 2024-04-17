@@ -46,4 +46,8 @@ export class QRCodes {
 	@dbField()
 	@jsonProperty({ deserialize: true, serialize: true })
 	forVideo: boolean;
+
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	campaign: string;
 }
