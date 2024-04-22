@@ -16,9 +16,11 @@ import axios from 'axios';
 import { QRCodes } from '../models/qrcodes/qrcodes';
 import libraryRepository, { LibraryRepository } from '../db/repository/libraryRepository';
 import qrcodesRepository, { QrcodesRepository } from '../db/repository/qrcodesRepository';
+import scrapedRepository, { ScrapedRepository } from '../db/repository/scrapedRepository';
 import { Library } from '../models/library/library';
 
 import * as fs from 'fs';
+import { Scraped } from '../models/qrcodes/scraped';
 var QRCode = require('qrcode')
 
 
@@ -32,10 +34,12 @@ export class LibraryManager {
 
 	libraryRepository: LibraryRepository;
 	qrcodesRepository: QrcodesRepository;
+	scrapedRepository: ScrapedRepository;
 
 	constructor() {
 		this.libraryRepository = libraryRepository;
 		this.qrcodesRepository = qrcodesRepository;
+		this.scrapedRepository = scrapedRepository;
 
 	}
 
@@ -160,6 +164,43 @@ export class LibraryManager {
 
 
 	
+	async getAllScrapes(): Promise<Scraped[]> {
+		try {
+			// Directly query for QR codes where 'forVideo' is true
+			var qr: Scraped[] = await this.scrapedRepository.getAll();
+			console.log(qr)
+			return qr;
+		} catch (err) {
+			throw new Error('Error getting QR codes: ' + err.message);
+		}
+	}
+
+	
+
+	async updateScraped(name: string, email: string, website: string, id: string, text: string): Promise<Scraped> {
+		try {
+			// Directly query for QR codes where 'forVideo' is true
+			var sc: Scraped = await this.scrapedRepository.getByObjectIdOrThrow(id);
+
+			console.log("NASLAAAAAAA")
+			console.log(sc)
+			sc.hotel = name;
+			sc.email = email;
+			sc.website = website
+
+			/*if (text != "") {
+				sc.text += text;
+			}*/
+			console.log(sc)
+
+			var qrupdated: Scraped= await this.scrapedRepository.updateOneObjectId(id, sc);
+
+			return qrupdated;
+		} catch (err) {
+			console.log(err.error.errors)
+		}
+	}
+
 	async getGqCodeFromCode(code: number): Promise<QRCodes> {
 		try {
 			// Directly query for QR codes where 'forVideo' is true
