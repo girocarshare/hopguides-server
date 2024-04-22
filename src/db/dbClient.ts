@@ -3,6 +3,7 @@ import UserRepository from './repository/userRepository';
 import TourRepository from './repository/tourRepository';
 import TourVideoRepository from './repository/tourVideoRepository';
 import QrcodesRepository from './repository/qrcodesRepository';
+import ScrapedRepository from './repository/scrapedRepository';
 import VehicleRepository from './repository/vehicleRepository';
 import BookingRepository from './repository/bookingRepository';
 import BPartnerRepository from './repository/bpartnerRepository';
@@ -55,6 +56,7 @@ class DbClient {
     TourRepository.setCollection(database.collection('tours'));
     TourVideoRepository.setCollection(database.collection('toursvideo'));
     QrcodesRepository.setCollection(database.collection('qrcodes'));
+    ScrapedRepository.setCollection(database.collection('hotels'));
     VehicleRepository.setCollection(database.collection('vehicle'));
     BookingRepository.setCollection(database.collection('booking'));
     BPartnerRepository.setCollection(database.collection('bpartner'));

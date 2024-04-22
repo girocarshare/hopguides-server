@@ -2,7 +2,7 @@ import { Collection, FindAndModifyWriteOpResultObject, InsertOneWriteOpResult } 
 import { CustomError } from '../../classes/customError';
 import { SearchPagination } from '../../classes/searchPagination';
 import { serializeForDb } from '../dbUtils';
-
+import { ObjectId } from 'mongodb';
 export abstract class MongoRepository<T> {
 	collection: Collection;
 
@@ -35,6 +35,19 @@ export abstract class MongoRepository<T> {
 		if (!found) throw new CustomError(404, 'Not found');
 		return this.mapObject(found);
 	}
+
+	async getByObjectIdOrThrow(id: string): Promise<T> {
+        // Convert the string ID to an ObjectId
+        const objectId = new ObjectId(id);
+        
+        // Perform the query using the ObjectId
+        const found: any = await this.collection.findOne({ _id: objectId });
+        if (!found) throw new CustomError(404, 'Not found');
+        
+        return this.mapObject(found);
+    }
+
+  
 
 	async createOne(data: T): Promise<T> {
 		const inserted: InsertOneWriteOpResult<any> = await this.collection.insertOne(
@@ -86,6 +99,33 @@ export abstract class MongoRepository<T> {
 		  }}
 
 	}
+
+
+	async updateOneObjectId(id: string, data: any): Promise<T> {
+        // Remove _id from data to avoid conflicts during update
+        delete data._id;
+
+        // Convert the string ID to an ObjectId
+        const objectId = new ObjectId(id);
+
+        try {
+            // Update the document and return the updated document
+            const result = await this.collection.findOneAndUpdate(
+                { _id: objectId },
+                { $set: data },
+                { upsert: true, returnOriginal: false } // Ensure updated document is returned
+            );
+
+            if (!result.value) throw new Error('No document found or updated.');
+
+            // Assuming mapObject correctly maps the MongoDB document to type T
+            return this.mapObject(result.value);
+        } catch (err) {
+            // Handle errors appropriately
+            console.error('Error updating the document:', err);
+            throw err; // Rethrow or handle error as appropriate for your application
+        }
+    }
 
 	async incrementOne(id: string, data: any): Promise<T> {
 		delete data._id;

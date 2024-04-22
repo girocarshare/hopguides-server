@@ -47,6 +47,7 @@ import { Library } from '../models/library/library';
 import { POIVideo } from '../models/tours/poiModelVideo';
 import { TourVideo } from '../models/tours/tourvideo';
 import { TourVideoManager } from '../manager/tourVideoManager';
+import { Scraped } from '../models/qrcodes/scraped';
 
 const bodyParser = require('body-parser');
 const stripe = require('stripe')('sk_test_51MAy4gDmqfM7SoUzbMp9mpkECiaBifYevUo2rneRcI4o2jnF11HeY1yC5F1fiUApKjDIkkMUidTgmgStWvbyKLvx00Uvoij5vH');
@@ -738,6 +739,24 @@ const s3Client = new S3Client({
 
 	})
 );
+		//dodaj da uploaduje video pa da napravi qr code
+		this.router.get(
+			'/d-id/getallscrapes',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			//this.upload.array('file'),
+			withErrorHandler( async (req, res) => {
+				
+				try {
+					
+					var scrapes: Scraped[] = await this.libraryManager.getAllScrapes();
+				
+					res.status(200).send(scrapes);
+				} catch (err) {
+					console.log(err)
+				}
+
+			})
+		);
 
 
 
@@ -845,6 +864,38 @@ const s3Client = new S3Client({
 		);
 
 
+	//dodaj da uploaduje video pa da napravi qr code
+	this.router.post(
+		'/edit/scraped',
+		//allowFor([AdminRole, SupportRole, ServiceRole]),
+		this.upload.array('file'),
+		withErrorHandler( async (req, res) => {
+			
+			try {
+
+				/*var result = ""
+				if(req.body.hotel == ""){
+					result = ""
+				}else{
+					const parts = req.body.name.split("videos/");
+					result = parts[1];
+					console.log(result)
+				}*/
+				
+				console.log(req.body)
+					var newqrCode: Scraped = await this.libraryManager.updateScraped(req.body.name, req.body.email, req.body.website, req.body.id, "file data");
+				
+				//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
+				await sleep(2000);
+				console.log(newqrCode)
+
+				res.status(200).send(newqrCode);
+			} catch (err) {
+				console.log(err)
+			}
+
+		})
+	);
 
 
 		/** GET generate qr code for tour */
