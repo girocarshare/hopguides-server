@@ -2,21 +2,37 @@ import { dbField } from '../db/decorators';
 import { jsonProperty } from '../json/decorations';
 
 export class LocalizedField {
-	@jsonProperty()
-	@dbField()
-	english: string;
 
 	@jsonProperty()
 	@dbField()
-	slovenian: string;
+	english: string = "";
 
+	@jsonProperty()
+	@dbField()
+	slovenian: string = "";
+
+	@jsonProperty()
+	@dbField()
+	serbian: string= "";
 	
 	@jsonProperty()
 	@dbField()
-	serbian: string;
-	
+	spanish: string= "";
+
 	@jsonProperty()
 	@dbField()
-	spanish: string;
+	german: string= "";
 
+	@jsonProperty()
+	@dbField()
+	french: string= "";
+
+	@jsonProperty()
+	@dbField()
+	italian: string= "";
+
+	
+	constructor(data: Partial<LocalizedField> = {}) {
+        Object.assign(this, data);
+    }
 }

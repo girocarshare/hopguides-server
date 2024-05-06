@@ -55,7 +55,7 @@ export class Image {
 
 	@jsonProperty()
 	@dbField()
-	title: LocalizedField;
+	title?: LocalizedField;
 
 }
 
@@ -112,11 +112,11 @@ export class POI {
 
 	@jsonProperty()
 	@dbField()
-	voucherDesc: LocalizedField;
+	voucherDesc?: LocalizedField;
 
 	@jsonProperty()
 	@dbField()
-	title: LocalizedField;
+	title?: LocalizedField;
 
 	@jsonProperty()
 	@dbField()
