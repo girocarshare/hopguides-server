@@ -1845,7 +1845,17 @@ const s3Client = new S3Client({
 			})
 		);
 
+		function parseLocalizedField(titles) {
+			const fieldData = {};
+			titles.forEach(({ lang, title }) => {
+				if (lang && title) {
+					fieldData[lang] = title;
+				}
+			});
+			return new LocalizedField(fieldData);
+		}
 
+		
 
 		this.router.post(
 			'/add/teasertour',
@@ -1856,39 +1866,29 @@ const s3Client = new S3Client({
 				// Upload
 				try {
 
-					console.log(req.body.tour)
-
 					let jsonObj = JSON.parse(`{"price":"45","image":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/7BUv3BsMeK.jpg","audio":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/lu3FaaUm0Z.mp3","points":[],"duration":"4h","length":"11km","highestPoint":"155m","termsAndConditions":"","currency":"€","bpartnerId":"fd373bf5-6804-4293-b030-9be788516677","update":false,"title":{"english":" Ljubljana tour ","slovenian":"-"},"agreementTitle":{"english":"/ ","slovenian":" -"},"agreementDesc":{"english":"/","slovenian":"- "},"shortInfo":{"english":"Amidst a sprawling landscape of rolling plains and dense forests, this city blends history and modernity. Ancient stone pathways lead to market squares, while skyscrapers echo its aspirations. Parks offer respite from urban life, trails leading to endless plains. Beyond, nature's grandeur awaits, with woodlands and plains whispering tales of nomads and ancient civilizations. Seasons bring transformations, ever-changing vistas in this jewel of nature's crown. ","slovenian":"- "},"longInfo":{"english":" Amidst a sprawling landscape of rolling plains and dense forests, a city stands as a beacon of culture and progress. Its boundaries are marked by meandering rivers that shimmer under the sun, reflecting the city's skyline. On one side, the vast expanse of a tranquil lake borders the city, its waters often dotted with sailboats and kayakers enjoying the serenity. The city itself is a harmonious blend of history and modernity. Ancient stone pathways lead to market squares where traditions of old are kept alive, while towering skyscrapers in the distance echo the city's aspirations for the future. The green canopy of parks offers a respite from the urban hustle, with trails leading to the outskirts where the plains stretch out, seemingly endless. Beyond the city, the landscape is a testament to nature's grandeur. Dense woodlands, home to diverse wildlife, invite explorers to uncover their secrets. The plains, golden during the day and silver under the moonlight, whisper tales of nomads and ancient civilizations. As the seasons change, so does the landscape. From the blossoms of spring to the golden hues of autumn, the city and its surroundings transform, offering ever-changing vistas and experiences. In this vast and varied landscape, the city stands proud, a jewel in nature's magnificent crown.","slovenian":"-"}}`);
 					let tour = jsonObj as Tour;
 
+					const { pointsParsed, title } = JSON.parse(req.body.tour);
+					const tourTitle = parseLocalizedField(title);
+					const points = pointsParsed.map(point => ({
+						longitude: point.longitude,
+						latitude: point.latitude,
+						num: point.num,
+						title: parseLocalizedField(point.title)
+					}));
+				
+					tour.title = tourTitle
 
-					class PointHelp {
-						title: string
-						longitude: string
-						latitude: string
-						num: string
-					}
-					class HelpTour {
-						title: string
-						points: PointHelp[]
-					}
-					let jsonObj2 = JSON.parse(req.body.tour);
-					let tour2 = jsonObj2 as HelpTour;
-
-					tour.title.english = tour2.title
-
-					var points = []
 					var pointsData = []
-					for (var i = 0; i < tour2.points.length; i++) {
-						var point = new POI//deserialize(POI, tour.points[i])
-						//let point = poi as unknown as POI;
-						point.num = tour2.points[i].num
+					var pointsOff = []
+					for (var i = 0; i < points.length; i++) {
+						var point = new POI
+						point.num = points[i].num
 						point.audio = "https://hopguides.s3.amazonaws.com/menu/ZwOsbG5A95.mp3"
 						point.images = []
 						var image = new Image
 						image.image = "https://hopguides.s3.amazonaws.com/menu/sG0Ptf6OQG.png"
-
-
 						point.images.push(image)
 						point.price = 0
 						point.offerName = ""
@@ -1899,24 +1899,19 @@ const s3Client = new S3Client({
 						point.category = "NATURE"
 						point.shortInfo = new LocalizedField
 						point.shortInfo.english = " In the heart of a vibrant metropolis stands an enchanting architectural marvel. Its grand façade tells stories of the past, while inside, opulent art and ancient relics await. This point of interest is not just a celebration of history but also a vibrant cultural center, hosting diverse events. A journey here is a captivating experience, igniting wonder and appreciation for human expression. Whether a history buff, art enthusiast, or curious soul, it leaves an unforgettable impression, yearning for more. "
-						point.shortInfo.slovenian = " - "
-
 						point.longInfo = new LocalizedField
 						point.longInfo.english = "In the heart of a vibrant metropolis lies a captivating point of interest, a place that enchants locals and tourists alike. This architectural marvel stands tall, defying time and weather, weaving together the past and present with exquisite craftsmanship. Its grand façade, adorned with intricate carvings and sculptures, tells the stories of a bygone era. Step inside, and you are transported to a realm of opulence and elegance. The interior boasts a breathtaking display of art, from striking murals that adorn the ceilings to delicate mosaics that grace the floors. Each room exudes a unique ambiance, carrying the essence of the period it represents. As you wander through the labyrinth of hallways and chambers, you encounter relics of history preserved with utmost care. Ancient artifacts whisper tales of ancient civilizations, while carefully curated exhibits shed light on the region's rich cultural heritage. The point of interest not only celebrates history but also serves as a vibrant cultural center. Throughout the year, it hosts an array of events, from art exhibitions and classical concerts to traditional dance performances and contemporary showcases. Here, art and culture blend seamlessly, offering a delightful experience to enthusiasts from all walks of life. Visiting this point of interest is like embarking on a captivating journey through time and creativity. It leaves a lasting impression, igniting a sense of wonder and appreciation for the beauty and diversity of human expression. Whether you are an avid history buff, an art aficionado, or simply a curious soul seeking inspiration, this point of interest promises to be an unforgettable destination that leaves you yearning for more."
-						point.longInfo.slovenian = " - "
 						point.name = new LocalizedField
-						point.name.slovenian = " - "
-						point.name.english = tour2.points[i].title
-						point.location.longitude = tour2.points[i].longitude
-						point.location.latitude = tour2.points[i].latitude
+						point.name = points[i].title
+						point.location.longitude = points[i].longitude
+						point.location.latitude = points[i].latitude
 
 						const poi: POI = await this.poiManager.createPOI(point);
 
-						points.push(poi.id)
+						pointsOff.push(poi.id)
 						pointsData.push(poi)
 					}
-					tour.points = points
-					console.log(tour)
+					tour.points = pointsOff
 
 					var partnerImages = []
 
@@ -1938,9 +1933,6 @@ const s3Client = new S3Client({
 
 					}
 
-					console.log(partnerImages)
-
-					console.log(pointsData)
 					//if the names are the same
 					var arrayy = []
 					for (var po of pointsData) {
@@ -1957,7 +1949,7 @@ const s3Client = new S3Client({
 
 						obj.paths = arrayy
 						obj.names = []
-						for (var i = 0; i < tour2.points.length; i++) {
+						for (var i = 0; i < points.length; i++) {
 							var objec = {
 								number: "1",
 								name: new LocalizedField
@@ -1985,11 +1977,13 @@ const s3Client = new S3Client({
 					}
 
 
-					return res.status(200).send("Success");
+					createdTour.points = pointsData
+
+					return res.status(200).send(createdTour);
 
 
 				} catch (err) {
-					console.log(err)
+					console.log(err.error)
 				}
 			})
 		);

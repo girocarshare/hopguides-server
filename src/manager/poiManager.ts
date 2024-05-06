@@ -84,7 +84,10 @@ export class POIManager {
   }
 
   async createPOI(poi: POI): Promise<POI> {
-    return await this.poiRepository.createOne(poi).catch(() => {
+    console.log("Ovde sma uslaaaaaa")
+    console.log(poi)
+    return await this.poiRepository.createOne(poi).catch((err) => {
+      console.log(err)
       throw new CustomError(500, 'POI not created!');
     });
   }

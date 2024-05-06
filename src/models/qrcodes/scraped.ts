@@ -26,4 +26,8 @@ export class Scraped {
 	@dbField()
 	@jsonProperty({ deserialize: true, serialize: true })
 	website: string;
+
+    @dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	faq: string;
 }
