@@ -149,6 +149,7 @@ export class POIRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				try {
 
+					console.log("POIIIIII")
 					console.log(req.body.point)
 					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;

@@ -116,4 +116,9 @@ export class Tour {
 	gpx: string;
 
 	
+	@jsonProperty({ type: String })
+	@dbField({ type: String })
+	languages: string[] = []; 
+
+	
 }

@@ -116,10 +116,6 @@ export class POI {
 
 	@jsonProperty()
 	@dbField()
-	title?: LocalizedField;
-
-	@jsonProperty()
-	@dbField()
 	shortInfo: LocalizedField;
 
 	@jsonProperty()
@@ -191,6 +187,7 @@ export class POI {
 	@jsonProperty()
 	@dbField()
 	video: string;
+	image: any;
 
 
 }
