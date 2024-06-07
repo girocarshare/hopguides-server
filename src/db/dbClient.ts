@@ -8,6 +8,7 @@ import VehicleRepository from './repository/vehicleRepository';
 import BookingRepository from './repository/bookingRepository';
 import BPartnerRepository from './repository/bpartnerRepository';
 import LibraryRepository from './repository/libraryRepository';
+import AgreementRepository from './repository/agreementRepository';
 import POIRepository from './repository/poiRepository';
 
 import { Logger } from 'tslog';
@@ -62,6 +63,7 @@ class DbClient {
     BPartnerRepository.setCollection(database.collection('bpartner'));
     POIRepository.setCollection(database.collection('poi'));
     LibraryRepository.setCollection(database.collection('library'));
+    AgreementRepository.setCollection(database.collection('agreements'));
 
     return true;
   }

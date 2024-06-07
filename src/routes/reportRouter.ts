@@ -6,6 +6,7 @@ import { Tour } from '../models/tours/tour';
 import { ReportManager } from '../manager/reportManager';
 import { TourManager } from '../manager/tourManager';
 import * as fs from 'fs';
+import * as AWS from 'aws-sdk';
 import { POI } from '../models/tours/poiModel';
 import { POIManager } from '../manager/poiManager';
 const { createInvoice } = require("../classes/createInvoice");
@@ -18,6 +19,7 @@ const { PDFDocument } = require('pdf-lib');
 
 const { convert } = require('pdf-poppler');
 import * as multer from 'multer';
+import { Agreement } from '../models/tours/agreement';
 
 function sleep(ms) {
 	return new Promise((resolve) => {
@@ -28,7 +30,22 @@ interface helpObjectSort {
 	from: string;
 	count: number;
 };
+var s3 = new AWS.S3({
+	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+	secretAccessKey: "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"
+})
 
+
+const uploadPDFToS3 = ( key, pdfBuffer) => {
+    const params = {
+        Bucket: "hopguides/agreements",
+        Key: key,
+        Body: pdfBuffer,
+        ContentType: 'application/pdf',
+    };
+
+    return s3.upload(params).promise();
+};
 
 sgMail.setApiKey("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")
 var emailSender = "beta-app@gogiro.app";
@@ -95,6 +112,14 @@ export class ReportRouter extends BaseRouter {
 			})
 		);
 
+		this.router.get(
+			'/agreements/all',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				const agreements: Agreement[] = await this.reportManager.getAgreements();
+				return res.status(200).send(agreements)
+			})
+		);
 
 
 		async function convertPdfPageToImage(pdfPath, outputPath) {
@@ -117,8 +142,6 @@ export class ReportRouter extends BaseRouter {
 				{ name: 'premiumOffer', maxCount: 1 }
 			]),
 			withErrorHandler(async (req, res) => {
-
-
 
 				try {
 					const data = req.body;
@@ -196,6 +219,24 @@ export class ReportRouter extends BaseRouter {
 
 
 					const pdfBytes = await pdfDoc.save();
+
+				
+
+
+					const key = `${req.body.offer_number}_agreement.pdf`;
+		
+					await uploadPDFToS3(key, pdfBytes);
+		
+					var agreement = new Agreement();
+					agreement.addressee = req.body.addressee;
+					agreement.category = req.body.category;
+					agreement.email = req.body.email;
+					agreement.language = req.body.language;
+					agreement.offer_number = req.body.offer_number;
+					agreement.link = "https://hopguides.s3.eu-central-1.amazonaws.com/agreements/" + key
+
+					await this.reportManager.createAgreement(agreement);
+
 					fs.writeFileSync('final_output.pdf', pdfBytes);
 					res.setHeader('Content-Type', 'application/pdf');
 					res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf');
