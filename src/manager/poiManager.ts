@@ -29,6 +29,7 @@ export class POIManager {
 
   async getPois(filter?: any, pagination?: SearchPagination): Promise<POI[]> {
     return await this.poiRepository.getAll(filter, pagination).catch((err) => {
+      console.log("err.error")
       console.log(err.error)
       throw new Error('Error getting pois');
     });
@@ -84,8 +85,6 @@ export class POIManager {
   }
 
   async updatePoi(pointId: string, data: Partial<POI>): Promise<POI> {
-    console.log("LALALALLAaaaaaaaaaaa")
-    console.log(data)
     return await this.poiRepository.updateOne(pointId, data).catch(err => {
 
       throw new Error('Error updating poi');
@@ -93,8 +92,6 @@ export class POIManager {
   }
 
   async createPOI(poi: POI): Promise<POI> {
-    console.log("Ovde sma uslaaaaaa")
-    console.log(poi)
     return await this.poiRepository.createOne(poi).catch((err) => {
       console.log(err)
       throw new CustomError(500, 'POI not created!');
@@ -103,11 +100,8 @@ export class POIManager {
 
   async uploadAudio(pointId: string, file: string, language: string): Promise<POI> {
 
-    console.log("TUUUU" + pointId)
-    console.log(await this.getPois())
     var point: POI = await this.getPoi(pointId);
 
-    console.log("ehh")
     point.audio[language] = file;
     return await this.poiRepository.updateOne(pointId, point).catch(() => {
       throw new Error('Error updating poi');
