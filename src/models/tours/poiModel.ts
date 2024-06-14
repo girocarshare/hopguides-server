@@ -181,6 +181,9 @@ export class POI {
 	
 	@jsonProperty()
 	@dbField()
+	audioHelp: string; 
+	@jsonProperty()
+	@dbField()
 	previousId: string;
 
 	

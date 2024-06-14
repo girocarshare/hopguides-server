@@ -20,7 +20,7 @@ import { ToursWithPoints, PointsForTours, Logo, POICl, PointsShort, PointShort, 
 import * as AWS from 'aws-sdk';
 import { BPartner } from '../models/bpartner/bpartner';
 import { Characteristics, Location, Point, TourData } from '../classes/tour/tourData';
-import {  PointData } from '../classes/tour/pointData';
+import { PointData } from '../classes/tour/pointData';
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 import { resolve } from 'dns/promises';
 import { QRCodes } from '../models/qrcodes/qrcodes';
@@ -30,6 +30,7 @@ import { UserManager } from './userManager';
 import { User } from '../models/user/user';
 import qrcodesRepository from '../db/repository/qrcodesRepository';
 import { setMaxIdleHTTPParsers } from 'http';
+import { LocalizedField } from '../models/localizedField';
 
 var sizeOf = require('image-size');
 const url = require('url')
@@ -226,7 +227,7 @@ export class TourManager {
 			});
 
 		}
-			
+
 
 	}
 
@@ -389,12 +390,12 @@ export class TourManager {
 			}*/
 
 			var language = "english"
-			if(qrcode.language){
+			if (qrcode.language) {
 
 				language = qrcode.language
 			}
 
-			var tour: Tour = await this.getTourById( qrcode.tourId).catch((err) => {
+			var tour: Tour = await this.getTourById(qrcode.tourId).catch((err) => {
 				throw new Error('Error getting Tours');
 			});
 
@@ -621,7 +622,7 @@ export class TourManager {
 						location.lat = poi.location.latitude;
 						location.lng = poi.location.longitude;
 
-					
+
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio[language]
@@ -676,7 +677,7 @@ export class TourManager {
 						location.lat = poi.location.latitude;
 						location.lng = poi.location.longitude;
 
-					
+
 						var poiHelp: PointData = new PointData();
 						poiHelp.id = poi.id;
 						poiHelp.audio = poi.audio[language]
@@ -778,9 +779,9 @@ export class TourManager {
 			const user: User = await this.userManager.getUser(id);
 			const role = user.role;
 			let tours: Tour[] = [];
-	
+
 			const searchRegex = new RegExp(searchData, 'i');
-	
+
 			if (role === "ADMIN") {
 				tours = await this.tourRepository.getAll(
 					{ "title.english": { $regex: searchRegex } }
@@ -799,7 +800,7 @@ export class TourManager {
 					throw new Error('Error getting Tours');
 				});
 			}
-	
+
 			const toursReport: ToursWithPoints[] = tours.map(tour => {
 				const tourReport = new ToursWithPoints();
 				tourReport.tourId = tour.id;
@@ -807,7 +808,7 @@ export class TourManager {
 				tourReport.bpartnerId = tour.bpartnerId;
 				return tourReport;
 			});
-	
+
 			return toursReport;
 		} catch (err) {
 			throw new Error('Error getting Tours');
@@ -824,7 +825,7 @@ export class TourManager {
 
 			var pois = []
 
-			for(var poi of tour.points){
+			for (var poi of tour.points) {
 				var p: POI = await this.poiManager.getPoi(poi)
 				pois.push(p)
 			}
@@ -835,7 +836,6 @@ export class TourManager {
 			console.log(err)
 		}
 	}
-
 
 
 
