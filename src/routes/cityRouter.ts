@@ -44,27 +44,16 @@ async function getCity(token, city) {
 	return await axios.get("https://api.amadeus-discover.com/api/consumer/products?search=taxonomy%3Aactivities-culture-tickets-passes%20OR%20taxonomy%3Aactivities-food-drink-restaurants-bars%20OR%20taxonomy%3Aactivities-no-category%20OR%20taxonomy%3Aactivities-food-drink-tickets-passes%20OR%20taxonomy%3Aactivities-action-entertainment-tickets-passes%20AND%20city%3A" + city, {
 		headers: {
 			'Authorization': 'Bearer ' + token,
-			//'Content-Type': 'application/json'
 		}
 	})
 		.then(async response => {
-			console.log(response.data.items)
-
 			return response
-
-
 
 		})
 		.catch(error => {
-
 			console.log("error " + error)
 
 		});
-
-
-	//return res.status(200).send(response)
-
-
 
 }
 
@@ -157,18 +146,11 @@ export class CityRouter extends BaseRouter {
 						await axios.post("https://api.amadeus-discover.com/auth/realms/amadeus-discover/protocol/openid-connect/token", qs.stringify(data), {
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded',
-
-								//'Content-Type': 'application/json'
 							}
 						})
 							.then(async response => {
-								console.log(response.data.access_token)
 								var respons = await getCity(response.data.access_token, req.params.city)
-
-								console.log("RESPONSEEE" + respons)
 								res.status(200).send(respons.data.items);
-
-
 
 							})
 							.catch(error => {

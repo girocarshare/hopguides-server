@@ -48,7 +48,7 @@ export class POIManager {
 	}
 
  
-  async uploadImages(pointId: string, object: Obj): Promise<POI> {
+  async uploadImages(pointId: string, object: Obj, language: string): Promise<POI> {
 
     var point: POI = await this.getPoi(pointId);
 
@@ -56,7 +56,15 @@ export class POIManager {
     for(var i=0; i<object.paths.length; i++){
 
       if(object.paths[i].substring(object.paths[i].length-3)== "mp4"){
-        point.video = object.paths[i];
+        
+        if(point.video){
+          
+        point.video[language] = object.paths[i];
+        }else{
+          
+				point.video = new LocalizedField
+        point.video[language] = object.paths[i];
+        }
        
       }else{
       var image : Image = new Image()
@@ -69,6 +77,7 @@ export class POIManager {
 
     }
 
+    console.log(point)
     return await this.poiRepository.updateOne(pointId, point).catch(() => {
       throw new Error('Error updating poi');
     });
@@ -92,14 +101,14 @@ export class POIManager {
     });
   }
 
-  async uploadAudio(pointId: string, file: string): Promise<POI> {
+  async uploadAudio(pointId: string, file: string, language: string): Promise<POI> {
 
     console.log("TUUUU" + pointId)
     console.log(await this.getPois())
     var point: POI = await this.getPoi(pointId);
 
     console.log("ehh")
-    point.audio = file;
+    point.audio[language] = file;
     return await this.poiRepository.updateOne(pointId, point).catch(() => {
       throw new Error('Error updating poi');
     });

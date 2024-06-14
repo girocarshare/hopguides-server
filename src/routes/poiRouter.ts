@@ -149,8 +149,6 @@ export class POIRouter extends BaseRouter {
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				try {
 
-					console.log("POIIIIII")
-					console.log(req.body.point)
 					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;
 					var arrayy = []
@@ -180,7 +178,7 @@ export class POIRouter extends BaseRouter {
 
 							if (f.originalname.substring(0, 6).trim() === 'audio2') {
 
-								await this.poiManager.uploadAudio(point.id, f.location);
+								await this.poiManager.uploadAudio(point.id, f.location, point.language);
 
 							}
 
@@ -195,7 +193,7 @@ export class POIRouter extends BaseRouter {
 						var obj: Obj = new Obj();
 
 						obj.paths = arrayy
-						await this.poiManager.uploadImages(poiPrevious.id, obj);
+						await this.poiManager.uploadImages(poiPrevious.id, obj, point.language);
 
 						if (poiPrevious.images.length != 0) {
 							const updatedPoi: POI = await this.poiManager.updatePoi(
@@ -230,7 +228,7 @@ export class POIRouter extends BaseRouter {
 
 								if (f.originalname.substring(0, 6).trim() === 'audio2') {
 
-									await this.poiManager.uploadAudio(point.id, f.location);
+									await this.poiManager.uploadAudio(point.id, f.location, point.language);
 
 								}
 								if (f.originalname.substring(0, 4).trim() === 'menu') {
@@ -251,7 +249,7 @@ export class POIRouter extends BaseRouter {
 
 
 							obj.paths = arrayy
-							await this.poiManager.uploadImages(poiUpdated.id, obj);
+							await this.poiManager.uploadImages(poiUpdated.id, obj, point.language);
 
 							if (point.images.length != 0) {
 								const updatedPoi: POI = await this.poiManager.updatePoi(
@@ -294,10 +292,7 @@ export class POIRouter extends BaseRouter {
 							return res.status(200).send([]);
 						} else if (user.role == "ADMIN") {
 
-							console.log("ADMINNNNNNNNN")
 
-							
-								console.log("udjoh")
 								const updatedPoi: POI = await this.poiManager.updatePoi(
 									point.id,
 									point
@@ -307,7 +302,7 @@ export class POIRouter extends BaseRouter {
 
 								if (f.originalname.substring(0, 6).trim() === 'audio2') {
 
-									await this.poiManager.uploadAudio(point.id, f.location);
+									await this.poiManager.uploadAudio(point.id, f.location, point.language);
 
 								}
 								if (f.originalname.substring(0, 4).trim() === 'menu') {
@@ -329,11 +324,13 @@ export class POIRouter extends BaseRouter {
 
 
 								obj.paths = arrayy
-								await this.poiManager.uploadImages(point.id, obj);
+								await this.poiManager.uploadImages(point.id, obj, point.language);
 							}
-
-							//}
-							//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints();
+							var updatedTour = await this.tourManager.getTourData(t.id)
+							console.log("updatesssss")
+							console.log(updatedTour)
+							//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
+							return res.status(200).send({ updatedTour: updatedTour });
 
 
 							return res.status(200).send([]);

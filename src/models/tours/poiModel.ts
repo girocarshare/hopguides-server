@@ -176,7 +176,7 @@ export class POI {
 	
 	@jsonProperty()
 	@dbField()
-	audio: string;
+	audio: LocalizedField;
 
 	
 	@jsonProperty()
@@ -186,7 +186,12 @@ export class POI {
 	
 	@jsonProperty()
 	@dbField()
-	video: string;
+	language: string;
+
+	
+	@jsonProperty()
+	@dbField()
+	video: LocalizedField;
 	image: any;
 
 

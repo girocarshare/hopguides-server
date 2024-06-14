@@ -1142,28 +1142,15 @@ export class TourRouter extends BaseRouter {
 
 			})
 		);
-
 		this.router.get(
 			'/search/:data',
-			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-
-				const pagination: SearchPagination = new SearchPagination();
-				pagination.page = 0;
-				pagination.pageSize = 2;
-
-				const pageOfItems: ToursWithPoints[] = await this.tourManager.searchForTours(req.userId, req.params.data, null, pagination);
-
-				const pager = {
-					currentPage: Number.parseInt(req.params.page)
-				};
-
-				return res.json({ pager, pageOfItems });
-
+				const pageOfItems: ToursWithPoints[] = await this.tourManager.searchForTours(req.userId, req.params.data);
+		
+				return res.json({ pageOfItems });
 			})
 		);
-
 		this.router.get(
 			'/allToursWithPoints/:page',
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
@@ -1174,7 +1161,7 @@ export class TourRouter extends BaseRouter {
 
 				const pagination: SearchPagination = new SearchPagination();
 				pagination.page = Number.parseInt(req.params.page);
-				pagination.pageSize = 2;
+				pagination.pageSize = 5;
 
 				const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false, null, pagination);
 
@@ -1196,7 +1183,7 @@ export class TourRouter extends BaseRouter {
 
 				const pagination: SearchPagination = new SearchPagination();
 				pagination.page = Number.parseInt(req.params.page);
-				pagination.pageSize = 2;
+				pagination.pageSize = 5;
 
 				const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 
@@ -1247,7 +1234,7 @@ export class TourRouter extends BaseRouter {
 
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = Number.parseInt(req.params.page);
-					pagination.pageSize = 2;
+					pagination.pageSize = 5;
 
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 
@@ -1276,7 +1263,7 @@ export class TourRouter extends BaseRouter {
 
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = 0;
-					pagination.pageSize = 2;
+					pagination.pageSize = 5;
 
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false, null, pagination);
 
@@ -1471,7 +1458,7 @@ export class TourRouter extends BaseRouter {
 
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = 0;
-					pagination.pageSize = 2;
+					pagination.pageSize = 5;
 
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 
@@ -1532,7 +1519,7 @@ export class TourRouter extends BaseRouter {
 					})
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = 0;
-					pagination.pageSize = 2;
+					pagination.pageSize = 5;
 
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 
@@ -1576,7 +1563,7 @@ export class TourRouter extends BaseRouter {
 
 							} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
 
-								await this.tourManager.uploadAudio(tour.id, file);
+								await this.tourManager.uploadAudio(tour.id, file, tour.language);
 
 							}
 						}
@@ -1606,7 +1593,7 @@ export class TourRouter extends BaseRouter {
 
 								} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
 
-									await this.tourManager.uploadAudio(tour.id, file);
+									await this.tourManager.uploadAudio(tour.id, file, tour.language);
 
 								}
 							}
@@ -1642,16 +1629,18 @@ export class TourRouter extends BaseRouter {
 
 								} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
 
-									await this.tourManager.uploadAudio(tour.id, file);
+									await this.tourManager.uploadAudio(tour.id, file, tour.language);
 
 								}
 							}
 							tour.update = false;
-							var updatedTour = await this.tourManager.updateTour(
+							await this.tourManager.updateTour(
 								tour.id,
 								tour
 							);
 						}
+
+						var updatedTour = await this.tourManager.getTourData(tour.id)
 						//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
 						return res.status(200).send({ updatedTour: updatedTour });
 					}
@@ -1724,7 +1713,7 @@ export class TourRouter extends BaseRouter {
 
 
 							obj.paths = arrayy
-							await this.poiManager.uploadImages(i.id, obj);
+						//	await this.poiManager.uploadImages(i.id, obj);
 							arrayy = []
 						}
 
@@ -1738,7 +1727,7 @@ export class TourRouter extends BaseRouter {
 									var help2 = help[0].substring(6)
 
 									if (help2 == i.num) {
-										await this.poiManager.uploadAudio(i.id, f.location);
+										//await this.poiManager.uploadAudio(i.id, f.location);
 									}
 								}
 							}
@@ -1775,7 +1764,7 @@ export class TourRouter extends BaseRouter {
 
 						} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
 
-							await this.tourManager.uploadAudio(createdTour.id, file);
+						//	await this.tourManager.uploadAudio(createdTour.id, file);
 
 						}
 					}
@@ -1809,6 +1798,14 @@ export class TourRouter extends BaseRouter {
 					if (jsonObj.points.length != 0) {
 						for (var point of jsonObj.points) {
 
+							var h = point.audio
+							point.audio = new LocalizedField;
+							point.audio[point.language] = h
+
+							
+							var v = point.video
+							point.video = new LocalizedField;
+							point.video[point.language] = v
 							const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
 
 							var poiJson = deserialize(POI, point)
@@ -1861,7 +1858,7 @@ export class TourRouter extends BaseRouter {
 				// Upload
 				try {
 
-					let jsonObj = JSON.parse(`{"price":"45","image":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/7BUv3BsMeK.jpg","audio":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/lu3FaaUm0Z.mp3","points":[],"duration":"4h","length":"11km","highestPoint":"155m","termsAndConditions":"","currency":"€","bpartnerId":"fd373bf5-6804-4293-b030-9be788516677","update":false,"title":{"english":" Ljubljana tour ","slovenian":"-"},"agreementTitle":{"english":"/ ","slovenian":" -"},"agreementDesc":{"english":"/","slovenian":"- "},"shortInfo":{"english":"Amidst a sprawling landscape of rolling plains and dense forests, this city blends history and modernity. Ancient stone pathways lead to market squares, while skyscrapers echo its aspirations. Parks offer respite from urban life, trails leading to endless plains. Beyond, nature's grandeur awaits, with woodlands and plains whispering tales of nomads and ancient civilizations. Seasons bring transformations, ever-changing vistas in this jewel of nature's crown. ","slovenian":"- "},"longInfo":{"english":" Amidst a sprawling landscape of rolling plains and dense forests, a city stands as a beacon of culture and progress. Its boundaries are marked by meandering rivers that shimmer under the sun, reflecting the city's skyline. On one side, the vast expanse of a tranquil lake borders the city, its waters often dotted with sailboats and kayakers enjoying the serenity. The city itself is a harmonious blend of history and modernity. Ancient stone pathways lead to market squares where traditions of old are kept alive, while towering skyscrapers in the distance echo the city's aspirations for the future. The green canopy of parks offers a respite from the urban hustle, with trails leading to the outskirts where the plains stretch out, seemingly endless. Beyond the city, the landscape is a testament to nature's grandeur. Dense woodlands, home to diverse wildlife, invite explorers to uncover their secrets. The plains, golden during the day and silver under the moonlight, whisper tales of nomads and ancient civilizations. As the seasons change, so does the landscape. From the blossoms of spring to the golden hues of autumn, the city and its surroundings transform, offering ever-changing vistas and experiences. In this vast and varied landscape, the city stands proud, a jewel in nature's magnificent crown.","slovenian":"-"}}`);
+					let jsonObj = JSON.parse(`{"price":"45","image":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/7BUv3BsMeK.jpg","audio":{"english":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/lu3FaaUm0Z.mp3"},"points":[],"duration":"4h","length":"11km","highestPoint":"155m","termsAndConditions":"","currency":"€","bpartnerId":"fd373bf5-6804-4293-b030-9be788516677","update":false,"title":{"english":" Ljubljana tour ","slovenian":"-"},"agreementTitle":{"english":"/ ","slovenian":" -"},"agreementDesc":{"english":"/","slovenian":"- "},"shortInfo":{"english":"Amidst a sprawling landscape of rolling plains and dense forests, this city blends history and modernity. Ancient stone pathways lead to market squares, while skyscrapers echo its aspirations. Parks offer respite from urban life, trails leading to endless plains. Beyond, nature's grandeur awaits, with woodlands and plains whispering tales of nomads and ancient civilizations. Seasons bring transformations, ever-changing vistas in this jewel of nature's crown. ","slovenian":"- "},"longInfo":{"english":" Amidst a sprawling landscape of rolling plains and dense forests, a city stands as a beacon of culture and progress. Its boundaries are marked by meandering rivers that shimmer under the sun, reflecting the city's skyline. On one side, the vast expanse of a tranquil lake borders the city, its waters often dotted with sailboats and kayakers enjoying the serenity. The city itself is a harmonious blend of history and modernity. Ancient stone pathways lead to market squares where traditions of old are kept alive, while towering skyscrapers in the distance echo the city's aspirations for the future. The green canopy of parks offers a respite from the urban hustle, with trails leading to the outskirts where the plains stretch out, seemingly endless. Beyond the city, the landscape is a testament to nature's grandeur. Dense woodlands, home to diverse wildlife, invite explorers to uncover their secrets. The plains, golden during the day and silver under the moonlight, whisper tales of nomads and ancient civilizations. As the seasons change, so does the landscape. From the blossoms of spring to the golden hues of autumn, the city and its surroundings transform, offering ever-changing vistas and experiences. In this vast and varied landscape, the city stands proud, a jewel in nature's magnificent crown.","slovenian":"-"}}`);
 					let tour = jsonObj as Tour;
 
 					const tourTitle = new LocalizedField;
@@ -1882,7 +1879,8 @@ export class TourRouter extends BaseRouter {
 					for (var i = 0; i < points.length; i++) {
 						var point = new POI
 						point.num = points[i].num
-						point.audio = "https://hopguides.s3.amazonaws.com/menu/ZwOsbG5A95.mp3"
+						point.audio = new LocalizedField
+						point.audio.english = "https://hopguides.s3.amazonaws.com/menu/ZwOsbG5A95.mp3"
 						point.images = []
 						var image = new Image
 						image.image = "https://hopguides.s3.amazonaws.com/menu/sG0Ptf6OQG.png"
@@ -1918,17 +1916,26 @@ export class TourRouter extends BaseRouter {
 					tour.points = pointsOff
 
 					tour.image = "https://hopguides.s3.eu-central-1.amazonaws.com/" + req.body.name
+
+					
 					const createdTour: Tour = await this.tourManager.createTour(
 						deserialize(Tour, tour)
 					);
 
 					createdTour.points = pointsData
 
+
+
+					console.log(createdTour.id)
+					console.log(createdTour.languages)
+
+					await this.tourManager.generateQRForTour(createdTour.id, createdTour.languages )
+
 					return res.status(200).send(createdTour);
 
 
 				} catch (err) {
-					console.log(err.error)
+					throw new Error("Error" + err)
 				}
 			})
 		);

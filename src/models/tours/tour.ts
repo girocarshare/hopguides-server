@@ -17,6 +17,11 @@ export class Tour {
 	@dbField()
 	title: LocalizedField;
 
+	
+	@jsonProperty()
+	@dbField()
+	language: string;
+
 	@jsonProperty()
 	@dbField()
 	bpartnerId: string;
@@ -83,7 +88,7 @@ export class Tour {
 	
 	@jsonProperty()
 	@dbField()
-	audio: string;
+	audio: LocalizedField;
 	
 	@jsonProperty()
 	@dbField()
