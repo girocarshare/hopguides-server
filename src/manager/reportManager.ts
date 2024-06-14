@@ -7,10 +7,12 @@ import { CustomError } from '../classes/customError';
 import { BPartner } from '../models/bpartner/bpartner';
 import { BPartnerManager } from '../manager/bpartnerManager';
 import tourRepository, { TourRepository } from '../db/repository/tourRepository';
+import agreementRepository, { AgreementRepository } from '../db/repository/agreementRepository';
 import { POIManager } from '../manager/poiManager';
 import { Booking, BookingStatus } from '../models/booking/booking';
 import { deserialize, serialize } from '../json';
 import * as AWS from 'aws-sdk';
+import { Agreement } from '../models/tours/agreement';
 var multerS3 = require('multer-s3');
 var s3 = new AWS.S3({
 	accessKeyId: "AKIATMWXSVRDIIFSRWP2",
@@ -29,6 +31,7 @@ interface helpObjectSort {
 
 export class ReportManager {
 	bookingRepository: BookingRepository;
+	agreementRepository: AgreementRepository;
 	tourRepository: TourRepository;
 	poiManager: POIManager;
 	bpartnerManager: BPartnerManager;
@@ -36,6 +39,7 @@ export class ReportManager {
 
 	constructor() {
 		this.bookingRepository = bookingRepository;
+		this.agreementRepository = agreementRepository;
 		this.tourRepository = tourRepository;
 		this.poiManager = new POIManager();
 		this.bpartnerManager = new BPartnerManager();
@@ -222,5 +226,29 @@ export class ReportManager {
 	}
 	}
 
+
+	async createAgreement(agreement: Agreement): Promise<Agreement> {
+		
+		return await this.agreementRepository.createOne(agreement).catch((err) => {
+		  console.log(err)
+		  throw new CustomError(500, 'Agreement not created!');
+		});
+	  }
+	
+
+
+	
+	  async getAgreements(): Promise<Agreement[]> {
+
+		
+		return await this.agreementRepository.getAll().catch(() => {
+			throw new Error('Error getting agreements');
+		});
+
+
+	}
+
+
+	
 
 }

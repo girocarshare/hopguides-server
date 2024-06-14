@@ -12,6 +12,10 @@ export class QRCodes {
 	@dbField()
 	@jsonProperty({ deserialize: true, serialize: true })
 	qrcode: string;
+	
+	@dbField()
+	@jsonProperty({ deserialize: true, serialize: true })
+	language: string;
 
 
 	@dbField()

@@ -32,6 +32,11 @@ export class LocalizedField {
 	italian: string= "";
 
 	
+	@jsonProperty()
+	@dbField()
+	hungarian: string= "";
+
+	
 	constructor(data: Partial<LocalizedField> = {}) {
         Object.assign(this, data);
     }

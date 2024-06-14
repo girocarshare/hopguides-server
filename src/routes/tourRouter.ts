@@ -706,50 +706,99 @@ export class TourRouter extends BaseRouter {
 			return new Promise(resolve => setTimeout(resolve, ms));
 		}
 
-		
 
-		
-const s3Client = new S3Client({
-	 region: "eu-central-1" ,
-	 credentials: {
-		accessKeyId: "AKIATMWXSVRDIIFSRWP2",
-		secretAccessKey: "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",
-	  }
-	  
-});
-  this.router.get(
-	'/d-id/generate-presigned-url',
-	//allowFor([AdminRole, SupportRole, ServiceRole]),
-	//this.upload.array('file'),
-	withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-		try {
-			const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
-			const command = new PutObjectCommand({
-			  Bucket: "hopguides",
-			  Key:  "videos/"+  image_name + ".mp4", // Ensure the file name is unique
-			});
-		
-			const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL expires in 1 hour
-			res.json({ url: signedUrl, name:  "videos/"+ image_name + ".mp4"});
-		  } catch (error) {
-			console.error("Error generating signed URL", error);
-			res.status(500).send("Error generating signed URL");
-		  }
 
-	})
-);
+		const s3Client = new S3Client({
+			region: "eu-central-1",
+			credentials: {
+				accessKeyId: "AKIATMWXSVRDIIFSRWP2",
+				secretAccessKey: "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",
+			}
+
+		});
+		this.router.get(
+			'/d-id/generate-presigned-url',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			//this.upload.array('file'),
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+
+				try {
+					const image_name = Date.now() + "-" + Math.floor(Math.random() * 1000);
+					const command = new PutObjectCommand({
+						Bucket: "hopguides",
+						Key: "videos/" + image_name + ".mp4", // Ensure the file name is unique
+					});
+
+					const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL expires in 1 hour
+					res.json({ url: signedUrl, name: "videos/" + image_name + ".mp4" });
+				} catch (error) {
+					console.error("Error generating signed URL", error);
+					res.status(500).send("Error generating signed URL");
+				}
+
+			})
+		);
+
+
+
+		this.router.get(
+			'/teaser-tour/generate-presigned-url',
+			withErrorHandler(async (req, res) => {
+				try {
+
+					const fileType = req.query.fileType || ""; // Retrieve fileType from query
+
+					// Ensure fileType is a string
+					let fileTypeString = Array.isArray(fileType) ? fileType[0] : fileType;
+
+					// Validate that it's still a string
+					if (typeof fileTypeString !== "string") {
+						return res.status(400).send("Invalid file type");
+					}
+
+					// Split and extract the extension
+					const extension = fileTypeString.split("/")[1];
+					if (!extension) {
+						return res.status(400).send("Invalid file type");
+					}
+
+					// Generate a unique file name
+					const imageName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${extension}`;
+
+					// Define the S3 key path
+					const s3Key = `videos/${imageName}`;
+
+					// Create a command to upload the object
+					const command = new PutObjectCommand({
+						Bucket: "hopguides",
+						Key: s3Key, // File name includes the dynamic extension
+						ContentType: fileType, // Ensure S3 understands the correct content type
+					});
+
+					// Generate a pre-signed URL valid for 1 hour
+					const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+
+					// Return the URL and file name/path for reference
+					res.json({ url: signedUrl, name: s3Key });
+				} catch (error) {
+					console.error("Error generating signed URL", error);
+					res.status(500).send("Error generating signed URL");
+				}
+			})
+		);
+
 		//dodaj da uploaduje video pa da napravi qr code
 		this.router.get(
 			'/d-id/getallscrapes',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			//this.upload.array('file'),
-			withErrorHandler( async (req, res) => {
-				
+			withErrorHandler(async (req, res) => {
+
 				try {
-					
+
 					var scrapes: Scraped[] = await this.libraryManager.getAllScrapes();
-				
+
 					res.status(200).send(scrapes);
 				} catch (err) {
 					console.log(err)
@@ -765,12 +814,12 @@ const s3Client = new S3Client({
 			'/d-id/getallqrcodes',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			//this.upload.array('file'),
-			withErrorHandler( async (req, res) => {
-				
+			withErrorHandler(async (req, res) => {
+
 				try {
-					
+
 					var qrCodes: QRCodes[] = await this.libraryManager.getAllQrCodes();
-				
+
 					res.status(200).send(qrCodes);
 				} catch (err) {
 					console.log(err)
@@ -779,43 +828,43 @@ const s3Client = new S3Client({
 			})
 		);
 
-			//dodaj da uploaduje video pa da napravi qr code
-			this.router.get(
-				'/d-id/getqrcodeofcode',
-				//allowFor([AdminRole, SupportRole, ServiceRole]),
-				//this.upload.array('file'),
-				withErrorHandler( async (req, res) => {
-					
-					try {
-						const code = req.query.code;
+		//dodaj da uploaduje video pa da napravi qr code
+		this.router.get(
+			'/d-id/getqrcodeofcode',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			//this.upload.array('file'),
+			withErrorHandler(async (req, res) => {
 
-						console.log(code)
-						var qrCodes: QRCodes = await this.libraryManager.getGqCodeFromCode(parseInt(code.toString()));
-					
-						console.log(qrCodes.video)
-						res.status(200).send({video: qrCodes.video, link: qrCodes.link, text: qrCodes.text, campaign: qrCodes.campaign});
-					} catch (err) {
-						console.log(err)
-					}
-	
-				})
-			);
+				try {
+					const code = req.query.code;
+
+					console.log(code)
+					var qrCodes: QRCodes = await this.libraryManager.getGqCodeFromCode(parseInt(code.toString()));
+
+					console.log(qrCodes.video)
+					res.status(200).send({ video: qrCodes.video, link: qrCodes.link, text: qrCodes.text, campaign: qrCodes.campaign });
+				} catch (err) {
+					console.log(err)
+				}
+
+			})
+		);
 
 		//dodaj da uploaduje video pa da napravi qr code
 		this.router.post(
 			'/d-id/qrcodevideo',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			//this.upload.array('file'),
-			withErrorHandler( async (req, res) => {
-				
+			withErrorHandler(async (req, res) => {
+
 				try {
 					console.log(req.body.name)
 					console.log(req.body.link)
 					const parts = req.body.name.split("videos/");
-						const result = parts[1];
-						console.log(result)
-						var qrCode: string = await this.libraryManager.generateQr1(result, req.body.link, req.body.text,req.body.campaign);
-					
+					const result = parts[1];
+					console.log(result)
+					var qrCode: string = await this.libraryManager.generateQr1(result, req.body.link, req.body.text, req.body.campaign);
+
 					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
 					await sleep(2000);
 					console.log(qrCode)
@@ -830,27 +879,27 @@ const s3Client = new S3Client({
 
 
 
-		
+
 		//dodaj da uploaduje video pa da napravi qr code
 		this.router.post(
 			'/edit/qrcodevideo',
 			//allowFor([AdminRole, SupportRole, ServiceRole]),
 			//this.upload.array('file'),
-			withErrorHandler( async (req, res) => {
-				
+			withErrorHandler(async (req, res) => {
+
 				try {
 
 					var result = ""
-					if(req.body.name == ""){
+					if (req.body.name == "") {
 						result = ""
-					}else{
+					} else {
 						const parts = req.body.name.split("videos/");
 						result = parts[1];
 						console.log(result)
 					}
-					
-						var newqrCode: QRCodes = await this.libraryManager.updateQrCode(result, req.body.link, req.body.text, req.body.id, req.body.campaign);
-					
+
+					var newqrCode: QRCodes = await this.libraryManager.updateQrCode(result, req.body.link, req.body.text, req.body.id, req.body.campaign);
+
 					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
 					await sleep(2000);
 					console.log(newqrCode)
@@ -864,38 +913,38 @@ const s3Client = new S3Client({
 		);
 
 
-	//dodaj da uploaduje video pa da napravi qr code
-	this.router.post(
-		'/edit/scraped',
-		//allowFor([AdminRole, SupportRole, ServiceRole]),
-		this.upload.array('file'),
-		withErrorHandler( async (req, res) => {
-			
-			try {
+		//dodaj da uploaduje video pa da napravi qr code
+		this.router.post(
+			'/edit/scraped',
+			//allowFor([AdminRole, SupportRole, ServiceRole]),
+			this.upload.array('file'),
+			withErrorHandler(async (req, res) => {
 
-				/*var result = ""
-				if(req.body.hotel == ""){
-					result = ""
-				}else{
-					const parts = req.body.name.split("videos/");
-					result = parts[1];
-					console.log(result)
-				}*/
-				
-				console.log(req.body)
+				try {
+
+					/*var result = ""
+					if(req.body.hotel == ""){
+						result = ""
+					}else{
+						const parts = req.body.name.split("videos/");
+						result = parts[1];
+						console.log(result)
+					}*/
+
+					console.log(req.body)
 					var newqrCode: Scraped = await this.libraryManager.updateScraped(req.body.name, req.body.email, req.body.website, req.body.id, "file data");
-				
-				//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
-				await sleep(2000);
-				console.log(newqrCode)
 
-				res.status(200).send(newqrCode);
-			} catch (err) {
-				console.log(err)
-			}
+					//var qrCode: string = await this.libraryManager.generateQr(req.body.video);
+					await sleep(2000);
+					console.log(newqrCode)
 
-		})
-	);
+					res.status(200).send(newqrCode);
+				} catch (err) {
+					console.log(err)
+				}
+
+			})
+		);
 
 
 		/** GET generate qr code for tour */
@@ -1093,28 +1142,15 @@ const s3Client = new S3Client({
 
 			})
 		);
-
 		this.router.get(
 			'/search/:data',
-			//allowFor([AdminRole, SupportRole, ManagerRole]),
 			parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
-
-				const pagination: SearchPagination = new SearchPagination();
-				pagination.page = 0;
-				pagination.pageSize = 2;
-
-				const pageOfItems: ToursWithPoints[] = await this.tourManager.searchForTours(req.userId, req.params.data, null, pagination);
-
-				const pager = {
-					currentPage: Number.parseInt(req.params.page)
-				};
-
-				return res.json({ pager, pageOfItems });
-
+				const pageOfItems: ToursWithPoints[] = await this.tourManager.searchForTours(req.userId, req.params.data);
+		
+				return res.json({ pageOfItems });
 			})
 		);
-
 		this.router.get(
 			'/allToursWithPoints/:page',
 			//allowFor([AdminRole, SupportRole, ManagerRole]),
@@ -1125,7 +1161,7 @@ const s3Client = new S3Client({
 
 				const pagination: SearchPagination = new SearchPagination();
 				pagination.page = Number.parseInt(req.params.page);
-				pagination.pageSize = 2;
+				pagination.pageSize = 5;
 
 				const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false, null, pagination);
 
@@ -1147,7 +1183,7 @@ const s3Client = new S3Client({
 
 				const pagination: SearchPagination = new SearchPagination();
 				pagination.page = Number.parseInt(req.params.page);
-				pagination.pageSize = 2;
+				pagination.pageSize = 5;
 
 				const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 
@@ -1198,7 +1234,7 @@ const s3Client = new S3Client({
 
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = Number.parseInt(req.params.page);
-					pagination.pageSize = 2;
+					pagination.pageSize = 5;
 
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 
@@ -1227,7 +1263,7 @@ const s3Client = new S3Client({
 
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = 0;
-					pagination.pageSize = 2;
+					pagination.pageSize = 5;
 
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false, null, pagination);
 
@@ -1336,41 +1372,48 @@ const s3Client = new S3Client({
 			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 
-				var response = []
-				var gpx = new gpxParser(); //Create gpxParser Object
-				gpx.parse(req.body.text); //parse gpx file from string data
+				try {
+					console.log(req.body.id)
+					var response = []
+					var gpx = new gpxParser(); //Create gpxParser Object
+					gpx.parse(req.body.text); //parse gpx file from string data
 
-				for (var item of gpx.tracks[0].points) {
-					var obj = []
-					obj.push(item.lon.toString().slice(0, 8))
-					obj.push(item.lat.toString().slice(0, 8))
-					response.push(obj)
-				}
-
-				var tour = await this.tourManager.getTour(req.body.id)
-				if (tour != null) {
-
-					var str = "["
-					for (var objec of response) {
-						str += "[" + objec + "],"
-
+					for (var item of gpx.tracks[0].points) {
+						var obj = []
+						obj.push(item.lon.toString().slice(0, 8))
+						obj.push(item.lat.toString().slice(0, 8))
+						response.push(obj)
 					}
-					str += "]"
 
-					console.log(str)
-					tour.gpx = str;
-					await this.tourManager.updateTour(
-						tour.id,
-						tour
-					);
-				} else {
-					return res.status(412).send("Tour doesnt exist");
+					var tour = await this.tourManager.getTour(req.body.id)
+					if (tour != null) {
+
+						var str = "["
+						for (var objec of response) {
+							str += "[" + objec + "],"
+
+						}
+						str += "]"
+
+						console.log(str)
+						tour.gpx = str;
+						await this.tourManager.updateTour(
+							tour.id,
+							tour
+						);
+					} else {
+						return res.status(412).send("Tour doesnt exist");
+					}
+
+					return res.status(200).send(response);
+				} catch (e) {
+					return res.status(400).send(e.error);
 				}
-
-				return res.status(200).send(response);
-
 
 			})
+
+
+
 		);
 
 
@@ -1415,7 +1458,7 @@ const s3Client = new S3Client({
 
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = 0;
-					pagination.pageSize = 2;
+					pagination.pageSize = 5;
 
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 
@@ -1476,7 +1519,7 @@ const s3Client = new S3Client({
 					})
 					const pagination: SearchPagination = new SearchPagination();
 					pagination.page = 0;
-					pagination.pageSize = 2;
+					pagination.pageSize = 5;
 
 					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, true, null, pagination);
 
@@ -1520,7 +1563,7 @@ const s3Client = new S3Client({
 
 							} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
 
-								await this.tourManager.uploadAudio(tour.id, file);
+								await this.tourManager.uploadAudio(tour.id, file, tour.language);
 
 							}
 						}
@@ -1550,7 +1593,7 @@ const s3Client = new S3Client({
 
 								} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
 
-									await this.tourManager.uploadAudio(tour.id, file);
+									await this.tourManager.uploadAudio(tour.id, file, tour.language);
 
 								}
 							}
@@ -1586,7 +1629,7 @@ const s3Client = new S3Client({
 
 								} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
 
-									await this.tourManager.uploadAudio(tour.id, file);
+									await this.tourManager.uploadAudio(tour.id, file, tour.language);
 
 								}
 							}
@@ -1596,8 +1639,10 @@ const s3Client = new S3Client({
 								tour
 							);
 						}
-						const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
-						return res.status(200).send(tours);
+
+						var updatedTour = await this.tourManager.getTourData(tour.id)
+						//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
+						return res.status(200).send({ updatedTour: updatedTour });
 					}
 
 				} catch (err) {
@@ -1668,7 +1713,7 @@ const s3Client = new S3Client({
 
 
 							obj.paths = arrayy
-							await this.poiManager.uploadImages(i.id, obj);
+						//	await this.poiManager.uploadImages(i.id, obj);
 							arrayy = []
 						}
 
@@ -1682,7 +1727,7 @@ const s3Client = new S3Client({
 									var help2 = help[0].substring(6)
 
 									if (help2 == i.num) {
-										await this.poiManager.uploadAudio(i.id, f.location);
+										//await this.poiManager.uploadAudio(i.id, f.location);
 									}
 								}
 							}
@@ -1719,7 +1764,7 @@ const s3Client = new S3Client({
 
 						} else if (file.originalname.substring(0, 6).trim() === 'audio1') {
 
-							await this.tourManager.uploadAudio(createdTour.id, file);
+						//	await this.tourManager.uploadAudio(createdTour.id, file);
 
 						}
 					}
@@ -1738,89 +1783,41 @@ const s3Client = new S3Client({
 		this.router.post(
 			'/addFull/partner',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			parseJwt,
-			this.upload.array('file'),
+			//parseJwt,
+			//this.upload.array('file'),
 			//this.upload.single('audio'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				// Upload
 				try {
 
-					let jsonObj = JSON.parse(req.body.tour);
-					let tour = jsonObj as Tour;
+					let jsonObj = req.body.tour;
+					//let tour = jsonObj as Tour;
 
 					var arr: string[] = []
 					var arr2 = []
-					if (tour.points.length != 0) {
-						for (var point of tour.points) {
+					if (jsonObj.points.length != 0) {
+						for (var point of jsonObj.points) {
 
+							var h = point.audio
+							point.audio = new LocalizedField;
+							point.audio[point.language] = h
+
+							
+							var v = point.video
+							point.video = new LocalizedField;
+							point.video[point.language] = v
 							const poi: POI = await this.poiManager.createPOI(deserialize(POI, point));
 
 							var poiJson = deserialize(POI, point)
-
-
 
 							arr.push(poi.id)
 							arr2.push(poi)
 						}
 
-						var partnerImages = []
-
-						for (var f of req.files) {
-
-							if (f.originalname.substring(1, 8).trim() === 'partner') {
-
-								var help = f.originalname.split('---')
-
-								var help2 = help[0].substring(8)
-
-								var h = {
-									name: help2,
-									path: f.location
-								}
-								partnerImages.push(h)
-							}
-
-
-						}
-						//if the names are the same
-						var arrayy = []
-						for (var i of arr2) {
-							for (var im of partnerImages) {
-
-								if (im.name == i.num) {
-
-									arrayy.push(im.path);
-
-								}
-							}
-
-							var obj: Obj = new Obj();
-
-
-							obj.paths = arrayy
-							await this.poiManager.uploadImages(i.id, obj);
-							arrayy = []
-						}
-
-
-						for (var i of arr2) {
-							for (var f of req.files) {
-
-								if (f.originalname.substring(0, 6).trim() === 'audio2') {
-
-									var help = f.originalname.split('---')
-
-									var help2 = help[0].substring(6)
-
-									if (help2 == i.num) {
-										await this.poiManager.uploadAudio(i.id, f.location);
-									}
-								}
-							}
-						}
+		
 					}
 					var t: Tour = await this.tourManager.getTour(
-						tour.id,
+						jsonObj.id,
 					);
 
 					var pois = t.points
@@ -1828,15 +1825,11 @@ const s3Client = new S3Client({
 						pois.push(p)
 					}
 					t.points = pois
-
-
-					await this.tourManager.updateTour(
+					 await this.tourManager.updateTour(
 						t.id,
 						deserialize(Tour, t)
 					);
-
-					const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
-					return res.status(200).send(tours);
+					return res.status(200).send(arr2[0]);
 
 				} catch (err) {
 					console.log(err.error)
@@ -1855,37 +1848,39 @@ const s3Client = new S3Client({
 			return new LocalizedField(fieldData);
 		}
 
-		
+
 
 		this.router.post(
 			'/add/teasertour',
 			//allowFor([AdminRole, ManagerRole, MarketingRole]),
-			parseJwt,
-			this.upload.array('file'),
+			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				// Upload
 				try {
 
-					let jsonObj = JSON.parse(`{"price":"45","image":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/7BUv3BsMeK.jpg","audio":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/lu3FaaUm0Z.mp3","points":[],"duration":"4h","length":"11km","highestPoint":"155m","termsAndConditions":"","currency":"€","bpartnerId":"fd373bf5-6804-4293-b030-9be788516677","update":false,"title":{"english":" Ljubljana tour ","slovenian":"-"},"agreementTitle":{"english":"/ ","slovenian":" -"},"agreementDesc":{"english":"/","slovenian":"- "},"shortInfo":{"english":"Amidst a sprawling landscape of rolling plains and dense forests, this city blends history and modernity. Ancient stone pathways lead to market squares, while skyscrapers echo its aspirations. Parks offer respite from urban life, trails leading to endless plains. Beyond, nature's grandeur awaits, with woodlands and plains whispering tales of nomads and ancient civilizations. Seasons bring transformations, ever-changing vistas in this jewel of nature's crown. ","slovenian":"- "},"longInfo":{"english":" Amidst a sprawling landscape of rolling plains and dense forests, a city stands as a beacon of culture and progress. Its boundaries are marked by meandering rivers that shimmer under the sun, reflecting the city's skyline. On one side, the vast expanse of a tranquil lake borders the city, its waters often dotted with sailboats and kayakers enjoying the serenity. The city itself is a harmonious blend of history and modernity. Ancient stone pathways lead to market squares where traditions of old are kept alive, while towering skyscrapers in the distance echo the city's aspirations for the future. The green canopy of parks offers a respite from the urban hustle, with trails leading to the outskirts where the plains stretch out, seemingly endless. Beyond the city, the landscape is a testament to nature's grandeur. Dense woodlands, home to diverse wildlife, invite explorers to uncover their secrets. The plains, golden during the day and silver under the moonlight, whisper tales of nomads and ancient civilizations. As the seasons change, so does the landscape. From the blossoms of spring to the golden hues of autumn, the city and its surroundings transform, offering ever-changing vistas and experiences. In this vast and varied landscape, the city stands proud, a jewel in nature's magnificent crown.","slovenian":"-"}}`);
+					let jsonObj = JSON.parse(`{"price":"45","image":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/7BUv3BsMeK.jpg","audio":{"english":"https://hopguides.s3.eu-central-1.amazonaws.com/tours/lu3FaaUm0Z.mp3"},"points":[],"duration":"4h","length":"11km","highestPoint":"155m","termsAndConditions":"","currency":"€","bpartnerId":"fd373bf5-6804-4293-b030-9be788516677","update":false,"title":{"english":" Ljubljana tour ","slovenian":"-"},"agreementTitle":{"english":"/ ","slovenian":" -"},"agreementDesc":{"english":"/","slovenian":"- "},"shortInfo":{"english":"Amidst a sprawling landscape of rolling plains and dense forests, this city blends history and modernity. Ancient stone pathways lead to market squares, while skyscrapers echo its aspirations. Parks offer respite from urban life, trails leading to endless plains. Beyond, nature's grandeur awaits, with woodlands and plains whispering tales of nomads and ancient civilizations. Seasons bring transformations, ever-changing vistas in this jewel of nature's crown. ","slovenian":"- "},"longInfo":{"english":" Amidst a sprawling landscape of rolling plains and dense forests, a city stands as a beacon of culture and progress. Its boundaries are marked by meandering rivers that shimmer under the sun, reflecting the city's skyline. On one side, the vast expanse of a tranquil lake borders the city, its waters often dotted with sailboats and kayakers enjoying the serenity. The city itself is a harmonious blend of history and modernity. Ancient stone pathways lead to market squares where traditions of old are kept alive, while towering skyscrapers in the distance echo the city's aspirations for the future. The green canopy of parks offers a respite from the urban hustle, with trails leading to the outskirts where the plains stretch out, seemingly endless. Beyond the city, the landscape is a testament to nature's grandeur. Dense woodlands, home to diverse wildlife, invite explorers to uncover their secrets. The plains, golden during the day and silver under the moonlight, whisper tales of nomads and ancient civilizations. As the seasons change, so does the landscape. From the blossoms of spring to the golden hues of autumn, the city and its surroundings transform, offering ever-changing vistas and experiences. In this vast and varied landscape, the city stands proud, a jewel in nature's magnificent crown.","slovenian":"-"}}`);
 					let tour = jsonObj as Tour;
 
-					const { pointsParsed, title } = JSON.parse(req.body.tour);
-					const tourTitle = parseLocalizedField(title);
-					const points = pointsParsed.map(point => ({
+					const tourTitle = new LocalizedField;
+					tourTitle.english = req.body.title;
+
+					const points = req.body.pointsOfInterest.map(point => ({
 						longitude: point.longitude,
 						latitude: point.latitude,
-						num: point.num,
-						title: parseLocalizedField(point.title)
+						name: new LocalizedField({ english: point.title })
+
 					}));
-				
+
 					tour.title = tourTitle
+					tour.languages = Array.isArray(req.body.languages) ? req.body.languages : [];
 
 					var pointsData = []
 					var pointsOff = []
 					for (var i = 0; i < points.length; i++) {
 						var point = new POI
 						point.num = points[i].num
-						point.audio = "https://hopguides.s3.amazonaws.com/menu/ZwOsbG5A95.mp3"
+						point.audio = new LocalizedField
+						point.audio.english = "https://hopguides.s3.amazonaws.com/menu/ZwOsbG5A95.mp3"
 						point.images = []
 						var image = new Image
 						image.image = "https://hopguides.s3.amazonaws.com/menu/sG0Ptf6OQG.png"
@@ -1901,89 +1896,46 @@ const s3Client = new S3Client({
 						point.shortInfo.english = " In the heart of a vibrant metropolis stands an enchanting architectural marvel. Its grand façade tells stories of the past, while inside, opulent art and ancient relics await. This point of interest is not just a celebration of history but also a vibrant cultural center, hosting diverse events. A journey here is a captivating experience, igniting wonder and appreciation for human expression. Whether a history buff, art enthusiast, or curious soul, it leaves an unforgettable impression, yearning for more. "
 						point.longInfo = new LocalizedField
 						point.longInfo.english = "In the heart of a vibrant metropolis lies a captivating point of interest, a place that enchants locals and tourists alike. This architectural marvel stands tall, defying time and weather, weaving together the past and present with exquisite craftsmanship. Its grand façade, adorned with intricate carvings and sculptures, tells the stories of a bygone era. Step inside, and you are transported to a realm of opulence and elegance. The interior boasts a breathtaking display of art, from striking murals that adorn the ceilings to delicate mosaics that grace the floors. Each room exudes a unique ambiance, carrying the essence of the period it represents. As you wander through the labyrinth of hallways and chambers, you encounter relics of history preserved with utmost care. Ancient artifacts whisper tales of ancient civilizations, while carefully curated exhibits shed light on the region's rich cultural heritage. The point of interest not only celebrates history but also serves as a vibrant cultural center. Throughout the year, it hosts an array of events, from art exhibitions and classical concerts to traditional dance performances and contemporary showcases. Here, art and culture blend seamlessly, offering a delightful experience to enthusiasts from all walks of life. Visiting this point of interest is like embarking on a captivating journey through time and creativity. It leaves a lasting impression, igniting a sense of wonder and appreciation for the beauty and diversity of human expression. Whether you are an avid history buff, an art aficionado, or simply a curious soul seeking inspiration, this point of interest promises to be an unforgettable destination that leaves you yearning for more."
-						point.name = new LocalizedField
-						point.name = points[i].title
+					
+						point.name =  points[i].name
 						point.location.longitude = points[i].longitude
 						point.location.latitude = points[i].latitude
-
+						if(point.image){
+							var img = new Image()
+							img.image = "https://hopguides.s3.eu-central-1.amazonaws.com/" + point.image
+							point.images.push(img)
+	
+						}
+				
 						const poi: POI = await this.poiManager.createPOI(point);
 
 						pointsOff.push(poi.id)
 						pointsData.push(poi)
 					}
+
 					tour.points = pointsOff
 
-					var partnerImages = []
+					tour.image = "https://hopguides.s3.eu-central-1.amazonaws.com/" + req.body.name
 
-					for (var f of req.files) {
-
-						if (f.originalname.substring(1, 8).trim() === 'partner') {
-
-							var help = f.originalname.split('---')
-
-							var help2 = help[0].substring(8)
-
-							var h = {
-								name: help2,
-								path: f.location
-							}
-							partnerImages.push(h)
-						}
-
-
-					}
-
-					//if the names are the same
-					var arrayy = []
-					for (var po of pointsData) {
-						for (var im of partnerImages) {
-
-							if (im.name == po.num) {
-
-								arrayy.push(im.path);
-
-							}
-						}
-
-						var obj: Obj = new Obj();
-
-						obj.paths = arrayy
-						obj.names = []
-						for (var i = 0; i < points.length; i++) {
-							var objec = {
-								number: "1",
-								name: new LocalizedField
-							}
-							objec.name.english = "title"
-							obj.names.push(objec)
-						}
-						await this.poiManager.uploadImages(po.id, obj);
-						arrayy = []
-					}
-
+					
 					const createdTour: Tour = await this.tourManager.createTour(
 						deserialize(Tour, tour)
 					);
 
-
-
-					for (var file of req.files) {
-						console.log(file)
-						if (file.originalname.substring(0, 5).trim() === 'image') {
-
-							await this.tourManager.uploadMenu(createdTour.id, file);
-
-						}
-					}
-
-
 					createdTour.points = pointsData
+
+
+
+					console.log(createdTour.id)
+					console.log(createdTour.languages)
+
+					await this.tourManager.generateQRForTour(createdTour.id, createdTour.languages )
 
 					return res.status(200).send(createdTour);
 
 
 				} catch (err) {
-					console.log(err.error)
+					throw new Error("Error" + err)
 				}
 			})
 		);
