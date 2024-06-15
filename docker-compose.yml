@@ -1,13 +1,10 @@
 services:
-  mongo:
-    image: mongo:6.0.4
+  hopguides-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: girocarshare/hopguides-server:latest
     ports:
-      - '27017:27017'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: mongo
-    volumes:
-      - hopguides-mongo-data:/data/db
-
-volumes:
-  hopguides-mongo-data: {}
+      - '8080:8080'
+    env_file:
+      - .env
