@@ -16,8 +16,8 @@ const path = require('path');
 import { simpleAsync } from './util';
 import axios from 'axios';
 const { PDFDocument } = require('pdf-lib');
-
-const { convert } = require('pdf-poppler');
+const { Poppler } = require('node-poppler');
+const poppler = new Poppler();
 import * as multer from 'multer';
 import { Agreement } from '../models/tours/agreement';
 
@@ -123,17 +123,20 @@ export class ReportRouter extends BaseRouter {
 
 
 		async function convertPdfPageToImage(pdfPath, outputPath) {
-			let opts = {
-				format: 'jpeg',
-				out_dir: path.dirname(outputPath),
-				out_prefix: path.basename(outputPath, path.extenum),
-				page: 1
+			const options = {
+				singleFile: true,
+				pngFile: true,
+				firstPageToConvert: 1,
+				lastPageToConvert: 1
 			};
-			await convert(pdfPath, opts);
-			return path.join(__dirname, '../templates/' + opts.out_prefix + '-1.jpg');
+		
+			const outputFilePath = path.join(path.dirname(outputPath), path.basename(outputPath, path.extname(outputPath)));
+		
+			await poppler.pdfToCairo(pdfPath, outputFilePath, options);
+		
+			return `${outputFilePath}.png`; // Return the path to the generated image
 		}
-
-
+		
 		this.router.post(
 			'/agreements/create',
 			this.upload.fields([
@@ -142,12 +145,11 @@ export class ReportRouter extends BaseRouter {
 				{ name: 'premiumOffer', maxCount: 1 }
 			]),
 			withErrorHandler(async (req, res) => {
-
 				try {
 					const data = req.body;
-					var templatePath = ""
-					var placeholders = {}
-					
+					var templatePath = "";
+					var placeholders = {};
+		
 					if (req.body.category == "experience" && req.body.language == "English") {
 						templatePath = path.join(__dirname, '../templates/Test.pdf');
 						placeholders = {
@@ -155,21 +157,21 @@ export class ReportRouter extends BaseRouter {
 							standardOffer: { page: 5, x: 50, y: 275, width: 400, height: 500 },
 							premiumOffer: { page: 6, x: 50, y: 280, width: 400, height: 500 }
 						};
-					}else if(req.body.category == "experience" && req.body.language == "Slovenian"){
+					} else if (req.body.category == "experience" && req.body.language == "Slovenian") {
 						templatePath = path.join(__dirname, '../templates/Test_SLO.pdf');
 						placeholders = {
 							basicOffer: { page: 4, x: 50, y: 250, width: 400, height: 500 },
 							standardOffer: { page: 5, x: 50, y: 250, width: 400, height: 500 },
 							premiumOffer: { page: 6, x: 50, y: 250, width: 400, height: 500 }
 						};
-					}else if(req.body.category == "general" && req.body.language == "English"){
+					} else if (req.body.category == "general" && req.body.language == "English") {
 						templatePath = path.join(__dirname, '../templates/Test_general.pdf');
 						placeholders = {
 							basicOffer: { page: 4, x: 50, y: 255, width: 400, height: 500 },
 							standardOffer: { page: 5, x: 50, y: 240, width: 400, height: 500 },
 							premiumOffer: { page: 6, x: 50, y: 270, width: 400, height: 480 }
 						};
-					}else if(req.body.category == "general" && req.body.language == "Slovenian"){
+					} else if (req.body.category == "general" && req.body.language == "Slovenian") {
 						templatePath = path.join(__dirname, '../templates/Test_SLO_general.pdf');
 						placeholders = {
 							basicOffer: { page: 4, x: 50, y: 255, width: 400, height: 500 },
@@ -177,52 +179,49 @@ export class ReportRouter extends BaseRouter {
 							premiumOffer: { page: 6, x: 50, y: 270, width: 400, height: 480 }
 						};
 					}
+		
 					// Path to the stored PDF template on your server
 					const templateBytes = fs.readFileSync(templatePath);
 					const pdfDoc = await PDFDocument.load(templateBytes);
-
+		
 					// Get the form from the template and fill it
 					const form = pdfDoc.getForm();
 					form.getTextField('addressee').setText(data.name_of_addressee);
 					form.getTextField('offer_number').setText(data.offer_number);
 					form.getTextField('date').setText(data.date);
-
+		
 					form.getTextField('addressee').enableReadOnly();
 					form.getTextField('offer_number').enableReadOnly();
 					form.getTextField('date').enableReadOnly();
-
+		
 					//form.flatten(); // Optional: Flatten the form to prevent further edits
 					const fileFields = ['basicOffer', 'standardOffer', 'premiumOffer'];
-					
-
+		
 					for (const fieldName of fileFields) {
 						if (req.files[fieldName] && req.files[fieldName].length > 0) {
 							const uploadedFile = req.files[fieldName][0];
 							const imagePath = await convertPdfPageToImage(uploadedFile.path, path.join(__dirname, '../templates', fieldName));
-
+		
 							const imageBytes = fs.readFileSync(imagePath);
-							const image = await pdfDoc.embedJpg(imageBytes);
+							const image = await pdfDoc.embedPng(imageBytes); // Adjust if using JPEG
+		
 							const pageInfo = placeholders[fieldName];
 							const page = pdfDoc.getPages()[pageInfo.page];
-
+		
 							page.drawImage(image, {
 								x: placeholders[fieldName].x,
 								y: page.getHeight() - pageInfo.y - pageInfo.height,
 								width: placeholders[fieldName].width,
 								height: placeholders[fieldName].height
 							});
-
+		
 							fs.unlinkSync(uploadedFile.path); // Clean up uploaded file
 							fs.unlinkSync(imagePath); // Clean up converted image
 						}
 					}
-
-
+		
 					const pdfBytes = await pdfDoc.save();
-
-				
-
-
+		
 					const key = `${req.body.offer_number}_agreement.pdf`;
 		
 					await uploadPDFToS3(key, pdfBytes);
@@ -234,9 +233,9 @@ export class ReportRouter extends BaseRouter {
 					agreement.language = req.body.language;
 					agreement.offer_number = req.body.offer_number;
 					agreement.link = "https://hopguides.s3.eu-central-1.amazonaws.com/agreements/" + key
-
+		
 					await this.reportManager.createAgreement(agreement);
-
+		
 					fs.writeFileSync('final_output.pdf', pdfBytes);
 					res.setHeader('Content-Type', 'application/pdf');
 					res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf');
