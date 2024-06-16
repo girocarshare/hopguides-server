@@ -13,7 +13,7 @@ RUN npm ci --production
 FROM node:18.15-alpine
 WORKDIR /usr/app
 
-RUN apk add --no-cache ffmpeg
+RUN apk add --no-cache ffmpeg poppler-data poppler-utils
 
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
