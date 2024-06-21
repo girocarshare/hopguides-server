@@ -309,6 +309,8 @@ export class TourManager {
 
 	async deletePoi(tourId: string, poiId: string) {
 
+		console.log("poiIdddd")
+		console.log(poiId)
 		var tour: Tour = await this.getTour(tourId).catch((err) => {
 			throw new Error('Error getting Tours');
 		});
@@ -321,6 +323,7 @@ export class TourManager {
 		}
 
 		tour.points = points
+		console.log(points)
 		await this.tourRepository.updateOne(tourId, tour).catch((err) => {
 			throw new Error('Error updating Tour');
 		});
@@ -851,6 +854,32 @@ export class TourManager {
 		}
 	}
 
+
+	async rearrangePoints(id: string, points: POI[]): Promise<void> {
+		try {
+			console.log("Rearranging points...");
+			console.log(points);
+	
+			// Fetch the tour by ID
+			var tour = await this.tourRepository.getByIdOrThrow(id);
+	
+			// Map the points to their IDs
+			var poiIds = points.map(poi => poi.id);
+	
+			// Update the tour's points with the new order
+			tour.points = poiIds;
+	
+			// Save the updated tour
+			await this.tourRepository.updateOne(id, tour).catch((err) => {
+				throw new Error('Error updating Tour');
+			});
+	
+			console.log('Points order updated successfully');
+	
+		} catch (err) {
+			console.error('Error rearranging points:', err);
+		}
+	}
 
 
 
