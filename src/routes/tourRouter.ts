@@ -1256,22 +1256,15 @@ export class TourRouter extends BaseRouter {
 		this.router.get(
 			'/deletePoi/:tourId/:poiId',
 			//allowFor([AdminRole, ManagerRole, ServiceRole, SupportRole, MarketingRole]),
-			parseJwt,
+			//parseJwt,
 			withErrorHandler(async (req: IRequest, res: IResponse) => {
 				try {
+					console.log( "ytryrtyrt")
+					console.log(req.params.tourId)
+					console.log( req.params.poiId)
 					await this.tourManager.deletePoi(req.params.tourId, req.params.poiId);
 
-					const pagination: SearchPagination = new SearchPagination();
-					pagination.page = 0;
-					pagination.pageSize = 5;
-
-					const pageOfItems: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false, null, pagination);
-
-					const pager = {
-						currentPage: 0
-					};
-
-					return res.json({ pager, pageOfItems });
+					return res.status(200).send("Success");
 				} catch (e) {
 
 					return res.status(500).send("Error");
@@ -2370,7 +2363,24 @@ export class TourRouter extends BaseRouter {
 			})
 		);
 
+		this.router.post(
+			'/pointsorder/rearrange',
+			
+			withErrorHandler(async (req: IRequest, res: IResponse) => {
+				try {
+					// Retrieve the existing tour video using the ID provided
 
+					await this.tourManager.rearrangePoints(req.body.data.tourId, req.body.data.points);
+
+					// Identify the point to be updated
+
+					res.status(200).send("success");
+				} catch (e) {
+					console.log(e);
+					res.status(500).json({ error: e.message });
+				}
+			})
+		);
 
 
 	}
