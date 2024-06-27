@@ -140,208 +140,137 @@ export class POIRouter extends BaseRouter {
 		);
 
 
-		/** POST update poi */
 		this.router.post(
 			'/update',
-			//allowFor([AdminRole, ManagerRole, MarketingRole]),
 			parseJwt,
 			this.upload.array('file'),
 			simpleAsync(async (req: IBkRequest, res: IResponse) => {
 				try {
-
 					let jsonObj = JSON.parse(req.body.point);
 					let point = jsonObj as POI;
-					var arrayy = []
+					let arrayy = [];
 
-					var tour = null;
-					var tours: Tour[] = await this.tourManager.getTours();
-					for (var t of tours) {
-						for (var poi of t.points) {
-							if (point.id == poi) {
-								tour = t
+					let tour: Tour | null = null;
+					let tours: Tour[] = await this.tourManager.getTours();
+
+					for (let t of tours) {
+						for (let poi of t.points) {
+							if (point.id === poi) {  // Assuming poi is an object, compare IDs
+								tour = t;
+								break;
 							}
 						}
+						if (tour) break;
 					}
-					var user = await this.userManager.getUser(req.userId)
-					var poiPrevious = await this.poiManager.getPoiByPreviousId(point.id)
 
+					if (!tour) {
+						console.log('Tour not found for the given POI');
+						return res.status(404).send('Tour not found');
+					}
+
+					let user = await this.userManager.getUser(req.userId);
+					let poiPrevious = await this.poiManager.getPoiByPreviousId(point.id);
 
 					if (poiPrevious != null) {
-
-						if (user.role == "ADMIN") {
+						if (user.role === "ADMIN") {
 							return res.status(412).send("Poi already updated by partner");
 						}
 
-
-
-						for (var f of req.files) {
-
-							if (f.originalname.substring(0, 6).trim() === 'audio2') {
-
+						for (let f of req.files) {
+							if (f.originalname.trim().startsWith('audio2')) {
 								await this.poiManager.uploadAudio(point.id, f.location, point.language);
-
-							}
-
-
-							if (f.originalname.substring(1, 8).trim() === 'partner') {
-
+							} else if (f.originalname.trim().startsWith('partner')) {
 								arrayy.push(f.location);
 							}
 						}
 
-
-						var obj: Obj = new Obj();
-
-						obj.paths = arrayy
+						let obj: Obj = new Obj();
+						obj.paths = arrayy;
 						await this.poiManager.uploadImages(poiPrevious.id, obj, point.language);
 
 						if (poiPrevious.images.length != 0) {
-							const updatedPoi: POI = await this.poiManager.updatePoi(
-								poiPrevious.id,
-								point
-							);
+							await this.poiManager.updatePoi(poiPrevious.id, point);
 						}
+
 						sgMail.send({
-							to: "luna.zivkovic@gogiro.app", // change so that poi.contact.email gets email
+							to: "luna.zivkovic@gogiro.app",
 							from: emailSender,
 							subject: "Point of interest updated",
-							html: `Dear,<br/><br/>
-								
-								Point of interest with id: ${poiPrevious.id} and name ${poiPrevious.name.english} has been updated by partner with id ${req.userId}. Please approve or disapprove the changes. <br/><br/> <br/>
-								`
-						})
-
+							html: `Dear,<br/><br/> Point of interest with id: ${poiPrevious.id} and name ${poiPrevious.name.english} has been updated by partner with id ${req.userId}. Please approve or disapprove the changes. <br/><br/> <br/>`
+						});
 					} else {
+						if (user.role === "PROVIDER") {
+							let poi = await this.poiManager.getPoi(point.id);
+							poi.previousId = poi.id;
+							let poiUpdated = await this.poiManager.createPOI(deserialize(POI, poi));
 
-						if (user.role == "PROVIDER") {
-							const poi: POI = await this.poiManager.getPoi(point.id);
-							poi.previousId = poi.id
-							const poiUpdated: POI = await this.poiManager.createPOI(deserialize(POI, poi));
-
-							if (point.images.length == 0) {
-								const updatedPoi: POI = await this.poiManager.updatePoi(
-									poiUpdated.id,
-									point
-								);
+							if (point.images.length === 0) {
+								await this.poiManager.updatePoi(poiUpdated.id, point);
 							}
-							for (var f of req.files) {
 
-								if (f.originalname.substring(0, 6).trim() === 'audio2') {
-
+							for (let f of req.files) {
+								if (f.originalname.trim().startsWith('audio2')) {
 									await this.poiManager.uploadAudio(point.id, f.location, point.language);
-
-								}
-								if (f.originalname.substring(0, 4).trim() === 'menu') {
-
-									console.log(point.id + f.location)
+								} else if (f.originalname.trim().startsWith('menu')) {
 									await this.poiManager.uploadMenu(point.id, f.location);
-
-								}
-
-								if (f.originalname.substring(1, 8).trim() === 'partner') {
-
+								} else if (f.originalname.trim().startsWith('partner')) {
 									arrayy.push(f.location);
 								}
 							}
 
-
-							var obj: Obj = new Obj();
-
-
-							obj.paths = arrayy
+							let obj: Obj = new Obj();
+							obj.paths = arrayy;
 							await this.poiManager.uploadImages(poiUpdated.id, obj, point.language);
 
 							if (point.images.length != 0) {
-								const updatedPoi: POI = await this.poiManager.updatePoi(
-									poiUpdated.id,
-									point
-								);
+								await this.poiManager.updatePoi(poiUpdated.id, point);
 							}
 
-							var points = []
-							for (var p of tour.points) {
-								if (p == point.id) {
-
-								} else {
-									points.push(p)
-								}
-							}
-
-							points.push(poiUpdated.id)
-							tour.points = points
-							tour.previousId = tour.id
+							let points = tour.points.filter(p => p !== point.id);
+							points.push(poiUpdated.id);
+							tour.points = points;
+							tour.previousId = tour.id;
 							tour.update = true;
-							var t = await this.tourManager.createTour(
-								deserialize(Tour, tour)
-							);
-							await this.tourManager.updateTour(
-								t.id,
-								tour
-							);
+
+							let t = await this.tourManager.createTour(deserialize(Tour, tour));
+							await this.tourManager.updateTour(tour.id, tour);
 
 							sgMail.send({
-								to: "luna.zivkovic@gogiro.app", // change so that poi.contact.email gets email
+								to: "luna.zivkovic@gogiro.app",
 								from: emailSender,
 								subject: "Point of interest updated",
-								html: `Dear,<br/><br/>
-									
-									Point of interest with id: ${poi.id} and name ${poi.name.english} has been updated by partner with id ${req.userId}. Please approve or disapprove the changes. <br/><br/> <br/>
-									`
-							})
+								html: `Dear,<br/><br/> Point of interest with id: ${poi.id} and name ${poi.name.english} has been updated by partner with id ${req.userId}. Please approve or disapprove the changes. <br/><br/> <br/>`
+							});
 
 							return res.status(200).send([]);
-						} else if (user.role == "ADMIN") {
+						} else if (user.role === "ADMIN") {
+							await this.poiManager.updatePoi(point.id, point);
 
-
-								const updatedPoi: POI = await this.poiManager.updatePoi(
-									point.id,
-									point
-								);
-							
-							for (var f of req.files) {
-
-								if (f.originalname.substring(0, 6).trim() === 'audio2') {
-
+							for (let f of req.files) {
+								if (f.originalname.trim().startsWith('audio2')) {
 									await this.poiManager.uploadAudio(point.id, f.location, point.language);
-
-								}
-								if (f.originalname.substring(0, 4).trim() === 'menu') {
-
-
+								} else if (f.originalname.trim().startsWith('menu')) {
 									await this.poiManager.uploadMenu(point.id, f.location);
-
-								}
-
-								if (f.originalname.substring(1, 8).trim() === 'partner') {
-
+								} else if (f.originalname.trim().startsWith('partner')) {
 									arrayy.push(f.location);
 								}
 							}
 
-
 							if (arrayy.length != 0) {
-								var obj: Obj = new Obj();
-
-
-								obj.paths = arrayy
+								let obj: Obj = new Obj();
+								obj.paths = arrayy;
 								await this.poiManager.uploadImages(point.id, obj, point.language);
 							}
-							var updatedTour = await this.tourManager.getTourData(t.id)
-							console.log("updatesssss")
-							console.log(updatedTour)
-							//const tours: ToursWithPoints[] = await this.tourManager.getToursWithPoints(req.userId, false);
+
+							let updatedTour = await this.tourManager.getTourData(tour.id);
 							return res.status(200).send({ updatedTour: updatedTour });
-
-
-							return res.status(200).send([]);
 						}
 					}
 				} catch (err) {
-					console.log(err)
+					console.error('Error updating POI:', err);
+					res.status(500).send('Internal server error');
 				}
 			})
 		);
-
-
 	}
-}
+	}
