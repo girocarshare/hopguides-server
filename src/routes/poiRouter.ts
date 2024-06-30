@@ -247,11 +247,20 @@ export class POIRouter extends BaseRouter {
 							await this.poiManager.updatePoi(point.id, point);
 
 							for (let f of req.files) {
-								if (f.originalname.trim().startsWith('audio2')) {
+								if (f.originalname.substring(0, 6).trim() === 'audio2') {
+
 									await this.poiManager.uploadAudio(point.id, f.location, point.language);
-								} else if (f.originalname.trim().startsWith('menu')) {
+	
+								}
+								if (f.originalname.substring(0, 4).trim() === 'menu') {
+	
+	
 									await this.poiManager.uploadMenu(point.id, f.location);
-								} else if (f.originalname.trim().startsWith('partner')) {
+	
+								}
+	
+								if (f.originalname.substring(1, 8).trim() === 'partner') {
+	
 									arrayy.push(f.location);
 								}
 							}
@@ -264,6 +273,8 @@ export class POIRouter extends BaseRouter {
 
 							let updatedTour = await this.tourManager.getTourData(tour.id);
 							return res.status(200).send({ updatedTour: updatedTour });
+						
+						
 						}
 					}
 				} catch (err) {
@@ -274,3 +285,5 @@ export class POIRouter extends BaseRouter {
 		);
 	}
 	}
+
+
